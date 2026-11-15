@@ -1,0 +1,15 @@
+[package]
+name = "cairn-cli"
+description = "Command-line tool for Cairn (built in Phase 7)."
+version.workspace = true
+edition.workspace = true
+rust-version.workspace = true
+license.workspace = true
+repository.workspace = true
+authors.workspace = true
+
+[dependencies]
+cairn-core.workspace = true
+
+[lints]
+workspace = true

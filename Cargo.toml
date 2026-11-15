@@ -1,0 +1,39 @@
+[workspace]
+resolver = "3"
+members = ["crates/core", "crates/app", "crates/indexer", "crates/cli"]
+
+[workspace.package]
+version = "0.1.0"
+edition = "2024"
+rust-version = "1.99"
+license = "GPL-3.0-or-later"
+repository = "https://example.invalid/cairn"   # HUMAN: set when the repository exists
+authors = ["Cairn contributors"]
+
+[workspace.dependencies]
+cairn-core = { path = "crates/core" }
+# Baseline is Ubuntu 24.04: GTK 4.14, libadwaita 1.5 (ADR 0001).
+gtk = { package = "gtk4", version = "0.11", features = ["v4_14"] }
+adw = { package = "libadwaita", version = "0.9", features = ["v1_5"] }
+glib-build-tools = "0.22"
+serde = { version = "1", features = ["derive"] }
+serde_json = "1"
+
+[workspace.lints.rust]
+unsafe_code = "forbid"
+
+[workspace.lints.clippy]
+all = { level = "warn", priority = -1 }
+dbg_macro = "warn"
+todo = "warn"
+
+[profile.dev]
+# Smaller debug info keeps memory use and target size down in the Docker VM.
+debug = "line-tables-only"
+
+[profile.dev.package."*"]
+debug = false
+
+[profile.release]
+lto = "thin"
+codegen-units = 4

@@ -1,0 +1,15 @@
+[package]
+name = "cairn-indexer"
+description = "Cairn's background indexer (built in Phase 3)."
+version.workspace = true
+edition.workspace = true
+rust-version.workspace = true
+license.workspace = true
+repository.workspace = true
+authors.workspace = true
+
+[dependencies]
+cairn-core.workspace = true
+
+[lints]
+workspace = true
