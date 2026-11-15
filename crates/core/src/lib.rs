@@ -2,8 +2,20 @@
 //!
 //! This crate must never depend on GTK, so it can be tested headlessly and
 //! shared by the app, the indexer and the command-line tool (DESIGN.md §7.1).
+//! It uses GLib and GIO for files, mounts and models.
 
+pub mod entry;
+pub mod folder;
 pub mod guard;
+pub mod kind;
+pub mod natural;
+pub mod places;
+pub mod sort;
+pub mod store;
+
+pub use entry::{EntryData, FileEntry};
+pub use folder::{FolderModel, LoadState};
+pub use kind::Kind;
 
 /// The application ID, also used as the D-Bus name.
 pub const APP_ID: &str = "dev.cairn.Files";
