@@ -1,0 +1,55 @@
+# CI: the gate (DESIGN.md §9.8, §10). Runs `make check` on each supported
+# Ubuntu release, inside the same Docker images developers use.
+# HUMAN: enable Actions once the repository exists on its Git host.
+name: CI
+
+on:
+  push:
+    branches: [main]
+  pull_request:
+
+permissions:
+  contents: read
+
+concurrency:
+  group: ci-${{ github.ref }}
+  cancel-in-progress: true
+
+jobs:
+  check:
+    name: check (Ubuntu ${{ matrix.ubuntu }})
+    runs-on: ubuntu-24.04
+    timeout-minutes: 90
+    strategy:
+      fail-fast: false
+      matrix:
+        # 26.10 for now; 24.04 and 26.04 join once the project is complete (ADR 0007).
+        ubuntu: ["26.10"]
+    env:
+      UBUNTU_VERSION: ${{ matrix.ubuntu }}
+      CARGO_BUILD_JOBS: "4"
+    steps:
+      - uses: actions/checkout@v4
+
+      - uses: docker/setup-buildx-action@v3
+
+      - name: Build the dev image
+        run: make images
+
+      - name: Lint
+        run: make lint
+
+      - name: Unit and integration tests
+        run: make test
+
+      - name: End-to-end tests
+        run: make e2e
+
+      - name: Upload test artifacts
+        if: always()
+        uses: actions/upload-artifact@v4
+        with:
+          name: artifacts-${{ matrix.ubuntu }}
+          path: artifacts/
+          if-no-files-found: ignore
+          retention-days: 14
