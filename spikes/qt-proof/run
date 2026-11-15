@@ -1,0 +1,17 @@
+#!/bin/bash
+# Runs a command for the Qt proof in its own container and build cache.
+#   spikes/qt-proof/run cargo build
+#   spikes/qt-proof/run python3 tests/spikes/qt_proof_check.py
+set -euo pipefail
+repo=$(cd "$(dirname "$0")/../.." && pwd)
+exec docker run --rm -i \
+  -v "$repo:/workspace" \
+  -v cairn-desktop_cargo-registry:/usr/local/cargo/registry \
+  -v cairn-qt-proof-target:/var/cache/cargo-target \
+  --tmpfs /tmp:uid=1000,gid=1000,mode=1777 \
+  --tmpfs /home/dev:uid=1000,gid=1000 \
+  --security-opt seccomp=unconfined \
+  -e CARGO_BUILD_JOBS="${CARGO_BUILD_JOBS:-3}" \
+  -e CARGO_TARGET_DIR=/var/cache/cargo-target \
+  -w /workspace/spikes/qt-proof \
+  cairn-qt-proof:26.10 "$@"

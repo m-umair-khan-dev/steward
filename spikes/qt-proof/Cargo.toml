@@ -1,0 +1,21 @@
+[package]
+name = "cairn-qt-proof"
+description = "Throwaway proof: Qt 6 / QML front end on Cairn's Rust engine."
+version = "0.0.0"
+edition = "2024"
+license = "GPL-3.0-or-later"
+publish = false
+
+# Standalone: not part of the main workspace.
+[workspace]
+
+[dependencies]
+cairn-core = { path = "../../crates/core" }
+cxx = "1.0.95"
+cxx-qt = "0.10"
+cxx-qt-lib = { version = "0.10", features = ["qt_gui", "qt_qml"] }
+glib = "0.22"
+gio = "0.22"
+
+[build-dependencies]
+cxx-qt-build = { version = "0.10", features = ["link_qt_object_files"] }
