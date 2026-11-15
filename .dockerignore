@@ -1,0 +1,10 @@
+target/
+dist/
+artifacts/
+secrets/
+.env
+.git/
+fileosmac/
+**/__pycache__/
+**/.pytest_cache/
+**/node_modules/
