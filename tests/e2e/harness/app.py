@@ -184,7 +184,7 @@ class App:
 
     def a11y_click(self, name: str, role: str | None = None, within: str | None = None) -> None:
         """Performs a node's default action, as a screen reader user would.
-        `role` is an AT-SPI role name ("push button", "toggle button", ...).
+        `role` is an AT-SPI role name ("button", "toggle button", ...).
         `within` limits the search to the subtree of a node with that name."""
         result = self._atspi("click", name, role or "", within or "")
         if result.returncode != 0:

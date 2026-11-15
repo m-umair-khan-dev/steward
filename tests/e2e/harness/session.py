@@ -57,7 +57,15 @@ class Session:
         if not self.bus_address:
             raise RuntimeError("dbus-daemon did not report an address; see dbus.log")
 
-        env = self.base_env() | {"COMPOSITOR_LOG": str(self.logs / "compositor.log")}
+        # The compositor keeps its caches (e.g. Mesa's shader cache) outside the
+        # test home, so checks that the home is unchanged only see the app.
+        compositor_cache = self.root / "compositor-cache"
+        compositor_cache.mkdir()
+        env = self.base_env() | {
+            "COMPOSITOR_LOG": str(self.logs / "compositor.log"),
+            "XDG_CACHE_HOME": str(compositor_cache),
+            "MESA_SHADER_CACHE_DIR": str(compositor_cache / "mesa"),
+        }
         result = subprocess.run([str(START_COMPOSITOR)], env=env, capture_output=True, text=True,
                                 timeout=30)
         if result.returncode != 0:

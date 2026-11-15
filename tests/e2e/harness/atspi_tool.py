@@ -6,7 +6,7 @@ AT-SPI library binds to one session bus per process.
     atspi_tool.py PID dump                       JSON tree of the app's accessibles
     atspi_tool.py PID click NAME [ROLE] [WITHIN] perform the default action on a node
 
-ROLE is an AT-SPI role name such as "push button" (empty string for any).
+ROLE is an AT-SPI role name such as "button" (empty string for any); see ROLE_ALIASES.
 WITHIN limits the search to the subtree of the first showing node with that
 name, for when the same name appears more than once (e.g. two "Close" buttons).
 """
@@ -22,6 +22,16 @@ from gi.repository import Atspi  # noqa: E402
 
 PREFERRED_ACTIONS = ("click", "activate", "press", "toggle")
 TIMEOUT = 10.0
+
+# AT-SPI renamed some roles between releases (Ubuntu 24.04 reports "push
+# button" and "panel"; 26.10 reports "button" and "grouping"). Tests use the
+# short names; both spellings match.
+ROLE_ALIASES = {"push button": "button", "grouping": "panel"}
+
+
+def role_of(node) -> str:
+    role = node.get_role_name()
+    return ROLE_ALIASES.get(role, role)
 
 
 def find_app(pid: int):
@@ -59,7 +69,7 @@ def describe(node, depth: int = 0) -> dict:
             if child is not None:
                 children.append(describe(child, depth + 1))
     return {
-        "role": node.get_role_name(),
+        "role": role_of(node),
         "name": node.get_name() or "",
         "showing": states.contains(Atspi.StateType.SHOWING),
         "enabled": states.contains(Atspi.StateType.ENABLED),
@@ -69,7 +79,7 @@ def describe(node, depth: int = 0) -> dict:
 
 
 def find(node, name: str, role: str | None):
-    if (node.get_name() == name and (role is None or node.get_role_name() == role)
+    if (node.get_name() == name and (role is None or role_of(node) == ROLE_ALIASES.get(role, role))
             and node.get_state_set().contains(Atspi.StateType.SHOWING)):
         return node
     for index in range(node.get_child_count()):

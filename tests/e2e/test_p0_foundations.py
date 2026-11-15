@@ -32,7 +32,7 @@ def test_E0_02_about_dialog_opens_and_closes(app):
     assert dialog["version"] == app.state()["version"]
 
     # The main window has a "Close" button too; target the dialog's.
-    app.a11y_click("Close", role="push button", within="About")
+    app.a11y_click("Close", role="button", within="About")
     app.wait_for(lambda: app.state()["active_window"]["dialog"] is None,
                  "the About dialog to close")
 
