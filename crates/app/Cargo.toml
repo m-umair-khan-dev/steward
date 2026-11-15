@@ -1,0 +1,32 @@
+[package]
+name = "cairn"
+description = "Cairn, a file manager for Ubuntu."
+version.workspace = true
+edition.workspace = true
+rust-version.workspace = true
+license.workspace = true
+repository.workspace = true
+authors.workspace = true
+build = "build.rs"
+
+[[bin]]
+name = "cairn"
+path = "src/main.rs"
+
+[features]
+# Compiles in the dev.cairn.Files.Test1 D-Bus interface used by end-to-end
+# tests (DESIGN.md §10.2). Never enabled in release packages.
+e2e = ["dep:serde_json"]
+
+[dependencies]
+cairn-core.workspace = true
+gtk.workspace = true
+adw.workspace = true
+gettext-rs = { version = "0.8", features = ["gettext-system"] }
+serde_json = { workspace = true, optional = true }
+
+[build-dependencies]
+glib-build-tools.workspace = true
+
+[lints]
+workspace = true

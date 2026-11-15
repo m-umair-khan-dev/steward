@@ -1,0 +1,7 @@
+/* Cairn's stylesheet. Use libadwaita named colours only (DESIGN.md §3.5),
+ * so the app follows the system accent colour and light or dark style.
+ * Debug builds reload this file live when it is saved. */
+
+.empty-content {
+  padding: 24px;
+}

@@ -1,0 +1,10 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<gresources>
+  <gresource prefix="/dev/cairn/Files">
+    <!-- Compiled from data/ui/*.blp into OUT_DIR by build.rs -->
+    <file preprocess="xml-stripblanks">ui/window.ui</file>
+    <!-- Not at the root: AdwApplication would load a root style.css by itself,
+         and debug builds load the file from disk instead (live reload). -->
+    <file alias="css/style.css">style.css</file>
+  </gresource>
+</gresources>

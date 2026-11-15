@@ -1,0 +1,85 @@
+using Gtk 4.0;
+using Adw 1;
+
+template $CairnWindow: Adw.ApplicationWindow {
+  title: _("Cairn");
+  default-width: 1100;
+  default-height: 720;
+  width-request: 360;
+  height-request: 294;
+
+  content: Adw.OverlaySplitView split_view {
+    min-sidebar-width: 200;
+    max-sidebar-width: 280;
+
+    sidebar: Adw.ToolbarView {
+      [top]
+      Adw.HeaderBar {
+        show-title: false;
+      }
+
+      content: ScrolledWindow {
+        hscrollbar-policy: never;
+
+        child: ListBox sidebar_list {
+          styles [
+            "navigation-sidebar",
+          ]
+
+          accessibility {
+            label: _("Sidebar");
+          }
+        };
+      };
+    };
+
+    content: Adw.ToolbarView {
+      [top]
+      Adw.HeaderBar header_bar {
+        accessibility {
+          label: _("Main toolbar");
+        }
+
+        [end]
+        MenuButton menu_button {
+          icon-name: "open-menu-symbolic";
+          menu-model: primary_menu;
+          primary: true;
+          tooltip-text: _("Main Menu");
+
+          accessibility {
+            label: _("Main menu");
+          }
+        }
+      }
+
+      content: Adw.StatusPage empty_page {
+        styles [
+          "empty-content",
+        ]
+
+        icon-name: "folder-symbolic";
+        title: _("Nothing Here Yet");
+        description: _("Folders will appear here.");
+
+        accessibility {
+          label: _("Content");
+        }
+      };
+    };
+  };
+}
+
+menu primary_menu {
+  section {
+    item {
+      label: _("_About Cairn");
+      action: "app.about";
+    }
+
+    item {
+      label: _("_Quit");
+      action: "app.quit";
+    }
+  }
+}
