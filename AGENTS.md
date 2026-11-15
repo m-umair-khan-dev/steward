@@ -8,7 +8,7 @@ They apply to every contributor, human or agent.
 3. **Everything runs through `make` in Docker.** Do not install toolchains on the host. Do not run the app outside the dev container.
 4. **Never touch a real home folder.** In development and test builds the app refuses to start unless its home contains the marker file `.cairn-fixture`. Do not remove or bypass that guard.
 5. **Write the test with the task.** Each end-to-end scenario is implemented in the same commit series as the feature it covers. A task whose "done when" names a scenario is not done until that scenario passes.
-6. **The gate is `make check-all`.** It runs lint, unit and integration tests, and *every* end-to-end scenario written so far, on Ubuntu 24.04 and 26.04. Earlier phases' scenarios are the regression suite; they stay green.
+6. **The gate is `make check-all`.** It runs lint, unit and integration tests, and *every* end-to-end scenario written so far, on every supported release. Today that is Ubuntu 26.10 only; 24.04 and 26.04 join once the project is complete (ADR 0007). Keep the code within the 24.04 baseline APIs (GTK 4.14, libadwaita 1.5) so that later step stays small. Earlier phases' scenarios are the regression suite; they stay green.
 7. **Never weaken a test to make it pass.** If a scenario is wrong, fix the scenario and say why in `docs/PROGRESS.md`. No `sleep` in tests; wait for a condition with a timeout.
 8. **When a [verify] item turns out false,** write an ADR in `docs/adr/` with what was found, apply the fallback DESIGN.md names, and continue. If no fallback is named, stop and ask the human.
 9. **Stop at steps marked HUMAN.** These need real hardware, a real desktop session, a naming or legal decision, or a secret. List them in `docs/PROGRESS.md` and hand over.
@@ -26,7 +26,7 @@ They apply to every contributor, human or agent.
 | `make e2e` | End-to-end tests (`make e2e k=E0_03` for one) |
 | `make lint` | Formatting, clippy, Dockerfile and Compose checks |
 | `make check` | The gate on the default Ubuntu release |
-| `make check-all` | The gate on 24.04 and 26.04 |
+| `make check-all` | The gate on every supported release (26.10 for now) |
 | `make shell` | A shell with the full toolchain |
 
 When an end-to-end test fails, read `artifacts/e2e/<test-id>/` (screenshot,

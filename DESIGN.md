@@ -58,7 +58,7 @@ A desktop file manager is not *deployed* in a container. End users install a `.d
 | # | Decision | Why |
 |---|---|---|
 | D1 | **GTK 4 + libadwaita, written in Rust** | A file manager lives on GIO/GVfs (trash, mounts, phones, network shares, thumbnails, drag and drop with other apps). GTK gives all of that natively and looks at home on Ubuntu. Rust gives the scanning, hashing and indexing speed the features need, and matches the team's existing repos. Details in [§6](#6-frontend-stack). |
-| D2 | **API baseline is Ubuntu 24.04** (GTK 4.14, libadwaita 1.5 **[verify]**), with newer features gated at runtime | 24.04 is supported for years and is the largest install base. The dev machine is on 26.10 (GTK 4.24, libadwaita 1.10, GNOME 51), so the Docker build image is what guards the baseline. |
+| D2 | **API baseline is Ubuntu 24.04** (GTK 4.14, libadwaita 1.5, confirmed in ADR 0001), with newer features gated at runtime | 24.04 is supported for years and is the largest install base. During development the gate runs on 26.10 first and the older releases are tested at the end (ADR 0007); the pinned crate features keep code within the baseline meanwhile. |
 | D3 | **Two processes: the app and a background indexer**, sharing a SQLite cache | Search and folder sizes must not block the window or die with it. A shared read-mostly database is the simplest contract between them. |
 | D4 | **Every file action goes through one operations engine with an undo journal** | "Nothing moves without a preview, everything can be undone" is the original's core promise. It has to be an architectural property, not a per-feature courtesy. |
 | D5 | **The app never runs anything as root.** System-level clean-ups are shown as a command to copy | The original does the same for packages ("FileOS only reads"). Root actions cannot go to the Trash, so they cannot honour the Undo promise. |
@@ -1003,7 +1003,7 @@ volumes:
   fixture-home:
 ```
 
-`docker/scripts/headless-run` starts a private D-Bus session and a headless Wayland compositor, then runs its arguments inside them: `dbus-run-session -- mutter --headless --wayland --no-x11 --virtual-monitor 1280x800 -- "$@"` **[verify exact flags per Mutter version; `weston --backend=headless` is the fallback]**.
+`docker/scripts/headless-run` starts a private D-Bus session and a headless Wayland compositor (mutter by default, weston as the fallback; `docker/scripts/start-compositor`, ADR 0002), then runs its arguments inside them. End-to-end tests do not use it: the harness starts a fresh session per test. On Docker Desktop, which cannot reach the host's display, `make app` uses an `app-broadway` service that shows the window in a browser at http://127.0.0.1:8085 (ADR 0004). The compose file in the repository is the reference; the listing above is the original design.
 
 **Why the app runs against a fake home.** This is a tool that moves and trashes files. In development it must never touch the developer's real Documents. The container's home is the `fixture-home` volume, and its private D-Bus session gives it its own Trash. A bug costs nothing.
 
@@ -1290,7 +1290,7 @@ Copy these into `AGENTS.md` at the repository root in Phase 0.
 3. **Everything runs through `make` in Docker.** Do not install toolchains on the host. Do not run the app outside the dev container.
 4. **Never touch a real home folder.** In development and test builds the app refuses to start unless its home contains the marker file `.cairn-fixture` (task P0-T05). Do not remove or bypass that guard.
 5. **Write the test with the task.** Each end-to-end scenario below is implemented in the same commit series as the feature it covers. A task whose "done when" names a scenario is not done until that scenario passes.
-6. **The gate is `make check-all`.** It runs lint, unit and integration tests, and *every* end-to-end scenario written so far, on Ubuntu 24.04 and 26.04. Earlier phases' scenarios are the regression suite; they stay green.
+6. **The gate is `make check-all`.** It runs lint, unit and integration tests, and *every* end-to-end scenario written so far, on every supported release: Ubuntu 26.10 during development, with 24.04 and 26.04 added once the project is complete (ADR 0007). Earlier phases' scenarios are the regression suite; they stay green.
 7. **Never weaken a test to make it pass.** If a scenario is wrong, fix the scenario and say why in `docs/PROGRESS.md`. No `sleep` in tests; wait for a condition with a timeout.
 8. **When a [verify] item turns out false,** write an ADR in `docs/adr/` with what was found, apply the fallback this document names, and continue. If no fallback is named, stop and ask the human.
 9. **Stop at steps marked HUMAN.** These need real hardware, a real desktop session, a naming or legal decision, or a secret. List them in `docs/PROGRESS.md` and hand over.
@@ -1331,7 +1331,7 @@ pytest (in the dev container)
 | Check results on disk | Plain Python on the temporary home, plus `home.snapshot()` (paths, sizes, hashes) for before-and-after comparison | The primary assertion for anything that changes files |
 | Control time | `CAIRN_FAKE_NOW` shifts the app's clock | File birth time cannot be set, so "older than 90 days" rules are tested by moving "now" forward |
 | Stand in for the system | Fake executables on `PATH` (`dpkg-query`, `snap`, `flatpak`, `sudo`, `pkexec`, editors, terminals) that return recorded output and log every call | Proves what the app asked for, and that it never ran a privileged or mutating command |
-| Real key presses and drags | Only if spike P0-S3 finds a reliable way to inject input into the headless compositor | Fallback: scenarios trigger the action a key is bound to, a unit test checks the key-to-action table, and real keys and drags go on the HUMAN checklist |
+| Real key presses | `app.press("ctrl+q")`: keys injected through mutter's remote-desktop interface (ADR 0003) | Needs the mutter compositor (the default). Pointer input and drags are not automated yet and stay on the HUMAN checklist |
 
 **Conventions.** Test IDs match this document: `tests/e2e/test_p4_downloads.py::test_E4_03_tidy_then_undo`. Each test is marked with its phase (`@pytest.mark.p4`); a few are also marked `smoke` (run against the installed `.deb`) or `shots` (produce website screenshots). Every test starts from a clean home and may not depend on another test.
 
