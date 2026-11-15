@@ -1,9 +1,21 @@
 //! Cairn, a file manager for Ubuntu.
 
+mod app_data;
 mod application;
+mod file_card;
+mod folder_card;
+mod folder_view;
+mod format;
+mod path_bar;
+mod preferences;
+mod preview_pane;
+mod settings;
+mod sidebar;
 mod style;
 #[cfg(feature = "e2e")]
 mod test_iface;
+mod thumbnails;
+mod tint;
 mod window;
 
 use std::path::PathBuf;

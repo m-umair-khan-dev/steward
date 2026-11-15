@@ -1,0 +1,6 @@
+/* Cairn's purple accent (ADR 0008). Not loaded when the user picks the
+ * system accent colour in Preferences. */
+
+@define-color accent_bg_color #6b56dc;
+@define-color accent_fg_color #ffffff;
+@define-color accent_color #5a45cc;

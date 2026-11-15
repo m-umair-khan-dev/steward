@@ -37,13 +37,26 @@ fn main() {
 
     let gresource = data_dir.join("resources.gresource.xml");
     println!("cargo:rerun-if-changed={}", gresource.display());
-    println!(
-        "cargo:rerun-if-changed={}",
-        data_dir.join("style.css").display()
-    );
+    for css in ["style.css", "style-dark.css", "accent.css", "accent-dark.css"] {
+        println!("cargo:rerun-if-changed={}", data_dir.join(css).display());
+    }
     glib_build_tools::compile_resources(
         &[out_dir.as_path(), data_dir.as_path()],
         gresource.to_str().expect("UTF-8 path"),
         "cairn.gresource",
     );
+
+    // Development and test builds load the settings schema from OUT_DIR, so
+    // nothing has to be installed system-wide (see src/settings.rs).
+    let schema = data_dir.join("dev.cairn.Files.gschema.xml");
+    println!("cargo:rerun-if-changed={}", schema.display());
+    let schema_out = out_dir.join("schemas");
+    fs::create_dir_all(&schema_out).expect("create OUT_DIR/schemas");
+    fs::copy(&schema, schema_out.join("dev.cairn.Files.gschema.xml")).expect("copy schema");
+    let status = Command::new("glib-compile-schemas")
+        .arg("--strict")
+        .arg(&schema_out)
+        .status()
+        .expect("run glib-compile-schemas");
+    assert!(status.success(), "glib-compile-schemas failed");
 }

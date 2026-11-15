@@ -1,0 +1,20 @@
+/* Dark palette (ADR 0008). Loaded on top of style.css while dark. */
+
+@define-color window_bg_color #0c0b14;
+@define-color view_bg_color #15141f;
+@define-color headerbar_bg_color #15141f;
+@define-color sidebar_bg_color #12111b;
+@define-color card_bg_color #1e1d2b;
+@define-color window_fg_color #eeecf7;
+@define-color view_fg_color #eeecf7;
+@define-color cairn_muted #a6a2bc;
+@define-color cairn_line alpha(white, 0.07);
+@define-color cairn_preview_bg #232232;
+
+.folder-paper {
+  background-color: #e9e7f3;
+}
+
+.folder-paper.second {
+  background-color: #d9d6e8;
+}

@@ -1,7 +1,539 @@
-/* Cairn's stylesheet. Use libadwaita named colours only (DESIGN.md §3.5),
- * so the app follows the system accent colour and light or dark style.
- * Debug builds reload this file live when it is saved. */
+/* Cairn's stylesheet: layout and the light palette (ADR 0008).
+ * Colours are libadwaita named colours, overridden here to give the soft
+ * lavender look; style-dark.css redefines them for dark mode and accent.css
+ * sets Cairn's purple accent. Debug builds reload these files live. */
 
-.empty-content {
-  padding: 24px;
+@define-color window_bg_color #f4f3f9;
+@define-color view_bg_color #ffffff;
+@define-color headerbar_bg_color #ffffff;
+@define-color sidebar_bg_color #efeef6;
+@define-color card_bg_color #ffffff;
+@define-color window_fg_color #16132a;
+@define-color view_fg_color #16132a;
+@define-color cairn_muted #5d5a72;
+@define-color cairn_line alpha(#16132a, 0.08);
+@define-color cairn_preview_bg #f1f0f6;
+
+/* --- window structure --------------------------------------------------- */
+
+.content-pane {
+  background-color: @view_bg_color;
 }
+
+window.background {
+  background-color: @window_bg_color;
+}
+
+headerbar.main-header {
+  background-color: @view_bg_color;
+  box-shadow: none;
+  border-bottom: none;
+  padding: 6px 8px;
+}
+
+.header-title {
+  font-weight: 700;
+  font-size: 15pt;
+  margin-left: 10px;
+}
+
+.nav-pill {
+  border-radius: 999px;
+  background-color: alpha(@window_fg_color, 0.05);
+  padding: 2px;
+}
+
+.nav-pill button {
+  border-radius: 999px;
+  min-width: 34px;
+  min-height: 30px;
+  background: none;
+}
+
+.nav-pill button:hover {
+  background-color: alpha(@window_fg_color, 0.07);
+}
+
+/* Segmented controls: None/Kind/Date and list/grid. */
+.segmented {
+  border-radius: 999px;
+  background-color: alpha(@window_fg_color, 0.05);
+  padding: 3px;
+}
+
+.segmented button {
+  border-radius: 999px;
+  min-height: 28px;
+  padding: 0 12px;
+  background: none;
+  box-shadow: none;
+  font-weight: 500;
+}
+
+.segmented button:checked {
+  background-color: @view_bg_color;
+  box-shadow: 0 1px 3px alpha(black, 0.12);
+  font-weight: 600;
+}
+
+.round-button {
+  border-radius: 999px;
+  min-width: 34px;
+  min-height: 34px;
+}
+
+.crumb-bar {
+  background-color: @view_bg_color;
+  border-bottom: 1px solid @cairn_line;
+  padding: 2px 14px 6px 10px;
+}
+
+.path-crumbs button {
+  padding: 2px 6px;
+  min-height: 26px;
+  color: @cairn_muted;
+  font-size: 11.5pt;
+  font-weight: normal;
+}
+
+.path-crumbs button.current-crumb {
+  color: @window_fg_color;
+  font-weight: 700;
+}
+
+.path-crumbs .crumb-separator {
+  color: alpha(@window_fg_color, 0.35);
+}
+
+.path-hint {
+  font-size: 9pt;
+  color: alpha(@window_fg_color, 0.45);
+}
+
+.chip-row {
+  padding: 10px 18px 2px 18px;
+}
+
+.chips button {
+  border-radius: 999px;
+  padding: 2px 12px;
+  min-height: 26px;
+  background-color: alpha(@window_fg_color, 0.05);
+  font-weight: 500;
+}
+
+.chips button:checked {
+  background-color: alpha(@accent_bg_color, 0.16);
+  color: @accent_color;
+  font-weight: 700;
+}
+
+.folder-summary {
+  color: @cairn_muted;
+  font-size: 10pt;
+}
+
+.status-bar {
+  padding: 5px 16px;
+  border-top: 1px solid @cairn_line;
+  background-color: @view_bg_color;
+}
+
+.status-bar label {
+  color: @cairn_muted;
+}
+
+/* --- sidebar -------------------------------------------------------------- */
+
+/* The sidebar is an inset, rounded panel on the window background. */
+overlay-split-view > widget.sidebar-pane {
+  background-color: @window_bg_color;
+}
+
+.cairn-sidebar {
+  background-color: @sidebar_bg_color;
+  margin: 8px 0 8px 8px;
+  border-radius: 16px;
+  border: 1px solid @cairn_line;
+}
+
+.sidebar-toggle {
+  min-width: 30px;
+  min-height: 30px;
+  border-radius: 8px;
+}
+
+.sidebar-toggle image {
+  color: alpha(@window_fg_color, 0.55);
+}
+
+/* Icon rail while the sidebar is collapsed. */
+.sidebar-rail {
+  background-color: @sidebar_bg_color;
+  margin: 8px 0 8px 8px;
+  border-radius: 16px;
+  border: 1px solid @cairn_line;
+  padding: 14px 6px 10px 6px;
+}
+
+.sidebar-rail button {
+  min-width: 40px;
+  min-height: 40px;
+  border-radius: 10px;
+}
+
+.sidebar-rail button image {
+  color: @accent_color;
+}
+
+.sidebar-rail button.rail-selected {
+  background-color: alpha(@accent_bg_color, 0.16);
+}
+
+.app-row {
+  padding: 14px 10px 6px 16px;
+}
+
+.app-badge {
+  background-image: linear-gradient(160deg, #a497f2, #6a55db);
+  border-radius: 9px;
+  color: white;
+  padding: 5px;
+}
+
+.app-name {
+  font-weight: 700;
+  font-size: 14pt;
+}
+
+.sidebar-heading {
+  font-size: 9.5pt;
+  font-weight: 600;
+  color: alpha(@window_fg_color, 0.5);
+  margin: 14px 0 4px 18px;
+}
+
+.cairn-sidebar .navigation-sidebar {
+  background: none;
+  padding: 0 8px;
+}
+
+.cairn-sidebar .navigation-sidebar > row {
+  border-radius: 10px;
+  min-height: 34px;
+  padding: 0 10px;
+}
+
+.cairn-sidebar .navigation-sidebar > row image {
+  color: @accent_color;
+}
+
+.cairn-sidebar .navigation-sidebar > row {
+  padding: 0;
+}
+
+.sidebar-button {
+  padding: 6px 10px;
+  border-radius: 10px;
+  min-height: 22px;
+  font-weight: inherit;
+  background: none;
+}
+
+.sidebar-button:hover {
+  background-color: alpha(@window_fg_color, 0.05);
+}
+
+.cairn-sidebar .navigation-sidebar > row:selected {
+  background-color: alpha(@accent_bg_color, 0.16);
+  font-weight: 700;
+}
+
+.computer-row {
+  border-top: 1px solid @cairn_line;
+  margin: 0 12px;
+  padding: 10px 6px 12px 6px;
+  border-radius: 0;
+}
+
+.computer-name {
+  font-weight: 700;
+}
+
+.computer-free {
+  font-size: 9pt;
+  color: @cairn_muted;
+}
+
+.computer-row levelbar block.filled {
+  background-color: @accent_bg_color;
+}
+
+levelbar.thin block.empty {
+  background-color: alpha(@window_fg_color, 0.08);
+}
+
+levelbar.thin trough,
+levelbar.thin block {
+  min-height: 4px;
+  border-radius: 99px;
+}
+
+/* --- the grid: sections, glass folders, file cards ----------------------- */
+
+.grouped-grid {
+  background-color: @view_bg_color;
+  padding: 6px 18px 18px 18px;
+}
+
+.grouped-grid > row,
+.grouped-grid > row:hover,
+.grouped-grid > row:selected,
+.grouped-grid > row:focus {
+  background: none;
+  outline: none;
+  padding: 0;
+}
+
+.section-header {
+  padding: 16px 2px 8px 2px;
+  font-size: 11.5pt;
+}
+
+.card-row {
+  padding: 4px 0;
+}
+
+.folder-card {
+  padding: 6px 6px 8px 6px;
+  border-radius: 14px;
+}
+
+.folder-card:hover {
+  background-color: alpha(@window_fg_color, 0.04);
+}
+
+.folder-card.selected-card {
+  background-color: alpha(@accent_bg_color, 0.14);
+}
+
+.folder-back {
+  border-radius: 4px 14px 14px 14px;
+}
+
+.folder-tab {
+  border-radius: 10px 12px 0 0;
+}
+
+.folder-paper {
+  background-color: #ffffff;
+  border-radius: 6px;
+  box-shadow: 0 1px 2px alpha(black, 0.12);
+}
+
+.folder-paper.first {
+  transform: rotate(-4deg);
+}
+
+.folder-paper.second {
+  transform: rotate(2deg);
+  background-color: #f6f5fb;
+}
+
+.folder-front {
+  border-radius: 12px;
+  border: 1px solid alpha(white, 0.35);
+  box-shadow: inset 0 1px alpha(white, 0.45), 0 2px 6px alpha(black, 0.12);
+  padding: 7px 9px;
+  color: white;
+}
+
+.folder-count {
+  font-weight: 700;
+  font-size: 9.5pt;
+  color: white;
+  text-shadow: 0 1px 1px alpha(black, 0.18);
+}
+
+.folder-size {
+  font-size: 8.5pt;
+  color: alpha(white, 0.92);
+}
+
+.folder-symbol {
+  color: alpha(white, 0.9);
+}
+
+.folder-name {
+  font-size: 11pt;
+}
+
+.file-card {
+  background-color: @card_bg_color;
+  border-radius: 14px;
+  border: 1px solid @cairn_line;
+  box-shadow: 0 1px 2px alpha(black, 0.04);
+}
+
+.file-card:hover {
+  border-color: alpha(@accent_bg_color, 0.45);
+}
+
+.file-card.selected-card {
+  border: 2px solid @accent_bg_color;
+}
+
+.file-preview {
+  background-color: @cairn_preview_bg;
+  border-radius: 13px 13px 0 0;
+}
+
+.file-preview image {
+  color: alpha(@window_fg_color, 0.55);
+}
+
+.file-info {
+  padding: 8px 10px 10px 10px;
+}
+
+.file-badge {
+  color: white;
+  font-size: 7pt;
+  font-weight: 800;
+  border-radius: 4px;
+  padding: 1px 4px;
+}
+
+.file-name {
+  font-size: 10.5pt;
+}
+
+.file-meta {
+  font-size: 9pt;
+  color: @cairn_muted;
+}
+
+/* --- list view ------------------------------------------------------------- */
+
+.file-list {
+  background-color: @view_bg_color;
+}
+
+/* --- preview / folder overview pane ----------------------------------------- */
+
+.preview-pane {
+  padding: 22px 20px;
+  background-color: alpha(@window_fg_color, 0.025);
+  border-left: 1px solid @cairn_line;
+}
+
+.overview-total {
+  font-size: 22pt;
+  font-weight: 800;
+}
+
+.overview-in-all {
+  color: @cairn_muted;
+  font-size: 11pt;
+}
+
+.overview-heading {
+  font-size: 9pt;
+  font-weight: 700;
+  letter-spacing: 1px;
+  color: alpha(@window_fg_color, 0.5);
+  margin-top: 14px;
+}
+
+.space-dot {
+  min-width: 8px;
+  min-height: 8px;
+  border-radius: 99px;
+}
+
+.overview-row levelbar trough {
+  background-color: alpha(@window_fg_color, 0.07);
+}
+
+/* --- tints: folder colours by kind ------------------------------------ */
+
+.tint-purple .folder-back,
+.tint-purple .folder-tab { background-color: #6A55DB; }
+.tint-purple .folder-front {
+  background-image: linear-gradient(170deg, alpha(#A497F2, 0.97) 0%, alpha(#6A55DB, 0.93) 100%);
+}
+.tint-purple .file-badge,
+.tint-purple.space-dot,
+levelbar.tint-purple block.filled { background-color: #6A55DB; }
+.tint-teal .folder-back,
+.tint-teal .folder-tab { background-color: #13778A; }
+.tint-teal .folder-front {
+  background-image: linear-gradient(170deg, alpha(#55AFBF, 0.97) 0%, alpha(#13778A, 0.93) 100%);
+}
+.tint-teal .file-badge,
+.tint-teal.space-dot,
+levelbar.tint-teal block.filled { background-color: #13778A; }
+.tint-orange .folder-back,
+.tint-orange .folder-tab { background-color: #DC7409; }
+.tint-orange .folder-front {
+  background-image: linear-gradient(170deg, alpha(#F4AE55, 0.97) 0%, alpha(#DC7409, 0.93) 100%);
+}
+.tint-orange .file-badge,
+.tint-orange.space-dot,
+levelbar.tint-orange block.filled { background-color: #DC7409; }
+.tint-red .folder-back,
+.tint-red .folder-tab { background-color: #C53434; }
+.tint-red .folder-front {
+  background-image: linear-gradient(170deg, alpha(#E77474, 0.97) 0%, alpha(#C53434, 0.93) 100%);
+}
+.tint-red .file-badge,
+.tint-red.space-dot,
+levelbar.tint-red block.filled { background-color: #C53434; }
+.tint-blue .folder-back,
+.tint-blue .folder-tab { background-color: #2C6CD6; }
+.tint-blue .folder-front {
+  background-image: linear-gradient(170deg, alpha(#73A2EE, 0.97) 0%, alpha(#2C6CD6, 0.93) 100%);
+}
+.tint-blue .file-badge,
+.tint-blue.space-dot,
+levelbar.tint-blue block.filled { background-color: #2C6CD6; }
+.tint-slate .folder-back,
+.tint-slate .folder-tab { background-color: #4C5361; }
+.tint-slate .folder-front {
+  background-image: linear-gradient(170deg, alpha(#8A919D, 0.97) 0%, alpha(#4C5361, 0.93) 100%);
+}
+.tint-slate .file-badge,
+.tint-slate.space-dot,
+levelbar.tint-slate block.filled { background-color: #4C5361; }
+.tint-green .folder-back,
+.tint-green .folder-tab { background-color: #2C8A57; }
+.tint-green .folder-front {
+  background-image: linear-gradient(170deg, alpha(#6BBE91, 0.97) 0%, alpha(#2C8A57, 0.93) 100%);
+}
+.tint-green .file-badge,
+.tint-green.space-dot,
+levelbar.tint-green block.filled { background-color: #2C8A57; }
+.tint-pink .folder-back,
+.tint-pink .folder-tab { background-color: #BE3D77; }
+.tint-pink .folder-front {
+  background-image: linear-gradient(170deg, alpha(#E584AF, 0.97) 0%, alpha(#BE3D77, 0.93) 100%);
+}
+.tint-pink .file-badge,
+.tint-pink.space-dot,
+levelbar.tint-pink block.filled { background-color: #BE3D77; }
+.tint-indigo .folder-back,
+.tint-indigo .folder-tab { background-color: #3A49B5; }
+.tint-indigo .folder-front {
+  background-image: linear-gradient(170deg, alpha(#7D88DF, 0.97) 0%, alpha(#3A49B5, 0.93) 100%);
+}
+.tint-indigo .file-badge,
+.tint-indigo.space-dot,
+levelbar.tint-indigo block.filled { background-color: #3A49B5; }
+.tint-gray .folder-back,
+.tint-gray .folder-tab { background-color: #7A7D86; }
+.tint-gray .folder-front {
+  background-image: linear-gradient(170deg, alpha(#B1B3B9, 0.97) 0%, alpha(#7A7D86, 0.93) 100%);
+}
+.tint-gray .file-badge,
+.tint-gray.space-dot,
+levelbar.tint-gray block.filled { background-color: #7A7D86; }

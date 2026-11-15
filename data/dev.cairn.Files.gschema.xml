@@ -1,0 +1,63 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<schemalist gettext-domain="cairn">
+  <schema id="dev.cairn.Files" path="/dev/cairn/Files/">
+    <key name="default-view" type="s">
+      <choices>
+        <choice value="grid"/>
+        <choice value="list"/>
+      </choices>
+      <default>'grid'</default>
+      <summary>View for folders opened for the first time</summary>
+    </key>
+    <key name="row-size" type="s">
+      <choices>
+        <choice value="small"/>
+        <choice value="medium"/>
+        <choice value="large"/>
+      </choices>
+      <default>'medium'</default>
+      <summary>Size of cards and list rows</summary>
+    </key>
+    <key name="color-scheme" type="s">
+      <choices>
+        <choice value="system"/>
+        <choice value="light"/>
+        <choice value="dark"/>
+      </choices>
+      <default>'system'</default>
+      <summary>Light, dark, or follow the system</summary>
+    </key>
+    <key name="accent" type="s">
+      <choices>
+        <choice value="cairn"/>
+        <choice value="system"/>
+      </choices>
+      <default>'cairn'</default>
+      <summary>Cairn's purple accent, or the system accent colour</summary>
+    </key>
+    <key name="show-hidden" type="b">
+      <default>false</default>
+      <summary>Show hidden files</summary>
+    </key>
+    <key name="preview-visible" type="b">
+      <default>false</default>
+      <summary>Show the preview pane</summary>
+    </key>
+    <key name="sidebar-visible" type="b">
+      <default>true</default>
+      <summary>Show the sidebar</summary>
+    </key>
+    <key name="window-width" type="i">
+      <default>1100</default>
+      <summary>Window width</summary>
+    </key>
+    <key name="window-height" type="i">
+      <default>720</default>
+      <summary>Window height</summary>
+    </key>
+    <key name="window-maximized" type="b">
+      <default>false</default>
+      <summary>Window maximized</summary>
+    </key>
+  </schema>
+</schemalist>

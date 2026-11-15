@@ -154,6 +154,33 @@ class App:
                      "the window to get keyboard focus", timeout=10)
         self._keyboard.press(combo)
 
+    def type_text(self, text: str) -> None:
+        """Types text with real key presses (US layout characters only)."""
+        from .keys import combo_for
+        for char in text:
+            self.press(combo_for(char))
+
+    # -- folder helpers -----------------------------------------------------
+
+    def folder(self) -> dict:
+        return self.state()["folder"]
+
+    def open_folder(self, path, timeout: float = 15.0) -> dict:
+        """Opens a folder through win.go-to and waits until it has loaded."""
+        path = str(path)
+        self.action("win.go-to", GLib.Variant("s", path))
+
+        def loaded():
+            folder = self.folder()
+            return folder if folder["path"] == path and folder["state"] != "loading" else None
+
+        return wait_for(loaded, f"{path} to load", timeout)
+
+    def select(self, *names: str) -> None:
+        """Selects items in the folder view by name (Test1.Select)."""
+        self._call(f"{APP_PATH}/Test1", TEST_IFACE, "Select", GLib.Variant("(as)", (list(names),)),
+                   "(b)")
+
     # -- accessibility tree -------------------------------------------------
     # AT-SPI keeps one bus connection per process, so each query runs in a short
     # helper process with this session's environment.
@@ -189,6 +216,12 @@ class App:
         result = self._atspi("click", name, role or "", within or "")
         if result.returncode != 0:
             raise AssertionError(f"could not click {name!r}: {result.stderr.strip()}")
+
+    def a11y_focus(self, name: str, role: str | None = None, within: str | None = None) -> None:
+        """Gives a node keyboard focus through the accessibility tree."""
+        result = self._atspi("focus", name, role or "", within or "")
+        if result.returncode != 0:
+            raise AssertionError(f"could not focus {name!r}: {result.stderr.strip()}")
 
     # -- failure artifacts ------------------------------------------------
 

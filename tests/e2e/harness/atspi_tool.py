@@ -5,6 +5,7 @@ AT-SPI library binds to one session bus per process.
 
     atspi_tool.py PID dump                       JSON tree of the app's accessibles
     atspi_tool.py PID click NAME [ROLE] [WITHIN] perform the default action on a node
+    atspi_tool.py PID focus NAME [ROLE] [WITHIN] give a node keyboard focus
 
 ROLE is an AT-SPI role name such as "button" (empty string for any); see ROLE_ALIASES.
 WITHIN limits the search to the subtree of the first showing node with that
@@ -73,19 +74,21 @@ def describe(node, depth: int = 0) -> dict:
         "name": node.get_name() or "",
         "showing": states.contains(Atspi.StateType.SHOWING),
         "enabled": states.contains(Atspi.StateType.ENABLED),
+        "active": states.contains(Atspi.StateType.ACTIVE),
         "actions": actions_of(node),
         "children": children,
     }
 
 
-def find(node, name: str, role: str | None):
+def find(node, name: str, role: str | None, need_action: bool = False):
     if (node.get_name() == name and (role is None or role_of(node) == ROLE_ALIASES.get(role, role))
-            and node.get_state_set().contains(Atspi.StateType.SHOWING)):
+            and node.get_state_set().contains(Atspi.StateType.SHOWING)
+            and (not need_action or actions_of(node))):
         return node
     for index in range(node.get_child_count()):
         child = node.get_child_at_index(index)
         if child is not None:
-            found = find(child, name, role)
+            found = find(child, name, role, need_action)
             if found is not None:
                 return found
     return None
@@ -95,7 +98,7 @@ def click(app, name: str, role: str | None, within: str | None) -> None:
     deadline = time.monotonic() + TIMEOUT
     while True:
         scope = find(app, within, None) if within else app
-        node = find(scope, name, role) if scope is not None else None
+        node = find(scope, name, role, need_action=True) if scope is not None else None
         if node is not None:
             names = actions_of(node)
             if names:
@@ -108,6 +111,20 @@ def click(app, name: str, role: str | None, within: str | None) -> None:
         time.sleep(0.1)
 
 
+def focus(app, name: str, role: str | None, within: str | None) -> None:
+    deadline = time.monotonic() + TIMEOUT
+    while True:
+        scope = find(app, within, None) if within else app
+        node = find(scope, name, role) if scope is not None else None
+        if node is not None:
+            component = node.get_component_iface()
+            if component is not None and component.grab_focus():
+                return
+        if time.monotonic() > deadline:
+            sys.exit(f"could not focus {name!r}" + (f" inside {within!r}" if within else ""))
+        time.sleep(0.1)
+
+
 def main() -> None:
     pid, command, *rest = sys.argv[1:]
     app = find_app(int(pid))
@@ -117,6 +134,10 @@ def main() -> None:
         role = rest[1] if len(rest) > 1 and rest[1] else None
         within = rest[2] if len(rest) > 2 and rest[2] else None
         click(app, rest[0], role, within)
+    elif command == "focus":
+        role = rest[1] if len(rest) > 1 and rest[1] else None
+        within = rest[2] if len(rest) > 2 and rest[2] else None
+        focus(app, rest[0], role, within)
     else:
         sys.exit(f"unknown command {command}")
 

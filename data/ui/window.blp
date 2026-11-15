@@ -3,67 +3,290 @@ using Adw 1;
 
 template $CairnWindow: Adw.ApplicationWindow {
   title: _("Cairn");
-  default-width: 1100;
-  default-height: 720;
   width-request: 360;
   height-request: 294;
 
-  content: Adw.OverlaySplitView split_view {
-    min-sidebar-width: 200;
-    max-sidebar-width: 280;
+  content: Adw.ToastOverlay toast_overlay {
+    child: Adw.OverlaySplitView split_view {
+      min-sidebar-width: 200;
+      max-sidebar-width: 280;
 
-    sidebar: Adw.ToolbarView {
-      [top]
-      Adw.HeaderBar {
-        show-title: false;
-      }
+      sidebar: Adw.Bin sidebar_slot {};
 
-      content: ScrolledWindow {
-        hscrollbar-policy: never;
+      content: Box {
+        Adw.Bin rail_slot {
+          visible: false;
+        }
 
-        child: ListBox sidebar_list {
+        Adw.ToolbarView {
+        hexpand: true;
+
+        styles [
+          "content-pane",
+        ]
+
+        [top]
+        Adw.HeaderBar header_bar {
+          show-title: false;
+
           styles [
-            "navigation-sidebar",
+            "main-header",
           ]
 
           accessibility {
-            label: _("Sidebar");
+            label: _("Main toolbar");
           }
+
+          [start]
+          Box {
+            styles [
+              "nav-pill",
+            ]
+
+            Button back_button {
+              icon-name: "go-previous-symbolic";
+              action-name: "win.back";
+              tooltip-text: _("Back");
+
+              accessibility {
+                label: _("Back");
+              }
+            }
+
+            Button forward_button {
+              icon-name: "go-next-symbolic";
+              action-name: "win.forward";
+              tooltip-text: _("Forward");
+
+              accessibility {
+                label: _("Forward");
+              }
+            }
+          }
+
+          [start]
+          Label folder_title {
+            ellipsize: end;
+            max-width-chars: 28;
+
+            styles [
+              "header-title",
+            ]
+          }
+
+          [end]
+          MenuButton menu_button {
+            icon-name: "open-menu-symbolic";
+            menu-model: primary_menu;
+            primary: true;
+            tooltip-text: _("Main Menu");
+
+            styles [
+              "round-button",
+            ]
+
+            accessibility {
+              label: _("Main menu");
+            }
+          }
+
+          [end]
+          SearchEntry filter_entry {
+            placeholder-text: _("Filter this folder");
+            width-chars: 16;
+            max-width-chars: 22;
+
+            accessibility {
+              label: _("Filter this folder");
+            }
+          }
+
+          [end]
+          ToggleButton preview_button {
+            icon-name: "view-dual-symbolic";
+            action-name: "win.toggle-preview";
+            tooltip-text: _("Preview Pane");
+
+            styles [
+              "round-button",
+            ]
+
+            accessibility {
+              label: _("Preview pane");
+            }
+          }
+
+          [end]
+          MenuButton view_button {
+            icon-name: "view-sort-descending-symbolic";
+            menu-model: view_menu;
+            tooltip-text: _("Sort and Size");
+
+            styles [
+              "round-button",
+            ]
+
+            accessibility {
+              label: _("Sort and size");
+            }
+          }
+
+          [end]
+          Box view_switch {
+            styles [
+              "segmented",
+            ]
+
+            accessibility {
+              label: _("View");
+            }
+
+            ToggleButton {
+              icon-name: "view-list-symbolic";
+              action-name: "win.view-mode";
+              action-target: "'list'";
+              tooltip-text: _("List");
+
+              accessibility {
+                label: _("List");
+              }
+            }
+
+            ToggleButton {
+              icon-name: "view-grid-symbolic";
+              action-name: "win.view-mode";
+              action-target: "'grid'";
+              tooltip-text: _("Grid");
+
+              accessibility {
+                label: _("Grid");
+              }
+            }
+          }
+
+          [end]
+          Box group_switch {
+            styles [
+              "segmented",
+            ]
+
+            accessibility {
+              label: _("Group by");
+            }
+
+            ToggleButton {
+              label: _("None");
+              action-name: "win.group-by";
+              action-target: "'none'";
+            }
+
+            ToggleButton {
+              label: _("Kind");
+              action-name: "win.group-by";
+              action-target: "'kind'";
+            }
+
+            ToggleButton {
+              label: _("Date");
+              action-name: "win.group-by";
+              action-target: "'created'";
+            }
+          }
+        }
+
+        [top]
+        Box crumb_bar {
+          spacing: 12;
+
+          styles [
+            "crumb-bar",
+          ]
+
+          Adw.Bin path_bar_slot {
+            hexpand: true;
+          }
+
+          Label path_hint {
+            label: _("Ctrl+L to type a path");
+
+            styles [
+              "path-hint",
+            ]
+          }
+        }
+
+        content: Paned content_paned {
+          shrink-end-child: false;
+          resize-end-child: false;
+
+          start-child: Box {
+            orientation: vertical;
+
+            Box chip_row {
+              spacing: 12;
+
+              styles [
+                "chip-row",
+              ]
+
+              ScrolledWindow {
+                vscrollbar-policy: never;
+                hscrollbar-policy: external;
+                hexpand: true;
+
+                child: Box chips_box {
+                  spacing: 6;
+
+                  styles [
+                    "chips",
+                  ]
+
+                  accessibility {
+                    label: _("Filter by kind");
+                  }
+                };
+              }
+
+              Label folder_summary {
+                xalign: 1;
+                ellipsize: start;
+
+                styles [
+                  "folder-summary",
+                ]
+              }
+            }
+
+            Adw.Bin folder_view_slot {
+              vexpand: true;
+            }
+          };
+
+          end-child: Adw.Bin preview_slot {
+            visible: false;
+          };
         };
-      };
-    };
 
-    content: Adw.ToolbarView {
-      [top]
-      Adw.HeaderBar header_bar {
-        accessibility {
-          label: _("Main toolbar");
-        }
+        [bottom]
+        Box status_bar {
+          styles [
+            "status-bar",
+          ]
 
-        [end]
-        MenuButton menu_button {
-          icon-name: "open-menu-symbolic";
-          menu-model: primary_menu;
-          primary: true;
-          tooltip-text: _("Main Menu");
+          Label status_label {
+            xalign: 0;
+            hexpand: true;
+            ellipsize: end;
+            styles [
+              "caption",
+              "dim-label",
+            ]
 
-          accessibility {
-            label: _("Main menu");
+            accessibility {
+              label: _("Status");
+            }
           }
         }
-      }
-
-      content: Adw.StatusPage empty_page {
-        styles [
-          "empty-content",
-        ]
-
-        icon-name: "folder-symbolic";
-        title: _("Nothing Here Yet");
-        description: _("Folders will appear here.");
-
-        accessibility {
-          label: _("Content");
         }
       };
     };
@@ -73,13 +296,158 @@ template $CairnWindow: Adw.ApplicationWindow {
 menu primary_menu {
   section {
     item {
-      label: _("_About Cairn");
-      action: "app.about";
+      label: _("_Show Hidden Files");
+      action: "win.show-hidden";
     }
 
     item {
+      label: _("Expand _Sidebar");
+      action: "win.toggle-sidebar";
+    }
+
+    item {
+      label: _("Restore Sidebar");
+      action: "win.sidebar-reset";
+    }
+  }
+
+  section {
+    label: _("Style");
+
+    item {
+      label: _("Follow System");
+      action: "app.color-scheme";
+      target: "system";
+    }
+
+    item {
+      label: _("Light");
+      action: "app.color-scheme";
+      target: "light";
+    }
+
+    item {
+      label: _("Dark");
+      action: "app.color-scheme";
+      target: "dark";
+    }
+  }
+
+  section {
+    item {
+      label: _("_Preferences");
+      action: "app.preferences";
+    }
+
+    item {
+      label: _("_Keyboard Shortcuts");
+      action: "win.show-help-overlay";
+    }
+
+    item {
+      label: _("_About Cairn");
+      action: "app.about";
+    }
+  }
+
+  section {
+    item {
       label: _("_Quit");
       action: "app.quit";
+    }
+  }
+}
+
+menu view_menu {
+  section {
+    item {
+      label: _("_Grid");
+      action: "win.view-mode";
+      target: "grid";
+    }
+
+    item {
+      label: _("_List");
+      action: "win.view-mode";
+      target: "list";
+    }
+  }
+
+  section {
+    label: _("Sort By");
+
+    item {
+      label: _("_Name");
+      action: "win.sort-by";
+      target: "name";
+    }
+
+    item {
+      label: _("_Size");
+      action: "win.sort-by";
+      target: "size";
+    }
+
+    item {
+      label: _("_Modified");
+      action: "win.sort-by";
+      target: "modified";
+    }
+
+    item {
+      label: _("_Created");
+      action: "win.sort-by";
+      target: "created";
+    }
+
+    item {
+      label: _("_Kind");
+      action: "win.sort-by";
+      target: "kind";
+    }
+
+    item {
+      label: _("_Descending");
+      action: "win.sort-descending";
+    }
+  }
+
+  section {
+    label: _("Group By");
+
+    item {
+      label: _("No Groups");
+      action: "win.group-by";
+      target: "none";
+    }
+
+    item {
+      label: _("Kind");
+      action: "win.group-by";
+      target: "kind";
+    }
+
+    item {
+      label: _("Date Created");
+      action: "win.group-by";
+      target: "created";
+    }
+  }
+
+  section {
+    item {
+      label: _("Zoom _In");
+      action: "win.zoom-in";
+    }
+
+    item {
+      label: _("Zoom _Out");
+      action: "win.zoom-out";
+    }
+
+    item {
+      label: _("_Reset Zoom");
+      action: "win.zoom-reset";
     }
   }
 }

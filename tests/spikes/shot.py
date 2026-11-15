@@ -23,7 +23,10 @@ with tempfile.TemporaryDirectory() as tmp:
         app.launch()
         app.wait_idle()
         out = app.screenshot(REPO / "artifacts" / "spikes" / f"headless-{release}.png")
-        print(out, app.state()["active_window"])
+        import json
+        state = app.state()
+        (REPO / "artifacts" / "spikes" / f"state-{release}.json").write_text(json.dumps(state, indent=1))
+        print(out, json.dumps(state["folder"], indent=1)[:1500])
     finally:
         app.stop()
         session.stop()

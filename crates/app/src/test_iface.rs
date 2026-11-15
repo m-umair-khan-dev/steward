@@ -4,12 +4,16 @@
 //! - `State() -> s`: JSON describing what the app shows.
 //! - `WaitIdle(u timeout_ms) -> b`: returns once the app has no pending work.
 //! - `Screenshot(s path) -> b`: renders the active window to a PNG file.
+//! - `Select(as names) -> b`: selects the named items in the folder view.
 
 use adw::prelude::*;
 use gtk::{gio, glib, gsk};
 use serde_json::{Value, json};
 
 use cairn_core::APP_OBJECT_PATH;
+
+use crate::application::ACCELS;
+use crate::window::CairnWindow;
 
 const INTERFACE: &str = "dev.cairn.Files.Test1";
 const XML: &str = r#"
@@ -24,6 +28,10 @@ const XML: &str = r#"
     </method>
     <method name="Screenshot">
       <arg type="s" name="path" direction="in"/>
+      <arg type="b" name="ok" direction="out"/>
+    </method>
+    <method name="Select">
+      <arg type="as" name="names" direction="in"/>
       <arg type="b" name="ok" direction="out"/>
     </method>
   </interface>
@@ -61,13 +69,20 @@ pub fn register(app: &adw::Application) {
                     }
                     "Screenshot" => {
                         let path: String = params.child_get::<String>(0);
-                        match screenshot(&app, &path) {
-                            Ok(()) => invocation.return_value(Some(&(true,).to_variant())),
-                            Err(message) => invocation
-                                .return_dbus_error("org.freedesktop.DBus.Error.Failed", &message),
-                        }
+                        screenshot_when_drawn(&app, path, invocation);
                     }
-                    _ => invocation.return_dbus_error(
+                    "Select" => {
+                    let names: Vec<String> = params.child_get::<Vec<String>>(0);
+                    match main_window(&app) {
+                        Some(window) => {
+                            window.folder_view().select_names(&names);
+                            invocation.return_value(Some(&(true,).to_variant()));
+                        }
+                        None => invocation
+                            .return_dbus_error("org.freedesktop.DBus.Error.Failed", "no window"),
+                    }
+                }
+                _ => invocation.return_dbus_error(
                         "org.freedesktop.DBus.Error.UnknownMethod",
                         &format!("no method {method}"),
                     ),
@@ -80,14 +95,33 @@ pub fn register(app: &adw::Application) {
     }
 }
 
+fn main_window(app: &adw::Application) -> Option<CairnWindow> {
+    app.windows().into_iter().find_map(|w| w.downcast::<CairnWindow>().ok())
+}
+
 fn state(app: &adw::Application) -> Value {
     let windows = app.windows();
     let active = app.active_window().or_else(|| windows.first().cloned());
-    json!({
+    let accels: serde_json::Map<String, Value> = ACCELS
+        .iter()
+        .map(|(action, _)| {
+            let current: Vec<String> =
+                app.accels_for_action(action).iter().map(|a| a.to_string()).collect();
+            (action.to_string(), json!(current))
+        })
+        .collect();
+    let mut value = json!({
         "version": env!("CARGO_PKG_VERSION"),
         "windows": windows.len(),
         "active_window": active.map(|window| window_state(&window)),
-    })
+        "accels": accels,
+    });
+    if let Some(window) = main_window(app) {
+        if let (Value::Object(target), Value::Object(extra)) = (&mut value, window.test_state()) {
+            target.extend(extra);
+        }
+    }
+    value
 }
 
 fn window_state(window: &gtk::Window) -> Value {
@@ -114,6 +148,39 @@ fn dialog_state(dialog: &adw::Dialog) -> Value {
         value["version"] = json!(about.version().to_string());
     }
     value
+}
+
+/// Renders on the next frames, after layout and drawing, retrying for a few
+/// frames while the window has not drawn anything yet.
+fn screenshot_when_drawn(
+    app: &adw::Application,
+    path: String,
+    invocation: gio::DBusMethodInvocation,
+) {
+    let Some(window) = app.active_window().or_else(|| app.windows().first().cloned()) else {
+        invocation.return_dbus_error("org.freedesktop.DBus.Error.Failed", "no window");
+        return;
+    };
+    let app = app.clone();
+    let invocation = std::cell::RefCell::new(Some(invocation));
+    let frames_left = std::cell::Cell::new(60);
+    window.add_tick_callback(move |_, _| {
+        frames_left.set(frames_left.get() - 1);
+        let result = screenshot(&app, &path);
+        if result.is_err() && frames_left.get() > 0 {
+            return glib::ControlFlow::Continue;
+        }
+        if let Some(invocation) = invocation.borrow_mut().take() {
+            match result {
+                Ok(()) => invocation.return_value(Some(&(true,).to_variant())),
+                Err(message) => {
+                    invocation.return_dbus_error("org.freedesktop.DBus.Error.Failed", &message)
+                }
+            }
+        }
+        glib::ControlFlow::Break
+    });
+    window.queue_draw();
 }
 
 fn screenshot(app: &adw::Application, path: &str) -> Result<(), String> {

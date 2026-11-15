@@ -22,8 +22,23 @@ KEYCODES.update({
     "enter": 28, "escape": 1, "esc": 1, "space": 57, "comma": 51, "period": 52, "slash": 53,
     "f11": 87, "f12": 88, "home": 102, "up": 103, "pageup": 104, "left": 105, "right": 106,
     "end": 107, "down": 108, "pagedown": 109, "insert": 110, "delete": 111,
-    "ctrl": 29, "control": 29, "shift": 42, "alt": 56, "super": 125,
+    "ctrl": 29, "control": 29, "shift": 42, "alt": 56, "super": 125, "grave": 41,
+    "semicolon": 39, "apostrophe": 40, "backslash": 43, "leftbracket": 26, "rightbracket": 27,
 })
+
+# Characters for type_text(): the combination that types each one (US layout).
+_CHARS = {" ": "space", "/": "slash", ".": "period", ",": "comma", "-": "minus", "=": "equal",
+          "~": "shift+grave", "_": "shift+minus", "+": "shift+equal", ":": "shift+semicolon"}
+
+
+def combo_for(char: str) -> str:
+    if char in _CHARS:
+        return _CHARS[char]
+    if char.isascii() and char.isalpha():
+        return f"shift+{char.lower()}" if char.isupper() else char
+    if char.isdigit():
+        return char
+    raise ValueError(f"cannot type {char!r} with the US key table")
 SHIFT = KEYCODES["shift"]
 
 
