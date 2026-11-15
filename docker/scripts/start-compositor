@@ -1,0 +1,45 @@
+#!/bin/bash
+# Starts a headless Wayland compositor in the background and waits for its socket.
+#
+# Needs XDG_RUNTIME_DIR (and a D-Bus session for mutter). Prints "PID SOCKET" on
+# success. The compositor is chosen by CAIRN_COMPOSITOR (default: see ADR 0002).
+# Its output goes to COMPOSITOR_LOG (default: /dev/null).
+set -euo pipefail
+
+# mutter is GNOME's own compositor and lets tests inject real key presses
+# (ADR 0002, ADR 0003); weston is the lighter fallback.
+kind=${CAIRN_COMPOSITOR:-mutter}
+socket=${CAIRN_WAYLAND_SOCKET:-wayland-cairn}
+log=${COMPOSITOR_LOG:-/dev/null}
+: "${XDG_RUNTIME_DIR:?XDG_RUNTIME_DIR must be set}"
+
+case "$kind" in
+  mutter)
+    mutter --headless --no-x11 --wayland-display="$socket" \
+      --virtual-monitor 1280x800 >"$log" 2>&1 &
+    ;;
+  weston)
+    weston --backend=headless --socket="$socket" --width=1280 --height=800 \
+      --idle-time=0 >"$log" 2>&1 &
+    ;;
+  *)
+    echo "start-compositor: unknown compositor '$kind' (use mutter or weston)" >&2
+    exit 2
+    ;;
+esac
+pid=$!
+
+# Wait up to 10 s for the socket; give up early if the compositor dies.
+for _ in $(seq 1 200); do
+  if [ -S "$XDG_RUNTIME_DIR/$socket" ]; then
+    echo "$pid $socket"
+    exit 0
+  fi
+  kill -0 "$pid" 2>/dev/null || break
+  sleep 0.05
+done
+
+echo "start-compositor: $kind did not create $XDG_RUNTIME_DIR/$socket" >&2
+[ "$log" != /dev/null ] && tail -n 40 "$log" >&2
+kill "$pid" 2>/dev/null || true
+exit 1

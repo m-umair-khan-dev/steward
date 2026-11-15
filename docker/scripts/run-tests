@@ -1,0 +1,7 @@
+#!/bin/bash
+# `make test`: unit and integration tests, plus the fixture generator's tests.
+set -euo pipefail
+cd /workspace
+
+docker/scripts/headless-run cargo nextest run --workspace --locked --no-fail-fast
+python3 -m pytest -q -p no:cacheprovider tests/fixtures

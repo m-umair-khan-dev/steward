@@ -1,0 +1,16 @@
+#!/bin/bash
+# `make app` on Docker Desktop: shows the app in a browser via GTK's Broadway
+# backend (ADR 0004), at http://127.0.0.1:8085. Restarts on source changes.
+set -euo pipefail
+cd /workspace
+
+mkdir -p "$XDG_RUNTIME_DIR"
+chmod 700 "$XDG_RUNTIME_DIR"
+
+gtk4-broadwayd --address 0.0.0.0 --port 8085 "$BROADWAY_DISPLAY" &
+broadway_pid=$!
+trap 'kill $broadway_pid 2>/dev/null || true' EXIT
+
+echo "Cairn: open http://127.0.0.1:8085 in your browser."
+exec dbus-run-session -- watchexec --restart --exts rs,blp,xml,toml \
+  --ignore 'target/**' -- cargo run -p cairn

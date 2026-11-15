@@ -1,0 +1,136 @@
+# Desktop app: development, tests and end-to-end tests (DESIGN.md §9.3).
+# Use it through the Makefile (`make app`, `make test`, `make e2e`, ...).
+name: cairn-desktop
+
+x-dev: &dev
+  image: cairn-dev:${UBUNTU_VERSION:-26.10}
+  pull_policy: never
+  init: true
+  environment: &dev-env
+    RUST_BACKTRACE: "1"
+    CARGO_BUILD_JOBS: ${CARGO_BUILD_JOBS:-2}
+    LANG: C.UTF-8
+  volumes: &dev-volumes
+    - .:/workspace
+    - cargo-registry:/usr/local/cargo/registry
+    - cargo-target:/var/cache/cargo-target
+  # bwrap and the headless compositor need user namespaces (ADR 0005). Dev and test only.
+  security_opt: ["seccomp=unconfined"]
+
+x-app: &app
+  <<: *dev
+  volumes:
+    - .:/workspace
+    - cargo-registry:/usr/local/cargo/registry
+    - cargo-target:/var/cache/cargo-target
+    - fixture-home:/home/dev            # the app's home is the FAKE home, never yours
+  cap_add: ["SYS_PTRACE"]               # debugger; dev only
+  stdin_open: true
+  tty: true
+
+services:
+  # Builds the dev image once; every other service reuses it.
+  dev-image:
+    profiles: ["build"]
+    image: cairn-dev:${UBUNTU_VERSION:-26.10}
+    build:
+      context: .
+      dockerfile: docker/desktop.Dockerfile
+      target: dev
+      args:
+        UBUNTU_IMAGE: ${UBUNTU_IMAGE}
+        HOST_UID: ${HOST_UID:-1000}
+        HOST_GID: ${HOST_GID:-1000}
+        NEXTEST_VERSION: ${NEXTEST_VERSION}
+        NEXTEST_SHA256: ${NEXTEST_SHA256}
+        WATCHEXEC_VERSION: ${WATCHEXEC_VERSION}
+        WATCHEXEC_SHA256: ${WATCHEXEC_SHA256}
+
+  # Runs the app in a window on the host's Wayland session (Docker Engine on Linux).
+  # Restarts on every source change.
+  app:
+    <<: *app
+    environment:
+      <<: *dev-env
+      WAYLAND_DISPLAY: ${WAYLAND_DISPLAY:-wayland-0}
+      XDG_RUNTIME_DIR: /run/user/${HOST_UID:-1000}
+      GDK_BACKEND: wayland
+      GTK_DEBUG: ${GTK_DEBUG:-}
+      G_MESSAGES_DEBUG: ${G_MESSAGES_DEBUG:-}
+      CAIRN_DEV: "1"
+    tmpfs:
+      - /run/user/${HOST_UID:-1000}:uid=${HOST_UID:-1000},gid=${HOST_GID:-1000},mode=0700
+    volumes:
+      - .:/workspace
+      - cargo-registry:/usr/local/cargo/registry
+      - cargo-target:/var/cache/cargo-target
+      - fixture-home:/home/dev
+      - ${XDG_RUNTIME_DIR:-/run/user/1000}/${WAYLAND_DISPLAY:-wayland-0}:/run/user/${HOST_UID:-1000}/${WAYLAND_DISPLAY:-wayland-0}
+    devices: ["/dev/dri:/dev/dri"]
+    command: >
+      dbus-run-session -- watchexec --restart --exts rs,blp,xml,toml
+      --ignore 'target/**' -- cargo run -p cairn
+
+  # Docker Desktop cannot reach the host's display (ADR 0004). This variant shows
+  # the window in a browser at http://127.0.0.1:8085 using GTK's Broadway backend.
+  app-broadway:
+    <<: *app
+    environment:
+      <<: *dev-env
+      GDK_BACKEND: broadway
+      BROADWAY_DISPLAY: ":5"
+      XDG_RUNTIME_DIR: /tmp/runtime-dev
+      GTK_DEBUG: ${GTK_DEBUG:-}
+      G_MESSAGES_DEBUG: ${G_MESSAGES_DEBUG:-}
+      CAIRN_DEV: "1"
+    ports: ["127.0.0.1:8085:8085"]
+    command: docker/scripts/run-broadway
+
+  # (Re)creates the fake home folder the app runs against.
+  fixture:
+    <<: *dev
+    # Mounted where the image has a dev-owned home, so a new volume is created
+    # owned by the dev user (a fresh mount point would be owned by root).
+    volumes:
+      - .:/workspace
+      - fixture-home:/home/dev
+    command: ["docker/scripts/make-fixture-home", "/home/dev", "--force"]
+
+  # Unit and integration tests (Rust), plus the fixture generator's own tests.
+  test:
+    <<: *dev
+    tmpfs: ["/home/dev:uid=${HOST_UID:-1000},gid=${HOST_GID:-1000}"]
+    command: ["docker/scripts/run-tests"]
+
+  # End-to-end tests: the real app, headless, driven by tests/e2e (DESIGN.md §10.2).
+  e2e:
+    <<: *dev
+    environment:
+      <<: *dev-env
+      E2E_MARK: ${E2E_MARK:-not manual}
+      E2E_K: ${E2E_K:-}
+      CAIRN_COMPOSITOR: ${CAIRN_COMPOSITOR:-}
+    tmpfs:
+      - /home/dev:uid=${HOST_UID:-1000},gid=${HOST_GID:-1000}
+      - /tmp:uid=${HOST_UID:-1000},gid=${HOST_GID:-1000},mode=1777
+    command: ["docker/scripts/run-e2e"]
+
+  # Formatting and clippy (Dockerfile and Compose checks run from the Makefile).
+  lint:
+    <<: *dev
+    tmpfs: ["/home/dev:uid=${HOST_UID:-1000},gid=${HOST_GID:-1000}"]
+    command: ["docker/scripts/run-lint"]
+
+  # A shell with the full toolchain.
+  shell:
+    <<: *dev
+    tmpfs: ["/home/dev:uid=${HOST_UID:-1000},gid=${HOST_GID:-1000}"]
+    stdin_open: true
+    tty: true
+    command: ["bash"]
+
+volumes:
+  cargo-registry:
+  cargo-target:
+    name: cairn-target-${UBUNTU_VERSION:-26.10}   # one build cache per Ubuntu release
+  fixture-home:

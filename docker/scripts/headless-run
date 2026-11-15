@@ -1,0 +1,25 @@
+#!/bin/bash
+# Runs a command inside a private D-Bus session with a headless Wayland
+# compositor, so GTK code can run without a screen (DESIGN.md §9.3).
+#
+#   docker/scripts/headless-run cargo nextest run
+set -euo pipefail
+
+if [ $# -eq 0 ]; then
+  echo "usage: headless-run COMMAND [ARGS...]" >&2
+  exit 2
+fi
+
+here=$(cd "$(dirname "$0")" && pwd)
+XDG_RUNTIME_DIR=$(mktemp -d /tmp/cairn-runtime.XXXXXX)
+chmod 700 "$XDG_RUNTIME_DIR"
+export XDG_RUNTIME_DIR
+
+# shellcheck disable=SC2016  # expanded by the inner shell
+exec dbus-run-session -- bash -c '
+  set -euo pipefail
+  read -r pid socket < <("$0/start-compositor")
+  trap "kill $pid 2>/dev/null || true; rm -rf \"$XDG_RUNTIME_DIR\"" EXIT
+  export WAYLAND_DISPLAY=$socket GDK_BACKEND=wayland
+  "$@"
+' "$here" "$@"

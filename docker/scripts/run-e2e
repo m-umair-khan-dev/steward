@@ -1,0 +1,27 @@
+#!/bin/bash
+# `make e2e`: builds the app with the test interface, then runs the end-to-end
+# scenarios (DESIGN.md §10.2). Each test starts its own D-Bus session,
+# compositor and app against a fresh copy of the fixture home.
+#
+# Environment: E2E_MARK (pytest -m), E2E_K (pytest -k), CAIRN_COMPOSITOR.
+set -euo pipefail
+cd /workspace
+
+# Separate target folder: the e2e build (with the Test1 interface) must never
+# overwrite the binary `make app` is running, or the other way round.
+export CARGO_TARGET_DIR="$CARGO_TARGET_DIR/e2e"
+cargo build --locked -p cairn --features e2e
+export CAIRN_BIN="$CARGO_TARGET_DIR/debug/cairn"
+
+# `run-e2e python3 SCRIPT` runs a helper script (e.g. tests/spikes/*) against
+# the same e2e build instead of the test suite.
+if [ "${1:-}" = "python3" ]; then
+  exec "$@"
+fi
+
+args=(-c tests/e2e/pytest.ini tests/e2e --junitxml=artifacts/e2e/junit.xml)
+[ -n "${E2E_MARK:-}" ] && args+=(-m "$E2E_MARK")
+[ -n "${E2E_K:-}" ] && args+=(-k "$E2E_K")
+
+mkdir -p artifacts/e2e
+exec python3 -m pytest "${args[@]}"
