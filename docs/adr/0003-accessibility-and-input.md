@@ -23,7 +23,9 @@ press a button the way a screen-reader user would (scenario E0-02 does this).
 
 Two practical lessons, now built into the harness:
 
-- AT-SPI role names are not GTK's: a button is `push button`.
+- AT-SPI role names are not GTK's, and they changed between releases: 24.04
+  reports `push button` and `panel`, 26.10 reports `button` and `grouping`. The
+  helper treats each pair as the same role; tests use `button` and `panel`.
 - Names repeat (the window and a dialog each have a "Close" button), so clicks
   can be limited to a named subtree: `a11y_click("Close", role="push button",
   within="About")`.
@@ -36,7 +38,8 @@ CreateSession, Start, then NotifyKeyboardKeycode with evdev codes. Finding:
 the window is not focused after launch; mutter focuses it on the *first* input
 event, and that event is lost. The harness therefore taps Shift first, waits
 until the window reports `is_active`, then sends the real keys. Ctrl+Q injected
-this way quits the app (harness test `test_harness_presses_real_keys`).
+this way quits the app (harness test `test_harness_presses_real_keys`), on
+24.04 and on 26.10.
 
 **Pointer input: not tested.** Absolute pointer motion through RemoteDesktop
 needs a ScreenCast stream. Not needed until drag-and-drop tests; revisit then.

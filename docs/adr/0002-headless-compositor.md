@@ -18,12 +18,15 @@ Probe: `tests/spikes/probe.py` (S2), plus the full end-to-end suite under each.
 | Release | mutter | weston |
 |---|---|---|
 | 24.04 | 46.2: starts in 0.45 s; all Phase 0 scenarios pass | 13.0.0: starts in 0.08 s; all Phase 0 scenarios pass |
-| 26.04 | see the 26.04 section below | see below |
+| 26.10 | 51.0: starts in 0.3 s; all Phase 0 scenarios pass | 16.0.0: starts in 0.08 s |
 
 Working command lines (`docker/scripts/start-compositor`):
 
 - `mutter --headless --no-x11 --wayland-display=NAME --virtual-monitor 1280x800`
 - `weston --backend=headless --socket=NAME --width=1280 --height=800 --idle-time=0`
+
+On 26.10, mutter also writes a Mesa shader cache under `$XDG_CACHE_HOME`; the
+harness gives the compositor its own cache folder outside the test home.
 
 mutter logs harmless warnings in a container: no system bus, no
 `org.gnome.SessionManager`, no locale1 or colord. None affect the app.
