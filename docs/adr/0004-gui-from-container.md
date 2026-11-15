@@ -47,3 +47,12 @@ Broadway as a convenient viewer for development, not a faithful one.
   confirm the window opens on the desktop.
 - Developers on Docker Desktop who want a native window can install Docker
   Engine alongside it and switch context (`docker context use default`).
+
+## Update (2026-11-15, ADR 0009)
+
+With the switch to Qt/QML, GTK's Broadway backend no longer applies. On
+Docker Desktop, `make app` runs the app with Qt's VNC display plugin
+(`QT_QPA_PLATFORM=vnc`, in `qt6-qpa-plugins`) and publishes it on
+`127.0.0.1:5900`; open it with Remmina (installed on Ubuntu) or any VNC
+viewer. With Docker Engine on Linux, the app uses the host's Wayland socket as
+before.

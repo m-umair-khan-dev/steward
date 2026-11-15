@@ -2,7 +2,7 @@
 
 | | |
 |---|---|
-| **Status** | Draft v2: open source, with an agent-executable implementation plan |
+| **Status** | Draft v3: open source; Qt/QML front end (ADR 0009); look matched to the reference (ADR 0008) |
 | **Date** | 15 November 2026 |
 | **Reference product** | FileOS 1.0.3 for macOS, [fileosmac.com](https://fileosmac.com/) |
 | **Reference capture** | [fileosmac/README.md](fileosmac/README.md), with recordings in [fileosmac/gifs/](fileosmac/gifs/) and stills in [fileosmac/screenshots/](fileosmac/screenshots/) |
@@ -46,7 +46,7 @@ FileOS is a **native desktop file manager**, with a small web presence around it
 
 | Term in the brief | What it means here |
 |---|---|
-| Frontend | (a) the GTK desktop UI and (b) the marketing and docs website |
+| Frontend | (a) the Qt/QML desktop UI (ADR 0009) and (b) the marketing and docs website |
 | Backend | The local core engine and indexer inside the app. There is no server application; the only hosted pieces are static files (website, apt repository) |
 | Database | Local SQLite files per user. No server database |
 | Docker | Reproducible build, run and test environment for the desktop app; build and preview for the website and the apt repository |
@@ -57,8 +57,8 @@ A desktop file manager is not *deployed* in a container. End users install a `.d
 
 | # | Decision | Why |
 |---|---|---|
-| D1 | **GTK 4 + libadwaita, written in Rust** | A file manager lives on GIO/GVfs (trash, mounts, phones, network shares, thumbnails, drag and drop with other apps). GTK gives all of that natively and looks at home on Ubuntu. Rust gives the scanning, hashing and indexing speed the features need, and matches the team's existing repos. Details in [§6](#6-frontend-stack). |
-| D2 | **API baseline is Ubuntu 24.04** (GTK 4.14, libadwaita 1.5, confirmed in ADR 0001), with newer features gated at runtime | 24.04 is supported for years and is the largest install base. During development the gate runs on 26.10 first and the older releases are tested at the end (ADR 0007); the pinned crate features keep code within the baseline meanwhile. |
+| D1 | **Qt 6 / QML front end on a Rust engine** (ADR 0009; originally GTK 4 + libadwaita) | The engine stays Rust on GIO/GVfs for trash, mounts, phones, shares and thumbnails. The front end moved to Qt 6 / QML through cxx-qt so the app can match the reference's look and motion (ADR 0008, ADR 0009). |
+| D2 | **Develop on Ubuntu 26.10 (Qt 6.11); older releases at the end** (ADR 0007) | The interface uses Qt 6.5+ features (`QtQuick.Effects`, system colour scheme). 26.04 ships a current Qt; 24.04 ships Qt 6.4, so its support is decided once the project is complete: Qt5Compat effects, or a Flatpak with a current Qt (ADR 0009). |
 | D3 | **Two processes: the app and a background indexer**, sharing a SQLite cache | Search and folder sizes must not block the window or die with it. A shared read-mostly database is the simplest contract between them. |
 | D4 | **Every file action goes through one operations engine with an undo journal** | "Nothing moves without a preview, everything can be undone" is the original's core promise. It has to be an architectural property, not a per-feature courtesy. |
 | D5 | **The app never runs anything as root.** System-level clean-ups are shown as a command to copy | The original does the same for packages ("FileOS only reads"). Root actions cannot go to the Trash, so they cannot honour the Undo promise. |
@@ -67,7 +67,7 @@ A desktop file manager is not *deployed* in a container. End users install a `.d
 | D8 | **The Drop Shelf is redesigned, not ported** | A Wayland app cannot place itself at the top of the screen, grab a global key on older GNOME, or see a drag that starts in another app. The Ubuntu version is a summonable Shelf window, with an optional GNOME Shell extension for placement. |
 | D9 | **No server application.** Static website, static signed apt repository, no accounts, no telemetry | The project is open source, so the reference's checkout and licence activation are dropped. The reference itself runs no backend of its own, so nothing is lost |
 | D10 | **Website content lives in Git as Markdown** (Astro static site). No CMS | The content is a landing page, about 27 guide pages and a changelog, all written by the team. A CMS adds a service to run and secure for no gain. |
-| D11 | **Own name, own icon, own copy, own screenshots** | See below. |
+| D11 | **Own name, icon, words and artwork; the look follows the reference** (ADR 0008) | Layout, colours, shapes and motion match the captures in `fileosmac/`; every image, icon and string is our own. See below. |
 | D12 | **End-to-end tests drive the real app in a headless container**, and every phase ends at a gate that runs all of them | An AI agent can only be trusted with a file manager if it can prove, by itself, that files end up where they should. Details in [§10.2](#102-test-layers-and-the-end-to-end-harness) |
 
 ### 1.3 Name, brand and what we may not copy
@@ -146,107 +146,172 @@ Layout patterns seen across every capture:
 
 ## 3. UI/UX design for Ubuntu
 
+The interface follows the reference captures in [fileosmac/](fileosmac/) closely: layout, proportions, colours, card and folder shapes, motion (ADR 0008). It is built with Qt 6 / QML (ADR 0009) from **our own drawing, icons and words**: nothing is copied from the reference (§1.3). Where Ubuntu conventions differ from macOS (window buttons, keys, file locations), Ubuntu wins.
+
+**Primary references** (open these when building any screen):
+
+| Capture | What to match |
+|---|---|
+| [screenshots/smart-downloads.png](fileosmac/screenshots/smart-downloads.png) | The whole window: sidebar, header, breadcrumb row, Folders and "By kind" sections, glass folders, right pane, status bar |
+| [screenshots/design.png](fileosmac/screenshots/design.png) | File cards, glass folders with counts and sizes, folder-at-a-glance tree |
+| [gifs/hero.gif](fileosmac/gifs/hero.gif) | The tour, and the signature motion: files flying into kind folders |
+| [gifs/smart-clean.gif](fileosmac/gifs/smart-clean.gif) | Card grid, detail page push, rows collapsing and reflowing, ring animation, Undo toast |
+| [gifs/dual-pane.gif](fileosmac/gifs/dual-pane.gif) | Two panes, rows flying across, footer hint bar |
+| [gifs/search.gif](fileosmac/gifs/search.gif) | Search overlay, chips with counts, matched-line rows |
+| [gifs/iphone.gif](fileosmac/gifs/iphone.gif), [gifs/workspaces.gif](fileosmac/gifs/workspaces.gif), [gifs/developers.gif](fileosmac/gifs/developers.gif), [gifs/peek.gif](fileosmac/gifs/peek.gif), [gifs/bookmarks.gif](fileosmac/gifs/bookmarks.gif), [gifs/about-this-mac.gif](fileosmac/gifs/about-this-mac.gif), [screenshots/ai-agents.png](fileosmac/screenshots/ai-agents.png), [screenshots/installed.png](fileosmac/screenshots/installed.png) | Each later feature's screen |
+
 ### 3.1 Principles
 
-1. **Look like an Ubuntu app, behave like the reference.** Use libadwaita widgets and the Yaru theme as they come. Keep the reference's information design: the sidebar order, summaries, chips with counts, cards, toasts with Undo.
-2. **Follow the system, do not restyle it.** Accent colour, light or dark, font, window-button side and animation setting all come from the desktop.
-3. **Use the keys Ubuntu users already know.** Where the reference's shortcut collides with a GNOME or Nautilus convention, the convention wins ([Appendix A](#appendix-a-keyboard-map)).
-4. **No fake macOS.** No traffic lights, no notch, no frosted glass, no SF symbols.
+1. **Look like the reference, behave like an Ubuntu app.** Same layout, shapes, colours and motion; Ubuntu window buttons, Ctrl-based keys, XDG folders, Trash and drives.
+2. **Motion explains change.** Every change to the file system or the view animates from where things were to where they go (files into kind folders, rows across panes, rows collapsing). Never a bare jump.
+3. **Calm by default.** Soft lavender surfaces, one accent, generous spacing, short words.
+4. **Respect the system where it matters to people:** light or dark, text size, reduced motion, screen readers, keyboard-only use.
+5. **No fake macOS.** No traffic lights, no notch, no Apple names or symbols.
 
-### 3.2 Translation table: macOS idiom to Ubuntu idiom
+### 3.2 From macOS idiom to Ubuntu
 
-| Reference (macOS) | Ubuntu version | Notes |
-|---|---|---|
-| Traffic-light window buttons, left | `AdwHeaderBar` with system button layout | Ubuntu's default is right-side buttons; honour the user's setting |
-| Unified toolbar | Header bar: back/forward, path bar, view switcher, search, primary menu | One row; the view options collapse into a menu on narrow windows |
-| Translucent sidebar | `AdwOverlaySplitView` sidebar with standard sidebar style | No blur. GTK apps cannot blur what is behind them |
-| Brand purple | **System accent colour** (`accent_bg_color`) | Ubuntu's default accent is orange. Hard-coding purple would look foreign. The app's *icon* may carry a brand colour |
-| SF Pro / Instrument Sans | System font (Ubuntu Sans) | Never bundle a UI font |
-| SF Symbols | Symbolic icons from the icon theme, plus a small set of our own symbolic SVGs for folder symbols | Follow GNOME's symbolic icon rules so they recolour |
-| "Glass" folders | Tinted folder cards: Yaru folder icon plus our symbol emblem, on an accent-tinted rounded card | Setting offers **System** (theme icon, default) and **Tinted** (our card) |
-| Notch Drop Shelf | **Shelf** window, summoned by a key or the tray icon | See [§4.4](#44-redesigned-the-shelf) |
-| Menu bar icon with panel | Tray icon (AppIndicator), click toggles the Shelf | Ubuntu ships the AppIndicator extension by default; vanilla GNOME does not |
-| Dark toast with Undo | `AdwToast` with an Undo button | Direct equivalent |
-| Sheets and alerts | `AdwDialog`, `AdwAlertDialog` | Destructive button styled as destructive, never the default |
-| Settings window, 9 pages | `AdwPreferencesDialog`, 6 pages | General, Appearance, Shortcuts, Open In, Shelf and tray, Search and index. The Folder Access, Spotlight and License pages are not needed ([§4.5](#45-excluded-with-reasons)) |
-| ⌘K palette | In-window search overlay on `Ctrl+K` | Same layout: chips with counts, folders first, thumbnails, matched line |
-| Quick Look | **Peek**, our own preview overlay on `Space` | GNOME's own previewer (Sushi) is tied to Nautilus |
-| "Show in Finder" | "Show in Files" | Via the `org.freedesktop.FileManager1` D-Bus interface |
-| Spotlight entries | GNOME Shell search provider | Workspaces, collections and saved links appear in the Activities search |
-| Shortcuts app and Siri actions | App actions over D-Bus, a `cairn` command-line tool, and desktop-file actions (right-click the dock icon) | Same eight actions |
-| Full Disk Access onboarding | *Removed* | A `.deb` app has the user's normal file permissions. This shortens onboarding by two screens |
-| Sound effects | *Removed in v1* | Ubuntu has event sounds off for most actions |
+| Reference (macOS) | Cairn on Ubuntu |
+|---|---|
+| Traffic lights, top left | Our own window buttons (minimise, maximise, close) at the right of the header, round and quiet. The window is frameless; we draw the whole chrome so it matches (GNOME expects client-side decorations) |
+| Sidebar as an inset rounded panel | Same |
+| App name row ("FileOS" + icon) | "Cairn" + our own app badge |
+| Sections Workspaces, Bookmarks, Favorites, Tools, Locations | Same order. Favorites holds Home and the XDG folders; Locations holds drives, phones and network shares. Sections appear as their features land (Workspaces Phase 4, Bookmarks Phase 7, Tools Phases 5 and 7) |
+| "MacBook Air · 147.8 GB free" with a bar | "Computer · 147.8 GB free" with a bar; opens About This Computer (Phase 5) |
+| ⌘ shortcuts | Ctrl shortcuts ([Appendix A](#appendix-a-keyboard-map)) |
+| Quick Look | Peek (Space), our own overlay |
+| "Show in Finder" | "Show in Files" |
+| Spotlight | GNOME Shell search provider |
+| Notch Drop Shelf | Shelf window ([§4.4](#44-redesigned-the-shelf)) |
+| Menu bar extra | Tray icon (AppIndicator) |
+| macOS system blur behind windows | Not possible on GNOME; blur is used inside the window (glass folder fronts, overlays) where QML can do it |
 
 ### 3.3 Window anatomy
 
+Matches [smart-downloads.png](fileosmac/screenshots/smart-downloads.png):
+
 ```
-┌────────────────────────────────────────────────────────────────────────────┐
-│ ‹ ›  ⌂ › Documents › Clients › Acme        [main ●3]   ▦ ☰   🔍  ≡   – □ ✕ │  header bar
-├───────────────┬────────────────────────────────────────────┬───────────────┤
-│ WORKSPACES    │ Acme Rebrand                               │  PREVIEW      │
-│  Product Lau… │ 3 folders, 8 files · 31 MB · changed 2 h   │               │
-│  Japan Trip   │ [All 11] [Folders 3] [Images 3] [Docs 5]   │  (thumbnail   │
-│ BOOKMARKS     │                                            │   or folder   │
-│  All        18│ Folders                                    │   tree, two   │
-│ PLACES        │  ▣ Exports    ▣ Logo Files   ▣ Photos      │   levels)     │
-│  Home         │  14 · 2 MB    6 · 640 KB     38 · 21 MB    │               │
-│  Desktop      │                                            │  Kind  PDF    │
-│  Documents    │ Files                                      │  Size  4.2 MB │
-│  Downloads    │  ┌────┐ ┌────┐ ┌────┐ ┌────┐               │  Where ~/Doc… │
-│  Pictures …   │  │ ▒▒ │ │ ▒▒ │ │ ▒▒ │ │ ▒▒ │               │               │
-│ TOOLS         │  └────┘ └────┘ └────┘ └────┘               │  [Open]       │
-│  Free Up Space│  Brand…  Mood…  Pitch…  Invo…              │  [Show in     │
-│  Installed  48│                                            │   Files]      │
-│  AI Agents    │                                            │               │
-│ DEVICES       ├────────────────────────────────────────────┴───────────────┤
-│  Pixel 9    ⏏ │ 11 items, 1 selected · 147.8 GB available                  │  status
-│  T7 Shield  ⏏ │            ┌───────────────────────────────────┐           │
-│ ───────────── │            │ Moved 2 items to "Invoices"  Undo │           │  toast
-│ 🖥 147.8 GB    │            └───────────────────────────────────┘           │
-└───────────────┴────────────────────────────────────────────────────────────┘
+╭──────────────╮  ╭─────────────────────────────────────────────────────────────────────────────╮
+│ ▣ Cairn    ⇤ │  │ (‹ ›)  Downloads        ( None│Kind│Date ) (☰│▦) (▤│▥│◫) ( Filter… ) ⋯  – ▢ ✕ │ header
+│              │  │ Computer › home › sam › Downloads                         Ctrl+L to type a path│ crumbs
+│ Workspaces   │  ├───────────────────────────────────────────────────────┬─────────────────────┤
+│  ▤ Launch    │  │ [All 29] [Folders 3] [Images 6] [Videos 2]   3 folders…│ Downloads           │
+│ Bookmarks    │  │                                                       │ 1.87 GB  in all     │
+│  ☆ All    18 │  │ Folders 3                                             │ 3 folders · 26 files│
+│ Favorites    │  │  ╭▔▔╮____  ╭▔▔╮____  ╭▔▔╮____                         │                     │
+│  ⌂ Home      │  │  │5 items│  │3 items│  │12 items                       │ WHAT TAKES THE SPACE│
+│ ▸ Downloads  │  │  │  ▤    │  │  ☆    │  │  ✦    │                       │ ● Videos     1.6 GB │
+│  ▤ Documents │  │  ╰745 KB╯  ╰5.4 MB╯  ╰48 MB ╯                         │ ▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬     │
+│ Tools        │  │  archive   Receipts  Wallpapers                       │ ● Installers 188 MB │
+│  ⌁ Free Up…  │  │                                                       │ ▬▬                  │
+│ Locations  › │  │ By kind 6                                             │ SUGGESTIONS         │
+│              │  │  (teal Videos) (orange Images) (red PDFs) …           │ ┌─────────────────┐ │
+│ ▭ Computer   │  │                                                       │ │1 installer·186MB│ │
+│ ▬▬▬ 147.8 GB │  │                                                       │ └─────────────────┘ │
+╰──────────────╯  │ 21 items · 147.8 GB available                         │ [ Tidy Downloads… ] │
+                  ╰─────────────────────────────────────────────────────────────────────────────╯
 ```
 
-- **Header bar.** Back and forward; a breadcrumb path bar that turns into a text field on `Ctrl+L` (accepts a path *or* a folder name, Tab completes); the **git chip** when the folder is in a repository (branch plus count of uncommitted changes, read-only); view switcher; search; primary menu.
-- **Sidebar.** Sections in the reference's order, with two renamings. "Favorites" becomes **Places** (the XDG user folders: Home, Desktop, Documents, Downloads, Music, Pictures, Videos, plus pinned folders). "Locations" becomes **Devices** (disks, phones, network mounts, with an eject button). The bottom row shows the computer and free space and opens About This Computer. Users can reorder and hide entries.
-- **Content.** Grid of cards or a list with columns. Three sizes, `Ctrl +` and `Ctrl −`. Grouping by None, Kind or Date. Rubber-band selection, drag and drop, context menus.
-- **Preview pane** (toggle with `Ctrl+Shift+P`; `F9` toggles the sidebar, as in Files). For a file: preview and facts. For a folder: where it lives and a two-level tree of what is inside.
-- **Status line.** Item count, selection, free space.
-- **Toasts.** One at a time, bottom centre, with Undo for every file action.
+| Element | Specification |
+|---|---|
+| Window | Lavender background (`bg`). Frameless; 8 px gutter around the sidebar panel; the content pane is white. Drag by any empty header area (system move); resize from the edges (system resize). Remembers size and maximised state |
+| Sidebar | Inset rounded panel, 210–240 px, radius 16, `sidebar` colour, 1 px `line` border. App row (badge + "Cairn", 19 px bold) with a collapse button. Section headings 12 px semibold, 50 % ink. Rows 34 px, radius 10, purple line icons, label, optional count on the right in `faint`. Selected row: accent at 16 % with bold label. Computer row pinned at the bottom with a thin purple usage bar and "N GB free" |
+| Collapsed sidebar | A 56 px icon rail (app badge, one icon per entry, computer icon). Hovering the rail slides the full sidebar over the content (spring, 250 ms); leaving it slides back. The collapse button and F9 toggle |
+| Header | 56 px. Left: back/forward in a white pill with a soft shadow; folder title 20 px bold. Right: grouping segmented control (None, Kind, Date); view switch (list, grid); pane toggles (preview pane; later the space chart and dual pane) where active buttons are filled with the accent; "Filter this folder" pill field; ⋯ menu; window buttons |
+| Breadcrumb row | Full path from the disk root ("Computer › home › sam › Downloads"), muted segments, current segment bold; "Ctrl+L to type a path" hint on the right. Ctrl+L turns the row into a text field with Tab completion |
+| Chip row | "All N" and one chip per kind present, with counts; active chip filled with accent at 16 % and accent text. Folder summary on the right ("3 folders, 26 files · 1.87 GB") |
+| Content | Sections, each with a header: bold title plus a `faint` count ("Folders 3", "Files 26", "By kind 6"). Folders as glass folders; files as file cards. List view: a table with Name, Size, Kind, Modified, Created and section headers when grouping |
+| Right pane | 300 px, `pane` colour, left border. Nothing selected: the folder overview (name, total size "in all", counts, WHAT TAKES THE SPACE with coloured dots and bars, later SUGGESTIONS and the purple Tidy button). One item selected: its preview and facts (Kind, Size, Modified, Created, Where) and Open. A folder: what is inside (two levels once the index exists) |
+| Status bar | "21 items, 1 selected · 147.8 GB available" in `muted`, 12 px |
+| Toasts | Dark pill at the bottom centre ("Moved 2 items to …"), with Undo. Slides up with a spring, leaves after 3 s |
+| Menus, popovers, dialogs | White, radius 12, soft shadow, 13–14 px text; dialogs centred with a dimmed backdrop |
 
-### 3.4 Screens
+### 3.4 Components
 
-Each row links the reference capture the screen is modelled on.
+**Glass folder** (matches the folders in [smart-downloads.png](fileosmac/screenshots/smart-downloads.png) and [design.png](fileosmac/screenshots/design.png)):
 
-| Screen | Reference | Ubuntu design notes |
+- Shape about 200 × 165 at Medium (scales with Small, Medium, Large).
+- Back: the tint colour with a tab at the top left. Behind the front, two sheets of white paper, slightly rotated.
+- Front: a frosted panel covering the lower 65 %. A real blur of what is behind it, a tint gradient (light at the top left to the tint colour), a 1 px white border at 40 %, and an inner highlight.
+- On the front: "N items" (bold, top left), an info button (top right, opens the preview pane), a symbol in the centre (from the folder-symbol rules, §4.1), and the size (bottom left, once the index knows it).
+- Name underneath, centred.
+- Tints: folders purple; kind folders by kind (Videos teal, Images orange, PDFs red, Documents blue, Installers slate, Archives green, Audio pink, Code indigo, Other grey).
+- Hover: lifts 4 px, scales to 1.04, deeper coloured shadow (spring). Selected: accent ring around the card.
+
+**File card** (matches the file cards in [design.png](fileosmac/screenshots/design.png)):
+
+- About 300 × 260 at Medium.
+- A preview area on a light grey background showing the real thumbnail (first page, photo, video frame, slide). Without one, a large type icon on a tinted gradient.
+- Underneath: a small document glyph with a coloured type label ("PDF", "JPG", "KEY"), the name, then "PDF · 4.2 MB", and a ⋯ button for the item menu.
+- Hover: lift, purple border. Selected: 2 px accent border.
+
+**Segmented control:** pill track at 5 % ink; the selected segment is a white pill with a shadow that **slides** to the new option (spring).
+
+**Rows** (lists in the right pane, Smart Clean, Installed): white rounded rows, coloured dot, title and subtitle, value on the right.
+
+### 3.5 Motion
+
+Taken from measuring the GIFs (the drop-shelf capture recorded nothing and needs re-recording before Phase 8):
+
+| Motion | Where | Specification |
 |---|---|---|
-| Folder view | [design.png](fileosmac/screenshots/design.png) | Virtualised grid or list. Folder cards show item count and size, filled in as the background scan completes (a spinner dot until known) |
-| Downloads with Tidy | [smart-downloads.gif](fileosmac/gifs/smart-downloads.gif) | Side panel "What takes the space" and "Suggestions". **Tidy Downloads…** opens the plan dialog: a list of "file → folder", a "Left where they are" group, then **Tidy** |
-| Search overlay | [search.gif](fileosmac/gifs/search.gif) | Centred overlay, 720 px wide. Chips: All, Folders, Images, Videos, Documents with counts. A "Contents" switch. Footer shows the keys |
-| Phone | [iphone.gif](fileosmac/gifs/iphone.gif) | Header with device name, battery and item count. Chips: Not on this computer yet, Photos, Videos, Screenshots, All. Day sections. Sticky bar "3 picked · Copy to ▾ · Copy". Badge "On this computer" |
-| Free Up Space | [smart-clean.gif](fileosmac/gifs/smart-clean.gif) | Big free-space number, segmented disk bar with legend, suggestion cards in two groups, review page per card, sticky "Move N to Trash" bar. A third group, **Needs administrator**, holds copy-the-command rows |
-| Workspace page | [workspaces.gif](fileosmac/gifs/workspaces.gif) | Title, description, colour. Tabs: Overview, Folders, Images, Documents. Each folder card shows where it really lives. A missing folder shows **Locate…** |
-| Dual pane | [dual-pane.gif](fileosmac/gifs/dual-pane.gif) | `GtkPaned` with two full panes; the active one has an accent top border. Footer hint bar: "Copy to 'X' F5 · Move F6 · Tab switches pane" |
-| Shelf | [drop-shelf.gif](fileosmac/gifs/drop-shelf.gif) | Small undecorated window: Holding well on the left, numbered pinned folders, latest downloads row. See [§4.4](#44-redesigned-the-shelf) |
-| Peek | [peek.gif](fileosmac/gifs/peek.gif) | Overlay inside the window. Toolbar: Open, Open With, Add to Workspace, Show in Folder, Info. Arrow keys move through the folder |
-| Bookmarks | [bookmarks.gif](fileosmac/gifs/bookmarks.gif) | Four views (cards, list, headlines, masonry). Chips by type. `Ctrl+V` pastes a link |
-| About This Computer | [about-this-mac.gif](fileosmac/gifs/about-this-mac.gif) | Grouped rows (`AdwPreferencesGroup` style). "Hide Names" and "Copy as Text" in the header |
-| AI Agents | [ai-agents.png](fileosmac/screenshots/ai-agents.png) | Usage chart, local servers list, project cards |
-| Installed | [installed.png](fileosmac/screenshots/installed.png) | Tool chips with counts and sizes, filter chips, table with "Why it's here" |
-| Markdown | Hero tour, last tab, in [hero.gif](fileosmac/gifs/hero.gif) | Preview, Edit and Split switch; outline on the right |
-| Welcome | Guide, "Install and first launch" | Three steps instead of six: demo ("a messy folder, then sorted"), short tour, make it yours |
+| Files into kind folders | Group by Kind (hero tour) | Each card shrinks to about 20 % and flies to its kind folder's centre (560 ms, in-out cubic, staggered about 22 ms per card); kind folders grow in from 55 % with a spring once the first cards land. Reverse when ungrouping |
+| Page push | Opening a Smart Clean card, settings pages | Slide in from the right with a fade, 300 ms |
+| Collapse and reflow | Removing rows or cards (Move to Trash, Tidy) | Leaving item fades and slides out (240 ms); the rest move up with a spring |
+| Fly across | Dual pane F5/F6, Shelf drops | Ghost rows travel from source to target (about 1 s), then the target list inserts them |
+| Ring | Disk usage | Arc animates to its new value (600 ms) |
+| Toast | After any file action | Spring up from below; Undo reverses with the opposite motion |
+| Hover | Folders, cards, sidebar rows, buttons | Lift and shadow (spring, about 180 ms) |
+| Segmented and chips | Header, chip row | Selection pill slides (spring) |
+| Sidebar hover | Collapsed rail | Sidebar slides over the content (spring, 250 ms) |
 
-### 3.5 Visual system
+All motion is off when the system asks for reduced motion, and in end-to-end tests unless a test is about motion.
 
-- **Colour.** Only libadwaita named colours (`accent_bg_color`, `window_bg_color`, `card_bg_color`, `destructive_color`, `success_color`, `warning_color`). Kind colours for file-type folders and chips come from the libadwaita palette (blue, green, yellow, orange, red, purple, brown) so they work in light and dark.
-- **Shape.** libadwaita defaults: 12 px cards, 6 px buttons. Do not import the site's larger radii.
-- **Type.** libadwaita type classes (`title-1` to `title-4`, `heading`, `body`, `caption`, `numeric` for sizes so digits align).
-- **Density.** Three row sizes, as in the reference. Default Medium.
-- **Motion.** Use `AdwTimedAnimation` with an ease-out curve close to the reference's. Honour the system "reduce animation" setting. The folder "open" flourish and the Tidy sort animation are the two signature moments worth building; everything else uses stock transitions.
-- **Empty and loading states.** Scans show their cards at once in a "Looking…" state and fill in one by one, as the reference does. Nothing blocks the window.
-- **Accessibility.** Every control has an accessible name. Full keyboard reach. No information by colour alone ("Your call" has a warning icon, not just amber). Test with Orca and at 200% text scale.
-- **Languages.** Same six as the reference at launch, through gettext. Layouts must survive German string lengths and CJK glyph heights.
+### 3.6 Colour and type tokens
 
----
+Defined once in `qml/Theme.qml` (values derived from the reference site's palette, [§2.3](#23-observed-design-language)):
+
+| Token | Light | Dark | Use |
+|---|---|---|---|
+| `bg` | `#f4f3f9` | `#0c0b14` | Window background |
+| `pane` | `#ffffff` | `#15141f` | Content pane, header |
+| `sidebar` | `#ecebf4` | `#12111b` | Sidebar panel |
+| `card` | `#ffffff` | `#1e1d2b` | File cards, rows, menus |
+| `ink` | `#16132a` | `#eeecf7` | Text |
+| `muted` | `#5d5a72` | `#a6a2bc` | Secondary text |
+| `faint` | `#8a879a` | `#6f6b85` | Counts, hints |
+| `line` | ink at 8 % | white at 7 % | Borders |
+| `accent` | `#6b56dc` | `#7b66e6` (text `#a897f3`) | Selection, active controls, buttons |
+| tints | see glass folder | same | Kind colours |
+
+Type: the system font (Ubuntu Sans) at 13–14 px body, 20–22 px titles, semibold headings. Preferences offer "Use system accent colour" (from the desktop portal) instead of the purple.
+
+### 3.7 Screens
+
+| Screen | Reference | Notes |
+|---|---|---|
+| Folder (grid, list, grouped) | smart-downloads.png, design.png | §3.3, §3.4 |
+| Downloads with Tidy | smart-downloads.gif, hero.gif | Phase 4. Right pane gains SUGGESTIONS and "Tidy Downloads…"; the plan dialog lists moves before anything happens |
+| Search overlay | search.gif | Phase 3. Centred panel, chips with counts, matched line with the word in bold, key hints in the footer |
+| Free Up Space | smart-clean.gif | Phase 5. Ring, cards in two groups, page push into a card, collapse and reflow, sticky "Move N to Trash" bar |
+| Workspace page | workspaces.gif | Phase 4 |
+| Dual pane | dual-pane.gif | Phase 4. Active pane has an accent top edge; footer hint "Copy to … F5 · Move F6 · Tab switches pane" |
+| Phone | iphone.gif | Phase 8. Day sections, chips, picked bar, "On this computer" badge |
+| Peek | peek.gif | Phase 3. Overlay with toolbar (Open, Open With, Show in Folder, Info) |
+| Bookmarks, About This Computer, AI Agents, Installed | bookmarks.gif, about-this-mac.gif, ai-agents.png, installed.png | Phases 5 and 7 |
+| Welcome | hero.gif opening ("a messy folder, then sorted") | Phase 6 |
+| Preferences, About, Shortcuts, Open With | – | QML dialogs in the same style |
+
+### 3.8 Accessibility
+
+- Every interactive element has an accessible name and role (`Accessible.name`, `Accessible.role`) and a press action. Containers that tests or screen readers need to find (Sidebar, Main toolbar, Files, Preview) are named groups.
+- Full keyboard reach: arrows in the grid, Tab between areas, every command on a key ([Appendix A](#appendix-a-keyboard-map)).
+- No meaning by colour alone. Contrast checked in light and dark. Works at 200 % text scale.
+- Reduced motion respected (§3.5).
+- Tested with Orca on a real desktop (HUMAN) and through AT-SPI in every end-to-end run.
+
+### 3.9 Languages
+
+Same six as the reference at launch. QML strings use `qsTr()` and Rust strings gettext; Phase 6 wires both to one translation workflow. Layouts must survive German string lengths and CJK glyph heights.
 
 ## 4. Features: what to keep, adapt, replace and exclude
 
@@ -256,7 +321,7 @@ Each row links the reference capture the screen is modelled on.
 
 | Feature (reference) | Verdict | Ubuntu implementation | Pri |
 |---|---|---|---|
-| Browse folders, icon and list views, three sizes | Keep | `GtkGridView` and `GtkColumnView` over a `GListModel`; virtualised | P1 |
+| Browse folders, icon and list views, three sizes | Keep | QML: grid as a `ListView` of section headers and card rows (glass folders, file cards); list as a table; both virtualised. Layout computed in the Rust controller | P1 |
 | Column (Miller) view, Gallery view | Exclude for now | Not a GNOME convention, high cost. Revisit on demand | P3 |
 | Path bar, type a path or a folder name, Tab completes | Keep | Breadcrumb plus entry on `Ctrl+L`; name lookup uses the index | P1 |
 | Copy, cut, paste compatible with the system file manager | Keep | Clipboard formats `text/uri-list` and `x-special/gnome-copied-files`, so it works with Files (Nautilus) both ways | P1 |
@@ -273,9 +338,9 @@ Each row links the reference capture the screen is modelled on.
 | Sidebar you arrange; missing favourite shows a question mark and **Locate** | Keep | Stored in the app database | P1 |
 | iCloud Drive, Dropbox, external drives in the sidebar | Adapt | Whatever GVfs mounts: external drives, SMB/SFTP/WebDAV shares, and GNOME Online Accounts drives (Google Drive, Nextcloud, OneDrive on newer releases **[verify]**). Dropbox appears as its normal synced folder | P1 |
 | Finder tags | Exclude | No system-wide equivalent that other apps honour | – |
-| AirDrop, Recents, Shared in sidebar | Exclude | AirDrop is Apple-only. "Recent" may come later from GTK's recent-files list | – |
+| AirDrop, Recents, Shared in sidebar | Exclude | AirDrop is Apple-only. "Recent" may come later from the XDG recently-used list | – |
 | Folder symbols (automatic by name, project type or "mostly PDFs"; or chosen) and per-folder colour, saved on the folder | Keep | Same rule order. Stored as user extended attributes (`user.cairn.symbol`, `user.cairn.color`) so they survive rename and move; database fallback on filesystems without xattrs (FAT, exFAT, some network shares) | P2 |
-| Light, Dark or as system | Keep | `AdwStyleManager` | P1 |
+| Light, Dark or as system | Keep | `Theme.qml` light and dark palettes; "system" follows the desktop through Qt's style hints | P1 |
 | Open In (terminal, editor), add your own app | Adapt | Detect installed apps from desktop files. Terminals: the system default (via `xdg-terminal-exec` where present, else `x-terminal-emulator`), GNOME Terminal, Ptyxis, Ghostty, Kitty, Alacritty, WezTerm. Editors: VS Code, Cursor, Zed, Sublime Text, JetBrains IDEs, GNOME Text Editor, GNOME Builder. Xcode, Nova, BBEdit and iTerm are Mac-only and dropped | P2 |
 | Choose which folder is Downloads | Keep | Default from `xdg-user-dirs` | P1 |
 | Six languages | Keep | gettext | P1 |
@@ -294,10 +359,10 @@ Each row links the reference capture the screen is modelled on.
 | **Workspaces** (folders and files from anywhere on one page; nothing moves; description, colour; Locate for missing items) | Keep | Database references by path plus device ID and inode for re-finding after a rename. Items on an unplugged drive show greyed with the drive name | P1 |
 | **Dual pane** (split, copy and move across, drag, queue, clash dialog, panes restored after relaunch) | Keep | `F3` toggles (the long-standing Linux file-manager key), `F5` copies, `F6` moves, `Tab` switches | P1 |
 | **Search** (folders by name anywhere, then files, sorted by kind, thumbnails, video length) | Keep | Own index in SQLite FTS5 with a trigram tokenizer ([§7.1](#71-local-backend-inside-the-desktop-app)) | P1 |
-| Search inside files, with the matched line | Keep | Text extracted in a sandboxed helper: plain text and code, Markdown, PDF (Poppler), OpenDocument and Office files (zipped XML). Off by default per folder outside Home | P2 |
+| Search inside files, with the matched line | Keep | Text extracted in a sandboxed helper: plain text and code, Markdown, PDF (`pdftotext`), OpenDocument and Office files (zipped XML). Off by default per folder outside Home | P2 |
 | Search finds words in screenshots | Adapt | OCR with Tesseract, optional package, only for the Screenshots folder and imported phone screenshots | P3 |
-| **Peek** (Space; PDFs scroll, videos play, Info with where a file came from) | Adapt | Images via GdkTexture, PDF via Poppler, video and audio via GStreamer, text via GtkSourceView. "Where from" reads the `user.xdg.origin.url` attribute, which only some downloaders set, so the row is shown only when present | P1 |
-| **Markdown** (Preview, Edit, Split, outline) | Keep | GtkSourceView for editing; preview rendered from CommonMark to HTML in a WebKitGTK view with scripts and network disabled | P2 |
+| **Peek** (Space; PDFs scroll, videos play, Info with where a file came from) | Adapt | Images via QML `Image`, PDF via Qt PDF, video and audio via Qt Multimedia, text and code in a QML text view with syntax colouring. "Where from" reads the `user.xdg.origin.url` attribute, which only some downloaders set, so the row is shown only when present | P1 |
+| **Markdown** (Preview, Edit, Split, outline) | Keep | QML `TextArea` for editing; preview with QML's own Markdown rendering (no web engine, so no scripts and no network) | P2 |
 | **Bookmarks** (links with pictures, collections, tags, four views) | Adapt | GNOME has no system Share menu. Ways in: paste with `Ctrl+V`, drag a link onto the page, `cairn add-link URL`, the dock-icon action "Add Link". A browser extension is a later option. Fetching a link's title and picture contacts that site; say so in Settings and allow turning it off | P2 |
 | **Git at a glance** (branch and uncommitted count, read-only) | Keep | Pure-Rust Git reader (`gix`), so no dependency on a `git` binary and no chance of writing | P2 |
 | Path bar commands (`code .`, `zed`, `terminal` …) | Keep | Maps to Open In targets | P2 |
@@ -463,53 +528,76 @@ Screenshots and screen recordings are **generated, not hand-made**: the test con
 
 ### 6.1 Desktop UI
 
-**Recommendation: GTK 4 and libadwaita, in Rust (`gtk4-rs`), with Blueprint for layouts.**
+**Choice: Qt 6 with QML for the interface, on a Rust engine, bridged by cxx-qt** (ADR 0009). The first plan (GTK 4 + libadwaita, below) was built through Phase 1 and replaced after a proof showed Qt/QML could match the reference's look and motion natively (`spikes/qt-proof`).
 
 | Option | Verdict | Reasoning |
 |---|---|---|
-| **GTK 4 + libadwaita (Rust)** | **Chosen** | Native look on Ubuntu with no theming work. GIO/GVfs in-process: trash, mounts, MTP, network shares, file monitors, MIME, app chooser. Proper Wayland drag and drop and clipboard with other apps. Virtualised list widgets for 100k-item folders. Rust for the heavy scanning code |
-| GTK 4 + libadwaita (Python or Vala) | Rejected | Same UI benefits, but duplicate detection, indexing and size scans are CPU- and I/O-bound; Python needs native helpers anyway, and Vala has a thin library ecosystem |
-| Flutter | Rejected | Canonical uses it for its own apps and it has a Yaru kit, which is a real point in its favour. But file-manager plumbing (GVfs, trash, drag and drop of files between apps, thumbnails) is plugin territory with gaps |
-| Qt 6 / QML | Rejected | Technically strong, but looks and behaves like a KDE guest on Ubuntu and brings KIO-versus-GIO mismatches |
-| Tauri or Electron | Rejected | Web UI cannot receive and offer native file drags reliably, cannot use GIO directly, and Electron's memory cost is hard to justify for an always-open utility |
+| **Qt 6 / QML + Rust engine (cxx-qt)** | **Chosen** | QML's animation system (behaviours, states, transitions, list add/remove/displaced transitions, springs) covers every motion in the captures. Real blur and shadows (`QtQuick.Effects`). Fully custom drawing for glass folders and cards. Native Wayland, high-DPI, AT-SPI accessibility, drag and drop with other apps, clipboard with any MIME type. Qt runs GLib's main loop on Linux, so the GIO-based engine runs unchanged |
+| GTK 4 + libadwaita (Rust) | Replaced | Excellent file-manager plumbing and the native GNOME look, but no blur behind widgets and motion would be hand-built. Its plumbing advantage is kept: the engine uses GIO directly |
+| Flutter | Rejected | Strong animation, but gaps in drag-out to other apps and file-manager plumbing; Dart beside the Rust engine |
+| Tauri or Electron | Rejected | Web animation is easy, but native file drags, trash and mounts are limited, and Electron's memory cost suits an always-open utility poorly |
+| Slint | Rejected | Native Rust with animations, but no drag and drop with other apps, which a file manager needs |
+
+**How the pieces fit**
+
+```
+QML (crates/app/qml)                 Rust (crates/app/src)                     Engine (crates/core)
+─────────────────────                ─────────────────────                     ────────────────────
+Main.qml, Sidebar, Header, …  ──►  Presenter (cxx-qt QObject)  ──►  Controller (plain Rust)  ──►  FolderModel (GIO),
+binds to JSON properties             thin: properties + invokables          state, navigation,          sort, kinds, store,
+calls presenter.activate(…)          + signals (toast, quit, …)              selection, layout           places, guard
+                                     ▲                                         │
+                                     └── GIO actions (org.gtk.Actions) ◄──────┘  exported on D-Bus: menus, keys, CLI, tests
+```
+
+- **Presenter.** The only QObject. Publishes the view state as JSON properties (folder, grid rows, list items, selection, thumbnails, sidebar, preview, path bar, navigation, preferences) and takes commands through invokables. JSON keeps the bridge small and lets QML use plain JavaScript objects.
+- **Controller.** Owns the state and all logic in plain Rust: the listing, navigation history, view options, filters, selection, grid layout (columns from the viewport width), sidebar, preview, thumbnails queue. Unit-tested without Qt.
+- **Actions.** Every user command is a `gio::SimpleAction` (`app.*`, `win.*`), exported on the session bus as `org.gtk.Actions` and activated by QML shortcuts and menus. Same names as before, so tests and the future CLI do not change.
+- **Large folders.** QML `ListView`s create delegates only for visible rows (the grid is a list of card rows), so 10,000-item folders stay fast.
 
 **Libraries and choices**
 
 | Concern | Choice | Note |
 |---|---|---|
-| Widgets | libadwaita (`AdwApplicationWindow`, `AdwOverlaySplitView`, `AdwNavigationView`, `AdwDialog`, `AdwToastOverlay`, `AdwPreferencesDialog`) | All present at the 24.04 baseline **[verify]**. Newer widgets are used only behind a runtime version check |
-| Layout files | Blueprint, compiled to GTK `.ui` at build time | Readable diffs; composite templates |
-| Lists and grids | `GtkGridView`, `GtkColumnView`, `GtkSectionModel` for groups | Never build one widget per file by hand |
-| Styling | One `style.css` using libadwaita named colours | Hot-reloaded from disk in debug builds |
-| Text editing | GtkSourceView 5 | Markdown editing, text Peek |
-| Markdown preview | WebKitGTK 6 with JavaScript, plugins and network access disabled | Already on a default Ubuntu desktop as a dependency of other GNOME components **[verify]**. Loaded lazily |
-| PDF | Poppler (GLib bindings) | Peek and text extraction |
-| Media | GStreamer through GTK's media widgets | Peek for video and audio |
-| Tray icon | StatusNotifierItem over D-Bus | Works with Ubuntu's AppIndicator extension |
-| Settings store | GSettings schema | Preferences and shortcuts |
-| Translation | gettext, `.po` files | |
-| App state pattern | GObject subclasses for models; a small message-passing layer between UI and core (async channels into the GLib main loop) | No framework on top of gtk4-rs. Keeps the dependency surface small |
+| Bridge | cxx-qt 0.10, cxx-qt-lib (gui, qml, quickcontrols) | The bridge module is the one place `unsafe extern "C++"` is allowed |
+| Controls | Qt Quick Controls, Basic style, restyled | Text fields, menus, popups, switches, combo boxes |
+| Effects | `QtQuick.Effects` (MultiEffect) | Blur, shadows, colourising icons |
+| Icons | Our own line icons as SVG in `qml/icons` (Qt SVG plugin) | Drawn for this project in the reference's line style; recoloured in QML |
+| Thumbnails | Existing sandboxed thumbnailer (Rust, `bwrap`); QML shows the cached PNG | Unchanged |
+| Peek (Phase 3) | Images: QML `Image`; PDF: Qt PDF; audio and video: Qt Multimedia; text and code: QML `TextArea` with syntax colouring (KSyntaxHighlighting if packaged) | Replaces Poppler/GStreamer/GtkSourceView in the GTK plan |
+| Markdown (Phase 7) | Preview with QML `Text.MarkdownText` (no web engine); editor in `TextArea`; outline from the Rust side | No WebKit needed |
+| Settings | GSettings through the `gio` crate | Unchanged |
+| Light and dark | Setting "system/light/dark"; "system" reads the desktop through Qt's style hints (Qt 6.5+) | |
+| Window chrome | Frameless window, our header, `startSystemMove`/`startSystemResize` | Matches the look on GNOME |
+| Translation | `qsTr()` in QML, gettext in Rust | Unified in Phase 6 |
 
-**UI module structure** (crate `cairn`):
+**Module structure** (crate `cairn`):
 
 ```
-app/src/
-├─ application.rs        GApplication, actions, D-Bus activation, single instance
-├─ window/               main window, header bar, sidebar, status line, toasts
-├─ views/
-│  ├─ folder/            grid, list, grouping, selection, DnD, context menus
-│  ├─ downloads/         side panel, Tidy plan dialog
-│  ├─ search/            Ctrl+K overlay
-│  ├─ workspace/         workspace page, editor
-│  ├─ clean/             overview, cards, review, system commands
-│  ├─ installed/  agents/  about/  bookmarks/  phone/  markdown/
-│  ├─ peek/              overlay and per-type viewers
-│  └─ shelf/             Shelf window
-├─ dual_pane.rs          pane container, focus, F5/F6
-├─ preferences/          pages
-├─ welcome/              first-run flow
-└─ widgets/              file card, folder card, chip, disk bar, path bar, git chip
+crates/app/
+├─ build.rs              QML module dev.cairn.files, cxx-qt bridge, icons, settings schema
+├─ qml/
+│  ├─ Main.qml           window, layout, shortcuts, dialogs
+│  ├─ Theme.qml          colour and size tokens (§3.6)
+│  ├─ Sidebar.qml  Rail.qml  Header.qml  PathBar.qml  ChipRow.qml
+│  ├─ FolderGrid.qml  FolderList.qml  GlassFolder.qml  FileCard.qml
+│  ├─ PreviewPane.qml  StatusPage.qml  Toast.qml  Segmented.qml  Icon.qml  IconButton.qml
+│  ├─ Dialog.qml  AboutDialog.qml  PreferencesDialog.qml  ShortcutsDialog.qml  OpenWithDialog.qml  MenuPopup.qml
+│  └─ icons/             our SVG icons + icons.qrc
+└─ src/
+   ├─ main.rs            fixture guard, then app::run
+   ├─ app.rs             GLib context, Qt application, QML engine
+   ├─ bridge.rs          Presenter (cxx-qt)
+   ├─ controller.rs      state and logic
+   ├─ dbus.rs            bus name, exported actions, Test1 (e2e builds)
+   ├─ sidebar.rs  paths.rs  thumbnails.rs  settings.rs  format.rs  app_data.rs  tint.rs
 ```
+
+<details><summary>The original GTK 4 plan (kept for the record)</summary>
+
+GTK 4 + libadwaita in Rust (`gtk4-rs`), Blueprint layouts, libadwaita widgets (`AdwOverlaySplitView`, `AdwDialog`, `AdwToastOverlay`, `AdwPreferencesDialog`), `GtkGridView`/`GtkColumnView` for files, GtkSourceView and WebKitGTK for Markdown, Poppler and GStreamer for Peek, CSS with libadwaita named colours. Built through Phase 1 (commit fb3c7b4) and replaced by ADR 0009.
+
+</details>
 
 ### 6.2 Website and docs
 
@@ -532,7 +620,7 @@ Plain GJS, no build framework, in `shell-extension/`. Scope is deliberately tiny
 
 ### 7.1 Local backend (inside the desktop app)
 
-All logic that is not widgets lives in `cairn-core`, a Rust library with **no GTK dependency**, so it can be unit-tested headlessly and reused by the indexer and the CLI.
+All logic that is not widgets lives in `cairn-core`, a Rust library with **no UI-toolkit dependency** (neither Qt nor GTK), so it can be unit-tested headlessly and reused by the indexer and the CLI.
 
 | Module | Responsibility | Key technology |
 |---|---|---|
@@ -672,9 +760,9 @@ The project is open source. There is no checkout, no licence key, no account and
 ```
 ┌─────────────────────────────── user session ───────────────────────────────┐
 │                                                                             │
-│  cairn (GTK app)                         cairn-indexer (systemd user unit)  │
+│  cairn (Qt/QML app + Rust)               cairn-indexer (systemd user unit)  │
 │  ┌───────────────────────────┐           ┌───────────────────────────┐      │
-│  │ UI: windows, views, Shelf │           │ crawler · inotify watcher │      │
+│  │ QML UI ◄─► Presenter      │           │ crawler · inotify watcher │      │
 │  ├───────────────────────────┤  D-Bus    │ size roll-up              │      │
 │  │ cairn-core                │◀─control─▶│ text extraction ──┐       │      │
 │  │  ops engine + undo journal│           └───────┬───────────│───────┘      │
@@ -754,7 +842,7 @@ How:
 | Area | Measure |
 |---|---|
 | Untrusted file content | Text extraction and thumbnailers run in `bwrap` with no network, a read-only view of the single input file and a size and time limit |
-| Markdown preview | WebKit with JavaScript and network off; local images only from the document's folder |
+| Markdown preview | QML's Markdown rendering: no scripts, no network; local images only from the document's folder |
 | Privilege | No root, no polkit actions in v1. System clean-ups are commands to copy |
 | Deletion | Always to Trash. Permanent deletion only through "Empty Trash", which asks |
 | Symlinks | Scans never follow links out of the scanned root; operations act on the link, not the target |
@@ -776,7 +864,7 @@ How:
 - **Two-release build matrix** (24.04 and 26.04) on every pull request catches API drift early.
 - **Architecture Decision Records** in `docs/adr/`, one per decision in [§1.2](#12-key-decisions).
 - **Testing pyramid**: unit tests in core; integration tests of `ops` and `index` against the fixture home; end-to-end tests that drive the real app under a headless compositor ([§10.2](#102-test-layers-and-the-end-to-end-harness)); an install test of the `.deb` on a clean image.
-- **Lint gates**: `rustfmt`, `clippy -D warnings`, Blueprint compile, desktop-file and AppStream validation, `lintian`, `hadolint`, site link check.
+- **Lint gates**: `rustfmt`, `clippy -D warnings`, `qmllint`, desktop-file and AppStream validation, `lintian`, `hadolint`, site link check.
 
 ### 8.8 Packaging and distribution
 
@@ -784,7 +872,7 @@ How:
 |---|---|---|
 | `.deb` in our signed apt repository | **Primary** | Full filesystem and host-tool access. One-line setup adds the key and source; updates then arrive with system updates. Built per Ubuntu release |
 | `.deb` direct download | Secondary | For a first install without adding a repository |
-| Flatpak, through Flathub | Later (Phase 9) | Needs broad filesystem permission and still cannot see host packages or `/proc` fully, so Installed, parts of Smart Clean and AI Agents would be reduced |
+| Flatpak, through Flathub (KDE runtime, current Qt) | Later (Phase 9); possibly the route for 24.04 | Needs broad filesystem permission and still cannot see host packages or `/proc` fully, so Installed, parts of Smart Clean and AI Agents would be reduced |
 | Snap | Not planned | A file manager needs classic confinement, which requires store approval **[verify current policy]** |
 | Launchpad PPA | Optional second channel | Free builds and hosting for open-source projects, but the builders have no network access, so Rust dependencies must be vendored **[verify]** |
 
@@ -792,7 +880,7 @@ How:
 
 ## 9. Docker-based development and deployment
 
-**Goal:** a new developer needs only **Docker, Docker Compose and `make`**. No Rust, GTK headers or Node on the host. (The dev machine has Docker 29.9 and Compose 5.5 and no Rust toolchain, so this is also the practical route.)
+**Goal:** a new developer needs only **Docker, Docker Compose and `make`**. No Rust, Qt or Node on the host. (The dev machine has Docker 29.9 and Compose 5.5 and no Rust toolchain, so this is also the practical route.)
 
 ### 9.1 Repository layout
 
@@ -857,11 +945,13 @@ RUN --mount=type=cache,target=/var/cache/apt,sharing=locked \
     rm -f /etc/apt/apt.conf.d/docker-clean && apt-get update && \
     apt-get install -y --no-install-recommends \
       ca-certificates curl git build-essential pkg-config clang mold \
-      libgtk-4-dev libadwaita-1-dev libgtksourceview-5-dev libwebkitgtk-6.0-dev \
-      libpoppler-glib-dev libgtk-4-media-gstreamer gstreamer1.0-plugins-good \
-      blueprint-compiler gettext desktop-file-utils appstream \
+      libglib2.0-dev gettext desktop-file-utils appstream poppler-utils \
       gvfs gvfs-backends dbus bubblewrap xdg-user-dirs shared-mime-info \
-      mutter yaru-theme-gtk yaru-theme-icon fonts-ubuntu
+      mutter weston at-spi2-core fonts-ubuntu
+# Qt 6 / QML (ADR 0009), a separate layer in the real Dockerfile:
+#   qt6-base-dev qt6-declarative-dev qt6-declarative-dev-tools qmake6 qt6-wayland qt6-qpa-plugins
+#   qml6-module-qtquick{,-window,-effects,-shapes,-controls,-layouts,-templates} qt6-svg-plugins
+# The repository's docker/desktop.Dockerfile is the reference; this listing is the original design.
 ENV RUSTUP_HOME=/usr/local/rustup CARGO_HOME=/usr/local/cargo \
     PATH=/usr/local/cargo/bin:$PATH CARGO_TARGET_DIR=/var/cache/cargo-target
 COPY rust-toolchain.toml /tmp/toolchain/
@@ -937,7 +1027,7 @@ x-desktop-build: &desktop-build
     CARGO_DEB_VERSION: ${CARGO_DEB_VERSION}
 
 services:
-  # Runs the real GTK app in a window on the host's Wayland session,
+  # Runs the real app in a window on the host's Wayland session (Docker Engine),
   # against a FAKE home folder. Restarts on every source change.
   app:
     build: { <<: *desktop-build, target: dev }
@@ -945,7 +1035,7 @@ services:
       WAYLAND_DISPLAY: ${WAYLAND_DISPLAY:-wayland-0}
       XDG_RUNTIME_DIR: /run/user/${HOST_UID:-1000}
       GDK_BACKEND: wayland
-      GTK_DEBUG: ${GTK_DEBUG:-}             # set to "interactive" for the GTK Inspector
+      QML_DEBUG: ${QML_DEBUG:-}             # QML console and binding warnings
       G_MESSAGES_DEBUG: ${G_MESSAGES_DEBUG:-}
       RUST_BACKTRACE: "1"
       CAIRN_DEV: "1"                        # live CSS reload; fixture-home guard on
@@ -957,7 +1047,7 @@ services:
       - cargo-registry:/usr/local/cargo/registry
       - cargo-target:/var/cache/cargo-target
       - fixture-home:/home/dev
-    devices: ["/dev/dri:/dev/dri"]          # GPU rendering; remove and set GSK_RENDERER=cairo if absent
+    devices: ["/dev/dri:/dev/dri"]          # GPU rendering; without a GPU, Mesa renders in software
     cap_add: ["SYS_PTRACE"]                 # debugger only; dev only
     security_opt: ["seccomp=unconfined"]    # bwrap needs user namespaces; dev only
     init: true
@@ -1003,7 +1093,7 @@ volumes:
   fixture-home:
 ```
 
-`docker/scripts/headless-run` starts a private D-Bus session and a headless Wayland compositor (mutter by default, weston as the fallback; `docker/scripts/start-compositor`, ADR 0002), then runs its arguments inside them. End-to-end tests do not use it: the harness starts a fresh session per test. On Docker Desktop, which cannot reach the host's display, `make app` uses an `app-broadway` service that shows the window in a browser at http://127.0.0.1:8085 (ADR 0004). The compose file in the repository is the reference; the listing above is the original design.
+`docker/scripts/headless-run` starts a private D-Bus session and a headless Wayland compositor (mutter by default, weston as the fallback; `docker/scripts/start-compositor`, ADR 0002), then runs its arguments inside them. End-to-end tests do not use it: the harness starts a fresh session per test. On Docker Desktop, which cannot reach the host's display, `make app` runs the app with Qt's VNC display plugin and publishes it on `127.0.0.1:5900`; open it with Remmina (installed on Ubuntu) or any VNC viewer (ADR 0004). The compose file in the repository is the reference; the listing above is the original design.
 
 **Why the app runs against a fake home.** This is a tool that moves and trashes files. In development it must never touch the developer's real Documents. The container's home is the `fixture-home` volume, and its private D-Bus session gives it its own Trash. A bug costs nothing.
 
@@ -1012,9 +1102,9 @@ volumes:
 | Change | Feedback |
 |---|---|
 | `style.css` | Applied live in the running window (debug builds watch the file) |
-| Blueprint layouts, Rust code | `watchexec` rebuilds and relaunches. Incremental builds with the `mold` linker and a persistent target volume keep this to seconds for UI crates |
+| QML files, Rust code | `watchexec` rebuilds and relaunches. Incremental builds with the `mold` linker and a persistent target volume keep this to seconds for UI crates |
 | Window state | Debug builds reopen the last folder and view, so a relaunch lands where you were |
-| Inspecting widgets | `GTK_DEBUG=interactive make app` opens the GTK Inspector |
+| Inspecting the interface | `qmllint` in `make lint`; QML warnings in the log; GammaRay can attach for a live object tree **[verify packaging]** |
 
 Keeping `cairn-core` separate from the UI crate matters here: a UI edit recompiles only the thin UI crate.
 
@@ -1204,14 +1294,14 @@ Every command is a `make` target so nobody (human or agent) memorises Compose fl
 | Task | Command | What it runs |
 |---|---|---|
 | First-time setup | `make init` | Copies `.env.example`, generates the dev signing key, builds images, creates the fixture home |
-| Run the desktop app | `make app` | Window appears on your desktop from the dev container; restarts on save |
+| Run the desktop app | `make app` | Docker Engine: the window opens on your desktop. Docker Desktop: open `vnc://127.0.0.1:5900` (ADR 0004). Restarts on save |
 | Run it as 26.04 | `make app UBUNTU_VERSION=26.04` | Same, different base and build cache |
-| GTK Inspector | `make app GTK_DEBUG=interactive` | |
+| QML warnings | `make app QML_DEBUG=1` | |
 | Reset the fake home | `make fixture` | Rebuilds the `fixture-home` volume |
 | Unit and integration tests | `make test` | `cargo nextest` under a headless session |
 | End-to-end tests | `make e2e` | The real app, headless, driven by `tests/e2e` ([§10.2](#102-test-layers-and-the-end-to-end-harness)) |
 | One end-to-end test | `make e2e k=E4_03` | pytest `-k` filter |
-| Lint | `make lint` | rustfmt, clippy, Blueprint, desktop-file and AppStream validation, hadolint, `docker compose config` |
+| Lint | `make lint` | rustfmt, clippy, qmllint, desktop-file and AppStream validation, hadolint, `docker compose config` |
 | **The gate** | `make check` | lint + test + e2e on the default release |
 | The gate, both releases | `make check-all` | `make check` for 24.04 and 26.04 |
 | Toolchain shell | `make shell` | Bash in the dev image |
@@ -1227,7 +1317,7 @@ Every command is a `make` target so nobody (human or agent) memorises Compose fl
 
 **Debugging**
 
-- *Desktop app:* GTK Inspector for widgets and CSS; `G_MESSAGES_DEBUG=all` for GLib logs; `make shell` then `rust-gdb` (the dev service has `SYS_PTRACE`); `sqlite3` on the fixture home's databases; `RUST_BACKTRACE=1` is on by default.
+- *Desktop app:* QML warnings in the app log; `G_MESSAGES_DEBUG=all` for GLib logs; `make shell` then `rust-gdb` (the dev service has `SYS_PTRACE`); `sqlite3` on the fixture home's databases; `RUST_BACKTRACE=1` is on by default.
 - *End-to-end failures:* each failed test leaves a screenshot, the accessibility tree as text, the app's JSON state and the app log in `artifacts/e2e/<test-id>/`. Read those before changing code.
 - *Containers:* `docker compose ps` for health; `docker compose exec web sh` for the preview server.
 
@@ -1273,7 +1363,7 @@ release tag  ─▶ rebuild from the tag ─▶ full e2e on both releases ─▶
 
 - USB phones cannot be exercised conveniently in a container. Phone code is developed against the fake `PhoneSource` and verified on a real machine or VM.
 - The Shell extension, the tray icon and global shortcuts depend on the host's GNOME Shell. They are verified on the host or in a VM, per Ubuntu release.
-- Inside the container the app cannot read the host's theme settings, so it shows libadwaita defaults unless the dev image sets them; the Yaru theme and Ubuntu fonts are installed in the image for a close match.
+- Inside the container the app cannot read the host's light/dark setting through the desktop portal, so "follow the system" shows the light theme there; the explicit Light and Dark settings work everywhere.
 
 ---
 
@@ -1323,7 +1413,7 @@ pytest (in the dev container)
 
 | Need | Mechanism | Notes |
 |---|---|---|
-| Trigger a command | Activate the app's or window's `GAction` over D-Bus (`org.gtk.Actions`) | The same actions back the menus, shortcuts and the CLI, so this exercises the real code path |
+| Trigger a command | Activate the app's or window's `GAction` over D-Bus (`org.gtk.Actions`, exported by the app through GIO, ADR 0009) | The same actions back the menus, shortcuts and the CLI, so this exercises the real code path |
 | Click a control, type text, read what is on screen | The accessibility tree (AT-SPI), by role and accessible name | This is also what a screen reader sees, so these tests double as accessibility checks |
 | Read precise state | `dev.cairn.Files.Test1.State()` returns JSON: current folder, visible items, selection, active pane, open dialog, toast text, queue | Compiled in only with the `e2e` cargo feature; never in release builds |
 | Wait for background work | `Test1.WaitIdle(timeout_ms)` returns when the operations queue and the indexer are idle | Replaces sleeps |
@@ -1382,6 +1472,8 @@ Phases 7, 8 and 9 are independent of each other and can run in any order after 1
 
 ### Phase 0: Foundations, harness and spikes
 
+> Phase 0 was completed with the original GTK plan. The Qt/QML equivalents of its spikes (accessibility tree, real keys, headless rendering) were re-verified in the Qt proof before the switch (ADR 0009).
+
 **Goal.** `make init && make app` shows an empty window from a container; `make check-all` runs a real end-to-end test on both Ubuntu releases; the unknowns that block Phases 1 to 6 are settled.
 
 | ID | Task | Done when |
@@ -1389,7 +1481,7 @@ Phases 7, 8 and 9 are independent of each other and can run in any order after 1
 | P0-T01 | Repository skeleton: licence file, README, CONTRIBUTING, `AGENTS.md` (rules from §10.1), `docs/PROGRESS.md`, ADR template, `.gitignore`, `.dockerignore` | Files exist; `AGENTS.md` matches §10.1 |
 | P0-T02 | Cargo workspace with empty crates `core`, `app`, `indexer`, `cli`; `rust-toolchain.toml`; shared lint settings | `cargo build --workspace --locked` succeeds in the container |
 | P0-T03 | `docker/desktop.Dockerfile`, `compose.desktop.yaml`, `docker/versions.env`, Makefile targets `init`, `app`, `shell`, `test`, `lint`, `check`, `check-all` | Images build for 24.04 and 26.04; every package name confirmed |
-| P0-T04 | Hello window: `AdwApplication` with app ID, single instance, a header bar, an empty sidebar and content area; Blueprint compiled into a GResource; `style.css` reloads live in debug builds; actions `app.quit` and `app.about` | `make app` shows the window on the host |
+| P0-T04 | Hello window (built with GTK; the interface moved to Qt/QML in Phase 1, ADR 0009): `AdwApplication` with app ID, single instance, a header bar, an empty sidebar and content area; Blueprint compiled into a GResource; `style.css` reloads live in debug builds; actions `app.quit` and `app.about` | `make app` shows the window on the host |
 | P0-T05 | Fixture home: `docker/scripts/make-fixture-home` builds a deterministic fake home ([§9.4](#94-the-fixture-home-folder)) and writes `manifest.json` describing it (counts, sizes, expected Tidy moves, planted duplicates). The app's fixture guard (rule 4) | Same inputs give byte-identical output; guard has a unit test |
 | P0-T06 | `docker/scripts/headless-run` and the end-to-end harness in `tests/e2e/`: `app` and `home` fixtures, action helper, accessibility helpers, the `Test1` D-Bus interface behind the `e2e` feature, artifact collection on failure | Scenarios E0-01 to E0-05 pass |
 | P0-T07 | CI workflow: lint, test and e2e on both releases; upload `artifacts/` | Green run on a pull request |
@@ -1422,9 +1514,9 @@ Phases 7, 8 and 9 are independent of each other and can run in any order after 1
 
 | ID | Task | Done when |
 |---|---|---|
-| P1-T01 | `core::vfs`: asynchronous folder listing into a `GListModel` of `FileEntry` objects (name, size, times, MIME, kind, icon); sort and hidden-file filter models | L2 test lists the fixture home and matches the manifest |
+| P1-T01 | `core::folder`: asynchronous folder listing into a `gio::ListStore` of `FileEntry` objects (name, size, times, MIME, kind, icon); sort and hidden-file filter models | L2 test lists the fixture home and matches the manifest |
 | P1-T02 | Kind table: MIME type to kind (Images, Videos, PDFs, Documents, Archives, Installers, Code, Other), one place, used everywhere | Unit tests for every MIME type in the fixture |
-| P1-T03 | Folder view: `GtkGridView` of cards and `GtkColumnView` list (Name, Size, Kind, Modified, Created); view switch; three sizes | E1-02, E1-08 |
+| P1-T03 | Folder view in QML (§3.3, §3.4): sections "Folders N" and "Files N" with glass folders and file cards (a virtualised list of card rows), list view with columns (Name, Size, Kind, Modified, Created); view switch; three sizes | E1-02, E1-08 |
 | P1-T04 | Navigation: open, back, forward, up, history; window title and header follow | E1-03 |
 | P1-T05 | Path bar: breadcrumbs; `Ctrl+L` entry accepting paths with `~` and Tab completion | E1-04 |
 | P1-T06 | `app.db` with a migration runner; sidebar with Places (XDG folders), Devices (`GVolumeMonitor`, mount and eject), computer row with free space; reorder and hide, persisted | E1-10 |
@@ -1436,6 +1528,11 @@ Phases 7, 8 and 9 are independent of each other and can run in any order after 1
 | P1-T12 | GSettings schema; Preferences dialog with General and Appearance pages (default view, row size, colour scheme) | E1-02 (persistence), E1-13 |
 | P1-T13 | States: empty folder, permission denied, folder gone, slow device spinner | E1-11 |
 | P1-T14 | Primary menu, keyboard shortcuts window, About dialog | E1-14 |
+| P1-T15 | **Qt/QML front end** (ADR 0009): presenter bridge (cxx-qt), controller in plain Rust, GIO actions exported on D-Bus, bus name and single instance, Test1 interface, frameless window chrome with our own header and window buttons, our own icon set, `Theme.qml` light and dark | All earlier scenarios pass on the Qt build |
+| P1-T16 | Reference look (ADR 0008): inset sidebar with app row and section headings, header with nav pill, segmented grouping and view controls, breadcrumb row with hint, chip row and summary, glass folders with counts, file cards with badges, right pane folder overview ("in all", WHAT TAKES THE SPACE) | Screenshots reviewed against `fileosmac/screenshots/smart-downloads.png` and `design.png` (HUMAN sign-off) |
+| P1-T17 | "Filter this folder" field (`Ctrl+F`) | E1-16 |
+| P1-T18 | Collapsible sidebar: icon rail; slides over the content on hover | E1-17 |
+| P1-T19 | Motion (§3.5): files fly into kind folders and back; hover lift; sliding segmented control; toast spring; reduced motion respected | E1-18 |
 
 **End-to-end scenarios**
 
@@ -1456,8 +1553,11 @@ Phases 7, 8 and 9 are independent of each other and can run in any order after 1
 | E1-13 | Screenshot in light and in dark | Window background differs between the two; no element keeps a light background in dark |
 | E1-14 | Open the shortcuts window | Every action in [Appendix A](#appendix-a-keyboard-map) that exists so far is listed |
 | E1-15 | Read-only proof: run E1-01 to E1-14, then compare | The fixture home is unchanged apart from the app's own database, settings and caches |
+| E1-16 | `Ctrl+F`, type `invoice`, then Escape | Only the matching items remain and the status line counts them; Escape restores the whole folder |
+| E1-17 | Collapse the sidebar; open Documents from the rail; expand | The rail lists the same entries as icons; Documents opens; the full sidebar returns. (Hover expansion is on the HUMAN list) |
+| E1-18 | In Downloads, group by Kind with motion on; capture frames during the change | Cards move towards their kind folders over several frames (not a jump); the end state shows "By kind N" folders; with reduced motion the change is immediate |
 
-**HUMAN.** Look and feel on a real 24.04 and 26.04 desktop: theme, accent colour, window buttons, text scaling at 200%. Plug in and eject a USB drive.
+**HUMAN.** Compare the running app with the reference captures (§3) and sign off the look. On a real 26.10 desktop: window move and resize, hover effects and the sidebar hover expansion, text scaling at 200 %. Drag a file out of Cairn into Files. Plug in and eject a USB drive.
 
 **Gate.** `make check-all` green.
 
@@ -1782,6 +1882,7 @@ Phases 7, 8 and 9 are independent of each other and can run in any order after 1
 
 | Risk | Impact | Mitigation |
 |---|---|---|
+| cxx-qt or the Qt bridge blocks something later (an API we need is missing) | Rework in the bridge | The presenter keeps the bridge small; logic lives in plain Rust; small C++ additions are allowed through cxx-qt when needed |
 | A bug in file operations destroys user data | Severe; ends trust | Single operations engine, plan-then-run, Trash-only deletion, journal, never overwrite on undo, the fixture-home guard, end-to-end tests that compare the filesystem before and after |
 | The headless end-to-end approach does not work as planned | Agents cannot verify their own work | Settled first, in Phase 0 (spikes P0-S2 and P0-S3), with named fallbacks. If the accessibility tree is unusable, tests drive through the `Test1` interface alone |
 | An agent "fixes" a failing test by weakening it | False confidence | Rule 7; filesystem snapshots as the main assertion; human review of any change under `tests/e2e/` |
@@ -1797,7 +1898,7 @@ Phases 7, 8 and 9 are independent of each other and can run in any order after 1
 
 | # | Question | Recommendation | Effect |
 |---|---|---|---|
-| O1 | **Source licence** | GPL-3.0-or-later. It is the norm for GNOME apps, and Poppler (used for PDF) is GPL-licensed, so a permissive licence would force that component out | Licence file and headers in Phase 0 |
+| O1 | **Source licence** | GPL-3.0-or-later. It suits the Linux desktop, is compatible with Qt (LGPL/GPL), and the PDF text tools are GPL | Licence file and headers in Phase 0 |
 | O2 | Final name, domain and app ID | Decide before Phase 6; the codename is fine until then | Replace `cairn` and `dev.cairn.Files` everywhere |
 | O3 | Where the code and the site are hosted | Any Git host with CI and static hosting | CI syntax only |
 | O4 | Is the Shell extension in scope | Decide after spike P8-S1 | Phase 8 only |
@@ -1845,11 +1946,11 @@ Where the reference's key conflicts with an Ubuntu convention, the convention wi
 |---|---|
 | Landing page HTML (980 KB) and extracted text | All feature copy, comparison table, pricing, FAQ, demo data |
 | `styles.css` (189 KB) | Colour tokens, fonts, easing ([§2.3](#23-observed-design-language)) |
-| 18 recorded animations and 2× stills | Screen layouts and interactions ([§3.4](#34-screens), [§5.2](#52-recordings-and-stills)) |
+| 18 recorded animations and 2× stills | Screen layouts and interactions ([§3.4](#37-screens), [§5.2](#52-recordings-and-stills)) |
 | Guide index and pages: install, buy-and-activate, smart-clean, drop-shelf, settings, folder-symbols, around-your-mac, troubleshooting | Onboarding steps, licence behaviour, Smart Clean rules, Shelf and Holding behaviour, Settings structure, folder-symbol rules, menu bar, Spotlight and Shortcuts actions, edge-case rules for Tidy and Undo |
 | Changelog | Release order; search and iPhone arrived in 1.0.3 |
 | Privacy page and page source | Third parties: Dodo Payments, Resend, Google Fonts, a self-run analytics collector |
-| This workstation | Ubuntu 26.10, GNOME Shell 51, Wayland, GTK 4.24, libadwaita 1.10, Docker 29.9, Compose 5.5; both GNOME Terminal and Ptyxis installed; no Rust toolchain on the host |
+| This workstation | Ubuntu 26.10, GNOME Shell 51, Wayland, Qt 6.11 (dev image), GTK 4.24, libadwaita 1.10, Docker 29.9, Compose 5.5; both GNOME Terminal and Ptyxis installed; no Rust toolchain on the host |
 | Sibling repositories in this workspace | The team already works in Rust workspaces, GNOME Shell extensions, Makefiles and Docker Compose |
 
 **Guide pages of the reference** (a ready outline for our own guide): install · buy-and-activate · window · browse · peek · markdown · path-bar · copy-move · rename-trash-undo · sidebar · folder-symbols · smart-downloads · smart-clean · workspaces · bookmarks · dual-pane · drop-shelf · git · open-in · packages · ai-agents · about-this-mac · settings · around-your-mac · shortcuts · troubleshooting.
