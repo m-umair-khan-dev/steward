@@ -42,24 +42,54 @@ role "button" (AT-SPI calls it "push button" on 24.04) and without a scope (the
 window has its own "Close"). It now targets `within="About"`, and the helper
 treats role names that changed between releases as the same.
 
-## Phase 1: Browse
+## Phase 1: Browse (complete on 26.10, pending HUMAN sign-off)
+
+Gate on Ubuntu 26.10, 2026-11-19: `make check` green. Lint ok; 35 Rust tests
+and 13 fixture tests pass; end-to-end E0-01 to E0-05, the key-press harness
+test and E1-01 to E1-18 pass.
 
 | ID | Task | Status | Notes |
 |---|---|---|---|
-| P1-T01 | Folder listing in core | done (L2) | `FolderModel`, tested against the fixture |
-| P1-T02 | Kind table | done (L1, L2) | Agrees with the fixture generator. Adds an Audio kind |
-| P1-T03 | Grid and list views | in progress | |
-| P1-T04 | Navigation | todo | |
-| P1-T05 | Path bar | todo | |
-| P1-T06 | app.db, sidebar | in progress | Store and migrations done (L1) |
-| P1-T07 | Grouping, summary, chips, status | in progress | Rules in core done (L1) |
-| P1-T08 | Thumbnails | in progress | |
-| P1-T09 | Preview pane | todo | |
-| P1-T10 | Live refresh, hidden files, sort, per-folder memory | in progress | Live refresh done (L2) |
-| P1-T11 | Open and Open With | todo | |
-| P1-T12 | Settings and Preferences | in progress | Schema done |
-| P1-T13 | Empty, denied, gone, loading states | in progress | |
-| P1-T14 | Menus, shortcuts window, About | todo | |
+| P1-T01 | Folder listing in core | done | `FolderModel` (L2) |
+| P1-T02 | Kind table | done | Adds an Audio kind |
+| P1-T03 | Grid and list views | done | E1-01, E1-02, E1-08 |
+| P1-T04 | Navigation | done | E1-03 |
+| P1-T05 | Path bar | done | E1-04 (real keys, Tab completion) |
+| P1-T06 | app.db, sidebar | done | E1-10 |
+| P1-T07 | Grouping, summary, chips, status | done | E1-01, E1-05 |
+| P1-T08 | Thumbnails | done | E1-09 |
+| P1-T09 | Preview pane | done | E1-03 |
+| P1-T10 | Live refresh, hidden files, sort, per-folder memory | done | E1-02, E1-06, E1-07 |
+| P1-T11 | Open and Open With | done | E1-12 |
+| P1-T12 | Settings and Preferences | done | E1-02, E1-13 |
+| P1-T13 | Empty, denied, gone, loading states | done | E1-11 |
+| P1-T14 | Menus, shortcuts window, About | done | E1-14, E0-02 |
+| P1-T15 | Qt/QML front end (ADR 0009) | done | All earlier scenarios pass on the Qt build |
+| P1-T16 | Reference look (ADR 0008) | done, HUMAN sign-off | Review `artifacts/screens/` against `fileosmac/screenshots/smart-downloads.png` |
+| P1-T17 | "Filter this folder" | done | E1-16 |
+| P1-T18 | Collapsible sidebar and rail | done | E1-17; hover slide-out is on the HUMAN list |
+| P1-T19 | Motion | done | E1-18 |
+
+T15 to T19 share one commit: they were built as one QML tree and do not split
+into working pieces.
+
+Scenario fixes recorded under rule 7 (toolkit switch, ADR 0009):
+- E0-02 expected the dialog type "AdwAboutDialog"; the Qt build reports "about".
+- E1-14 expected GTK accelerator names (`<Control>l`); the table now uses Qt
+  key-sequence syntax (`Ctrl+L`). The shortcuts themselves are unchanged.
+
+Bugs found and fixed while bringing up the Qt build:
+- The test state could say "ready" one main-loop turn before the controller
+  rebuilt its item list, so `Select` right after loading found nothing (E1-03).
+  The controller now reports the load state as of its own last rebuild.
+- A grid rebuild could cancel the thumbnails the new cards had just asked for:
+  Qt destroys old cards after creating new ones. Cards now report on-screen by
+  file URI with a count (E1-15 caught it).
+- Ctrl- and Shift-click read modifiers from the wrong object and never worked.
+
+Review screenshots: `docker compose -f compose.desktop.yaml run --rm e2e
+docker/scripts/run-e2e python3 tests/tools/capture_screens.py` writes
+`artifacts/screens/`.
 
 ## Blocked / waiting for a human
 
@@ -67,7 +97,13 @@ treats role names that changed between releases as the same.
 - With Docker Engine (not Docker Desktop), run `make app` once and confirm the
   window opens on the desktop (ADR 0004).
 - Confirm or replace the codename "Cairn" and app ID `dev.cairn.Files`.
+- P1-T16: sign off the look against the reference captures.
+- E1-17: check that pointing at the rail slides the sidebar out (pointer input
+  is not automated).
+- Decide whether to add tabs (the reference shows a second header row of tabs).
+- Docker Desktop on this machine needs the user in the `kvm` group (done on
+  2026-11-19); without it Docker Desktop stops at start-up after a reboot.
 
 ## Next
 
-- Finish the Phase 1 UI and its end-to-end scenarios E1-01 to E1-15.
+- Phase 2 waits for the product owner's go-ahead.
