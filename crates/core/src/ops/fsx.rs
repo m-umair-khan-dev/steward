@@ -129,31 +129,85 @@ pub fn copy_tree(
             created: true,
         });
     }
-    let mut last = 0u64;
-    let result = gio::File::for_path(src).copy(
-        &gio::File::for_path(dst),
-        gio::FileCopyFlags::NOFOLLOW_SYMLINKS | gio::FileCopyFlags::ALL_METADATA,
-        Some(cancel),
-        Some(&mut |current: i64, _total: i64| {
-            let current = current.max(0) as u64;
-            progress(current.saturating_sub(last));
-            last = current;
-        }),
-    );
-    match result {
-        Ok(()) => {
-            progress(meta.len().saturating_sub(last));
-            Ok(())
+    copy_file(src, dst, &meta, cancel, progress)
+}
+
+/// Copies one regular file: in 1 MiB blocks with progress after each and a
+/// cancel check before each; all-zero blocks become holes (like
+/// `cp --sparse=auto`), so a sparse disk image stays small. Permissions and
+/// times are kept.
+fn copy_file(
+    src: &Path,
+    dst: &Path,
+    meta: &std::fs::Metadata,
+    cancel: &gio::Cancellable,
+    progress: &mut dyn FnMut(u64),
+) -> Result<(), CopyError> {
+    use std::io::{Read, Seek, SeekFrom, Write};
+    use std::os::unix::fs::OpenOptionsExt;
+
+    let mut input = std::fs::File::open(src).map_err(|error| CopyError {
+        error,
+        created: false,
+    })?;
+    let mut output = std::fs::OpenOptions::new()
+        .write(true)
+        .create_new(true)
+        .mode(0o600)
+        .open(dst)
+        .map_err(|error| CopyError {
+            error,
+            created: false,
+        })?;
+    let fail = |error: io::Error| CopyError {
+        error,
+        created: true,
+    };
+    let mut buffer = vec![0u8; 1 << 20];
+    let mut written: u64 = 0;
+    loop {
+        if cancel.is_cancelled() {
+            return Err(fail(cancelled()));
         }
-        Err(error) => Err(CopyError {
-            created: exists(dst),
-            error: if error.matches(gio::IOErrorEnum::Cancelled) {
-                cancelled()
-            } else {
-                io_error(&error)
-            },
-        }),
+        let n = input.read(&mut buffer).map_err(fail)?;
+        if n == 0 {
+            break;
+        }
+        let block = &buffer[..n];
+        if block.iter().all(|&b| b == 0) {
+            output.seek(SeekFrom::Current(n as i64)).map_err(fail)?;
+        } else {
+            output.write_all(block).map_err(fail)?;
+        }
+        written += n as u64;
+        progress(n as u64);
     }
+    // A trailing hole is only a seek so far: fix the length.
+    output.set_len(written).map_err(fail)?;
+    output.set_permissions(meta.permissions()).map_err(fail)?;
+    let mut times = std::fs::FileTimes::new();
+    if let Ok(modified) = meta.modified() {
+        times = times.set_modified(modified);
+    }
+    if let Ok(accessed) = meta.accessed() {
+        times = times.set_accessed(accessed);
+    }
+    output.set_times(times).map_err(fail)?;
+    output.sync_all().map_err(fail)?;
+    drop(output);
+    // Extended attributes (tags, origin URLs), where the filesystem allows.
+    // Best effort: owner and the like need privileges we never have.
+    let _ = gio::File::for_path(src).copy_attributes(
+        &gio::File::for_path(dst),
+        gio::FileCopyFlags::NOFOLLOW_SYMLINKS,
+        gio::Cancellable::NONE,
+    );
+    if written != meta.len() {
+        return Err(fail(io::Error::other(
+            "the file changed while it was copied",
+        )));
+    }
+    Ok(())
 }
 
 /// Removes a file, link or whole folder (links are removed, never followed).
@@ -206,18 +260,6 @@ pub fn cancelled() -> io::Error {
 
 pub fn is_cancelled(error: &io::Error) -> bool {
     error.kind() == io::ErrorKind::Interrupted
-}
-
-fn io_error(error: &glib::Error) -> io::Error {
-    let kind = match error.kind::<gio::IOErrorEnum>() {
-        Some(gio::IOErrorEnum::Exists) => io::ErrorKind::AlreadyExists,
-        Some(gio::IOErrorEnum::NotFound) => io::ErrorKind::NotFound,
-        Some(gio::IOErrorEnum::PermissionDenied) => io::ErrorKind::PermissionDenied,
-        Some(gio::IOErrorEnum::NoSpace) => io::ErrorKind::StorageFull,
-        Some(gio::IOErrorEnum::ReadOnly) => io::ErrorKind::ReadOnlyFilesystem,
-        _ => io::ErrorKind::Other,
-    };
-    io::Error::new(kind, error.message().to_string())
 }
 
 /// A name in `dir` that is free, starting from `name`: "a.txt", then

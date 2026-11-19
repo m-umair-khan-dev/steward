@@ -810,3 +810,83 @@ fn a_batch_left_running_is_recovered_as_partial() {
     run(&worker, Request::Undo);
     assert!(place.path("src/a.txt").exists() && b.exists());
 }
+
+#[test]
+fn copies_keep_holes_times_and_permissions() {
+    use std::os::unix::fs::PermissionsExt;
+    let place = Place::new("sparse");
+    let worker = place.worker();
+    let src = place.path("disk.img");
+    {
+        use std::io::{Seek, SeekFrom, Write};
+        let mut f = std::fs::File::create(&src).unwrap();
+        f.write_all(b"head").unwrap();
+        f.seek(SeekFrom::Start(256 * 1024 * 1024)).unwrap();
+        f.write_all(b"tail").unwrap();
+    }
+    std::fs::set_permissions(&src, std::fs::Permissions::from_mode(0o640)).unwrap();
+    let old = SystemTime::UNIX_EPOCH + Duration::from_secs(1_600_000_000);
+    std::fs::File::options()
+        .write(true)
+        .open(&src)
+        .unwrap()
+        .set_modified(old)
+        .unwrap();
+    std::fs::create_dir(place.path("out")).unwrap();
+    run(
+        &worker,
+        Request::Copy {
+            sources: vec![src.clone()],
+            dest: place.path("out"),
+        },
+    );
+    let copy = place.path("out/disk.img");
+    let (a, b) = (src.metadata().unwrap(), copy.metadata().unwrap());
+    assert_eq!(a.len(), b.len());
+    assert!(
+        b.blocks() * 512 < 16 * 1024 * 1024,
+        "the hole stayed a hole ({} blocks)",
+        b.blocks()
+    );
+    assert_eq!(b.modified().unwrap(), old);
+    assert_eq!(b.permissions().mode() & 0o777, 0o640);
+    let bytes = std::fs::read(&copy).unwrap();
+    assert_eq!(&bytes[..4], b"head");
+    assert_eq!(&bytes[bytes.len() - 4..], b"tail");
+}
+
+#[test]
+fn drops_move_by_default_and_copy_with_ctrl() {
+    use cairn_core::ops::drop_request;
+    let place = Place::new("drop");
+    let a = place.write("src/a.txt", "A");
+    let folder = place.path("src");
+    let dest = place.path("dst");
+    std::fs::create_dir(&dest).unwrap();
+    assert_eq!(
+        drop_request(std::slice::from_ref(&a), &dest, false),
+        Some(Request::Move {
+            sources: vec![a.clone()],
+            dest: dest.clone()
+        })
+    );
+    assert_eq!(
+        drop_request(std::slice::from_ref(&a), &dest, true),
+        Some(Request::Copy {
+            sources: vec![a.clone()],
+            dest: dest.clone()
+        })
+    );
+    // Onto its own folder, or a folder into itself: nothing to do.
+    assert_eq!(drop_request(std::slice::from_ref(&a), &folder, false), None);
+    assert_eq!(
+        drop_request(std::slice::from_ref(&folder), &folder.join("inner"), false),
+        None
+    );
+    // Across filesystems (/proc is never the same device): a copy.
+    let elsewhere = Path::new("/proc");
+    assert!(matches!(
+        drop_request(std::slice::from_ref(&a), elsewhere, false),
+        Some(Request::Copy { .. })
+    ));
+}

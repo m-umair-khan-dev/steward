@@ -95,6 +95,32 @@ impl Request {
     }
 }
 
+/// What a drop does (P2-T05), as Files does it: a move within one
+/// filesystem, a copy onto another; holding Ctrl always copies. Dropping
+/// items onto the folder they are already in does nothing.
+pub fn drop_request(sources: &[PathBuf], dest: &Path, ctrl: bool) -> Option<Request> {
+    let sources: Vec<PathBuf> = sources
+        .iter()
+        .filter(|s| s.parent() != Some(dest) && !dest.starts_with(s))
+        .cloned()
+        .collect();
+    if sources.is_empty() {
+        return None;
+    }
+    let same_device = sources.iter().all(|s| fsx::same_device(s, dest));
+    if ctrl || !same_device {
+        Some(Request::Copy {
+            sources,
+            dest: dest.to_path_buf(),
+        })
+    } else {
+        Some(Request::Move {
+            sources,
+            dest: dest.to_path_buf(),
+        })
+    }
+}
+
 /// The answer to a name clash.
 #[derive(Debug, Clone, Copy, PartialEq, Eq)]
 pub enum Choice {
@@ -203,10 +229,6 @@ pub type JobId = u64;
 /// Something the UI should know about.
 #[derive(Debug, Clone, PartialEq, Eq)]
 pub enum Event {
-    Queued {
-        job: JobId,
-        summary: String,
-    },
     Started {
         job: JobId,
     },
@@ -249,7 +271,6 @@ pub struct Engine {
     jobs: Sender<Job>,
     shared: Arc<Mutex<Shared>>,
     next: JobId,
-    handler: Handler,
 }
 
 struct ThreadContext {
@@ -328,11 +349,13 @@ impl Context for ThreadContext {
 
 impl Engine {
     /// Opens the journal at `db`, marks batches a crash left open as
-    /// partial, and starts the worker. Returns the engine and the batches
+    /// partial, and starts the worker. `step_delay` slows every step down
+    /// (end-to-end tests use it to interrupt a batch midway). Returns the engine and the batches
     /// that were interrupted (to report).
     pub fn start(
         db: PathBuf,
         trash: Trash,
+        step_delay: Option<std::time::Duration>,
         handler: impl Fn(Event) + Send + Sync + 'static,
     ) -> io::Result<(Self, Vec<journal::Batch>)> {
         let store = Store::open(&db).map_err(io::Error::other)?;
@@ -348,7 +371,8 @@ impl Engine {
         std::thread::Builder::new()
             .name("cairn-ops".into())
             .spawn(move || {
-                let worker = Worker::new(store, trash);
+                let mut worker = Worker::new(store, trash);
+                worker.step_delay = step_delay;
                 for job in rx {
                     deliver(&thread_handler, Event::Started { job: job.id });
                     let mut ctx = ThreadContext {
@@ -377,7 +401,6 @@ impl Engine {
                 jobs: tx,
                 shared,
                 next: 1,
-                handler,
             },
             interrupted,
         ))
@@ -392,13 +415,8 @@ impl Engine {
         if let Ok(mut shared) = self.shared.lock() {
             shared.cancels.insert(id, cancel.clone());
         }
-        deliver(
-            &self.handler,
-            Event::Queued {
-                job: id,
-                summary: summary.to_string(),
-            },
-        );
+        // No event here: submit runs on the main thread, where `invoke` would
+        // call the handler at once, inside the caller's own borrow.
         let _ = self.jobs.send(Job {
             id,
             request,

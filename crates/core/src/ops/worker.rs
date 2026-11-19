@@ -33,6 +33,9 @@ pub trait Context {
 pub struct Worker {
     pub store: Store,
     pub trash: Trash,
+    /// Test hook: a pause before each item and each progress step (see
+    /// `Engine::start`).
+    pub step_delay: Option<std::time::Duration>,
 }
 
 struct Run<'a> {
@@ -50,6 +53,9 @@ struct Run<'a> {
 
 impl Run<'_> {
     fn tick(&mut self, delta: u64, current: &str) {
+        if let Some(delay) = self.worker.step_delay {
+            std::thread::sleep(delay);
+        }
         self.bytes += delta;
         self.ctx.progress(
             self.bytes,
@@ -139,6 +145,9 @@ impl Run<'_> {
                 self.report.cancelled = true;
                 return;
             }
+            if let Some(delay) = self.worker.step_delay {
+                std::thread::sleep(delay);
+            }
             let name = fsx::file_name(src);
             let mut target = dest.join(&name);
             if moving && src.parent() == Some(dest) {
@@ -210,7 +219,11 @@ impl Run<'_> {
 
 impl Worker {
     pub fn new(store: Store, trash: Trash) -> Self {
-        Self { store, trash }
+        Self {
+            store,
+            trash,
+            step_delay: None,
+        }
     }
 
     pub fn run(&self, request: &Request, summary: &str, ctx: &mut dyn Context) -> Report {

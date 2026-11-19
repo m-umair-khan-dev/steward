@@ -57,6 +57,15 @@ impl Trash {
         Ok((root, Some(top)))
     }
 
+    /// Creates the home Trash folders if they are missing (the Trash view
+    /// lists `files/`).
+    pub fn ensure(&self) -> io::Result<PathBuf> {
+        std::fs::create_dir_all(self.home.join("info"))?;
+        let files = self.home.join("files");
+        std::fs::create_dir_all(&files)?;
+        Ok(files)
+    }
+
     /// Moves `path` to the Trash and returns where it now is.
     pub fn trash(&self, path: &Path) -> io::Result<PathBuf> {
         if !fsx::exists(path) {
