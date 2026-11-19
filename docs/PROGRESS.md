@@ -4,13 +4,9 @@ Read this first in every session (AGENTS.md rule 2). Update it before stopping.
 
 ## Current phase
 
-**Phase 2: File operations and Undo**, complete on 26.10 (gate green
-2026-11-19), pending the HUMAN drag-and-drop check. Phase 3 waits for the
-product owner's go-ahead.
-
-Phase 0 is complete; its gate passed on Ubuntu 26.10 on 2026-11-15. The product
-owner asked to start Phase 1 while Phase 0's 26.10 run was finishing (an
-exception to AGENTS.md rule 1, approved by them).
+**Phase 3: Index, folder sizes, search and Peek**, complete on 26.10 (gate
+green 2026-11-20), pending the HUMAN check on a large real home. Phase 4
+waits for the product owner's go-ahead.
 
 ## Release targets
 
@@ -135,6 +131,44 @@ closer to the reference (larger app row, headings and rows, lighter panel,
 collapsible "Locations ›"). The reference's Workspaces, Bookmarks and Tools
 sections arrive with Phases 4, 5 and 7.
 
+## Phase 3: Index, folder sizes, search and Peek (complete on 26.10)
+
+Gate on Ubuntu 26.10, 2026-11-20: `make check` green. Lint ok; 74 Rust tests
+and 13 fixture tests pass; end-to-end E0-01 to E3-12 (49 scenarios) pass.
+E3-10: one million entries, p95 32 to 36 ms against a 50 ms limit
+(`artifacts/perf/E3-10.json`).
+
+| ID | Task | Status | Notes |
+|---|---|---|---|
+| P3-T01 | `cairn-indexer`: crawl at idle priority, batched writes, exclusions | done | L2 count equals the manifest |
+| P3-T02 | `index.db` with a trigram name index | done | L2 |
+| P3-T03 | Size and count roll-up, incremental | done | L2, E3-02 |
+| P3-T04 | Watching (GIO monitors, inotify); timed re-crawls past the limit; Notify from the app | done | E3-05, E3-06 |
+| P3-T05 | D-Bus control; systemd user unit and activation file | done | E3-11, E3-12; unit and service file in `data/` |
+| P3-T06 | Folder cards with count and size; two-level outline | done | E3-02 |
+| P3-T07 | Search overlay on Ctrl+K | done | E3-03 |
+| P3-T08 | Ranking; a new keystroke supersedes the last query | done | L1, E3-10 |
+| P3-T09 | Result keys | done | E3-04 |
+| P3-T10 | Folder names in the path bar | done | E3-09 |
+| P3-T11 | Peek: images, PDF, text and code, audio and video, Info | done | E3-08 |
+| P3-T12 | Preferences › Search and index | done | E3-11 |
+
+Scenario adjustment (rule 7): E3-01 and E3-07 compare the index with the
+manifest plus `.config/dconf/user`, the settings database that the session
+writes into the home as soon as a setting changes. The manifest only knows
+the planted files; that database is real user data and the index is right
+to count it. Two harness leaks were fixed instead of adjusting the test:
+Mesa's shader cache (written by the app) and mutter's session state no
+longer land in the test home.
+
+Bugs found while bringing it up:
+- The indexer's Pause handler re-entered its own state through the
+  settings "changed" signal; settings reactions now wait a main-loop turn.
+- Search first read full rows for up to 10,000 candidates (p95 53 ms); it
+  now ranks on names and reads full rows only for the results shown.
+- The E3-10 timing test starved a file-monitor test when run in parallel;
+  nextest now runs it alone (`.config/nextest.toml`).
+
 ## Blocked / waiting for a human
 
 - Enable CI once the repository is on its Git host (P0-T07).
@@ -147,10 +181,12 @@ sections arrive with Phases 4, 5 and 7.
 - Decide whether to add tabs (the reference shows a second header row of tabs).
 - P2-T05: drag files between Cairn and Files (Nautilus) both ways; Ctrl-drag
   copies; copy in one and paste in the other.
+- Phase 3: index a real, large home; watch CPU, disk activity and battery
+  behaviour (the indexer runs at nice 19; the systemd unit adds idle I/O).
 - Docker Desktop on this machine needs the user in the `kvm` group (done on
   2026-11-19); without it Docker Desktop stops at start-up after a reboot.
 
 ## Next
 
-- Phase 3 (index, folder sizes, search, Peek) waits for the product owner's
-  go-ahead.
+- Phase 4 (Smart Downloads, Dual pane, Workspaces) waits for the product
+  owner's go-ahead.
