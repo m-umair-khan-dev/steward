@@ -4,7 +4,9 @@ Read this first in every session (AGENTS.md rule 2). Update it before stopping.
 
 ## Current phase
 
-**Phase 1: Browse (a read-only file manager)**, in progress.
+**Phase 2: File operations and Undo**, complete on 26.10 (gate green
+2026-11-19), pending the HUMAN drag-and-drop check. Phase 3 waits for the
+product owner's go-ahead.
 
 Phase 0 is complete; its gate passed on Ubuntu 26.10 on 2026-11-15. The product
 owner asked to start Phase 1 while Phase 0's 26.10 run was finishing (an
@@ -91,6 +93,48 @@ Review screenshots: `docker compose -f compose.desktop.yaml run --rm e2e
 docker/scripts/run-e2e python3 tests/tools/capture_screens.py` writes
 `artifacts/screens/`.
 
+## Phase 2: File operations and Undo (complete on 26.10)
+
+Gate on Ubuntu 26.10, 2026-11-19: `make check` green. Lint ok (with the E2-13
+ops check); 64 Rust tests (22 engine L2 tests) and 13 fixture tests pass;
+end-to-end E0-01 to E2-14 (38 scenarios) pass.
+
+| ID | Task | Status | Notes |
+|---|---|---|---|
+| P2-T01 | `core::ops`: operations, batches, queue, progress, cancel | done | L2 tests per operation |
+| P2-T02 | Journal, undo and redo, never overwrite, partial batches | done | L2 tests for every undo edge case |
+| P2-T03 | New folder, rename in place, Move to Trash, duplicate | done | E2-01, E2-02 |
+| P2-T04 | Clipboard: text/uri-list and gnome-copied-files | done | E2-03, E2-04, E2-08 (verified headless with wl-paste/wl-copy) |
+| P2-T05 | Drag and drop | done, HUMAN | L2 for the decision; the gesture is on the HUMAN list |
+| P2-T06 | Clash dialog | done | E2-05 |
+| P2-T07 | Queue UI with progress and Cancel | done | E2-07 |
+| P2-T08 | Toasts with Undo; Ctrl+Z, Ctrl+Shift+Z; menu names the undo | done | E2-01 to E2-04 |
+| P2-T09 | Trash view: list, Put Back, Empty Trash asks | done | E2-09 |
+| P2-T10 | Context menus | done | Items, selection, background, Trash |
+| P2-T11 | Failure handling | done | E2-10; disk full reported (seen in E2-07's first run) |
+| P2-T12 | Crash safety | done | E2-11, E2-12 |
+| P2-T13 | Static ops check in `make lint` | done | E2-13 |
+
+Decisions:
+- ADR 0010: the Trash is implemented directly (FreeDesktop spec) instead of
+  `g_file_trash`, so Undo knows each item's exact place.
+- Copies use our own block loop (not `g_file_copy`): precise progress and
+  cancel, and holes stay holes. GIO's copy filled the test tmpfs with a 2 GB
+  sparse file.
+- Undo of a copy sends the copy to the Trash rather than deleting it, so Undo
+  itself never loses data.
+- Test hook `CAIRN_OPS_STEP_DELAY_MS` (e2e builds only) slows each step so a
+  test can cancel or kill midway (E2-07, E2-11).
+
+Harness fix (rule 7, not a weaker test): the compositor could drop the very
+first key press after launch; the harness now sends a lone Shift once the
+window is active, before the test's keys.
+
+UI follow-up from the product owner (2026-11-19): the sidebar was restyled
+closer to the reference (larger app row, headings and rows, lighter panel,
+collapsible "Locations ›"). The reference's Workspaces, Bookmarks and Tools
+sections arrive with Phases 4, 5 and 7.
+
 ## Blocked / waiting for a human
 
 - Enable CI once the repository is on its Git host (P0-T07).
@@ -101,9 +145,12 @@ docker/scripts/run-e2e python3 tests/tools/capture_screens.py` writes
 - E1-17: check that pointing at the rail slides the sidebar out (pointer input
   is not automated).
 - Decide whether to add tabs (the reference shows a second header row of tabs).
+- P2-T05: drag files between Cairn and Files (Nautilus) both ways; Ctrl-drag
+  copies; copy in one and paste in the other.
 - Docker Desktop on this machine needs the user in the `kvm` group (done on
   2026-11-19); without it Docker Desktop stops at start-up after a reboot.
 
 ## Next
 
-- Phase 2 waits for the product owner's go-ahead.
+- Phase 3 (index, folder sizes, search, Peek) waits for the product owner's
+  go-ahead.
