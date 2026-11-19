@@ -23,6 +23,8 @@ gettext-rs = { version = "0.8", features = ["gettext-system"] }
 glib = "0.22"
 gio = "0.22"
 rusqlite = { version = "0.41", features = ["bundled"] }
+# Safe syscalls the standard library lacks: renameat2(RENAME_NOREPLACE), getuid.
+rustix = { version = "1", features = ["fs", "process"] }
 serde = { version = "1", features = ["derive"] }
 serde_json = "1"
 

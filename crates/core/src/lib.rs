@@ -9,6 +9,7 @@ pub mod folder;
 pub mod guard;
 pub mod kind;
 pub mod natural;
+pub mod ops;
 pub mod places;
 pub mod sort;
 pub mod store;

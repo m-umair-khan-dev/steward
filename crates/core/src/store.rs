@@ -21,6 +21,28 @@ const MIGRATIONS: &[&str] = &[
         group_by TEXT,
         updated_at INTEGER NOT NULL
      );",
+    // 2: the undo journal (DESIGN.md §7.1). One batch per user action.
+    // `undoable` is cleared when the Trash is emptied under a batch.
+    "CREATE TABLE op_batch (
+        id INTEGER PRIMARY KEY,
+        kind TEXT NOT NULL,
+        summary TEXT NOT NULL,
+        created_at INTEGER NOT NULL,
+        state TEXT NOT NULL CHECK (state IN ('running','done','undone','partial')),
+        undoable INTEGER NOT NULL DEFAULT 1
+     );
+     CREATE TABLE op_step (
+        id INTEGER PRIMARY KEY,
+        batch_id INTEGER NOT NULL REFERENCES op_batch(id) ON DELETE CASCADE,
+        seq INTEGER NOT NULL,
+        action TEXT NOT NULL,
+        src_uri TEXT,
+        dst_uri TEXT,
+        trash_uri TEXT,
+        state TEXT NOT NULL CHECK (state IN ('pending','done','failed','undone')),
+        error TEXT
+     );
+     CREATE INDEX op_step_batch ON op_step (batch_id, seq);",
 ];
 
 /// How one folder was last shown. `None` fields fall back to the defaults.
@@ -68,6 +90,10 @@ impl Store {
         };
         store.migrate()?;
         Ok(store)
+    }
+
+    pub(crate) fn conn(&self) -> &Connection {
+        &self.conn
     }
 
     pub fn schema_version(&self) -> rusqlite::Result<i64> {
