@@ -1,0 +1,16 @@
+# Cairn's search index, as a systemd user service (DESIGN.md §7.1, P3-T05).
+# Installed to /usr/lib/systemd/user/. D-Bus activation starts it on demand
+# (dev.cairn.Indexer.service); the app asks for it on first launch.
+[Unit]
+Description=Cairn search index
+
+[Service]
+Type=dbus
+BusName=dev.cairn.Indexer
+ExecStart=/usr/libexec/cairn-indexer
+# Idle priority for CPU and disk: indexing never competes with the user.
+Nice=19
+IOSchedulingClass=idle
+CPUSchedulingPolicy=idle
+Restart=on-failure
+RestartSec=30

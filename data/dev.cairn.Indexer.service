@@ -1,0 +1,6 @@
+# D-Bus activation for Cairn's search index (installed to
+# /usr/share/dbus-1/services/). systemd starts the user unit.
+[D-BUS Service]
+Name=dev.cairn.Indexer
+Exec=/usr/libexec/cairn-indexer
+SystemdService=cairn-indexer.service

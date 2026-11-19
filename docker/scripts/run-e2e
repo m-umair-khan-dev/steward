@@ -10,7 +10,7 @@ cd /workspace
 # Separate target folder: the e2e build (with the Test1 interface) must never
 # overwrite the binary `make app` is running, or the other way round.
 export CARGO_TARGET_DIR="$CARGO_TARGET_DIR/e2e"
-cargo build --locked -p cairn --features e2e
+cargo build --locked -p cairn -p cairn-indexer --features e2e
 export CAIRN_BIN="$CARGO_TARGET_DIR/debug/cairn"
 
 # `run-e2e python3 SCRIPT` runs a helper script (e.g. tests/spikes/*) against

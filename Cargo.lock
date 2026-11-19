@@ -73,6 +73,10 @@ name = "cairn-indexer"
 version = "0.1.0"
 dependencies = [
  "cairn-core",
+ "gio",
+ "glib",
+ "rustix",
+ "serde_json",
 ]
 
 [[package]]

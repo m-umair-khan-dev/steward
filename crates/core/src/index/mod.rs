@@ -298,6 +298,24 @@ impl Index {
         tx.commit()
     }
 
+    /// Every indexed folder at or under `path`, shallowest first (the
+    /// indexer watches them).
+    pub fn folders_under(&self, path: &Path) -> Vec<PathBuf> {
+        let p = path_text(path);
+        let mut folders: Vec<PathBuf> = self
+            .conn
+            .prepare_cached(
+                "SELECT path FROM entry WHERE is_dir = 1 AND (path = ?1 OR (path > ?2 AND path < ?3))",
+            )
+            .and_then(|mut s| {
+                s.query_map(params![p, format!("{p}/"), format!("{p}0")], |r| r.get::<_, String>(0))
+                    .map(|rows| rows.flatten().map(PathBuf::from).collect())
+            })
+            .unwrap_or_default();
+        folders.sort_by_key(|f| f.components().count());
+        folders
+    }
+
     pub(crate) fn id_of(&self, path: &Path) -> Option<i64> {
         self.conn
             .query_row(

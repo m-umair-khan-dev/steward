@@ -59,5 +59,22 @@
       <default>false</default>
       <summary>Window maximized</summary>
     </key>
+    <key name="index-roots" type="as">
+      <default>[]</default>
+      <summary>Folders the search index covers</summary>
+      <description>Empty means the home folder.</description>
+    </key>
+    <key name="index-exclude" type="as">
+      <default>[]</default>
+      <summary>Folders the search index leaves out</summary>
+    </key>
+    <key name="index-paused" type="b">
+      <default>false</default>
+      <summary>Indexing is paused</summary>
+    </key>
+    <key name="index-pause-on-battery" type="b">
+      <default>true</default>
+      <summary>Pause indexing while on battery</summary>
+    </key>
   </schema>
 </schemalist>

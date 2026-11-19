@@ -1,0 +1,8 @@
+# Test scheduling for `make test` (cargo-nextest).
+
+# E3-10 times searches on a million-entry index. It runs alone: it should not
+# be timed while other tests compete, and its minute of full CPU and disk
+# would starve tests that wait on file monitors.
+[[profile.default.overrides]]
+filter = 'test(e3_10)'
+threads-required = 'num-test-threads'

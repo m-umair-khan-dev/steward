@@ -1,6 +1,6 @@
 [package]
 name = "cairn-indexer"
-description = "Cairn's background indexer (built in Phase 3)."
+description = "Cairn's background indexer: keeps index.db up to date (DESIGN.md §7.1)."
 version.workspace = true
 edition.workspace = true
 rust-version.workspace = true
@@ -10,6 +10,14 @@ authors.workspace = true
 
 [dependencies]
 cairn-core.workspace = true
+gio.workspace = true
+glib.workspace = true
+rustix.workspace = true
+serde_json.workspace = true
+
+[features]
+# Test builds: the fixture-home guard always applies (as in the app).
+e2e = []
 
 [lints]
 workspace = true
