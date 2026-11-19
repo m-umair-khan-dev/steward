@@ -8,6 +8,7 @@ pub mod clip;
 pub mod entry;
 pub mod folder;
 pub mod guard;
+pub mod index;
 pub mod kind;
 pub mod natural;
 pub mod ops;

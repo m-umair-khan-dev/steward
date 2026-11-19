@@ -44,6 +44,11 @@ debug = "line-tables-only"
 [profile.dev.package."*"]
 debug = false
 
+# SQLite is C code: optimise it even in dev builds, so index tests and the
+# E3-10 timing measure a real build.
+[profile.dev.package.libsqlite3-sys]
+opt-level = 3
+
 [profile.release]
 lto = "thin"
 codegen-units = 4

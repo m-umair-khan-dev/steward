@@ -49,6 +49,13 @@ RUN --mount=type=cache,target=/var/cache/apt,sharing=locked \
       qml6-module-qtquick-shapes qml6-module-qtqml-workerscript qml6-module-qtquick-templates \
       qml6-module-qtquick-controls qml6-module-qtquick-layouts \
       qt6-wayland qt6-qpa-plugins qt6-svg-plugins libqt6svg6 libgl-dev
+# Peek (Phase 3): PDF pages, audio and video, and the folder picker in Preferences.
+RUN --mount=type=cache,target=/var/cache/apt,sharing=locked \
+    --mount=type=cache,target=/var/lib/apt,sharing=locked \
+    apt-get update && \
+    apt-get install -y --no-install-recommends \
+      qml6-module-qtquick-pdf qml6-module-qtmultimedia qml6-module-qtquick-dialogs \
+      libqt6multimedia6
 ENV QMAKE=qmake6 \
     QT_LINUX_ACCESSIBILITY_ALWAYS_ON=1
 WORKDIR /workspace
