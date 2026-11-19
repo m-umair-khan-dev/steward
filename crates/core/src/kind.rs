@@ -197,7 +197,10 @@ mod tests {
             ("video/webm", Kind::Videos),
             ("application/pdf", Kind::Pdfs),
             ("application/vnd.oasis.opendocument.text", Kind::Documents),
-            ("application/vnd.oasis.opendocument.spreadsheet", Kind::Documents),
+            (
+                "application/vnd.oasis.opendocument.spreadsheet",
+                Kind::Documents,
+            ),
             (
                 "application/vnd.openxmlformats-officedocument.wordprocessingml.document",
                 Kind::Documents,
@@ -217,7 +220,11 @@ mod tests {
             ("application/octet-stream", Kind::Other),
         ];
         for (content_type, expected) in cases {
-            assert_eq!(Kind::from_content_type(content_type), expected, "{content_type}");
+            assert_eq!(
+                Kind::from_content_type(content_type),
+                expected,
+                "{content_type}"
+            );
         }
     }
 

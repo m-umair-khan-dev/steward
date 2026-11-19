@@ -21,10 +21,10 @@ $(error Unsupported UBUNTU_VERSION=$(UBUNTU_VERSION); use one of: $(SUPPORTED_RE
 endif
 
 # Docker Desktop runs containers in a VM that cannot reach the host's Wayland
-# socket, so `make app` shows the window in a browser instead (ADR 0004).
+# socket, so `make app` serves the window over VNC instead (ADR 0004, 0009).
 DOCKER_OS := $(shell docker info --format '{{.OperatingSystem}}' 2>/dev/null)
 ifneq ($(findstring Docker Desktop,$(DOCKER_OS)),)
-APP_SERVICE := app-broadway
+APP_SERVICE := app-vnc
 else
 APP_SERVICE := app
 endif
@@ -53,8 +53,8 @@ fixture: images ## (Re)create the fake home folder the app runs against
 	$(RUN) fixture
 
 app: images ## Run the app against the fake home (restarts on save)
-	@if [ "$(APP_SERVICE)" = app-broadway ]; then \
-	  echo "Docker Desktop detected: the window opens in your browser at http://127.0.0.1:8085"; fi
+	@if [ "$(APP_SERVICE)" = app-vnc ]; then \
+	  echo "Docker Desktop detected: connect a VNC viewer to 127.0.0.1:5900"; fi
 	$(RUN) --service-ports $(APP_SERVICE)
 
 shell: images ## A shell with the full toolchain

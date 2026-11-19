@@ -10,8 +10,14 @@ use gio::prelude::*;
 fn fixture_home(name: &str) -> (PathBuf, serde_json::Value) {
     let root = std::env::temp_dir().join(format!("cairn-l2-{name}-{}", std::process::id()));
     let _ = std::fs::remove_dir_all(&root);
-    let script = Path::new(env!("CARGO_MANIFEST_DIR")).join("../../docker/scripts/make-fixture-home");
-    let status = Command::new("python3").arg("-I").arg(script).arg(&root).status().unwrap();
+    let script =
+        Path::new(env!("CARGO_MANIFEST_DIR")).join("../../docker/scripts/make-fixture-home");
+    let status = Command::new("python3")
+        .arg("-I")
+        .arg(script)
+        .arg(&root)
+        .status()
+        .unwrap();
     assert!(status.success(), "fixture generator failed");
     let manifest = std::fs::read_to_string(root.join(".cairn-fixture")).unwrap();
     (root, serde_json::from_str(&manifest).unwrap())
@@ -30,7 +36,14 @@ fn run_until(ctx: &glib::MainContext, timeout: Duration, mut done: impl FnMut() 
 fn names(model: &FolderModel) -> Vec<String> {
     let store = model.store();
     let mut names: Vec<String> = (0..store.n_items())
-        .map(|i| store.item(i).and_downcast::<FileEntry>().unwrap().name().to_string())
+        .map(|i| {
+            store
+                .item(i)
+                .and_downcast::<FileEntry>()
+                .unwrap()
+                .name()
+                .to_string()
+        })
         .collect();
     names.sort();
     names
@@ -39,7 +52,9 @@ fn names(model: &FolderModel) -> Vec<String> {
 fn load(ctx: &glib::MainContext, path: &Path) -> FolderModel {
     let model = FolderModel::new();
     model.load(&gio::File::for_path(path));
-    run_until(ctx, Duration::from_secs(10), || model.state() != LoadState::Loading);
+    run_until(ctx, Duration::from_secs(10), || {
+        model.state() != LoadState::Loading
+    });
     model
 }
 
@@ -51,7 +66,10 @@ fn downloads_listing_matches_the_manifest() {
         let model = load(&ctx, &home.join("Downloads"));
         assert_eq!(model.state(), LoadState::Ready);
         let facts = &manifest["folders"]["Downloads"];
-        assert_eq!(model.store().n_items() as u64, facts["items"].as_u64().unwrap());
+        assert_eq!(
+            model.store().n_items() as u64,
+            facts["items"].as_u64().unwrap()
+        );
 
         let mut expected: Vec<String> = manifest["downloads"]["loose_files"]
             .as_array()
@@ -103,8 +121,14 @@ fn listing_states_for_missing_and_unreadable_folders() {
     let (home, _) = fixture_home("states");
     let ctx = glib::MainContext::new();
     ctx.with_thread_default(|| {
-        assert_eq!(load(&ctx, &home.join("no-such-folder")).state(), LoadState::NotFound);
-        assert_eq!(load(&ctx, &home.join("Desktop/todo.txt")).state(), LoadState::NotAFolder);
+        assert_eq!(
+            load(&ctx, &home.join("no-such-folder")).state(),
+            LoadState::NotFound
+        );
+        assert_eq!(
+            load(&ctx, &home.join("Desktop/todo.txt")).state(),
+            LoadState::NotAFolder
+        );
 
         let locked = home.join("locked");
         std::fs::create_dir(&locked).unwrap();
@@ -128,7 +152,9 @@ fn the_listing_follows_changes_on_disk() {
         assert_eq!(names(&model), vec!["todo.txt"]);
 
         std::fs::write(folder.join("new.txt"), "hello").unwrap();
-        run_until(&ctx, Duration::from_secs(5), || names(&model).contains(&"new.txt".into()));
+        run_until(&ctx, Duration::from_secs(5), || {
+            names(&model).contains(&"new.txt".into())
+        });
 
         std::fs::rename(folder.join("new.txt"), folder.join("renamed.txt")).unwrap();
         run_until(&ctx, Duration::from_secs(5), || {
@@ -136,7 +162,9 @@ fn the_listing_follows_changes_on_disk() {
         });
 
         std::fs::remove_file(folder.join("renamed.txt")).unwrap();
-        run_until(&ctx, Duration::from_secs(5), || names(&model) == vec!["todo.txt"]);
+        run_until(&ctx, Duration::from_secs(5), || {
+            names(&model) == vec!["todo.txt"]
+        });
     })
     .unwrap();
 }

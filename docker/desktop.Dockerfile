@@ -38,6 +38,19 @@ RUN curl --proto '=https' --tlsv1.2 -sSf https://sh.rustup.rs \
     rustup toolchain install && \
     rustup default "$(sed -n 's/^channel = "\(.*\)"/\1/p' rust-toolchain.toml)" && \
     rustc --version
+
+# Qt 6 / QML front end (ADR 0009). A separate layer so the layers above stay cached.
+RUN --mount=type=cache,target=/var/cache/apt,sharing=locked \
+    --mount=type=cache,target=/var/lib/apt,sharing=locked \
+    apt-get update && \
+    apt-get install -y --no-install-recommends \
+      qt6-base-dev qt6-base-dev-tools qt6-declarative-dev qt6-declarative-dev-tools qmake6 \
+      qml6-module-qtquick qml6-module-qtquick-window qml6-module-qtquick-effects \
+      qml6-module-qtquick-shapes qml6-module-qtqml-workerscript qml6-module-qtquick-templates \
+      qml6-module-qtquick-controls qml6-module-qtquick-layouts \
+      qt6-wayland qt6-qpa-plugins qt6-svg-plugins libqt6svg6 libgl-dev
+ENV QMAKE=qmake6 \
+    QT_LINUX_ACCESSIBILITY_ALWAYS_ON=1
 WORKDIR /workspace
 
 # ---- dev: interactive development and tests, runs as the host user ----------

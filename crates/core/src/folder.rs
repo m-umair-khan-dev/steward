@@ -196,10 +196,10 @@ impl FolderModel {
     }
 
     fn remove_child(&self, file: &gio::File) {
-        if let Some(name) = file.basename() {
-            if let Some(pos) = self.position_of(&name.to_string_lossy()) {
-                self.inner.store.remove(pos);
-            }
+        if let Some(name) = file.basename()
+            && let Some(pos) = self.position_of(&name.to_string_lossy())
+        {
+            self.inner.store.remove(pos);
         }
     }
 
@@ -215,7 +215,11 @@ impl FolderModel {
         let file = file.clone();
         glib::spawn_future_local(async move {
             let Ok(info) = file
-                .query_info_future(ATTRIBUTES, gio::FileQueryInfoFlags::NONE, glib::Priority::DEFAULT)
+                .query_info_future(
+                    ATTRIBUTES,
+                    gio::FileQueryInfoFlags::NONE,
+                    glib::Priority::DEFAULT,
+                )
                 .await
             else {
                 return;
@@ -229,16 +233,25 @@ impl FolderModel {
     }
 }
 
-async fn list(folder: &gio::File, cancellable: &gio::Cancellable) -> Result<Vec<FileEntry>, glib::Error> {
+async fn list(
+    folder: &gio::File,
+    cancellable: &gio::Cancellable,
+) -> Result<Vec<FileEntry>, glib::Error> {
     let enumerator = folder
-        .enumerate_children_future(ATTRIBUTES, gio::FileQueryInfoFlags::NONE, glib::Priority::DEFAULT)
+        .enumerate_children_future(
+            ATTRIBUTES,
+            gio::FileQueryInfoFlags::NONE,
+            glib::Priority::DEFAULT,
+        )
         .await?;
     let mut entries = Vec::new();
     loop {
         if cancellable.is_cancelled() {
             return Err(glib::Error::new(gio::IOErrorEnum::Cancelled, "cancelled"));
         }
-        let infos = enumerator.next_files_future(500, glib::Priority::DEFAULT).await?;
+        let infos = enumerator
+            .next_files_future(500, glib::Priority::DEFAULT)
+            .await?;
         if infos.is_empty() {
             break;
         }

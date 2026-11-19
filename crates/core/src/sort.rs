@@ -17,8 +17,13 @@ pub enum SortKey {
 }
 
 impl SortKey {
-    pub const ALL: [SortKey; 5] =
-        [SortKey::Name, SortKey::Size, SortKey::Modified, SortKey::Created, SortKey::Kind];
+    pub const ALL: [SortKey; 5] = [
+        SortKey::Name,
+        SortKey::Size,
+        SortKey::Modified,
+        SortKey::Created,
+        SortKey::Kind,
+    ];
 
     pub fn id(self) -> &'static str {
         match self {
@@ -94,7 +99,11 @@ pub fn section_of(entry: &EntryData, group: GroupBy, now: i64) -> Option<Section
         GroupBy::None => None,
         GroupBy::Kind => {
             let order = Kind::ALL.iter().position(|k| *k == entry.kind).unwrap_or(0) as u32;
-            Some(Section { order, id: entry.kind.id().into(), label: entry.kind.label() })
+            Some(Section {
+                order,
+                id: entry.kind.id().into(),
+                label: entry.kind.label(),
+            })
         }
         GroupBy::Created => {
             let (order, id, label) = if entry.created <= 0 {
@@ -110,7 +119,11 @@ pub fn section_of(entry: &EntryData, group: GroupBy, now: i64) -> Option<Section
                     _ => (5, "older", "Older"),
                 }
             };
-            Some(Section { order, id: id.into(), label })
+            Some(Section {
+                order,
+                id: id.into(),
+                label,
+            })
         }
     }
 }
@@ -142,7 +155,10 @@ mod tests {
     fn folders_come_first_even_when_descending() {
         let folder = entry("zz", true, 0, Kind::Folder, 0);
         let file = entry("aa", false, 9, Kind::Other, 0);
-        assert_eq!(compare(&folder, &file, SortKey::Name, false), Ordering::Less);
+        assert_eq!(
+            compare(&folder, &file, SortKey::Name, false),
+            Ordering::Less
+        );
         assert_eq!(compare(&folder, &file, SortKey::Size, true), Ordering::Less);
     }
 
@@ -166,8 +182,15 @@ mod tests {
     #[test]
     fn created_buckets() {
         let now = 1_000 * DAY;
-        let bucket = |age: i64| section_of(&entry("f", false, 0, Kind::Other, now - age),
-                                           GroupBy::Created, now).unwrap().id;
+        let bucket = |age: i64| {
+            section_of(
+                &entry("f", false, 0, Kind::Other, now - age),
+                GroupBy::Created,
+                now,
+            )
+            .unwrap()
+            .id
+        };
         assert_eq!(bucket(10), "today");
         assert_eq!(bucket(DAY + 1), "yesterday");
         assert_eq!(bucket(3 * DAY), "this-week");
@@ -175,7 +198,10 @@ mod tests {
         assert_eq!(bucket(100 * DAY), "this-year");
         assert_eq!(bucket(400 * DAY), "older");
         let unknown = entry("f", false, 0, Kind::Other, 0);
-        assert_eq!(section_of(&unknown, GroupBy::Created, now).unwrap().id, "unknown");
+        assert_eq!(
+            section_of(&unknown, GroupBy::Created, now).unwrap().id,
+            "unknown"
+        );
         assert_eq!(section_of(&unknown, GroupBy::None, now), None);
     }
 }

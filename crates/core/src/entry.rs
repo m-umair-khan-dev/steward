@@ -101,9 +101,8 @@ mod imp {
         fn properties() -> &'static [glib::ParamSpec] {
             use std::sync::OnceLock;
             static PROPERTIES: OnceLock<Vec<glib::ParamSpec>> = OnceLock::new();
-            PROPERTIES.get_or_init(|| {
-                vec![glib::ParamSpecString::builder("thumbnail-path").build()]
-            })
+            PROPERTIES
+                .get_or_init(|| vec![glib::ParamSpecString::builder("thumbnail-path").build()])
         }
 
         fn set_property(&self, _id: usize, value: &glib::Value, pspec: &glib::ParamSpec) {
@@ -138,11 +137,10 @@ impl FileEntry {
 
     pub fn from_info(parent: &gio::File, info: &gio::FileInfo) -> Self {
         let entry = Self::new(EntryData::from_info(parent, info));
-        let valid = !info.has_attribute("thumbnail::is-valid") || info.boolean("thumbnail::is-valid");
-        if valid {
-            if let Some(path) = info.attribute_byte_string("thumbnail::path") {
-                *entry.imp().thumbnail_path.borrow_mut() = Some(path.to_string());
-            }
+        let valid =
+            !info.has_attribute("thumbnail::is-valid") || info.boolean("thumbnail::is-valid");
+        if valid && let Some(path) = info.attribute_byte_string("thumbnail::path") {
+            *entry.imp().thumbnail_path.borrow_mut() = Some(path.to_string());
         }
         entry
     }

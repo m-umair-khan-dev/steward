@@ -16,17 +16,20 @@ path = "src/main.rs"
 [features]
 # Compiles in the dev.cairn.Files.Test1 D-Bus interface used by end-to-end
 # tests (DESIGN.md §10.2). Never enabled in release packages.
-e2e = ["dep:serde_json"]
+e2e = []
 
 [dependencies]
 cairn-core.workspace = true
-gtk.workspace = true
-adw.workspace = true
-gettext-rs = { version = "0.8", features = ["gettext-system"] }
-serde_json = { workspace = true, optional = true }
+cxx.workspace = true
+cxx-qt.workspace = true
+cxx-qt-lib.workspace = true
+gettext-rs.workspace = true
+gio.workspace = true
+glib.workspace = true
+serde_json.workspace = true
 
 [build-dependencies]
-glib-build-tools.workspace = true
+cxx-qt-build.workspace = true
 
 [lints]
 workspace = true

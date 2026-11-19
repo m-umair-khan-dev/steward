@@ -73,18 +73,19 @@ services:
 
   # Docker Desktop cannot reach the host's display (ADR 0004). This variant shows
   # the window in a browser at http://127.0.0.1:8085 using GTK's Broadway backend.
-  app-broadway:
+  # Docker Desktop cannot share the host's Wayland socket; Qt draws to a VNC
+  # server instead (ADR 0004, ADR 0009). Connect a VNC viewer to 127.0.0.1:5900.
+  app-vnc:
     <<: *app
     environment:
       <<: *dev-env
-      GDK_BACKEND: broadway
-      BROADWAY_DISPLAY: ":5"
+      QT_QPA_PLATFORM: "vnc:size=1440x900"
+      QT_LINUX_ACCESSIBILITY_ALWAYS_ON: "1"
       XDG_RUNTIME_DIR: /tmp/runtime-dev
-      GTK_DEBUG: ${GTK_DEBUG:-}
       G_MESSAGES_DEBUG: ${G_MESSAGES_DEBUG:-}
       CAIRN_DEV: "1"
-    ports: ["127.0.0.1:8085:8085"]
-    command: docker/scripts/run-broadway
+    ports: ["127.0.0.1:5900:5900"]
+    command: docker/scripts/run-vnc
 
   # (Re)creates the fake home folder the app runs against.
   fixture:

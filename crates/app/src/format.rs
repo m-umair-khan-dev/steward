@@ -1,7 +1,6 @@
 //! Human-readable sizes, dates, counts and kind names.
 
 use gettextrs::{gettext, ngettext};
-use gtk::glib;
 
 use cairn_core::Kind;
 
@@ -19,19 +18,27 @@ pub fn date(secs: i64) -> String {
     if secs <= 0 {
         return "—".into();
     }
-    let (Ok(when), Ok(now)) = (glib::DateTime::from_unix_local(secs), glib::DateTime::now_local())
-    else {
+    let (Ok(when), Ok(now)) = (
+        glib::DateTime::from_unix_local(secs),
+        glib::DateTime::now_local(),
+    ) else {
         return "—".into();
     };
     let same_year = when.year() == now.year();
-    let days_ago = if same_year { now.day_of_year() - when.day_of_year() } else { i32::MAX };
+    let days_ago = if same_year {
+        now.day_of_year() - when.day_of_year()
+    } else {
+        i32::MAX
+    };
     let pattern = match days_ago {
         0 => gettext("Today, %H:%M"),
         1 => gettext("Yesterday, %H:%M"),
         _ if same_year => gettext("%-e %b"),
         _ => gettext("%-e %b %Y"),
     };
-    when.format(&pattern).map(|s| s.to_string()).unwrap_or_else(|_| "—".into())
+    when.format(&pattern)
+        .map(|s| s.to_string())
+        .unwrap_or_else(|_| "—".into())
 }
 
 pub fn items(n: u32) -> String {

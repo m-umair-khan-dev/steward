@@ -1,0 +1,147 @@
+import QtQuick
+import QtQuick.Effects
+
+// A tinted glass folder (ADR 0008, DESIGN.md §3.2): coloured back with a tab,
+// two sheets of paper, and a frosted front that really blurs what is behind.
+Item {
+    id: root
+
+    property string kind: "folders"
+    property string label: ""
+    property string count: ""
+    property string size: ""
+    property string symbol: "document"
+    property bool selected: false
+    readonly property bool lifted: hover.hovered || selected
+    signal tapped(int modifiers)
+    signal doubleTapped()
+
+    readonly property color deep: Theme.deep(kind)
+    readonly property color light: Theme.light(kind)
+
+    width: 148
+    height: shape.height + 44
+
+    Accessible.role: Accessible.Button
+    Accessible.name: label
+    Accessible.selected: selected
+    Accessible.onPressAction: root.doubleTapped()
+
+    HoverHandler { id: hover; cursorShape: Qt.PointingHandCursor }
+    TapHandler {
+        id: tap
+        acceptedModifiers: Qt.KeyboardModifierMask
+        onTapped: root.tapped(tap.point.modifiers)
+        onDoubleTapped: root.doubleTapped()
+    }
+
+    Item {
+        id: shape
+        width: root.width - 16
+        height: Math.round(width * 0.8)
+        anchors.horizontalCenter: parent.horizontalCenter
+        y: root.lifted ? 0 : 4
+        scale: hover.hovered ? 1.05 : 1.0
+        Behavior on y { enabled: Theme.motion; SpringAnimation { spring: 4; damping: 0.32 } }
+        Behavior on scale { enabled: Theme.motion; SpringAnimation { spring: 4; damping: 0.32 } }
+
+        layer.enabled: true
+        layer.effect: MultiEffect {
+            shadowEnabled: true
+            shadowColor: Theme.alpha(root.deep, 0.55)
+            shadowBlur: root.lifted ? 0.9 : 0.5
+            shadowVerticalOffset: root.lifted ? 8 : 3
+            shadowOpacity: root.lifted ? 0.55 : 0.3
+            Behavior on shadowBlur { NumberAnimation { duration: 180 } }
+            Behavior on shadowVerticalOffset { NumberAnimation { duration: 180 } }
+        }
+
+        Item {
+            id: behind
+            anchors.fill: parent
+            Rectangle { width: parent.width * 0.4; height: parent.height * 0.25; radius: 10; color: root.deep }
+            Rectangle { y: parent.height * 0.11; width: parent.width; height: parent.height * 0.89; radius: 14; color: root.deep }
+            Rectangle { x: parent.width * 0.14; y: parent.height * 0.17; width: parent.width * 0.72; height: parent.height * 0.5
+                        radius: 6; color: "white"; rotation: -4; antialiasing: true }
+            Rectangle { x: parent.width * 0.15; y: parent.height * 0.21; width: parent.width * 0.72; height: parent.height * 0.5
+                        radius: 6; color: "#efedf8"; rotation: 3; antialiasing: true }
+        }
+
+        ShaderEffectSource {
+            id: behindTexture
+            sourceItem: behind
+            sourceRect: Qt.rect(front.x, front.y, front.width, front.height)
+            visible: false
+        }
+        Rectangle {
+            id: frontMask
+            width: front.width; height: front.height; radius: front.radius
+            visible: false
+            layer.enabled: true
+        }
+        MultiEffect {
+            x: front.x; y: front.y; width: front.width; height: front.height
+            source: behindTexture
+            blurEnabled: true
+            blur: 1.0
+            blurMax: 40
+            maskEnabled: true
+            maskSource: frontMask
+            maskThresholdMin: 0.5
+            maskSpreadAtMin: 1.0
+        }
+        Rectangle {
+            id: front
+            y: parent.height * 0.36
+            width: parent.width
+            height: parent.height - y
+            radius: 12
+            gradient: Gradient {
+                GradientStop { position: 0.0; color: Theme.alpha(root.light, 0.70) }
+                GradientStop { position: 1.0; color: Theme.alpha(root.deep, 0.80) }
+            }
+            border.color: Qt.rgba(1, 1, 1, 0.45)
+            border.width: 1
+
+            Text {
+                x: 10; y: 6
+                text: root.count
+                color: "white"; font.pixelSize: 11; font.weight: Font.Bold
+                width: parent.width - 20; elide: Text.ElideRight
+            }
+            Icon {
+                anchors.centerIn: parent
+                anchors.verticalCenterOffset: 2
+                name: root.symbol
+                size: Math.round(front.height * 0.34)
+                color: Qt.rgba(1, 1, 1, 0.92)
+            }
+            Text {
+                x: 10; anchors.bottom: parent.bottom; anchors.bottomMargin: 5
+                text: root.size
+                color: Qt.rgba(1, 1, 1, 0.92); font.pixelSize: 10
+            }
+        }
+    }
+
+    Rectangle {
+        anchors.horizontalCenter: parent.horizontalCenter
+        anchors.top: shape.bottom
+        anchors.topMargin: 8
+        width: Math.min(name.implicitWidth + 14, root.width)
+        height: 24
+        radius: 8
+        color: root.selected ? Theme.accent : "transparent"
+        Text {
+            id: name
+            anchors.centerIn: parent
+            width: Math.min(implicitWidth, root.width - 14)
+            text: root.label
+            color: root.selected ? "white" : Theme.ink
+            font.pixelSize: 13
+            font.weight: Font.Medium
+            elide: Text.ElideMiddle
+            horizontalAlignment: Text.AlignHCenter
+        }
+    }
+}

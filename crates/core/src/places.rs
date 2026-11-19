@@ -22,12 +22,32 @@ pub fn standard_places() -> Vec<Place> {
         icon: "user-home-symbolic",
     }];
     let folders = [
-        (glib::UserDirectory::Desktop, "desktop", "user-desktop-symbolic"),
-        (glib::UserDirectory::Documents, "documents", "folder-documents-symbolic"),
-        (glib::UserDirectory::Downloads, "downloads", "folder-download-symbolic"),
+        (
+            glib::UserDirectory::Desktop,
+            "desktop",
+            "user-desktop-symbolic",
+        ),
+        (
+            glib::UserDirectory::Documents,
+            "documents",
+            "folder-documents-symbolic",
+        ),
+        (
+            glib::UserDirectory::Downloads,
+            "downloads",
+            "folder-download-symbolic",
+        ),
         (glib::UserDirectory::Music, "music", "folder-music-symbolic"),
-        (glib::UserDirectory::Pictures, "pictures", "folder-pictures-symbolic"),
-        (glib::UserDirectory::Videos, "videos", "folder-videos-symbolic"),
+        (
+            glib::UserDirectory::Pictures,
+            "pictures",
+            "folder-pictures-symbolic",
+        ),
+        (
+            glib::UserDirectory::Videos,
+            "videos",
+            "folder-videos-symbolic",
+        ),
     ];
     for (dir, key, icon) in folders {
         let Some(path) = glib::user_special_dir(dir) else {
@@ -40,7 +60,12 @@ pub fn standard_places() -> Vec<Place> {
             .file_name()
             .map(|n| n.to_string_lossy().into_owned())
             .unwrap_or_else(|| key.into());
-        places.push(Place { key: format!("place:{key}"), label, path, icon });
+        places.push(Place {
+            key: format!("place:{key}"),
+            label,
+            path,
+            icon,
+        });
     }
     places
 }

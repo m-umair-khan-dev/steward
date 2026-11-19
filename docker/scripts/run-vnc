@@ -1,0 +1,13 @@
+#!/bin/bash
+# `make app` on Docker Desktop: Qt draws the window to a VNC server
+# (ADR 0004, ADR 0009). Connect a VNC viewer to 127.0.0.1:5900.
+# Restarts on source changes.
+set -euo pipefail
+cd /workspace
+
+mkdir -p "$XDG_RUNTIME_DIR"
+chmod 700 "$XDG_RUNTIME_DIR"
+
+echo "Cairn: connect a VNC viewer to 127.0.0.1:5900."
+exec dbus-run-session -- watchexec --restart --exts rs,qml,svg,qrc,xml,toml \
+  --ignore 'target/**' -- cargo run -p cairn

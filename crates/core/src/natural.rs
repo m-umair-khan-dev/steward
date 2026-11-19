@@ -16,7 +16,10 @@ pub fn compare(a: &str, b: &str) -> Ordering {
                 let m = take_number(&mut right);
                 // Compare by value: strip leading zeros, then length, then digits.
                 let (n_trim, m_trim) = (n.trim_start_matches('0'), m.trim_start_matches('0'));
-                let ord = n_trim.len().cmp(&m_trim.len()).then_with(|| n_trim.cmp(m_trim));
+                let ord = n_trim
+                    .len()
+                    .cmp(&m_trim.len())
+                    .then_with(|| n_trim.cmp(m_trim));
                 if ord != Ordering::Equal {
                     return ord;
                 }

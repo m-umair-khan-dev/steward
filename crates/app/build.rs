@@ -1,54 +1,61 @@
-//! Compiles the Blueprint layouts to GtkBuilder XML, then bundles them with the
-//! stylesheet into a GResource that is embedded in the binary.
+//! Builds the QML module (dev.cairn.files) and the cxx-qt bridge, embeds the
+//! icons, and compiles the settings schema for development builds.
 
 use std::env;
 use std::fs;
 use std::path::PathBuf;
 use std::process::Command;
 
+use cxx_qt_build::{CxxQtBuilder, QmlFile, QmlModule};
+
+const QML_FILES: &[&str] = &[
+    "qml/Main.qml",
+    "qml/Theme.qml",
+    "qml/Icon.qml",
+    "qml/IconButton.qml",
+    "qml/Segmented.qml",
+    "qml/Sidebar.qml",
+    "qml/Rail.qml",
+    "qml/Header.qml",
+    "qml/PathBar.qml",
+    "qml/ChipRow.qml",
+    "qml/FolderGrid.qml",
+    "qml/FolderList.qml",
+    "qml/GlassFolder.qml",
+    "qml/FileCard.qml",
+    "qml/PreviewPane.qml",
+    "qml/StatusPage.qml",
+    "qml/Toast.qml",
+    "qml/Sheet.qml",
+    "qml/AboutDialog.qml",
+    "qml/PreferencesDialog.qml",
+    "qml/ShortcutsDialog.qml",
+    "qml/OpenWithDialog.qml",
+    "qml/MenuPopup.qml",
+];
+
 fn main() {
-    let out_dir = PathBuf::from(env::var("OUT_DIR").expect("OUT_DIR is set by cargo"));
-    let manifest_dir =
-        PathBuf::from(env::var("CARGO_MANIFEST_DIR").expect("CARGO_MANIFEST_DIR is set by cargo"));
-    let data_dir = manifest_dir.join("../../data");
-    let blueprint_dir = data_dir.join("ui");
-    let ui_out = out_dir.join("ui");
-    fs::create_dir_all(&ui_out).expect("create OUT_DIR/ui");
-
-    let mut blueprints: Vec<PathBuf> = fs::read_dir(&blueprint_dir)
-        .expect("read data/ui")
-        .map(|entry| entry.expect("read data/ui entry").path())
-        .filter(|path| path.extension().is_some_and(|ext| ext == "blp"))
-        .collect();
-    blueprints.sort();
-    println!("cargo:rerun-if-changed={}", blueprint_dir.display());
-    for blueprint in &blueprints {
-        println!("cargo:rerun-if-changed={}", blueprint.display());
-    }
-
-    let status = Command::new("blueprint-compiler")
-        .arg("batch-compile")
-        .arg(&ui_out)
-        .arg(&blueprint_dir)
-        .args(&blueprints)
-        .status()
-        .expect("run blueprint-compiler (installed in the dev image)");
-    assert!(status.success(), "blueprint-compiler failed");
-
-    let gresource = data_dir.join("resources.gresource.xml");
-    println!("cargo:rerun-if-changed={}", gresource.display());
-    for css in ["style.css", "style-dark.css", "accent.css", "accent-dark.css"] {
-        println!("cargo:rerun-if-changed={}", data_dir.join(css).display());
-    }
-    glib_build_tools::compile_resources(
-        &[out_dir.as_path(), data_dir.as_path()],
-        gresource.to_str().expect("UTF-8 path"),
-        "cairn.gresource",
-    );
+    // Theme.qml holds the colour tokens (DESIGN.md §3.6) as a singleton.
+    let files = QML_FILES.iter().map(|path| {
+        let file = QmlFile::from(*path);
+        if path.ends_with("Theme.qml") {
+            file.singleton(true)
+        } else {
+            file
+        }
+    });
+    CxxQtBuilder::new_qml_module(QmlModule::new("dev.cairn.files").qml_files(files))
+        .qt_module("Quick")
+        .qrc("qml/icons.qrc")
+        .files(["src/bridge.rs"])
+        .build();
 
     // Development and test builds load the settings schema from OUT_DIR, so
     // nothing has to be installed system-wide (see src/settings.rs).
-    let schema = data_dir.join("dev.cairn.Files.gschema.xml");
+    let out_dir = PathBuf::from(env::var("OUT_DIR").expect("OUT_DIR is set by cargo"));
+    let manifest_dir =
+        PathBuf::from(env::var("CARGO_MANIFEST_DIR").expect("CARGO_MANIFEST_DIR is set by cargo"));
+    let schema = manifest_dir.join("../../data/dev.cairn.Files.gschema.xml");
     println!("cargo:rerun-if-changed={}", schema.display());
     let schema_out = out_dir.join("schemas");
     fs::create_dir_all(&schema_out).expect("create OUT_DIR/schemas");

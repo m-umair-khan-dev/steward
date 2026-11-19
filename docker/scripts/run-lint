@@ -1,12 +1,13 @@
 #!/bin/bash
 # `make lint` (inside the container): formatting and clippy, with and without
-# the e2e feature, warnings as errors. Also compiles the Blueprint files.
+# the e2e feature, warnings as errors; Python and shell syntax. QML errors fail
+# E0-01 (the window never reports its size).
 set -euo pipefail
 cd /workspace
 
 cargo fmt --all -- --check
 cargo clippy --workspace --all-targets --locked -- -D warnings
 cargo clippy -p cairn --all-targets --locked --features e2e -- -D warnings
-python3 -m py_compile docker/scripts/make-fixture-home tests/e2e/*.py tests/e2e/harness/*.py tests/fixtures/*.py
+python3 -m py_compile docker/scripts/make-fixture-home tests/e2e/*.py tests/e2e/harness/*.py tests/fixtures/*.py tests/tools/*.py
 bash -n docker/scripts/start-compositor docker/scripts/headless-run docker/scripts/run-*
 echo "lint: ok"

@@ -13,8 +13,7 @@ use std::path::{Path, PathBuf};
 use std::rc::Rc;
 use std::time::Duration;
 
-use gtk::prelude::*;
-use gtk::{gdk_pixbuf, gio, glib};
+use gio::prelude::*;
 
 use cairn_core::FileEntry;
 
@@ -57,7 +56,9 @@ impl Thumbnailer {
     }
 
     fn spec_for(&self, content_type: &str) -> Option<&Spec> {
-        self.specs.iter().find(|spec| spec.mime_types.iter().any(|m| m == content_type))
+        self.specs
+            .iter()
+            .find(|spec| spec.mime_types.iter().any(|m| m == content_type))
     }
 
     fn wants(&self, entry: &FileEntry) -> bool {
@@ -106,7 +107,10 @@ impl Thumbnailer {
                             *n += 1;
                             *n
                         };
-                        glib::g_debug!("cairn", "no thumbnail for {uri} (attempt {attempts}): {reason}");
+                        glib::g_debug!(
+                            "cairn",
+                            "no thumbnail for {uri} (attempt {attempts}): {reason}"
+                        );
                         if attempts >= 2 {
                             this.failed.borrow_mut().insert(uri.clone());
                         } else {
@@ -131,8 +135,8 @@ impl Thumbnailer {
         let spec = self.spec_for(&data.content_type).ok_or("no thumbnailer")?;
         let bwrap = self.sandbox.as_ref().ok_or("no sandbox")?;
         let uri = data.uri();
-        let md5 = glib::compute_checksum_for_string(glib::ChecksumType::Md5, &uri)
-            .ok_or("checksum")?;
+        let md5 =
+            glib::compute_checksum_for_string(glib::ChecksumType::Md5, &uri).ok_or("checksum")?;
 
         let cache = glib::user_cache_dir().join("thumbnails").join("large");
         create_private_dir(&cache)?;
@@ -144,7 +148,10 @@ impl Thumbnailer {
         let _ = std::fs::remove_dir_all(&work);
         create_private_dir(&work)?;
 
-        let ext = input.extension().map(|e| format!(".{}", e.to_string_lossy())).unwrap_or_default();
+        let ext = input
+            .extension()
+            .map(|e| format!(".{}", e.to_string_lossy()))
+            .unwrap_or_default();
         let inner_input = format!("/tmp/input{ext}");
         let argv = sandbox_argv(bwrap, &input, &inner_input, &work, &spec.exec);
         let argv_refs: Vec<&std::ffi::OsStr> = argv.iter().map(OsString::as_os_str).collect();
@@ -167,21 +174,20 @@ impl Thumbnailer {
         }
 
         let produced = work.join("thumb.png");
-        let pixbuf = gdk_pixbuf::Pixbuf::from_file(&produced).map_err(|e| e.to_string())?;
+        let png = std::fs::read(&produced).map_err(|e| e.to_string())?;
+        let mtime = data.modified.to_string();
+        let tagged = add_png_text(
+            &png,
+            &[
+                ("Thumb::URI", uri.as_str()),
+                ("Thumb::MTime", mtime.as_str()),
+                ("Software", "Cairn"),
+            ],
+        )
+        .ok_or("thumbnailer did not write a PNG")?;
         let final_path = cache.join(format!("{md5}.png"));
         let temp_path = cache.join(format!("{md5}.png.cairn-part-{}", self.serial.get()));
-        let mtime = data.modified.to_string();
-        pixbuf
-            .savev(
-                &temp_path,
-                "png",
-                &[
-                    ("tEXt::Thumb::URI", uri.as_str()),
-                    ("tEXt::Thumb::MTime", mtime.as_str()),
-                    ("tEXt::Software", "Cairn"),
-                ],
-            )
-            .map_err(|e| e.to_string())?;
+        std::fs::write(&temp_path, tagged).map_err(|e| e.to_string())?;
         std::fs::rename(&temp_path, &final_path).map_err(|e| e.to_string())?;
         let _ = std::fs::remove_dir_all(&work);
         Ok(final_path)
@@ -200,8 +206,22 @@ fn sandbox_argv(
     let mut argv: Vec<OsString> = vec![bwrap.into()];
     let mut add = |items: &[&str]| argv.extend(items.iter().map(OsString::from));
     add(&["--ro-bind", "/usr", "/usr"]);
-    add(&["--symlink", "usr/lib", "/lib", "--symlink", "usr/lib64", "/lib64"]);
-    add(&["--symlink", "usr/bin", "/bin", "--symlink", "usr/sbin", "/sbin"]);
+    add(&[
+        "--symlink",
+        "usr/lib",
+        "/lib",
+        "--symlink",
+        "usr/lib64",
+        "/lib64",
+    ]);
+    add(&[
+        "--symlink",
+        "usr/bin",
+        "/bin",
+        "--symlink",
+        "usr/sbin",
+        "/sbin",
+    ]);
     add(&["--ro-bind-try", "/etc/ld.so.cache", "/etc/ld.so.cache"]);
     add(&["--ro-bind-try", "/etc/fonts", "/etc/fonts"]);
     add(&["--dev", "/dev", "--tmpfs", "/tmp"]);
@@ -212,8 +232,21 @@ fn sandbox_argv(
     argv.push(work.into());
     argv.push("/tmp/out".into());
     let mut add = |items: &[&str]| argv.extend(items.iter().map(OsString::from));
-    add(&["--unshare-all", "--die-with-parent", "--new-session", "--clearenv"]);
-    add(&["--setenv", "PATH", "/usr/bin:/bin", "--setenv", "HOME", "/tmp", "--"]);
+    add(&[
+        "--unshare-all",
+        "--die-with-parent",
+        "--new-session",
+        "--clearenv",
+    ]);
+    add(&[
+        "--setenv",
+        "PATH",
+        "/usr/bin:/bin",
+        "--setenv",
+        "HOME",
+        "/tmp",
+        "--",
+    ]);
     let input_uri = format!("file://{inner_input}");
     for arg in exec {
         let replaced = arg
@@ -244,7 +277,10 @@ fn load_specs() -> Vec<Spec> {
         };
         let mut paths: Vec<PathBuf> = entries.flatten().map(|e| e.path()).collect();
         paths.sort();
-        for path in paths.into_iter().filter(|p| p.extension().is_some_and(|e| e == "thumbnailer")) {
+        for path in paths
+            .into_iter()
+            .filter(|p| p.extension().is_some_and(|e| e == "thumbnailer"))
+        {
             if let Some(spec) = parse_spec(&path) {
                 specs.push(spec);
             }
@@ -268,4 +304,70 @@ fn parse_spec(path: &Path) -> Option<Spec> {
         .map(|m| m.to_string())
         .collect();
     Some(Spec { mime_types, exec })
+}
+
+/// Adds tEXt chunks (FreeDesktop thumbnail metadata) right after the PNG
+/// header chunk. Returns None if `png` is not a PNG.
+fn add_png_text(png: &[u8], entries: &[(&str, &str)]) -> Option<Vec<u8>> {
+    const SIGNATURE: &[u8] = b"\x89PNG\r\n\x1a\n";
+    if !png.starts_with(SIGNATURE) || png.len() < 33 {
+        return None;
+    }
+    let ihdr_len = u32::from_be_bytes(png[8..12].try_into().ok()?) as usize;
+    let after_ihdr = 8 + 12 + ihdr_len;
+    let mut out = png[..after_ihdr].to_vec();
+    for (key, value) in entries {
+        let mut data = key.as_bytes().to_vec();
+        data.push(0);
+        data.extend_from_slice(value.as_bytes());
+        out.extend_from_slice(&(data.len() as u32).to_be_bytes());
+        let mut chunk = b"tEXt".to_vec();
+        chunk.extend_from_slice(&data);
+        out.extend_from_slice(&chunk);
+        out.extend_from_slice(&crc32(&chunk).to_be_bytes());
+    }
+    out.extend_from_slice(&png[after_ihdr..]);
+    Some(out)
+}
+
+fn crc32(bytes: &[u8]) -> u32 {
+    let mut crc = 0xFFFF_FFFFu32;
+    for &byte in bytes {
+        crc ^= u32::from(byte);
+        for _ in 0..8 {
+            crc = if crc & 1 != 0 {
+                (crc >> 1) ^ 0xEDB8_8320
+            } else {
+                crc >> 1
+            };
+        }
+    }
+    !crc
+}
+
+#[cfg(test)]
+mod tests {
+    use super::*;
+
+    #[test]
+    fn crc_matches_the_png_spec() {
+        assert_eq!(crc32(b"IEND"), 0xAE42_6082);
+    }
+
+    #[test]
+    fn text_chunks_go_after_the_header() {
+        let mut png = b"\x89PNG\r\n\x1a\n".to_vec();
+        png.extend_from_slice(&13u32.to_be_bytes());
+        png.extend_from_slice(b"IHDR");
+        png.extend_from_slice(&[0; 13]);
+        png.extend_from_slice(&[0; 4]);
+        png.extend_from_slice(&0u32.to_be_bytes());
+        png.extend_from_slice(b"IEND");
+        png.extend_from_slice(&crc32(b"IEND").to_be_bytes());
+        let tagged = add_png_text(&png, &[("Thumb::URI", "file:///x")]).unwrap();
+        let ihdr_end = 8 + 12 + 13;
+        assert_eq!(&tagged[ihdr_end + 4..ihdr_end + 8], b"tEXt");
+        assert!(tagged.ends_with(&png[ihdr_end..]));
+        assert!(add_png_text(b"not a png", &[]).is_none());
+    }
 }

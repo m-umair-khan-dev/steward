@@ -27,7 +27,7 @@ def test_E0_01_launch_headless(app):
 def test_E0_02_about_dialog_opens_and_closes(app):
     app.action("app.about")
     dialog = app.wait_for(lambda: app.state()["active_window"]["dialog"], "the About dialog")
-    assert dialog["type"] == "AdwAboutDialog"
+    assert dialog["type"] == "about"
     assert dialog["application_name"] == "Cairn"
     assert dialog["version"] == app.state()["version"]
 

@@ -63,13 +63,16 @@ impl Store {
     }
 
     pub fn open_in_memory() -> rusqlite::Result<Self> {
-        let mut store = Self { conn: Connection::open_in_memory()? };
+        let mut store = Self {
+            conn: Connection::open_in_memory()?,
+        };
         store.migrate()?;
         Ok(store)
     }
 
     pub fn schema_version(&self) -> rusqlite::Result<i64> {
-        self.conn.pragma_query_value(None, "user_version", |row| row.get(0))
+        self.conn
+            .pragma_query_value(None, "user_version", |row| row.get(0))
     }
 
     fn migrate(&mut self) -> rusqlite::Result<()> {
@@ -86,9 +89,15 @@ impl Store {
     // --- sidebar -------------------------------------------------------------
 
     pub fn sidebar_choices(&self) -> rusqlite::Result<Vec<SidebarChoice>> {
-        let mut stmt = self.conn.prepare("SELECT key, position, hidden FROM sidebar_entry")?;
+        let mut stmt = self
+            .conn
+            .prepare("SELECT key, position, hidden FROM sidebar_entry")?;
         let rows = stmt.query_map([], |row| {
-            Ok(SidebarChoice { key: row.get(0)?, position: row.get(1)?, hidden: row.get(2)? })
+            Ok(SidebarChoice {
+                key: row.get(0)?,
+                position: row.get(1)?,
+                hidden: row.get(2)?,
+            })
         })?;
         rows.collect()
     }
@@ -146,7 +155,14 @@ impl Store {
              ON CONFLICT(uri) DO UPDATE SET view = excluded.view, sort = excluded.sort,
                descending = excluded.descending, group_by = excluded.group_by,
                updated_at = excluded.updated_at",
-            params![uri, view.view, view.sort, view.descending, view.group_by, now],
+            params![
+                uri,
+                view.view,
+                view.sort,
+                view.descending,
+                view.group_by,
+                now
+            ],
         )?;
         Ok(())
     }
@@ -171,7 +187,7 @@ mod tests {
             store.set_sidebar_hidden("place:music", true).unwrap();
         }
         let store = Store::open(&path).unwrap();
-        assert_eq!(store.sidebar_choices().unwrap()[0].hidden, true);
+        assert!(store.sidebar_choices().unwrap()[0].hidden);
         let _ = std::fs::remove_file(&path);
     }
 
@@ -179,11 +195,27 @@ mod tests {
     fn sidebar_hide_order_and_reset() {
         let mut store = Store::open_in_memory().unwrap();
         store.set_sidebar_hidden("place:music", true).unwrap();
-        store.set_sidebar_order(&["place:home".into(), "place:music".into()]).unwrap();
+        store
+            .set_sidebar_order(&["place:home".into(), "place:music".into()])
+            .unwrap();
         let mut choices = store.sidebar_choices().unwrap();
         choices.sort_by(|a, b| a.key.cmp(&b.key));
-        assert_eq!(choices[0], SidebarChoice { key: "place:home".into(), position: Some(0), hidden: false });
-        assert_eq!(choices[1], SidebarChoice { key: "place:music".into(), position: Some(1), hidden: true });
+        assert_eq!(
+            choices[0],
+            SidebarChoice {
+                key: "place:home".into(),
+                position: Some(0),
+                hidden: false
+            }
+        );
+        assert_eq!(
+            choices[1],
+            SidebarChoice {
+                key: "place:music".into(),
+                position: Some(1),
+                hidden: true
+            }
+        );
         store.reset_sidebar().unwrap();
         assert!(store.sidebar_choices().unwrap().is_empty());
     }

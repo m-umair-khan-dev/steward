@@ -6,7 +6,7 @@ import time
 
 import pytest
 from gi.repository import GLib
-from PIL import Image
+from PIL import Image, ImageChops, ImageStat
 
 pytestmark = pytest.mark.p1
 
@@ -214,8 +214,7 @@ def test_E1_12_open_a_text_file(session, home, app_factory):
 def _mean_luminance(path) -> float:
     with Image.open(path) as image:
         grey = image.convert("L").resize((64, 40))
-        pixels = list(grey.getdata())
-    return sum(pixels) / len(pixels)
+    return ImageStat.Stat(grey).mean[0]
 
 
 def test_E1_13_light_and_dark(app, tmp_path):
@@ -231,9 +230,10 @@ def test_E1_13_light_and_dark(app, tmp_path):
 
 def test_E1_14_shortcuts_window(app):
     accels = app.state()["accels"]
-    assert accels["win.location"] == ["<Control>l"]
-    assert accels["win.show-hidden"] == ["<Control>h"]
-    assert accels["win.back"][0] == "<Alt>Left"
+    # Qt key-sequence syntax since ADR 0009.
+    assert accels["win.location"] == ["Ctrl+L"]
+    assert accels["win.show-hidden"] == ["Ctrl+H"]
+    assert accels["win.back"][0] == "Alt+Left"
     assert all(accels[name] for name in accels), f"actions without keys: {accels}"
 
     app.action("win.show-help-overlay")
@@ -300,3 +300,53 @@ def test_E1_17_sidebar_collapses_to_a_rail(app, home):
     app.wait_for(lambda: app.state()["sidebar"]["expanded"] and app.state()["sidebar"]["visible"],
                  "the sidebar to expand again")
     assert not app.state()["sidebar"]["rail_visible"]
+
+
+def _image_difference(a, b) -> float:
+    """Mean absolute difference of two screenshots, 0..255."""
+    with Image.open(a) as first, Image.open(b) as second:
+        x = first.convert("L").resize((160, 100))
+        y = second.convert("L").resize((160, 100))
+    return ImageStat.Stat(ImageChops.difference(x, y)).mean[0]
+
+
+def _by_kind_shown(app) -> bool:
+    return any(h.startswith("By kind") for h in app.folder()["grid_headers"])
+
+
+def test_E1_18_files_fly_into_kind_folders(session, home, app_factory, tmp_path):
+    """Added with ADR 0009 (DESIGN.md §3.5): grouping by kind is animated,
+    and immediate when motion is off."""
+    app = app_factory(extra_env={"CAIRN_MOTION": "1"})
+    assert app.state()["motion"], "CAIRN_MOTION=1 turns motion on in a test build"
+    app.open_folder(home / "Downloads")
+    app.wait_idle()
+    before = app.screenshot(tmp_path / "before.png")
+
+    app.action("win.group-by", s("kind"))
+    app.wait_for(lambda: app.state()["flying"] > 0, "cards to take off", timeout=3)
+    started = time.monotonic()
+    middle = app.screenshot(tmp_path / "middle.png")
+    still_flying = app.state()["flying"] > 0
+    app.wait_for(lambda: app.state()["flying"] == 0, "cards to land", timeout=5)
+    flight = time.monotonic() - started
+    app.wait_for(lambda: _by_kind_shown(app), "the By kind section")
+    app.wait_idle()
+    after = app.screenshot(tmp_path / "after.png")
+
+    # A movement over several frames, not a jump.
+    assert still_flying and flight > 0.2, f"the flight lasted only {flight:.2f}s"
+    assert _image_difference(middle, before) > 1.0, "the mid-flight frame equals the start"
+    assert _image_difference(middle, after) > 1.0, "the mid-flight frame equals the end"
+    app.stop()
+
+    # Reduced motion: the same change happens at once, with nothing in flight.
+    still = app_factory()
+    assert not still.state()["motion"]
+    still.open_folder(home / "Downloads")
+    still.action("win.group-by", s("created"))
+    still.action("win.group-by", s("kind"))
+    seen = []
+    still.wait_for(lambda: seen.append(still.state()["flying"]) or _by_kind_shown(still), "the By kind section")
+    still.wait_idle()
+    assert still.state()["flying"] == 0 and max(seen) == 0, f"cards flew with motion off: {seen}"

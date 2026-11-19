@@ -1,28 +1,23 @@
 //! Cairn, a file manager for Ubuntu.
 
+mod actions;
+mod app;
 mod app_data;
-mod application;
-mod file_card;
-mod folder_card;
-mod folder_view;
+mod bridge;
+mod controller;
+mod dbus;
 mod format;
-mod path_bar;
-mod preferences;
-mod preview_pane;
+mod paths;
 mod settings;
 mod sidebar;
-mod style;
-#[cfg(feature = "e2e")]
-mod test_iface;
 mod thumbnails;
 mod tint;
-mod window;
 
 use std::path::PathBuf;
 use std::process::ExitCode;
 
 fn main() -> ExitCode {
-    // The guard runs before GTK or GLib start, so a refused start creates nothing
+    // The guard runs before Qt or GLib start, so a refused start creates nothing
     // in the home folder (AGENTS.md rule 4, scenario E0-04).
     let guard_required =
         cairn_core::guard::is_required(cfg!(debug_assertions), cfg!(feature = "e2e"), |name| {
@@ -36,5 +31,5 @@ fn main() -> ExitCode {
         }
     }
 
-    application::run()
+    app::run()
 }

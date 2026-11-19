@@ -3,8 +3,6 @@
 use std::cell::{OnceCell, RefCell};
 use std::rc::Rc;
 
-use gtk::glib;
-
 use cairn_core::store::Store;
 
 thread_local! {

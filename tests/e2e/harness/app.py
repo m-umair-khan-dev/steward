@@ -42,7 +42,9 @@ class App:
             "CAIRN_E2E": "1",
             "G_DEBUG": "fatal-criticals",
             "RUST_BACKTRACE": "1",
-            "GTK_A11Y": "atspi",
+            "QT_QPA_PLATFORM": "wayland",
+            "QT_LINUX_ACCESSIBILITY_ALWAYS_ON": "1",
+            "QT_WAYLAND_DISABLE_WINDOWDECORATION": "1",
         } | self.extra_env
 
     def launch(self, wait: bool = True, timeout: float = 20.0) -> "App":
