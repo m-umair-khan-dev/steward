@@ -64,6 +64,8 @@ class Session:
         env = self.base_env() | {
             "COMPOSITOR_LOG": str(self.logs / "compositor.log"),
             "XDG_CACHE_HOME": str(compositor_cache),
+            # Mutter keeps session state under XDG_DATA_HOME: not in the test home.
+            "XDG_DATA_HOME": str(compositor_cache / "data"),
             "MESA_SHADER_CACHE_DIR": str(compositor_cache / "mesa"),
         }
         result = subprocess.run([str(START_COMPOSITOR)], env=env, capture_output=True, text=True,

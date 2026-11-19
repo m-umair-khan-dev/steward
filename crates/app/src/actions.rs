@@ -71,6 +71,13 @@ pub const ACCELS: &[(&str, &str, &[&str], &str)] = &[
     ("win.paste", "", &["Ctrl+V"], "Paste"),
     ("win.undo", "", &["Ctrl+Z"], "Undo"),
     ("win.redo", "", &["Ctrl+Shift+Z"], "Redo"),
+    (
+        "win.search",
+        "",
+        &["Ctrl+K"],
+        "Find anything: folders and files",
+    ),
+    ("win.peek", "", &["Space"], "Peek at a file"),
 ];
 
 /// Shortcuts that text fields need for themselves: QML turns these off while
@@ -82,6 +89,7 @@ const TEXT_KEYS: &[&str] = &[
     "win.paste",
     "win.undo",
     "win.redo",
+    "win.peek",
 ];
 
 thread_local! {
@@ -244,6 +252,51 @@ fn create() -> (gio::SimpleActionGroup, gio::SimpleActionGroup) {
     });
     with_string(&win, "cancel-job", |id| {
         controller::with(|c| c.cancel_job(id))
+    });
+    // Search, Peek and the index (Phase 3).
+    simple(&win, "search", || controller::with(|c| c.open_search()));
+    simple(&win, "search-close", || {
+        controller::with(|c| c.close_search())
+    });
+    with_string(&win, "search-move", |key| {
+        controller::with(|c| c.search_move(key))
+    });
+    with_string(&win, "search-select", |i| {
+        controller::with(|c| c.search_select(i.parse().unwrap_or(0)))
+    });
+    with_string(&win, "search-kind", |kind| {
+        controller::with(|c| c.search_kind(kind))
+    });
+    simple(&win, "search-open", || {
+        controller::with(|c| c.search_open())
+    });
+    simple(&win, "search-reveal", || {
+        controller::with(|c| c.search_reveal())
+    });
+    simple(&win, "search-peek", || {
+        controller::with(|c| c.search_peek())
+    });
+    simple(&win, "peek", || controller::with(|c| c.peek_selected()));
+    with_string(&win, "peek-move", |d| controller::with(|c| c.peek_move(d)));
+    simple(&win, "peek-close", || controller::with(|c| c.peek_close()));
+    simple(&win, "peek-open", || controller::with(|c| c.peek_open()));
+    with_string(&win, "path-match", |key| {
+        controller::with(|c| match key.parse::<usize>() {
+            Ok(i) => c.path_match_go(i),
+            Err(_) => c.path_match_move(key),
+        })
+    });
+    simple(&win, "start-indexer", || {
+        controller::with(|c| c.start_indexer())
+    });
+    with_string(&win, "index-paused", |v| {
+        controller::with(|c| c.set_index_paused(v == "true"))
+    });
+    simple(&win, "index-rebuild", || {
+        controller::with(|c| c.rebuild_index())
+    });
+    with_string(&win, "index-exclude", |change| {
+        controller::with(|c| c.edit_index_exclude(change))
     });
     simple(&win, "open-selected", || {
         controller::with(|c| c.open_selected())

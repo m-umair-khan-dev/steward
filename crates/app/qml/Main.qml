@@ -27,6 +27,10 @@ Window {
                 pathBar.field.text = win.pathbar.text || ""
                 pathBar.field.selectAll()
                 pathBar.field.forceActiveFocus()
+            } else if (target === "search") {
+                searchOverlay.focusField()
+            } else if (target === "peek") {
+                peekOverlay.forceActiveFocus()
             } else if (target === "content") {
                 content.forceActiveFocus()
             } else if (target === "filter") {
@@ -55,6 +59,8 @@ Window {
     readonly property var accels: parse(p.accels, [])
     readonly property var dialogData: parse(p.dialogdata, ({}))
     readonly property var ops: parse(p.ops, ({ jobs: [], trash: false }))
+    readonly property var search: parse(p.search, ({ open: false }))
+    readonly property var peek: parse(p.peek, ({ open: false }))
     // A text field has the keyboard: shortcuts it needs (copy, paste, undo,
     // Delete) are left to it.
     readonly property bool typing: !!activeFocusItem && activeFocusItem.cursorPosition !== undefined
@@ -198,6 +204,7 @@ Window {
         }
         PathBar {
             id: pathBar
+            z: 5
             anchors.top: header.bottom
             width: parent.width
             model: win.pathbar
@@ -366,6 +373,10 @@ Window {
             { text: "Show Hidden Files", action: "win.show-hidden", param: "", checked: !!win.prefs.showHidden }
         ]
     }
+
+    // --- search and Peek (Phase 3) ---------------------------------------------
+    SearchOverlay { id: searchOverlay; model: win.search }
+    PeekOverlay { id: peekOverlay; model: win.peek }
 
     // --- dialogs ---------------------------------------------------------------
     AboutDialog { visible: p.dialog === "about"; version: p.version }

@@ -43,6 +43,9 @@ class App:
             "G_DEBUG": "fatal-criticals",
             "RUST_BACKTRACE": "1",
             "QT_QPA_PLATFORM": "wayland",
+            # GPU shader caches belong to the machine, not the fixture home
+            # (the index would count them, E3-01).
+            "MESA_SHADER_CACHE_DIR": str(self.session.root / "mesa-app"),
             "QT_LINUX_ACCESSIBILITY_ALWAYS_ON": "1",
             "QT_WAYLAND_DISABLE_WINDOWDECORATION": "1",
         } | self.extra_env
@@ -135,6 +138,31 @@ class App:
                              GLib.Variant("(u)", (int(timeout * 1000),)), "(b)",
                              timeout_ms=int(timeout * 1000) + 2000)
         assert idle, f"app not idle after {timeout}s"
+
+    # -- the indexer (Phase 3) -----------------------------------------------
+
+    INDEXER = ("dev.cairn.Indexer", "/dev/cairn/Indexer", "dev.cairn.Indexer1")
+
+    def indexer(self, method: str, args: GLib.Variant | None = None, reply: str | None = None,
+                timeout_ms: int = 5000):
+        name, path, iface = self.INDEXER
+        result = self.bus.call_sync(name, path, iface, method, args,
+                                    GLib.VariantType(reply) if reply else None,
+                                    Gio.DBusCallFlags.NO_AUTO_START, timeout_ms, None)
+        return result.unpack() if result is not None else None
+
+    def index_status(self) -> dict:
+        return json.loads(self.indexer("Status", reply="(s)")[0])
+
+    def wait_index_idle(self, timeout: float = 30.0) -> dict:
+        """Waits for the indexer to start and to have nothing left to do."""
+        wait_for(lambda: self.index_status(), "the indexer to run", timeout)
+        (idle,) = self.indexer("WaitIdle", GLib.Variant("(u)", (int(timeout * 1000),)), "(b)",
+                               timeout_ms=int(timeout * 1000) + 2000)
+        assert idle, f"indexer not idle after {timeout}s"
+        status = self.index_status()
+        wait_for(lambda: self.state()["index"]["running"], "the app to see the indexer", 10)
+        return status
 
     def screenshot(self, path: Path | str) -> Path:
         path = Path(path)

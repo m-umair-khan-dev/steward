@@ -62,6 +62,8 @@ Rectangle {
         Accessible.name: "Location"
         background: Rectangle { radius: 8; color: Theme.track; border.color: Theme.accent; border.width: 1.5 }
         Keys.onTabPressed: (event) => { text = p.complete(text); cursorPosition = text.length; event.accepted = true }
+        Keys.onDownPressed: p.activate("win.path-match", "down")
+        Keys.onUpPressed: p.activate("win.path-match", "up")
         Keys.onEscapePressed: p.cancelpath()
         onAccepted: p.submit(text)
         onTextChanged: if (visible) p.typed(text)
@@ -75,5 +77,49 @@ Rectangle {
         text: "Ctrl+L to type a path"
         color: Theme.faint
         font.pixelSize: 12
+    }
+
+    // Typing a folder's name lists every folder with that name and where it
+    // is (P3-T10).
+    Rectangle {
+        visible: root.model.editing && (root.model.matches || []).length > 0
+        x: 12
+        y: parent.height + 4
+        width: Math.min(560, parent.width - 24)
+        height: matchList.implicitHeight + 12
+        radius: 12
+        color: Theme.card
+        border.color: Theme.line
+        z: 50
+        Accessible.role: Accessible.List
+        Accessible.name: "Folders with that name"
+        Column {
+            id: matchList
+            x: 6; y: 6
+            width: parent.width - 12
+            Repeater {
+                model: root.model.matches || []
+                delegate: Rectangle {
+                    id: match
+                    required property var modelData
+                    width: matchList.width
+                    height: 46
+                    radius: 8
+                    color: modelData.chosen ? Theme.alpha(Theme.accent, 0.14) : (matchHover.hovered ? Theme.hover : "transparent")
+                    Accessible.role: Accessible.ListItem
+                    Accessible.name: modelData.name + " " + modelData.where
+                    Accessible.onPressAction: p.activate("win.path-match", String(modelData.index))
+                    Icon { x: 10; anchors.verticalCenter: parent.verticalCenter; name: "folder"; size: 20
+                           color: Theme.deep("folders") }
+                    Column {
+                        x: 40; anchors.verticalCenter: parent.verticalCenter
+                        Text { text: match.modelData.name; color: Theme.ink; font.pixelSize: 14; font.weight: Font.DemiBold }
+                        Text { text: match.modelData.where; color: Theme.muted; font.pixelSize: 12 }
+                    }
+                    HoverHandler { id: matchHover }
+                    MouseArea { anchors.fill: parent; onClicked: p.activate("win.path-match", String(match.modelData.index)) }
+                }
+            }
+        }
     }
 }

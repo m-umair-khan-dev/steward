@@ -18,7 +18,10 @@ use serde_json::{Value, json};
 use cairn_core::sort::{self, GroupBy, SortKey};
 use cairn_core::{FileEntry, FolderModel, Kind, LoadState};
 
+mod index;
 mod ops;
+mod peek;
+mod search;
 
 use crate::sidebar::{self, SidebarEntry};
 use crate::thumbnails::Thumbnailer;
@@ -120,7 +123,9 @@ pub mod dirty {
     pub const NAV: u32 = 512;
     pub const PREFS: u32 = 1024;
     pub const OPS: u32 = 2048;
-    pub const ALL: u32 = 4095;
+    pub const SEARCH: u32 = 4096;
+    pub const PEEK: u32 = 8192;
+    pub const ALL: u32 = 16383;
 }
 
 /// One-off things for QML to do.
@@ -170,6 +175,12 @@ pub struct Controller {
     preview_children: Option<(String, Vec<String>)>,
     last_toast: Option<String>,
     ops: ops::Ops,
+    index: index::IndexState,
+    search: search::SearchState,
+    peek: peek::PeekState,
+    /// Path bar: folders whose name matches what is typed, and the one chosen.
+    path_matches: Vec<PathBuf>,
+    path_match: Option<usize>,
     dialog: String,
     dialog_data: Value,
     open_with_apps: Vec<gio::AppInfo>,
@@ -252,6 +263,11 @@ pub fn init(notifier: impl Fn() + 'static) {
         preview_children: None,
         last_toast: None,
         ops: ops::Ops::default(),
+        index: index::IndexState::default(),
+        search: search::SearchState::default(),
+        peek: peek::PeekState::default(),
+        path_matches: Vec::new(),
+        path_match: None,
         dialog: String::new(),
         dialog_data: Value::Null,
         open_with_apps: Vec::new(),
@@ -303,6 +319,7 @@ pub fn init(notifier: impl Fn() + 'static) {
     });
     with(|c| {
         ops::start(c);
+        index::start(c);
         c.reload_sidebar();
         c.refresh_home_space();
         c.navigate(&gio::File::for_path(glib::home_dir()), false);
@@ -888,12 +905,61 @@ impl Controller {
     pub fn stop_path_edit(&mut self) {
         self.path_editing = false;
         self.path_text = None;
+        self.path_matches.clear();
+        self.path_match = None;
         self.mark(dirty::PATH);
     }
 
     pub fn path_typed(&mut self, text: &str) {
         if self.path_editing {
             self.path_text = Some(text.to_string());
+            // A folder's name, not a path: offer every folder with that name
+            // and where it is (P3-T10).
+            let name = text.trim();
+            self.path_matches = if name.len() >= 2 && !name.contains('/') && !name.starts_with('~')
+            {
+                let running = self.index.running;
+                self.index
+                    .reader()
+                    .filter(|_| running)
+                    .map(|r| {
+                        r.folders_named(name, 8)
+                            .into_iter()
+                            .map(|h| h.path)
+                            .collect()
+                    })
+                    .unwrap_or_default()
+            } else {
+                Vec::new()
+            };
+            self.path_match = None;
+            self.mark(dirty::PATH);
+        }
+    }
+
+    /// Down and Up in the path field move through the offered folders.
+    pub fn path_match_move(&mut self, key: &str) {
+        if self.path_matches.is_empty() {
+            return;
+        }
+        let last = self.path_matches.len() - 1;
+        self.path_match = Some(match (key, self.path_match) {
+            ("down", None) => 0,
+            ("down", Some(i)) => (i + 1).min(last),
+            ("up", Some(i)) => i.saturating_sub(1),
+            _ => 0,
+        });
+        self.mark(dirty::PATH);
+    }
+
+    pub fn path_match_go(&mut self, index: usize) {
+        if let Some(path) = self.path_matches.get(index).cloned() {
+            self.path_matches.clear();
+            self.path_match = None;
+            self.path_editing = false;
+            self.path_text = None;
+            self.navigate(&gio::File::for_path(&path), true);
+            self.mark(dirty::PATH);
         }
     }
 
@@ -907,8 +973,20 @@ impl Controller {
             self.stop_path_edit();
             return;
         }
+        if let Some(chosen) = self.path_match {
+            self.path_match_go(chosen);
+            return;
+        }
         let base = self.current().and_then(|f| f.path());
         let path = paths::expand(text, base.as_deref());
+        if !path.is_dir() && self.path_matches.len() == 1 {
+            self.path_match_go(0);
+            return;
+        }
+        if !path.is_dir() && self.path_matches.len() > 1 {
+            // Several folders have that name: the list stays open to choose.
+            return;
+        }
         if path.is_dir() {
             self.path_editing = false;
             self.path_text = None;
@@ -1002,6 +1080,7 @@ impl Controller {
         };
         if entry.is_dir() {
             if visible {
+                self.folder_seen(uri);
                 self.count_items(&entry);
             }
             return;
@@ -1451,15 +1530,6 @@ impl Controller {
         json!(self.thumbs)
     }
 
-    pub fn counts_json(&self) -> Value {
-        json!(
-            self.counts
-                .iter()
-                .map(|(uri, n)| (uri.clone(), format::items(*n)))
-                .collect::<HashMap<_, _>>()
-        )
-    }
-
     pub fn sidebar_json(&self) -> Value {
         let selected = self.current().and_then(|f| {
             self.sidebar
@@ -1507,16 +1577,44 @@ impl Controller {
             if let Some(parent) = data.file.parent().and_then(|p| p.path()) {
                 facts.push(json!([gettext("Where"), paths::display_path(&parent)]));
             }
-            let children = match &self.preview_children {
+            let mut children = match &self.preview_children {
                 Some((uri, names)) if *uri == data.uri() => names.clone(),
                 _ => Vec::new(),
             };
+            // The index knows the folder two levels deep (P3-T06).
+            let path = data.file.path();
+            let tree = path
+                .as_deref()
+                .filter(|_| data.is_dir)
+                .and_then(|p| self.outline_json(p));
+            let numbers = path
+                .as_deref()
+                .filter(|_| data.is_dir)
+                .and_then(|p| self.folder_numbers(p));
+            if let Some(tree) = &tree
+                && children.is_empty()
+            {
+                children = tree
+                    .as_array()
+                    .map(|lines| {
+                        lines
+                            .iter()
+                            .filter(|l| l["depth"] == 0)
+                            .filter_map(|l| l["name"].as_str().map(str::to_string))
+                            .collect()
+                    })
+                    .unwrap_or_default();
+            }
+            if let Some((_, bytes)) = numbers {
+                facts.insert(1, json!([gettext("Size"), format::size(bytes)]));
+            }
             return json!({
                 "visible": visible, "mode": "item", "name": self.shown_name(entry), "uri": data.uri(),
                 "dir": data.is_dir, "kind": data.kind.id(), "badge": tint::badge(&data.name, data.kind),
                 "thumb": self.thumbs.get(&data.uri()), "facts": facts,
                 "children": children.iter().take(12).collect::<Vec<_>>(),
-                "childCount": format::items(children.len() as u32),
+                "childCount": format::items(numbers.map(|n| n.0 as u32).unwrap_or(children.len() as u32)),
+                "tree": tree,
                 "more": children.len().saturating_sub(12),
             });
         }
@@ -1568,6 +1666,12 @@ impl Controller {
                 .collect::<Vec<_>>(),
             "editing": self.path_editing,
             "text": self.path_text.clone().unwrap_or_else(|| paths::display_path(&path)),
+            "matches": self.path_matches.iter().enumerate().map(|(i, p)| json!({
+                "index": i,
+                "name": p.file_name().map(|n| n.to_string_lossy().into_owned()).unwrap_or_default(),
+                "where": p.parent().map(paths::display_path).unwrap_or_default(),
+                "chosen": self.path_match == Some(i),
+            })).collect::<Vec<_>>(),
         })
     }
 
@@ -1593,6 +1697,13 @@ impl Controller {
             "height": s.int("window-height"),
             "maximized": s.boolean("window-maximized"),
             "motion": self.motion,
+            // Search and index (P3-T12).
+            "indexRoots": s.strv("index-roots").iter().map(|r| r.to_string()).collect::<Vec<_>>(),
+            "indexExclude": s.strv("index-exclude").iter().map(|r| r.to_string()).collect::<Vec<_>>(),
+            "indexPaused": s.boolean("index-paused"),
+            "indexPauseOnBattery": s.boolean("index-pause-on-battery"),
+            "indexRunning": self.index.running,
+            "home": paths::display_path(&glib::home_dir()),
         })
     }
 
@@ -1650,6 +1761,7 @@ impl Controller {
             },
             "navigation": { "can_go_back": !self.back.is_empty(), "can_go_forward": !self.forward.is_empty() },
             "path_bar": {
+                "matches": path["matches"],
                 "editing": self.path_editing,
                 "text": path["text"],
                 "segments": path["segments"].as_array().map(|s| s.iter().map(|x| x["label"].clone()).collect::<Vec<_>>()),
@@ -1666,6 +1778,14 @@ impl Controller {
             },
             "last_toast": self.last_toast,
             "ops": self.ops_test_json(),
+            "index": self.index_test_json(),
+            "search": self.search_test_json(),
+            "peek": self.peek_test_json(),
+            // Folder numbers as the cards show them, by name.
+            "folder_stats": self.visible.iter().filter(|e| e.is_dir()).filter_map(|e| {
+                let (items, bytes) = self.folder_numbers(&e.data().file.path()?)?;
+                Some((e.name().to_string(), json!({ "items": items, "bytes": bytes })))
+            }).collect::<serde_json::Map<_, _>>(),
             "dark": self.dark,
             "motion": self.motion,
             "flying": self.flying,

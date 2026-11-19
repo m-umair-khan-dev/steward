@@ -190,7 +190,9 @@ Item {
                     readonly property string kind: modelData.kind
                     readonly property string symbol: modelData.symbol
                     readonly property string thumb: root.thumbs[modelData.uri] || ""
-                    readonly property string count: root.counts[modelData.uri] || ""
+                    // Folders: "N items" and the size from the index ("—" while unknown).
+                    readonly property string count: (root.counts[modelData.uri] || {}).count || ""
+                    readonly property string size: (root.counts[modelData.uri] || {}).size || ""
                     readonly property bool selected: !!root.selection[modelData.pos]
                     onThumbChanged: p.card(name, thumb !== "", count, 0)
                     onCountChanged: p.card(name, thumb !== "", count, 0)
@@ -216,6 +218,7 @@ Item {
             kind: "folders"
             label: parent.name
             count: parent.count
+            size: parent.size
             symbol: parent.symbol
             selected: parent.selected
             uri: parent.modelData.uri

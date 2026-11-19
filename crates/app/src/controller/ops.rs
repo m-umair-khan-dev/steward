@@ -142,6 +142,12 @@ impl Controller {
         self.mark(dirty::OPS);
     }
 
+    /// Selects the item once the folder on screen lists it.
+    pub fn select_when_shown(&mut self, uri: &str) {
+        self.ops.pending_select = vec![uri.to_string()];
+        self.apply_pending_select();
+    }
+
     /// Something is queued or running.
     #[cfg_attr(not(feature = "e2e"), allow(dead_code))] // Test1.WaitIdle
     pub fn ops_busy(&self) -> bool {
@@ -511,6 +517,11 @@ impl Controller {
     }
 
     fn finished(&mut self, report: Report) {
+        let mut touched: Vec<PathBuf> = cairn_core::ops::touched_folders(&report)
+            .into_iter()
+            .collect();
+        touched.extend(self.current_path());
+        super::index::notify(&touched);
         self.ops.last_report = json!({
             "kind": report.kind,
             "outcome": match report.outcome { Outcome::Forward => "forward", Outcome::Undo => "undo", Outcome::Redo => "redo" },

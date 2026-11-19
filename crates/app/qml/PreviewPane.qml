@@ -135,8 +135,49 @@ Rectangle {
                                Accessible.role: Accessible.StaticText; Accessible.name: parent.modelData[0] + " " + text }
                     }
                 }
+                // The index's outline, two levels deep (reference: "a folder at a glance").
                 Column {
-                    visible: !!root.model.dir && (root.model.children || []).length > 0
+                    visible: !!root.model.dir && !!root.model.tree
+                    width: parent.width
+                    spacing: 2
+                    topPadding: 6
+                    Text { text: "CONTENTS"; color: Theme.faint; font.pixelSize: 12; font.weight: Font.DemiBold
+                           font.letterSpacing: 0.6; bottomPadding: 4 }
+                    Repeater {
+                        model: root.model.tree || []
+                        delegate: Item {
+                            required property var modelData
+                            width: parent.width
+                            height: 26
+                            Icon {
+                                x: 4 + parent.modelData.depth * 18
+                                anchors.verticalCenter: parent.verticalCenter
+                                name: parent.modelData.dir ? "folder" : "document"
+                                size: 15
+                                color: parent.modelData.dir ? Theme.deep("folders") : Theme.faint
+                            }
+                            Text {
+                                x: 26 + parent.modelData.depth * 18
+                                width: parent.width - x - count.implicitWidth - 8
+                                anchors.verticalCenter: parent.verticalCenter
+                                text: parent.modelData.name
+                                elide: Text.ElideMiddle
+                                color: Theme.ink
+                                font.pixelSize: 13
+                            }
+                            Text {
+                                id: count
+                                anchors.right: parent.right
+                                anchors.verticalCenter: parent.verticalCenter
+                                text: parent.modelData.items
+                                color: Theme.faint
+                                font.pixelSize: 12
+                            }
+                        }
+                    }
+                }
+                Column {
+                    visible: !!root.model.dir && !root.model.tree && (root.model.children || []).length > 0
                     width: parent.width
                     spacing: 4
                     topPadding: 6

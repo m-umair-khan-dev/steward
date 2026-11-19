@@ -46,6 +46,8 @@ pub mod qobject {
         #[qproperty(QString, dialogdata)]
         #[qproperty(QString, version)]
         #[qproperty(QString, ops)]
+        #[qproperty(QString, search)]
+        #[qproperty(QString, peek)]
         type Presenter = super::PresenterRust;
 
         #[qsignal]
@@ -75,6 +77,10 @@ pub mod qobject {
         fn dragged(self: Pin<&mut Presenter>, uri: &QString) -> QString;
         #[qinvokable]
         fn dropped(self: Pin<&mut Presenter>, uris: &QString, target: &QString, ctrl: bool);
+        #[qinvokable]
+        fn searchquery(self: Pin<&mut Presenter>, text: &QString);
+        #[qinvokable]
+        fn peekpages(self: Pin<&mut Presenter>, pages: i32);
         #[qinvokable]
         fn flying(self: Pin<&mut Presenter>, count: i32);
         #[qinvokable]
@@ -137,6 +143,8 @@ pub struct PresenterRust {
     dialogdata: QString,
     version: QString,
     ops: QString,
+    search: QString,
+    peek: QString,
 }
 
 fn q(text: &str) -> QString {
@@ -179,6 +187,8 @@ impl qobject::Presenter {
             push(dirty::NAV, c.nav_json());
             push(dirty::PREFS, c.prefs_json());
             push(dirty::OPS, c.ops_json());
+            push(dirty::SEARCH, c.search_json());
+            push(dirty::PEEK, c.peek_json());
             (updates, events, c.dialog_data().to_string())
         });
         for (flag, value) in updates {
@@ -196,6 +206,8 @@ impl qobject::Presenter {
                 dirty::PATH => this.set_pathbar(value),
                 dirty::NAV => this.set_nav(value),
                 dirty::OPS => this.set_ops(value),
+                dirty::SEARCH => this.set_search(value),
+                dirty::PEEK => this.set_peek(value),
                 _ => this.set_prefs(value),
             }
         }
@@ -248,6 +260,15 @@ impl qobject::Presenter {
     pub fn dropped(self: Pin<&mut Self>, uris: &QString, target: &QString, ctrl: bool) {
         let (uris, target) = (uris.to_string(), target.to_string());
         controller::with(|c| c.dropped(&uris, &target, ctrl));
+    }
+
+    pub fn searchquery(self: Pin<&mut Self>, text: &QString) {
+        let text = text.to_string();
+        controller::with(|c| c.set_search_query(&text));
+    }
+
+    pub fn peekpages(self: Pin<&mut Self>, pages: i32) {
+        controller::with(|c| c.peek_pages(pages.max(0) as u32));
     }
 
     pub fn flying(self: Pin<&mut Self>, count: i32) {

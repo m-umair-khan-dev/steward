@@ -49,5 +49,74 @@ Sheet {
                 onToggled: p.setpref("show-hidden", checked ? "true" : "false")
             }
         }
+
+        // Search and index (P3-T12).
+        Text { text: "SEARCH AND INDEX"; color: Theme.faint; font.pixelSize: 12; font.weight: Font.DemiBold
+               font.letterSpacing: 0.6; topPadding: 14; bottomPadding: 4 }
+        Text {
+            width: parent.width
+            wrapMode: Text.WordWrap
+            color: Theme.muted; font.pixelSize: 13
+            text: !root.prefs.indexRunning ? "The index is not running."
+                  : root.prefs.indexPaused ? "Indexing is paused." : "The index is up to date and following changes."
+            Accessible.role: Accessible.StaticText
+            Accessible.name: text
+        }
+        Item {
+            width: parent.width; height: 44
+            Text { anchors.verticalCenter: parent.verticalCenter; text: "Pause indexing"; color: Theme.ink; font.pixelSize: 14 }
+            Switch {
+                anchors.right: parent.right; anchors.verticalCenter: parent.verticalCenter
+                checked: !!root.prefs.indexPaused
+                Accessible.name: "Pause indexing"
+                onToggled: p.activate("win.index-paused", checked ? "true" : "false")
+            }
+        }
+        Item {
+            width: parent.width; height: 44
+            Text { anchors.verticalCenter: parent.verticalCenter; text: "Pause on battery"; color: Theme.ink; font.pixelSize: 14 }
+            Switch {
+                anchors.right: parent.right; anchors.verticalCenter: parent.verticalCenter
+                checked: !!root.prefs.indexPauseOnBattery
+                Accessible.name: "Pause on battery"
+                onToggled: p.setpref("index-pause-on-battery", checked ? "true" : "false")
+            }
+        }
+        Text {
+            width: parent.width; wrapMode: Text.WordWrap; color: Theme.ink; font.pixelSize: 13; topPadding: 6
+            text: "Indexed: " + ((root.prefs.indexRoots || []).length ? root.prefs.indexRoots.join(", ") : (root.prefs.home || "Home"))
+                  + ". Removable drives and network shares are left out."
+        }
+        Text { text: "Left out"; color: Theme.ink; font.pixelSize: 14; topPadding: 8; visible: (root.prefs.indexExclude || []).length > 0 }
+        Repeater {
+            model: root.prefs.indexExclude || []
+            delegate: Item {
+                required property string modelData
+                width: parent.width; height: 34
+                Text { anchors.verticalCenter: parent.verticalCenter; text: parent.modelData; color: Theme.ink
+                       font.pixelSize: 13; elide: Text.ElideMiddle; width: parent.width - 40 }
+                IconButton { anchors.right: parent.right; anchors.verticalCenter: parent.verticalCenter
+                             width: 26; height: 26; iconSize: 12; flat: true; icon: "close"
+                             label: "Stop leaving out " + parent.modelData
+                             onClicked: p.activate("win.index-exclude", "-" + parent.modelData) }
+            }
+        }
+        Row {
+            width: parent.width
+            spacing: 8
+            topPadding: 6
+            TextField {
+                id: exclude
+                width: parent.width - add.width - rebuild.width - 16
+                placeholderText: "A folder to leave out, e.g. ~/Videos/Raw"
+                Accessible.name: "Folder to leave out"
+                color: Theme.ink
+                background: Rectangle { radius: 9; color: Theme.pane; border.color: Theme.line }
+                onAccepted: add.clicked()
+            }
+            PillButton { id: add; text: "Leave Out"
+                         onClicked: { if (exclude.text.trim() !== "") p.activate("win.index-exclude", "+" + exclude.text); exclude.text = "" } }
+            PillButton { id: rebuild; text: "Rebuild"; onClicked: p.activate("win.index-rebuild", "") }
+        }
     }
 }
