@@ -74,7 +74,7 @@ impl Store {
 
     pub fn open(path: &Path) -> rusqlite::Result<Self> {
         if let Some(dir) = path.parent() {
-            let _ = std::fs::create_dir_all(dir);
+            let _ = std::fs::create_dir_all(dir); // E2-13 allow: app.db folder, not user files
         }
         let conn = Connection::open(path)?;
         conn.pragma_update(None, "journal_mode", "WAL")?;

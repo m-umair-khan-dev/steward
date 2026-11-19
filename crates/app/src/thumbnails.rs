@@ -145,7 +145,7 @@ impl Thumbnailer {
             .join("cairn")
             .join("thumbnail-work")
             .join(format!("{md5}-{}", self.serial.get()));
-        let _ = std::fs::remove_dir_all(&work);
+        let _ = std::fs::remove_dir_all(&work); // E2-13 allow: thumbnail work folder, not user files
         create_private_dir(&work)?;
 
         let ext = input
@@ -169,7 +169,7 @@ impl Thumbnailer {
             }
         }
         if !process.is_successful() {
-            let _ = std::fs::remove_dir_all(&work);
+            let _ = std::fs::remove_dir_all(&work); // E2-13 allow: thumbnail work folder, not user files
             return Err(format!("thumbnailer exited with {}", process.exit_status()));
         }
 
@@ -187,9 +187,9 @@ impl Thumbnailer {
         .ok_or("thumbnailer did not write a PNG")?;
         let final_path = cache.join(format!("{md5}.png"));
         let temp_path = cache.join(format!("{md5}.png.cairn-part-{}", self.serial.get()));
-        std::fs::write(&temp_path, tagged).map_err(|e| e.to_string())?;
-        std::fs::rename(&temp_path, &final_path).map_err(|e| e.to_string())?;
-        let _ = std::fs::remove_dir_all(&work);
+        std::fs::write(&temp_path, tagged).map_err(|e| e.to_string())?; // E2-13 allow: thumbnail cache, not user files
+        std::fs::rename(&temp_path, &final_path).map_err(|e| e.to_string())?; // E2-13 allow: thumbnail cache, not user files
+        let _ = std::fs::remove_dir_all(&work); // E2-13 allow: thumbnail work folder, not user files
         Ok(final_path)
     }
 }
@@ -262,8 +262,8 @@ fn sandbox_argv(
 
 fn create_private_dir(dir: &Path) -> Result<(), String> {
     use std::os::unix::fs::PermissionsExt;
-    std::fs::create_dir_all(dir).map_err(|e| e.to_string())?;
-    let _ = std::fs::set_permissions(dir, std::fs::Permissions::from_mode(0o700));
+    std::fs::create_dir_all(dir).map_err(|e| e.to_string())?; // E2-13 allow: thumbnail cache, not user files
+    let _ = std::fs::set_permissions(dir, std::fs::Permissions::from_mode(0o700)); // E2-13 allow: thumbnail cache, not user files
     Ok(())
 }
 
