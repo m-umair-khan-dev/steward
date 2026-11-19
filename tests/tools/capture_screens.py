@@ -78,6 +78,38 @@ def main() -> None:
             app.action("app.about")
             app.wait_idle()
             app.screenshot(OUT / "08-about.png")
+            app.press("escape")
+            app.wait_for(lambda: app.state()["active_window"]["dialog"] is None, "the dialog to close", 5)
+
+            # Phase 2: rename in place, Undo toast, Trash view, clash dialog.
+            app.open_folder(home / "Downloads")
+            app.select("notes.txt")
+            app.press("f2")
+            app.wait_for(lambda: app.state()["ops"]["renaming"], "the rename editor", 5)
+            app.wait_idle()
+            app.screenshot(OUT / "09-rename.png")
+            app.press("escape")
+
+            app.select("export.csv", "Budget-Q4.ods")
+            app.press("delete")
+            app.wait_idle()
+            app.screenshot(OUT / "10-trashed-toast.png")
+
+            app.open_folder(home / ".local/share/Trash/files")
+            app.wait_idle()
+            app.screenshot(OUT / "11-trash-view.png")
+
+            (home / "Documents" / "notes.txt").write_text("older notes\n")
+            app.open_folder(home / "Downloads")
+            app.select("notes.txt")
+            app.press("ctrl+c")
+            app.open_folder(home / "Documents")
+            app.press("ctrl+v")
+            wait_for(lambda: (d := app.state()["active_window"]["dialog"]) and d["type"] == "clash",
+                     "the clash dialog", 5)
+            app.wait_for(lambda: True, "settle", 0.3)
+            app.screenshot(OUT / "12-clash.png")
+            app.press("escape")
         finally:
             app.stop()
             session.stop()

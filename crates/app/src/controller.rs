@@ -1556,8 +1556,14 @@ impl Controller {
             .current()
             .and_then(|f| f.path())
             .unwrap_or_else(|| PathBuf::from("/"));
+        // The Trash is a place of its own, not a folder under .local.
+        let segments = if self.in_trash() {
+            vec![(gettext("Trash"), path.clone())]
+        } else {
+            paths::segments(&path, &gettext("Computer"))
+        };
         json!({
-            "segments": paths::segments(&path, &gettext("Computer")).into_iter()
+            "segments": segments.into_iter()
                 .map(|(label, p)| json!({ "label": label, "path": p.display().to_string() }))
                 .collect::<Vec<_>>(),
             "editing": self.path_editing,

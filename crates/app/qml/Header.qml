@@ -102,7 +102,8 @@ Rectangle {
         }
         TextField {
             id: filter
-            width: 200
+            // Narrower on small windows, so the folder title keeps its room.
+            width: root.width < 1100 ? 150 : 200
             height: 36
             placeholderText: "Filter this folder"
             placeholderTextColor: Theme.faint
