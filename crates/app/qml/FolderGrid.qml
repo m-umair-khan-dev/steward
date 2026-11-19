@@ -15,6 +15,7 @@ Item {
     property string groupBy: "none"
     property string renaming: ""
     property int anchor: -1
+    property bool previewShown: false
     signal itemMenu(int pos)
 
     // Keep the item the keyboard is on (and one being renamed) on screen.
@@ -222,6 +223,10 @@ Item {
             onTapped: modifiers => p.pick(parent.modelData.pos, root.modes(modifiers))
             onDoubleTapped: p.open(parent.modelData.pos)
             onMenuRequested: root.itemMenu(parent.modelData.pos)
+            onInfoRequested: {
+                p.pick(parent.modelData.pos, 0)
+                if (!root.previewShown) p.activate("win.toggle-preview", "")
+            }
         }
     }
 

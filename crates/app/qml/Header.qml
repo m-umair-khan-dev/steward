@@ -48,8 +48,8 @@ Rectangle {
             anchors.verticalCenter: parent.verticalCenter
             text: root.folder.title || ""
             color: Theme.ink
-            font.pixelSize: 20
-            font.weight: Font.Bold
+            font.pixelSize: 21
+            font.weight: Font.DemiBold
             elide: Text.ElideRight
             // Room left of the controls: margins, the nav pill and the spacing.
             width: Math.max(0, Math.min(implicitWidth, root.width - right.width - 16 - 78 - 14 - 24))
@@ -113,8 +113,8 @@ Rectangle {
             Accessible.name: "Filter this folder"
             background: Rectangle {
                 radius: 18
-                color: Theme.track
-                border.color: filter.activeFocus ? Theme.accent : "transparent"
+                color: Theme.pane
+                border.color: filter.activeFocus ? Theme.accent : Theme.line
                 border.width: 1.5
                 Icon { x: 11; anchors.verticalCenter: parent.verticalCenter; name: "search"; size: 16; color: Theme.faint }
             }

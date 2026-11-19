@@ -275,6 +275,7 @@ Window {
                     groupBy: win.folder.groupBy || "none"
                     renaming: win.ops.renaming || ""
                     anchor: win.folder.anchor === undefined ? -1 : win.folder.anchor
+                    previewShown: !!win.preview.visible
                     onItemMenu: pos => win.itemMenuAt(pos)
                 }
                 FolderList {

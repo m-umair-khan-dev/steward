@@ -14,7 +14,10 @@ Rectangle {
     implicitWidth: row.implicitWidth + 6
     implicitHeight: 36
     radius: height / 2
-    color: Theme.track
+    // White pill with a thin border; the choice gets a soft grey fill (reference).
+    color: Theme.pane
+    border.color: Theme.line
+    border.width: 1
 
     Accessible.role: Accessible.Grouping
     Accessible.name: name
@@ -24,14 +27,12 @@ Rectangle {
         y: 3
         height: parent.height - 6
         radius: height / 2
-        color: Theme.pane
+        color: Theme.dark ? "#2c2a3d" : "#ececf2"
         property Item target: repeater.count > root.index ? repeater.itemAt(root.index) : null
         x: target ? row.x + target.x : 3
         width: target ? target.width : 0
         Behavior on x { enabled: Theme.motion; SpringAnimation { spring: 5; damping: 0.4 } }
         Behavior on width { enabled: Theme.motion; SpringAnimation { spring: 5; damping: 0.4 } }
-        layer.enabled: true
-        layer.effect: MultiEffect { shadowEnabled: true; shadowOpacity: 0.16; shadowBlur: 0.4; shadowVerticalOffset: 1 }
     }
 
     Row {

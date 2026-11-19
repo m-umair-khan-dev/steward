@@ -19,6 +19,7 @@ Item {
     signal tapped(int modifiers)
     signal doubleTapped()
     signal menuRequested()
+    signal infoRequested()
 
     readonly property color deep: Theme.deep(kind)
     readonly property color light: Theme.light(kind)
@@ -69,7 +70,14 @@ Item {
         Item {
             id: behind
             anchors.fill: parent
-            Rectangle { width: parent.width * 0.4; height: parent.height * 0.25; radius: 10; color: root.deep }
+            // The tab, with a slanted right edge (reference).
+            Rectangle { width: parent.width * 0.34; height: parent.height * 0.25; radius: 10; color: root.deep }
+            Rectangle {
+                x: parent.width * 0.25; y: parent.height * 0.035
+                width: parent.width * 0.18; height: parent.height * 0.2; radius: 6
+                rotation: 38; transformOrigin: Item.BottomLeft
+                color: root.deep; antialiasing: true
+            }
             Rectangle { y: parent.height * 0.11; width: parent.width; height: parent.height * 0.89; radius: 14; color: root.deep }
             Rectangle { x: parent.width * 0.14; y: parent.height * 0.17; width: parent.width * 0.72; height: parent.height * 0.5
                         radius: 6; color: "white"; rotation: -4; antialiasing: true }
@@ -118,6 +126,18 @@ Item {
                 text: root.count
                 color: "white"; font.pixelSize: 11; font.weight: Font.Bold
                 width: parent.width - 20; elide: Text.ElideRight
+            }
+            // "i": select the folder and show it in the preview pane.
+            Item {
+                visible: root.uri !== ""
+                anchors.right: parent.right; anchors.rightMargin: 7
+                y: 5
+                width: 16; height: 16
+                Accessible.role: Accessible.Button
+                Accessible.name: "About " + root.label
+                Accessible.onPressAction: root.infoRequested()
+                Icon { anchors.fill: parent; name: "info"; size: 16; color: Qt.rgba(1, 1, 1, 0.92) }
+                MouseArea { anchors.fill: parent; anchors.margins: -4; onClicked: root.infoRequested() }
             }
             Icon {
                 anchors.centerIn: parent

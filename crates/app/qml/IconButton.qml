@@ -14,7 +14,9 @@ Rectangle {
     implicitHeight: 34
     radius: height / 2
     color: checked ? Theme.accent
-                   : (hover.hovered ? Theme.hover : (flat ? "transparent" : Theme.track))
+                   : (hover.hovered ? (flat ? Theme.hover : Theme.sunken) : (flat ? "transparent" : Theme.pane))
+    border.color: checked || flat ? "transparent" : Theme.line
+    border.width: 1
     Behavior on color { ColorAnimation { duration: 120 } }
     opacity: enabled ? 1 : 0.4
 

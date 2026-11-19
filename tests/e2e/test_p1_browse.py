@@ -275,6 +275,7 @@ def test_E1_16_filter_this_folder(app, home):
     app.open_folder(home / "Downloads")
     total = len(app.folder()["items"])
     app.press("ctrl+f")
+    app.wait_idle()  # the field takes the focus before the letters arrive
     app.type_text("invoice")
     expected = sorted(n for n in home.manifest["downloads"]["loose_files"] if "invoice" in n.lower())
     app.wait_for(lambda: sorted(app.folder()["items"]) == expected, "only the matching items")

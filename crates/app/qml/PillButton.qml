@@ -1,6 +1,7 @@
 import QtQuick
 
-// A text button: filled with the accent (primary), red (destructive) or quiet.
+// A text button (rounded rectangle, as in the reference): accent-filled
+// (primary), red (destructive) or white with a border.
 Rectangle {
     id: root
     property string text: ""
@@ -10,10 +11,12 @@ Rectangle {
 
     implicitWidth: label.implicitWidth + 32
     implicitHeight: 36
-    radius: 18
+    radius: 10
     color: destructive ? (hover.hovered ? "#b02a2a" : "#c53434")
                        : primary ? (hover.hovered ? Qt.darker(Theme.accent, 1.1) : Theme.accent)
-                                 : (hover.hovered ? Theme.hover : Theme.track)
+                                 : (hover.hovered ? Theme.sunken : Theme.pane)
+    border.color: primary || destructive ? "transparent" : Theme.line
+    border.width: 1
     Behavior on color { ColorAnimation { duration: 120 } }
     opacity: enabled ? 1 : 0.45
     Accessible.role: Accessible.Button

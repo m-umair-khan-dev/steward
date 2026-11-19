@@ -98,17 +98,38 @@ Item {
                 Behavior on opacity { NumberAnimation { duration: 180 } }
             }
         }
-        Rectangle {
+        // A small page with the type on a coloured label (reference: design.png).
+        Item {
             id: badgeBox
-            x: 10; anchors.verticalCenter: info.verticalCenter
-            width: Math.max(28, badgeText.implicitWidth + 8); height: 18; radius: 5
-            color: root.tint
-            Text { id: badgeText; anchors.centerIn: parent; text: root.badge; color: "white"; font.pixelSize: 9; font.weight: Font.Black }
+            x: 12; anchors.verticalCenter: info.verticalCenter
+            width: 26; height: 30
+            Rectangle {
+                x: 3; width: 20; height: 26; radius: 3
+                color: Theme.card; border.color: Theme.line; border.width: 1
+                Rectangle { x: 13; width: 7; height: 7; color: Theme.sunken; border.color: Theme.line; border.width: 1 }
+            }
+            Rectangle {
+                y: 15; width: parent.width; height: 11; radius: 3
+                color: root.tint
+                Text { anchors.centerIn: parent; text: root.badge.slice(0, 4); color: "white"; font.pixelSize: 7; font.weight: Font.Black }
+            }
+        }
+        IconButton {
+            id: more
+            anchors.right: parent.right; anchors.rightMargin: 6
+            anchors.verticalCenter: info.verticalCenter
+            width: 26; height: 26; iconSize: 15
+            flat: true
+            icon: "more"
+            rotation: 90
+            label: "More for " + root.name
+            opacity: root.lifted || root.selected ? 1 : 0.55
+            onClicked: { root.tapped(0); root.menuRequested() }
         }
         Column {
             id: info
             anchors.left: badgeBox.right; anchors.leftMargin: 9
-            anchors.right: parent.right; anchors.rightMargin: 10
+            anchors.right: more.left; anchors.rightMargin: 4
             y: preview.height + 12
             Text { width: parent.width; text: root.name; elide: Text.ElideMiddle; color: Theme.ink
                    font.pixelSize: 13; font.weight: Font.Medium; visible: !root.renaming }

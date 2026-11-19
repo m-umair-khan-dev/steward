@@ -79,7 +79,7 @@ Item {
             width: list.width - 24
             height: 36
             radius: 9
-            color: selected ? Theme.accent : (hover.hovered ? Theme.hover : (index % 2 ? Theme.alpha(Theme.ink, 0.02) : "transparent"))
+            color: selected ? Theme.alpha(Theme.accent, 0.22) : (hover.hovered ? Theme.hover : (index % 2 ? Theme.alpha(Theme.ink, 0.025) : "transparent"))
             Accessible.role: Accessible.ListItem
             Accessible.name: modelData.name
             Accessible.selected: selected
@@ -97,16 +97,16 @@ Item {
             Rectangle {
                 x: 12; anchors.verticalCenter: parent.verticalCenter
                 width: 22; height: 22; radius: 6
-                color: line.selected ? Qt.rgba(1, 1, 1, 0.22) : Theme.alpha(Theme.deep(line.modelData.kind), 0.16)
+                color: Theme.alpha(Theme.deep(line.modelData.kind), 0.16)
                 Icon {
                     anchors.centerIn: parent; size: 14
                     name: line.modelData.dir ? "folder" : ({ images: "pictures", videos: "videos", audio: "music", pdfs: "pdf",
                           archives: "box", installers: "package", code: "code" })[line.modelData.kind] || "document"
-                    color: line.selected ? "white" : Theme.deep(line.modelData.kind)
+                    color: Theme.deep(line.modelData.kind)
                 }
             }
             Text { x: 42; width: root.kindX - 54; anchors.verticalCenter: parent.verticalCenter; text: line.modelData.name
-                   elide: Text.ElideMiddle; font.pixelSize: 13; color: line.selected ? "white" : Theme.ink
+                   elide: Text.ElideMiddle; font.pixelSize: 13; color: Theme.ink
                    visible: root.renaming !== line.modelData.uri }
             Loader {
                 active: root.renaming === line.modelData.uri
@@ -119,12 +119,12 @@ Item {
             }
             Text { x: root.kindX - 12; width: root.sizeX - root.kindX - 8; anchors.verticalCenter: parent.verticalCenter
                    text: line.modelData.kindText; elide: Text.ElideRight; font.pixelSize: 13
-                   color: line.selected ? "white" : Theme.muted }
+                   color: Theme.muted }
             Text { x: root.sizeX - 12; width: root.dateX - root.sizeX - 8; anchors.verticalCenter: parent.verticalCenter
-                   text: line.modelData.sizeText; font.pixelSize: 13; color: line.selected ? "white" : Theme.muted }
+                   text: line.modelData.sizeText; font.pixelSize: 13; color: Theme.muted }
             Text { x: root.dateX - 12; width: parent.width - x - 12; anchors.verticalCenter: parent.verticalCenter
                    text: line.modelData.modified; elide: Text.ElideRight; font.pixelSize: 13
-                   color: line.selected ? "white" : Theme.muted }
+                   color: Theme.muted }
         }
         }
     }

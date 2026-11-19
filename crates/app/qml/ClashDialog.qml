@@ -30,6 +30,23 @@ Sheet {
             id: all
             text: "Do this for every clash"
             Accessible.name: "Apply to all"
+            // Purple, rounded (reference: smart-clean.png).
+            indicator: Rectangle {
+                x: all.leftPadding
+                anchors.verticalCenter: parent.verticalCenter
+                width: 20; height: 20; radius: 6
+                color: all.checked ? Theme.accent : Theme.pane
+                border.color: all.checked ? Theme.accent : Theme.faint
+                border.width: 1.5
+                Icon { anchors.centerIn: parent; visible: all.checked; name: "check"; size: 14; color: "white" }
+            }
+            contentItem: Text {
+                leftPadding: all.indicator.width + 8
+                text: all.text
+                color: Theme.ink
+                font.pixelSize: 13
+                verticalAlignment: Text.AlignVCenter
+            }
         }
         Row {
             anchors.right: parent.right

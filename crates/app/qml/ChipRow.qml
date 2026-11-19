@@ -25,27 +25,41 @@ Item {
             Accessible.name: "Filter by kind"
             Repeater {
                 model: root.chips
+                // White with a border and a kind dot; the active chip is
+                // lavender with an accent edge (reference: search, Installed).
                 delegate: Rectangle {
+                    id: chip
                     required property var modelData
-                    width: label.implicitWidth + 26
+                    readonly property bool dotted: modelData.id !== "all"
+                    width: label.implicitWidth + (dotted ? 40 : 26)
                     height: 30
                     radius: 15
-                    color: modelData.active ? Theme.alpha(Theme.accent, 0.16) : (hover.hovered ? Theme.hover : Theme.track)
+                    color: modelData.active ? Theme.alpha(Theme.accent, 0.12) : (hover.hovered ? Theme.sunken : Theme.pane)
+                    border.color: modelData.active ? Theme.accent : Theme.line
+                    border.width: 1
                     Behavior on color { ColorAnimation { duration: 120 } }
                     Accessible.role: Accessible.Button
-                    Accessible.name: label.text
+                    Accessible.name: modelData.label + " " + modelData.count
                     Accessible.checked: modelData.active
                     Accessible.onPressAction: p.activate("win.filter-kind", modelData.id)
+                    Rectangle {
+                        visible: chip.dotted
+                        x: 13; anchors.verticalCenter: parent.verticalCenter
+                        width: 9; height: 9; radius: 2.5
+                        color: Theme.deep(chip.modelData.id)
+                    }
                     Text {
                         id: label
-                        anchors.centerIn: parent
-                    text: parent.modelData.label + " " + parent.modelData.count
-                    color: parent.modelData.active ? Theme.accentText : Theme.ink
-                    font.pixelSize: 13
-                    font.weight: parent.modelData.active ? Font.Bold : Font.Medium
-                }
-                HoverHandler { id: hover }
-                TapHandler { onTapped: p.activate("win.filter-kind", parent.modelData.id) }
+                        x: chip.dotted ? 28 : 13
+                        anchors.verticalCenter: parent.verticalCenter
+                        textFormat: Text.StyledText
+                        text: chip.modelData.label + "&nbsp;&nbsp;<font color='" + Theme.faint + "'>" + chip.modelData.count + "</font>"
+                        color: chip.modelData.active ? Theme.accentText : Theme.ink
+                        font.pixelSize: 13
+                        font.weight: chip.modelData.active ? Font.Bold : Font.Medium
+                    }
+                    HoverHandler { id: hover }
+                    TapHandler { onTapped: p.activate("win.filter-kind", chip.modelData.id) }
             }
         }
     }
