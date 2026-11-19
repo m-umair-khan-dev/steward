@@ -13,6 +13,18 @@ Item {
     property var counts: ({})
     property var metrics: ({ folder: 168, file: 240, gap: 18 })
     property string groupBy: "none"
+    property string renaming: ""
+    property int anchor: -1
+    signal itemMenu(int pos)
+
+    // Keep the item the keyboard is on (and one being renamed) on screen.
+    function reveal(pos) {
+        if (pos < 0) return
+        const index = shown.findIndex(r => r.t === "c" && r.items.some(i => i.pos === pos))
+        if (index >= 0) list.positionViewAtIndex(index, ListView.Contain)
+    }
+    onAnchorChanged: reveal(anchor)
+    onRenamingChanged: reveal(anchor)
 
     readonly property int margin: 22
     readonly property int gap: metrics.gap || 18
@@ -40,6 +52,7 @@ Item {
         springKinds = ghosts.length > 0 || (Theme.motion && groupBy === "kind" && shownGroup !== "kind")
         shownGroup = groupBy
         shown = rows
+        Qt.callLater(reveal, anchor)
         if (ghosts.length)
             Qt.callLater(launchGhosts, ghosts)
         if (springKinds)
@@ -204,8 +217,11 @@ Item {
             count: parent.count
             symbol: parent.symbol
             selected: parent.selected
+            uri: parent.modelData.uri
+            renaming: root.renaming === parent.modelData.uri
             onTapped: modifiers => p.pick(parent.modelData.pos, root.modes(modifiers))
             onDoubleTapped: p.open(parent.modelData.pos)
+            onMenuRequested: root.itemMenu(parent.modelData.pos)
         }
     }
 
@@ -220,8 +236,11 @@ Item {
             symbol: parent.symbol
             thumb: parent.thumb
             selected: parent.selected
+            uri: parent.modelData.uri
+            renaming: root.renaming === parent.modelData.uri
             onTapped: modifiers => p.pick(parent.modelData.pos, root.modes(modifiers))
             onDoubleTapped: p.open(parent.modelData.pos)
+            onMenuRequested: root.itemMenu(parent.modelData.pos)
         }
     }
 

@@ -154,6 +154,10 @@ class App:
             self._keyboard.start()
             wait_for(lambda: self.state()["active_window"]["is_active"],
                      "the window to get keyboard focus", timeout=10)
+            # The compositor can drop the very first key event while the
+            # client is still taking its keymap; a lone Shift does nothing.
+            self._keyboard.press("shift")
+            self.wait_idle()
         self._keyboard.press(combo)
 
     def type_text(self, text: str) -> None:

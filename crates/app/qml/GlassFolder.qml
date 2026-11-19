@@ -12,9 +12,13 @@ Item {
     property string size: ""
     property string symbol: "document"
     property bool selected: false
-    readonly property bool lifted: hover.hovered || selected
+    readonly property bool lifted: hover.hovered || selected || drop.containsDrag
+    property bool acceptsDrops: true
+    property string uri: ""
+    property bool renaming: false
     signal tapped(int modifiers)
     signal doubleTapped()
+    signal menuRequested()
 
     readonly property color deep: Theme.deep(kind)
     readonly property color light: Theme.light(kind)
@@ -28,11 +32,17 @@ Item {
     Accessible.onPressAction: root.doubleTapped()
 
     HoverHandler { id: hover; cursorShape: Qt.PointingHandCursor }
-    TapHandler {
-        id: tap
-        acceptedModifiers: Qt.KeyboardModifierMask
-        onTapped: root.tapped(tap.point.modifiers)
-        onDoubleTapped: root.doubleTapped()
+    FolderDrop { id: drop; anchors.fill: parent; target: root.uri; enabled: root.acceptsDrops && root.uri !== "" }
+    // A MouseArea (not a TapHandler) so the click stops here and never also
+    // reaches the background behind the card.
+    // Dragging the card carries it (and the rest of the selection).
+    DragSource {
+        uri: root.uri
+        onClicked: mouse => {
+            if (mouse.button === Qt.RightButton) root.menuRequested()
+            else root.tapped(mouse.modifiers)
+        }
+        onDoubleClicked: mouse => { if (mouse.button === Qt.LeftButton) root.doubleTapped() }
     }
 
     Item {
@@ -124,7 +134,17 @@ Item {
         }
     }
 
+    Loader {
+        active: root.renaming
+        z: 2
+        anchors.horizontalCenter: parent.horizontalCenter
+        anchors.top: shape.bottom
+        anchors.topMargin: 6
+        width: root.width + 12
+        sourceComponent: RenameField { uri: root.uri; original: root.label; isFolder: true }
+    }
     Rectangle {
+        visible: !root.renaming
         anchors.horizontalCenter: parent.horizontalCenter
         anchors.top: shape.bottom
         anchors.topMargin: 8

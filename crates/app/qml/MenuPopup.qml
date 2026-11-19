@@ -23,7 +23,7 @@ Menu {
             id: item
             required property var modelData
             text: modelData.text || ""
-            enabled: !modelData.separator
+            enabled: !modelData.separator && modelData.enabled !== false
             height: modelData.separator ? 9 : 32
             onTriggered: p.activate(modelData.action, modelData.param || "")
             contentItem: Item {
@@ -42,7 +42,7 @@ Menu {
                     x: 24
                     anchors.verticalCenter: parent.verticalCenter
                     text: item.text
-                    color: Theme.ink
+                    color: item.enabled ? Theme.ink : Theme.faint
                     font.pixelSize: 13
                 }
             }

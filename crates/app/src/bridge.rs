@@ -20,6 +20,13 @@ pub mod qobject {
         type QString = cxx_qt_lib::QString;
     }
 
+    // The system clipboard (cpp/clipboard.cpp).
+    unsafe extern "C++" {
+        include!("cairn/clipboard.h");
+        fn clipboard_set(mimes: &Vec<String>, data: &Vec<String>);
+        fn clipboard_get(mime: &str) -> String;
+    }
+
     extern "RustQt" {
         #[qobject]
         #[qml_element]
@@ -38,6 +45,7 @@ pub mod qobject {
         #[qproperty(QString, dialog)]
         #[qproperty(QString, dialogdata)]
         #[qproperty(QString, version)]
+        #[qproperty(QString, ops)]
         type Presenter = super::PresenterRust;
 
         #[qsignal]
@@ -45,7 +53,7 @@ pub mod qobject {
         #[qsignal]
         fn shoot(self: Pin<&mut Presenter>, path: QString);
         #[qsignal]
-        fn toast(self: Pin<&mut Presenter>, text: QString);
+        fn toast(self: Pin<&mut Presenter>, text: QString, undo: bool);
         #[qsignal]
         fn focus(self: Pin<&mut Presenter>, target: QString);
 
@@ -59,6 +67,14 @@ pub mod qobject {
         fn arrow(self: Pin<&mut Presenter>, key: &QString, extend: bool);
         #[qinvokable]
         fn filter(self: Pin<&mut Presenter>, text: &QString);
+        #[qinvokable]
+        fn rename(self: Pin<&mut Presenter>, uri: &QString, name: &QString);
+        #[qinvokable]
+        fn answer(self: Pin<&mut Presenter>, choice: &QString, all: bool);
+        #[qinvokable]
+        fn dragged(self: Pin<&mut Presenter>, uri: &QString) -> QString;
+        #[qinvokable]
+        fn dropped(self: Pin<&mut Presenter>, uris: &QString, target: &QString, ctrl: bool);
         #[qinvokable]
         fn flying(self: Pin<&mut Presenter>, count: i32);
         #[qinvokable]
@@ -120,6 +136,7 @@ pub struct PresenterRust {
     dialog: QString,
     dialogdata: QString,
     version: QString,
+    ops: QString,
 }
 
 fn q(text: &str) -> QString {
@@ -161,6 +178,7 @@ impl qobject::Presenter {
             push(dirty::PATH, c.path_json());
             push(dirty::NAV, c.nav_json());
             push(dirty::PREFS, c.prefs_json());
+            push(dirty::OPS, c.ops_json());
             (updates, events, c.dialog_data().to_string())
         });
         for (flag, value) in updates {
@@ -177,12 +195,13 @@ impl qobject::Presenter {
                 dirty::PREVIEW => this.set_preview(value),
                 dirty::PATH => this.set_pathbar(value),
                 dirty::NAV => this.set_nav(value),
+                dirty::OPS => this.set_ops(value),
                 _ => this.set_prefs(value),
             }
         }
         for event in events {
             match event {
-                Event::Toast(text) => self.as_mut().toast(q(&text)),
+                Event::Toast(text, undo) => self.as_mut().toast(q(&text), undo),
                 Event::Quit => self.as_mut().quitting(),
                 Event::Screenshot(path) => self.as_mut().shoot(q(&path)),
                 Event::Focus(target) => self.as_mut().focus(q(target)),
@@ -212,6 +231,23 @@ impl qobject::Presenter {
 
     pub fn filter(self: Pin<&mut Self>, text: &QString) {
         controller::with(|c| c.set_name_filter(&text.to_string()));
+    }
+
+    pub fn rename(self: Pin<&mut Self>, uri: &QString, name: &QString) {
+        controller::with(|c| c.finish_rename(&uri.to_string(), &name.to_string()));
+    }
+
+    pub fn answer(self: Pin<&mut Self>, choice: &QString, all: bool) {
+        controller::with(|c| c.answer_clash(&choice.to_string(), all));
+    }
+
+    pub fn dragged(self: Pin<&mut Self>, uri: &QString) -> QString {
+        q(&controller::with(|c| c.drag_uris(&uri.to_string())))
+    }
+
+    pub fn dropped(self: Pin<&mut Self>, uris: &QString, target: &QString, ctrl: bool) {
+        let (uris, target) = (uris.to_string(), target.to_string());
+        controller::with(|c| c.dropped(&uris, &target, ctrl));
     }
 
     pub fn flying(self: Pin<&mut Self>, count: i32) {

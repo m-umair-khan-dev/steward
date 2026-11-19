@@ -10,6 +10,7 @@ Rectangle {
     property var folder: ({})
     property var nav: ({})
     property var prefs: ({})
+    property var ops: ({ jobs: [] })
     property alias filterField: filter
     height: 60
     color: Theme.pane
@@ -50,7 +51,8 @@ Rectangle {
             font.pixelSize: 20
             font.weight: Font.Bold
             elide: Text.ElideRight
-            width: Math.min(implicitWidth, root.width - right.width - 160)
+            // Room left of the controls: margins, the nav pill and the spacing.
+            width: Math.max(0, Math.min(implicitWidth, root.width - right.width - 16 - 78 - 14 - 24))
         }
     }
 
@@ -118,12 +120,56 @@ Rectangle {
             onTextChanged: p.filter(text)
             Keys.onEscapePressed: { text = ""; root.Window.window.contentItem.forceActiveFocus() }
         }
+        // The queue (P2-T07): shows while something runs.
+        Item {
+            visible: (root.ops.jobs || []).length > 0
+            width: visible ? 34 : 0
+            height: 34
+            IconButton {
+                id: queueButton
+                anchors.fill: parent
+                icon: "progress"; label: "Operations"
+                checked: jobs.opened
+                onClicked: jobs.opened ? jobs.close() : jobs.open()
+            }
+            // Progress ring around the button.
+            Canvas {
+                anchors.fill: parent
+                anchors.margins: -3
+                property real fraction: root.ops.fraction || 0
+                onFractionChanged: requestPaint()
+                onPaint: {
+                    const ctx = getContext("2d")
+                    ctx.reset()
+                    ctx.lineWidth = 3
+                    ctx.strokeStyle = Theme.accent
+                    ctx.beginPath()
+                    ctx.arc(width / 2, height / 2, width / 2 - 2, -Math.PI / 2, -Math.PI / 2 + 2 * Math.PI * fraction)
+                    ctx.stroke()
+                }
+            }
+            JobsPopup {
+                id: jobs
+                y: parent.height + 8
+                x: parent.width - width
+                jobs: root.ops.jobs || []
+            }
+        }
         IconButton {
             icon: "more"; label: "Main menu"
             onClicked: mainMenu.popup()
             MenuPopup {
                 id: mainMenu
                 model: [
+                    { text: root.ops.undo ? "Undo " + root.ops.undo : "Undo", action: "win.undo", param: "",
+                      enabled: !!root.ops.undo },
+                    { text: root.ops.redo ? "Redo " + root.ops.redo : "Redo", action: "win.redo", param: "",
+                      enabled: !!root.ops.redo },
+                    { separator: true },
+                    { text: "New Folder", action: "win.new-folder", param: "", enabled: !root.ops.trash },
+                    { text: "Paste", action: "win.paste", param: "", enabled: !root.ops.trash },
+                    { text: "Select All", action: "win.select-all", param: "" },
+                    { separator: true },
                     { text: "Show Hidden Files", action: "win.show-hidden", param: "", checked: !!root.prefs.showHidden },
                     { text: "Expand Sidebar", action: "win.toggle-sidebar", param: "", checked: !!root.prefs.sidebar },
                     { text: "Restore Sidebar", action: "win.sidebar-reset", param: "" },

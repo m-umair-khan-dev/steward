@@ -63,6 +63,25 @@ pub const ACCELS: &[(&str, &str, &[&str], &str)] = &[
         &["Ctrl+Shift+P"],
         "Show the preview pane",
     ),
+    ("win.new-folder", "", &["Ctrl+Shift+N"], "New folder"),
+    ("win.rename", "", &["F2"], "Rename"),
+    ("win.trash", "", &["Delete"], "Move to the Trash"),
+    ("win.copy", "", &["Ctrl+C"], "Copy"),
+    ("win.cut", "", &["Ctrl+X"], "Cut"),
+    ("win.paste", "", &["Ctrl+V"], "Paste"),
+    ("win.undo", "", &["Ctrl+Z"], "Undo"),
+    ("win.redo", "", &["Ctrl+Shift+Z"], "Redo"),
+];
+
+/// Shortcuts that text fields need for themselves: QML turns these off while
+/// one has the focus.
+const TEXT_KEYS: &[&str] = &[
+    "win.trash",
+    "win.copy",
+    "win.cut",
+    "win.paste",
+    "win.undo",
+    "win.redo",
 ];
 
 thread_local! {
@@ -80,7 +99,8 @@ pub fn accels_json() -> Value {
         ACCELS
             .iter()
             .map(|(action, param, keys, description)| {
-                json!({ "action": action, "param": param, "keys": keys, "description": description })
+                json!({ "action": action, "param": param, "keys": keys, "description": description,
+                        "typing": TEXT_KEYS.contains(action) })
             })
             .collect(),
     )
@@ -201,6 +221,30 @@ fn create() -> (gio::SimpleActionGroup, gio::SimpleActionGroup) {
         controller::with(|c| c.start_path_edit())
     });
     simple(&win, "filter", || controller::with(|c| c.focus_filter()));
+    // File operations (Phase 2).
+    simple(&win, "new-folder", || controller::with(|c| c.new_folder()));
+    simple(&win, "rename", || controller::with(|c| c.start_rename()));
+    simple(&win, "trash", || controller::with(|c| c.trash_selected()));
+    simple(&win, "duplicate", || controller::with(|c| c.duplicate()));
+    simple(&win, "copy", || {
+        controller::with(|c| c.copy_selection(false))
+    });
+    simple(&win, "cut", || controller::with(|c| c.copy_selection(true)));
+    simple(&win, "paste", || controller::with(|c| c.paste()));
+    simple(&win, "undo", || controller::with(|c| c.undo()));
+    simple(&win, "redo", || controller::with(|c| c.redo()));
+    simple(&win, "restore", || {
+        controller::with(|c| c.restore_selected())
+    });
+    simple(&win, "empty-trash", || {
+        controller::with(|c| c.ask_empty_trash())
+    });
+    simple(&win, "empty-trash-confirm", || {
+        controller::with(|c| c.confirm_empty_trash())
+    });
+    with_string(&win, "cancel-job", |id| {
+        controller::with(|c| c.cancel_job(id))
+    });
     simple(&win, "open-selected", || {
         controller::with(|c| c.open_selected())
     });

@@ -15,8 +15,11 @@ Item {
     property bool selected: false
     readonly property bool lifted: hover.hovered
     readonly property color tint: Theme.deep(kind)
+    property string uri: ""
+    property bool renaming: false
     signal tapped(int modifiers)
     signal doubleTapped()
+    signal menuRequested()
 
     width: 196
     height: Math.round(width * 0.8)
@@ -27,11 +30,16 @@ Item {
     Accessible.onPressAction: root.doubleTapped()
 
     HoverHandler { id: hover; cursorShape: Qt.PointingHandCursor }
-    TapHandler {
-        id: tap
-        acceptedModifiers: Qt.KeyboardModifierMask
-        onTapped: root.tapped(tap.point.modifiers)
-        onDoubleTapped: root.doubleTapped()
+    // A MouseArea (not a TapHandler) so the click stops here and never also
+    // reaches the background behind the card.
+    // Dragging the card carries it (and the rest of the selection).
+    DragSource {
+        uri: root.uri
+        onClicked: mouse => {
+            if (mouse.button === Qt.RightButton) root.menuRequested()
+            else root.tapped(mouse.modifiers)
+        }
+        onDoubleClicked: mouse => { if (mouse.button === Qt.LeftButton) root.doubleTapped() }
     }
 
     Rectangle {
@@ -103,7 +111,13 @@ Item {
             anchors.right: parent.right; anchors.rightMargin: 10
             y: preview.height + 12
             Text { width: parent.width; text: root.name; elide: Text.ElideMiddle; color: Theme.ink
-                   font.pixelSize: 13; font.weight: Font.Medium }
+                   font.pixelSize: 13; font.weight: Font.Medium; visible: !root.renaming }
+            Loader {
+                active: root.renaming
+                visible: active
+                width: parent.width
+                sourceComponent: RenameField { uri: root.uri; original: root.name; horizontalAlignment: TextInput.AlignLeft }
+            }
             Text { width: parent.width; text: root.meta; elide: Text.ElideRight; color: Theme.muted; font.pixelSize: 11 }
         }
     }

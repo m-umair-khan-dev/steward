@@ -5,14 +5,16 @@ import QtQuick.Effects
 Rectangle {
     id: root
     property string text: ""
-    function show(message) {
+    property bool undo: false
+    function show(message, withUndo) {
         text = message
+        undo = !!withUndo
         shown = true
         hide.restart()
     }
     property bool shown: false
 
-    width: label.implicitWidth + 40
+    width: row.implicitWidth + 40
     height: 44
     radius: 22
     color: Theme.toastBg
@@ -28,6 +30,23 @@ Rectangle {
     Accessible.role: Accessible.AlertMessage
     Accessible.name: text
 
-    Text { id: label; anchors.centerIn: parent; text: root.text; color: "white"; font.pixelSize: 14 }
-    Timer { id: hide; interval: 4000; onTriggered: root.shown = false }
+    Row {
+        id: row
+        anchors.centerIn: parent
+        spacing: 16
+        Text { id: label; anchors.verticalCenter: parent.verticalCenter; text: root.text; color: "white"; font.pixelSize: 14 }
+        Rectangle {
+            visible: root.undo
+            anchors.verticalCenter: parent.verticalCenter
+            width: undoLabel.implicitWidth + 22; height: 28; radius: 14
+            color: undoHover.hovered ? Qt.rgba(1, 1, 1, 0.22) : Qt.rgba(1, 1, 1, 0.12)
+            Accessible.role: Accessible.Button
+            Accessible.name: "Undo"
+            Accessible.onPressAction: { root.shown = false; p.activate("win.undo", "") }
+            Text { id: undoLabel; anchors.centerIn: parent; text: "Undo"; color: "white"; font.pixelSize: 13; font.weight: Font.Bold }
+            HoverHandler { id: undoHover }
+            TapHandler { onTapped: { root.shown = false; p.activate("win.undo", "") } }
+        }
+    }
+    Timer { id: hide; interval: root.undo ? 7000 : 4000; onTriggered: root.shown = false }
 }

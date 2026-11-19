@@ -30,6 +30,7 @@ fn place_icon(key: &str) -> &'static str {
         "place:music" => "music",
         "place:pictures" => "pictures",
         "place:videos" => "videos",
+        "place:trash" => "trash",
         _ => "folder",
     }
 }
@@ -50,6 +51,14 @@ fn default_entries() -> Vec<SidebarEntry> {
             can_eject: false,
         })
         .collect();
+    entries.push(SidebarEntry {
+        key: "place:trash".into(),
+        label: gettext("Trash"),
+        section: "favorites",
+        file: gio::File::for_path(cairn_core::ops::Trash::default_home().join("files")),
+        icon: "trash",
+        can_eject: false,
+    });
     for mount in gio::VolumeMonitor::get().mounts() {
         if mount.is_shadowed() || !(mount.can_unmount() || mount.can_eject()) {
             continue;

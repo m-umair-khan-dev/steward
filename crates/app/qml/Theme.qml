@@ -10,7 +10,7 @@ QtObject {
 
     readonly property color bg: dark ? "#0c0b14" : "#f4f3f9"
     readonly property color pane: dark ? "#15141f" : "#ffffff"
-    readonly property color sidebar: dark ? "#12111b" : "#ecebf4"
+    readonly property color sidebar: dark ? "#12111b" : "#f3f2f9"
     readonly property color card: dark ? "#1e1d2b" : "#ffffff"
     readonly property color sunken: dark ? "#232232" : "#f1f0f6"
     readonly property color paneSide: dark ? "#13121c" : "#f8f7fb"

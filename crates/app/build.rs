@@ -31,6 +31,14 @@ const QML_FILES: &[&str] = &[
     "qml/PreferencesDialog.qml",
     "qml/ShortcutsDialog.qml",
     "qml/OpenWithDialog.qml",
+    "qml/RenameField.qml",
+    "qml/PillButton.qml",
+    "qml/ClashDialog.qml",
+    "qml/EmptyTrashDialog.qml",
+    "qml/TrashBar.qml",
+    "qml/JobsPopup.qml",
+    "qml/DragSource.qml",
+    "qml/FolderDrop.qml",
     "qml/MenuPopup.qml",
 ];
 
@@ -44,11 +52,22 @@ fn main() {
             file
         }
     });
-    CxxQtBuilder::new_qml_module(QmlModule::new("dev.cairn.files").qml_files(files))
+    let builder = CxxQtBuilder::new_qml_module(QmlModule::new("dev.cairn.files").qml_files(files))
         .qt_module("Quick")
         .qrc("qml/icons.qrc")
-        .files(["src/bridge.rs"])
-        .build();
+        .files(["src/bridge.rs"]);
+    // SAFETY: `cc_builder` is unsafe because changing compiler flags could
+    // make the generated code unsound. We only add an include folder and our
+    // own source file (the clipboard helper); no flags change.
+    #[allow(unsafe_code)]
+    let builder = unsafe {
+        builder.cc_builder(|cc| {
+            cc.include("cpp");
+            cc.file("cpp/clipboard.cpp");
+        })
+    };
+    builder.build();
+    println!("cargo:rerun-if-changed=cpp");
 
     // Development and test builds load the settings schema from OUT_DIR, so
     // nothing has to be installed system-wide (see src/settings.rs).

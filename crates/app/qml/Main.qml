@@ -21,12 +21,14 @@ Window {
         id: p
         onQuitting: Qt.quit()
         onShoot: path => win.contentItem.grabToImage(result => p.shot(path, result.saveToFile(path)))
-        onToast: text => toast.show(text)
+        onToast: (text, undo) => toast.show(text, undo)
         onFocus: target => {
             if (target === "path") {
                 pathBar.field.text = win.pathbar.text || ""
                 pathBar.field.selectAll()
                 pathBar.field.forceActiveFocus()
+            } else if (target === "content") {
+                content.forceActiveFocus()
             } else if (target === "filter") {
                 header.filterField.selectAll()
                 header.filterField.forceActiveFocus()
@@ -52,6 +54,10 @@ Window {
     readonly property var prefs: parse(p.prefs, ({}))
     readonly property var accels: parse(p.accels, [])
     readonly property var dialogData: parse(p.dialogdata, ({}))
+    readonly property var ops: parse(p.ops, ({ jobs: [], trash: false }))
+    // A text field has the keyboard: shortcuts it needs (copy, paste, undo,
+    // Delete) are left to it.
+    readonly property bool typing: !!activeFocusItem && activeFocusItem.cursorPosition !== undefined
 
     // Style.
     readonly property bool systemDark: Qt.styleHints.colorScheme === Qt.ColorScheme.Dark
@@ -90,6 +96,7 @@ Window {
             required property var modelData
             sequences: modelData.keys
             context: Qt.ApplicationShortcut
+            enabled: !(modelData.typing && win.typing)
             onActivated: p.activate(modelData.action, modelData.param)
         }
     }
@@ -126,7 +133,7 @@ Window {
 
     // --- sidebar -------------------------------------------------------------
     readonly property bool expanded: sidebar.expanded !== false
-    readonly property int sideWidth: 236
+    readonly property int sideWidth: 262
 
     Sidebar {
         id: side
@@ -187,6 +194,7 @@ Window {
             folder: win.folder
             nav: win.nav
             prefs: win.prefs
+            ops: win.ops
         }
         PathBar {
             id: pathBar
@@ -225,18 +233,37 @@ Window {
                         event.accepted = true
                     }
                 }
-                TapHandler { onTapped: { content.forceActiveFocus(); p.pick(-1, 0) } }
+                // The background: a click clears the selection, a right-click
+                // opens the folder's menu. Cards stop clicks themselves.
+                FolderDrop { anchors.fill: parent; z: -2; enabled: !win.ops.trash }
+                MouseArea {
+                    anchors.fill: parent
+                    z: -1
+                    acceptedButtons: Qt.LeftButton | Qt.RightButton
+                    onClicked: mouse => {
+                        content.forceActiveFocus()
+                        if (mouse.button === Qt.RightButton) backgroundMenu.popup()
+                        else p.pick(-1, 0)
+                    }
+                }
 
+                TrashBar {
+                    id: trashBar
+                    width: parent.width
+                    visible: !!win.ops.trash
+                    hasSelection: Object.keys(win.selection).length > 0
+                    empty: (win.folder.chips || []).length === 0
+                }
                 ChipRow {
                     id: chips
                     width: parent.width
-                    visible: win.folder.page === "grid" || win.folder.page === "list"
+                    visible: !win.ops.trash && (win.folder.page === "grid" || win.folder.page === "list")
                     chips: win.folder.chips || []
                     summary: win.folder.summary || ""
                 }
 
                 FolderGrid {
-                    anchors.top: chips.visible ? chips.bottom : parent.top
+                    anchors.top: chips.visible ? chips.bottom : (trashBar.visible ? trashBar.bottom : parent.top)
                     anchors.bottom: parent.bottom
                     width: parent.width
                     visible: win.folder.page === "grid"
@@ -246,14 +273,20 @@ Window {
                     counts: win.counts
                     metrics: win.folder.metrics || ({ folder: 168, file: 240, gap: 18 })
                     groupBy: win.folder.groupBy || "none"
+                    renaming: win.ops.renaming || ""
+                    anchor: win.folder.anchor === undefined ? -1 : win.folder.anchor
+                    onItemMenu: pos => win.itemMenuAt(pos)
                 }
                 FolderList {
-                    anchors.top: chips.visible ? chips.bottom : parent.top
+                    anchors.top: chips.visible ? chips.bottom : (trashBar.visible ? trashBar.bottom : parent.top)
                     anchors.bottom: parent.bottom
                     width: parent.width
                     visible: win.folder.page === "list"
                     items: visible ? win.items : []
                     selection: win.selection
+                    anchor: win.folder.anchor === undefined ? -1 : win.folder.anchor
+                    renaming: win.ops.renaming || ""
+                    onItemMenu: pos => win.itemMenuAt(pos)
                 }
                 StatusPage {
                     anchors.fill: parent
@@ -295,9 +328,49 @@ Window {
         Toast { id: toast }
     }
 
+    // --- context menus (P2-T10) ---------------------------------------------------
+    function itemMenuAt(pos) {
+        if (!win.selection[pos]) p.pick(pos, 0)
+        content.forceActiveFocus()
+        itemMenu.popup()
+    }
+    readonly property int selectedCount: Object.keys(win.selection).length
+    MenuPopup {
+        id: itemMenu
+        model: win.ops.trash ? [
+            { text: "Put Back", action: "win.restore", param: "" }
+        ] : [
+            { text: "Open", action: "win.open-selected", param: "" },
+            { text: "Open With…", action: "win.open-with", param: "", enabled: win.selectedCount === 1 },
+            { separator: true },
+            { text: "Rename…", action: "win.rename", param: "", enabled: win.selectedCount === 1 },
+            { text: "Duplicate", action: "win.duplicate", param: "" },
+            { separator: true },
+            { text: "Copy", action: "win.copy", param: "" },
+            { text: "Cut", action: "win.cut", param: "" },
+            { separator: true },
+            { text: "Move to Trash", action: "win.trash", param: "" }
+        ]
+    }
+    MenuPopup {
+        id: backgroundMenu
+        model: win.ops.trash ? [
+            { text: "Empty Trash…", action: "win.empty-trash", param: "" },
+            { text: "Select All", action: "win.select-all", param: "" }
+        ] : [
+            { text: "New Folder", action: "win.new-folder", param: "" },
+            { text: "Paste", action: "win.paste", param: "" },
+            { separator: true },
+            { text: "Select All", action: "win.select-all", param: "" },
+            { text: "Show Hidden Files", action: "win.show-hidden", param: "", checked: !!win.prefs.showHidden }
+        ]
+    }
+
     // --- dialogs ---------------------------------------------------------------
     AboutDialog { visible: p.dialog === "about"; version: p.version }
     PreferencesDialog { visible: p.dialog === "preferences"; prefs: win.prefs }
     ShortcutsDialog { visible: p.dialog === "shortcuts"; accels: win.accels }
     OpenWithDialog { visible: p.dialog === "open-with"; info: win.dialogData }
+    ClashDialog { visible: p.dialog === "clash"; info: win.dialogData }
+    EmptyTrashDialog { visible: p.dialog === "empty-trash"; info: win.dialogData }
 }

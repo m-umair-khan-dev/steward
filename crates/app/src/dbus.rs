@@ -114,8 +114,21 @@ fn register_test_interface(connection: &gio::DBusConnection) {
                 invocation.return_value(Some(&(value.to_string(),).to_variant()));
             }
             "WaitIdle" => {
-                glib::idle_add_local_full(glib::Priority::LOW, move || {
-                    invocation.clone().return_value(Some(&(true,).to_variant()));
+                // Idle means: the operations queue is empty and the main loop
+                // has nothing else to do.
+                let timeout: u32 = params.child_get(0);
+                let deadline = std::time::Instant::now()
+                    + std::time::Duration::from_millis(u64::from(timeout));
+                glib::timeout_add_local(std::time::Duration::from_millis(20), move || {
+                    let busy = controller::with(|c| c.ops_busy());
+                    if busy && std::time::Instant::now() < deadline {
+                        return glib::ControlFlow::Continue;
+                    }
+                    let invocation = invocation.clone();
+                    glib::idle_add_local_full(glib::Priority::LOW, move || {
+                        invocation.clone().return_value(Some(&(!busy,).to_variant()));
+                        glib::ControlFlow::Break
+                    });
                     glib::ControlFlow::Break
                 });
             }

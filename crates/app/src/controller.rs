@@ -18,6 +18,8 @@ use serde_json::{Value, json};
 use cairn_core::sort::{self, GroupBy, SortKey};
 use cairn_core::{FileEntry, FolderModel, Kind, LoadState};
 
+mod ops;
+
 use crate::sidebar::{self, SidebarEntry};
 use crate::thumbnails::Thumbnailer;
 use crate::{actions, app_data, format, paths, settings, tint};
@@ -117,13 +119,15 @@ pub mod dirty {
     pub const PATH: u32 = 256;
     pub const NAV: u32 = 512;
     pub const PREFS: u32 = 1024;
-    pub const ALL: u32 = 2047;
+    pub const OPS: u32 = 2048;
+    pub const ALL: u32 = 4095;
 }
 
 /// One-off things for QML to do.
 #[derive(Debug, Clone)]
 pub enum Event {
-    Toast(String),
+    /// Text, and whether the toast offers Undo.
+    Toast(String, bool),
     Quit,
     #[cfg_attr(not(feature = "e2e"), allow(dead_code))] // Test1.Screenshot
     Screenshot(String),
@@ -165,6 +169,7 @@ pub struct Controller {
     path_editing: bool,
     preview_children: Option<(String, Vec<String>)>,
     last_toast: Option<String>,
+    ops: ops::Ops,
     dialog: String,
     dialog_data: Value,
     open_with_apps: Vec<gio::AppInfo>,
@@ -246,6 +251,7 @@ pub fn init(notifier: impl Fn() + 'static) {
         path_editing: false,
         preview_children: None,
         last_toast: None,
+        ops: ops::Ops::default(),
         dialog: String::new(),
         dialog_data: Value::Null,
         open_with_apps: Vec::new(),
@@ -296,6 +302,7 @@ pub fn init(notifier: impl Fn() + 'static) {
         later(move |c| c.on_setting(&key));
     });
     with(|c| {
+        ops::start(c);
         c.reload_sidebar();
         c.refresh_home_space();
         c.navigate(&gio::File::for_path(glib::home_dir()), false);
@@ -325,7 +332,7 @@ impl Controller {
     }
 
     fn emit(&mut self, event: Event) {
-        if let Event::Toast(text) = &event {
+        if let Event::Toast(text, _) = &event {
             self.last_toast = Some(text.clone());
         }
         self.events.push(event);
@@ -374,6 +381,7 @@ impl Controller {
         self.anchor = None;
         self.preview_children = None;
         self.path_editing = false;
+        self.ops.renaming = None;
         self.load_started = Some(Instant::now());
         self.last_load_ms = None;
         self.state = LoadState::Loading;
@@ -614,6 +622,7 @@ impl Controller {
         let uris: HashSet<String> = visible.iter().map(|e| e.data().uri()).collect();
         self.selection.retain(|uri| uris.contains(uri));
         self.visible = visible;
+        self.apply_pending_select();
         self.mark(
             dirty::FOLDER
                 | dirty::ROWS
@@ -708,6 +717,10 @@ impl Controller {
             .filter(|e| names.iter().any(|n| n == e.name()))
             .map(|e| e.data().uri())
             .collect();
+        self.anchor = self
+            .visible
+            .iter()
+            .position(|e| self.selection.contains(&e.data().uri()));
         self.on_selection_changed();
     }
 
@@ -792,10 +805,10 @@ impl Controller {
             {
                 glib::g_warning!("cairn", "could not open {uri}: {error}");
                 later(move |c| {
-                    c.emit(Event::Toast(format!(
-                        "{} “{name}”",
-                        gettext("No app could open")
-                    )))
+                    c.emit(Event::Toast(
+                        format!("{} “{name}”", gettext("No app could open")),
+                        false,
+                    ))
                 });
             }
         });
@@ -821,9 +834,10 @@ impl Controller {
         };
         let apps = gio::AppInfo::all_for_type(&entry.data().content_type);
         if apps.is_empty() {
-            self.emit(Event::Toast(gettext(
-                "No installed app can open this kind of file",
-            )));
+            self.emit(Event::Toast(
+                gettext("No installed app can open this kind of file"),
+                false,
+            ));
             return;
         }
         self.dialog_data = json!({
@@ -900,11 +914,10 @@ impl Controller {
             self.path_text = None;
             self.navigate(&gio::File::for_path(&path), true);
         } else {
-            self.emit(Event::Toast(format!(
-                "{} “{}”",
-                gettext("No folder called"),
-                text.trim()
-            )));
+            self.emit(Event::Toast(
+                format!("{} “{}”", gettext("No folder called"), text.trim()),
+                false,
+            ));
         }
         self.mark(dirty::PATH);
     }
@@ -1068,6 +1081,9 @@ impl Controller {
     // --- JSON for QML ---------------------------------------------------------------------------
 
     fn folder_title(&self) -> String {
+        if self.in_trash() {
+            return gettext("Trash");
+        }
         match self.current().and_then(|f| f.path()) {
             Some(path) if path == glib::home_dir() => gettext("Home"),
             Some(path) if path == std::path::Path::new("/") => gettext("Computer"),
@@ -1206,6 +1222,8 @@ impl Controller {
             "descending": self.descending,
             "filterKind": self.kind_filter.map(|k| k.id()).unwrap_or("all"),
             "nameFilter": self.name_filter,
+            // The item the keyboard is on; the views keep it on screen.
+            "anchor": self.anchor.map(|a| a as i64).unwrap_or(-1),
             "metrics": { "folder": self.row_size.folder_width(), "file": self.row_size.file_width(), "gap": GAP },
         })
     }
@@ -1216,17 +1234,38 @@ impl Controller {
             .max(1.0) as usize
     }
 
+    /// The name to show: in the Trash, the item's original name.
+    fn shown_name(&self, entry: &FileEntry) -> String {
+        let data = entry.data();
+        match data.file.path() {
+            Some(path) if self.in_trash() => self.trash_name(&path),
+            _ => data.display_name.to_string(),
+        }
+    }
+
     fn item_json(&self, position: usize, entry: &FileEntry) -> Value {
         let data = entry.data();
+        let meta = match data.file.path() {
+            Some(path) if self.in_trash() => format!(
+                "{} {}",
+                gettext("From"),
+                self.trash_origin(&path).unwrap_or_default()
+            ),
+            _ if data.is_dir => gettext("Folder"),
+            _ => format!(
+                "{} · {}",
+                gio::content_type_get_description(&data.content_type),
+                format::size(data.size)
+            ),
+        };
         json!({
             "pos": position,
-            "name": data.display_name,
+            "name": self.shown_name(entry),
             "uri": data.uri(),
             "dir": data.is_dir,
             "kind": data.kind.id(),
             "badge": tint::badge(&data.name, data.kind),
-            "meta": if data.is_dir { gettext("Folder") } else {
-                format!("{} · {}", gio::content_type_get_description(&data.content_type), format::size(data.size)) },
+            "meta": meta,
             "symbol": folder_symbol(data),
         })
     }
@@ -1383,7 +1422,7 @@ impl Controller {
                     let section = sort::section_of(data, self.group, now).map(|s| gettext(s.label)).unwrap_or_default();
                     json!({
                         "pos": position,
-                        "name": data.display_name,
+                        "name": self.shown_name(entry),
                         "uri": data.uri(),
                         "dir": data.is_dir,
                         "kind": data.kind.id(),
@@ -1438,6 +1477,7 @@ impl Controller {
         json!({
             "entries": self.sidebar.iter().map(|e| json!({
                 "key": e.key, "label": e.label, "section": e.section, "icon": e.icon, "eject": e.can_eject,
+                "uri": e.file.uri().to_string(),
                 "path": e.file.path().map(|p| p.display().to_string()).unwrap_or_else(|| e.file.uri().to_string()),
             })).collect::<Vec<_>>(),
             "hidden": self.hidden,
@@ -1472,7 +1512,7 @@ impl Controller {
                 _ => Vec::new(),
             };
             return json!({
-                "visible": visible, "mode": "item", "name": data.display_name, "uri": data.uri(),
+                "visible": visible, "mode": "item", "name": self.shown_name(entry), "uri": data.uri(),
                 "dir": data.is_dir, "kind": data.kind.id(), "badge": tint::badge(&data.name, data.kind),
                 "thumb": self.thumbs.get(&data.uri()), "facts": facts,
                 "children": children.iter().take(12).collect::<Vec<_>>(),
@@ -1619,6 +1659,7 @@ impl Controller {
                 "children": preview["children"].as_array().cloned().unwrap_or_default(),
             },
             "last_toast": self.last_toast,
+            "ops": self.ops_test_json(),
             "dark": self.dark,
             "motion": self.motion,
             "flying": self.flying,

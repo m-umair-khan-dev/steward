@@ -7,6 +7,10 @@ Item {
     id: root
     property var items: []
     property var selection: ({})
+    property string renaming: ""
+    property int anchor: -1
+    signal itemMenu(int pos)
+    onAnchorChanged: if (anchor >= 0 && anchor < items.length) list.positionViewAtIndex(anchor, ListView.Contain)
 
     Accessible.role: Accessible.List
     Accessible.name: "Folder contents"
@@ -81,11 +85,14 @@ Item {
             Accessible.selected: selected
             Accessible.onPressAction: p.open(modelData.pos)
             HoverHandler { id: hover }
-            TapHandler {
-                id: tap
-                acceptedModifiers: Qt.KeyboardModifierMask
-                onTapped: p.pick(line.modelData.pos, root.modes(tap.point.modifiers))
-                onDoubleTapped: p.open(line.modelData.pos)
+            MouseArea {
+                anchors.fill: parent
+                acceptedButtons: Qt.LeftButton | Qt.RightButton
+                onClicked: mouse => {
+                    if (mouse.button === Qt.RightButton) root.itemMenu(line.modelData.pos)
+                    else p.pick(line.modelData.pos, root.modes(mouse.modifiers))
+                }
+                onDoubleClicked: mouse => { if (mouse.button === Qt.LeftButton) p.open(line.modelData.pos) }
             }
             Rectangle {
                 x: 12; anchors.verticalCenter: parent.verticalCenter
@@ -99,7 +106,17 @@ Item {
                 }
             }
             Text { x: 42; width: root.kindX - 54; anchors.verticalCenter: parent.verticalCenter; text: line.modelData.name
-                   elide: Text.ElideMiddle; font.pixelSize: 13; color: line.selected ? "white" : Theme.ink }
+                   elide: Text.ElideMiddle; font.pixelSize: 13; color: line.selected ? "white" : Theme.ink
+                   visible: root.renaming !== line.modelData.uri }
+            Loader {
+                active: root.renaming === line.modelData.uri
+                x: 38; width: root.kindX - 46; height: 28
+                anchors.verticalCenter: parent.verticalCenter
+                sourceComponent: RenameField {
+                    uri: line.modelData.uri; original: line.modelData.name; isFolder: line.modelData.dir
+                    horizontalAlignment: TextInput.AlignLeft
+                }
+            }
             Text { x: root.kindX - 12; width: root.sizeX - root.kindX - 8; anchors.verticalCenter: parent.verticalCenter
                    text: line.modelData.kindText; elide: Text.ElideRight; font.pixelSize: 13
                    color: line.selected ? "white" : Theme.muted }
