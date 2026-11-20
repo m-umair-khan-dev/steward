@@ -235,7 +235,10 @@ impl Worker {
     }
 
     fn forward(&self, request: &Request, summary: &str, ctx: &mut dyn Context) -> Report {
-        let kind = request.kind();
+        let kind: &str = match request {
+            Request::Apply { kind, .. } => kind,
+            _ => request.kind(),
+        };
         let batch = if request.undoable() {
             match self.store.begin_batch(kind, summary) {
                 Ok(id) => Some(id),
@@ -346,6 +349,55 @@ impl Worker {
                             run.done(step, Some(&original), None);
                         }
                         Err(error) => run.fail(Some(step), &original, &error),
+                    }
+                }
+            }
+            Request::Apply { moves, .. } => {
+                for (from, to) in moves {
+                    if run.cancelled() {
+                        run.report.cancelled = true;
+                        break;
+                    }
+                    let (Some(dir), Some(name)) = (to.parent(), to.file_name()) else {
+                        continue;
+                    };
+                    if !dir.is_dir() {
+                        match run.record(Action::Mkdir, None, Some(dir)) {
+                            Ok(step) => match fsx::create_dir(dir) {
+                                Ok(()) => {
+                                    let _ =
+                                        self.store.set_step(step, "done", Some(dir), None, None);
+                                }
+                                Err(error) => {
+                                    run.fail(Some(step), dir, &error);
+                                    continue;
+                                }
+                            },
+                            Err(error) => {
+                                run.fail(None, dir, &error);
+                                continue;
+                            }
+                        }
+                    }
+                    let target = dir.join(fsx::free_name(dir, &name.to_string_lossy()));
+                    let step = match run.record(Action::Move, Some(from), Some(&target)) {
+                        Ok(step) => step,
+                        Err(error) => {
+                            run.fail(None, from, &error);
+                            continue;
+                        }
+                    };
+                    let cancel = run.ctx.cancellable().clone();
+                    let label = fsx::file_name(from);
+                    let result =
+                        fsx::move_path(from, &target, &cancel, &mut |d| run.tick(d, &label));
+                    run.items += 1;
+                    match result {
+                        Ok(()) => {
+                            run.report.created.push(target.clone());
+                            run.done(step, Some(&target), None);
+                        }
+                        Err(error) => run.fail(Some(step), from, &error),
                     }
                 }
             }

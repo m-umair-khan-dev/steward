@@ -890,3 +890,50 @@ fn drops_move_by_default_and_copy_with_ctrl() {
         Some(Request::Copy { .. })
     ));
 }
+
+#[test]
+fn a_plan_runs_as_one_batch_and_one_undo_restores_it_exactly() {
+    let place = Place::new("apply");
+    let worker = place.worker();
+    let a = place.write("dl/a.pdf", "A");
+    let b = place.write("dl/b.png", "B");
+    // A kind folder that exists and already holds a file of the same name.
+    place.write("dl/Images/b.png", "older B");
+    let before = place.snapshot();
+    let moves = vec![
+        (a.clone(), place.path("dl/PDFs/a.pdf")),
+        (b.clone(), place.path("dl/Images/b.png")),
+    ];
+    let report = worker.run(
+        &Request::Apply {
+            kind: "tidy".into(),
+            moves,
+        },
+        "Tidy",
+        &mut Ctx::default(),
+    );
+    assert_eq!(report.done, 2);
+    assert_eq!(report.kind, "tidy");
+    assert_eq!(
+        std::fs::read_to_string(place.path("dl/PDFs/a.pdf")).unwrap(),
+        "A"
+    );
+    assert_eq!(
+        std::fs::read_to_string(place.path("dl/Images/b (2).png")).unwrap(),
+        "B",
+        "keep both"
+    );
+    assert_eq!(
+        std::fs::read_to_string(place.path("dl/Images/b.png")).unwrap(),
+        "older B"
+    );
+    assert_eq!(worker.store.batches().unwrap().len(), 1, "one batch");
+
+    let undo = run(&worker, Request::Undo);
+    assert!(undo.failed.is_empty(), "{:?}", undo.failed);
+    assert_eq!(
+        place.snapshot(),
+        before,
+        "exactly as before, the PDFs folder gone too"
+    );
+}

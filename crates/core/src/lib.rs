@@ -13,6 +13,7 @@ pub mod kind;
 pub mod natural;
 pub mod ops;
 pub mod places;
+pub mod plan;
 pub mod sort;
 pub mod store;
 

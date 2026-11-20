@@ -58,6 +58,13 @@ pub enum Request {
     },
     /// Deletes everything in the home Trash. Cannot be undone.
     EmptyTrash,
+    /// A plan's moves (Tidy and the like), as one batch: kind folders that
+    /// are missing are made (and removed again by Undo); a name already
+    /// taken gets a free one ("Keep both").
+    Apply {
+        kind: String,
+        moves: Vec<(PathBuf, PathBuf)>,
+    },
     Undo,
     Redo,
 }
@@ -74,6 +81,7 @@ impl Request {
             Request::Trash { .. } => "trash",
             Request::Restore { .. } => "restore",
             Request::EmptyTrash => "empty-trash",
+            Request::Apply { .. } => "apply",
             Request::Undo => "undo",
             Request::Redo => "redo",
         }
@@ -90,6 +98,7 @@ impl Request {
             | Request::Move { sources, .. }
             | Request::Duplicate { sources }
             | Request::Trash { sources } => sources.clone(),
+            Request::Apply { moves, .. } => moves.iter().map(|(from, _)| from.clone()).collect(),
             _ => Vec::new(),
         }
     }
