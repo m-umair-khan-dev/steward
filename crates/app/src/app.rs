@@ -9,6 +9,13 @@ const GETTEXT_DOMAIN: &str = "cairn";
 
 pub fn run() -> ExitCode {
     init_gettext();
+    // A second launch hands its request to the running Cairn (P6-T06).
+    let args: Vec<String> = std::env::args().skip(1).collect();
+    let requests = crate::launch::parse(&args);
+    if crate::launch::forward(&requests) {
+        return ExitCode::SUCCESS;
+    }
+    crate::launch::set_startup(requests);
     // Qt runs GLib's main loop on Linux. Owning its default context lets the
     // GIO-based engine spawn its futures on it.
     let context = glib::MainContext::default();
@@ -21,7 +28,9 @@ pub fn run() -> ExitCode {
             .set_application_display_name(&QString::from("Cairn"));
         app.as_mut()
             .set_application_version(&QString::from(env!("CARGO_PKG_VERSION")));
-        app.set_organization_domain(&QString::from("cairn.dev"));
+        app.as_mut().set_organization_domain(&QString::from("cairn.dev"));
+        // The Wayland app ID, so the shell matches the window to its desktop file.
+        QGuiApplication::set_desktop_file_name(&QString::from(cairn_core::APP_ID));
     }
     let mut engine = QQmlApplicationEngine::new();
     if let Some(engine) = engine.as_mut() {

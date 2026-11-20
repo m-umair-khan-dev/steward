@@ -7,6 +7,7 @@ mod bridge;
 mod controller;
 mod dbus;
 mod format;
+mod launch;
 mod paths;
 mod settings;
 mod sidebar;

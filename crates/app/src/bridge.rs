@@ -169,6 +169,8 @@ impl cxx_qt::Initialize for qobject::Presenter {
         controller::init(move || {
             let _ = qt.queue(|presenter| presenter.refresh());
         });
+        // What the command line or a desktop action asked for.
+        glib::idle_add_local_once(crate::launch::run_startup);
         dbus::start(|| controller::with(|c| c.quit()));
     }
 }

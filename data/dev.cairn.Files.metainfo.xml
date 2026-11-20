@@ -1,0 +1,78 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!-- AppStream metadata (P6-T06). Screenshots come from `make shots` (P6-T11);
+     their URLs point at the project website (HUMAN: final domain). -->
+<component type="desktop-application">
+  <id>dev.cairn.Files</id>
+  <metadata_license>CC0-1.0</metadata_license>
+  <project_license>GPL-3.0-or-later</project_license>
+  <name>Cairn</name>
+  <summary>Browse your files and keep folders tidy</summary>
+  <developer id="dev.cairn">
+    <name>Cairn contributors</name>
+  </developer>
+  <description>
+    <p>
+      Cairn is a file manager for Ubuntu that keeps folders tidy. It shows a
+      plan before anything moves, and one Undo puts everything back.
+    </p>
+    <ul>
+      <li>Tidy sorts a messy folder into kind folders after showing you the plan</li>
+      <li>Find any folder or file by name as you type</li>
+      <li>Folder sizes on every folder, worked out in the background</li>
+      <li>Two folders side by side, with copy and move across</li>
+      <li>Workspaces gather folders and files from anywhere on one page</li>
+      <li>Free Up Space shows what is safe to clear and why; everything goes to the Trash</li>
+      <li>Installed lists what apt, Snap, Flatpak and the language tools installed</li>
+      <li>About This Computer shows battery health, storage and security at a glance</li>
+    </ul>
+    <p>Cairn works on your files where they are. Nothing is uploaded and nothing is tracked.</p>
+  </description>
+  <launchable type="desktop-id">dev.cairn.Files.desktop</launchable>
+  <icon type="stock">dev.cairn.Files</icon>
+  <url type="homepage">https://example.invalid/cairn</url>
+  <url type="bugtracker">https://example.invalid/cairn/issues</url>
+  <url type="vcs-browser">https://example.invalid/cairn</url>
+  <categories>
+    <category>Utility</category>
+    <category>FileManager</category>
+  </categories>
+  <keywords>
+    <keyword>files</keyword>
+    <keyword>folder</keyword>
+    <keyword>tidy</keyword>
+    <keyword>disk space</keyword>
+  </keywords>
+  <provides>
+    <binary>cairn</binary>
+    <mediatype>inode/directory</mediatype>
+  </provides>
+  <supports>
+    <control>pointing</control>
+    <control>keyboard</control>
+  </supports>
+  <requires>
+    <display_length compare="ge">768</display_length>
+  </requires>
+  <screenshots>
+    <screenshot type="default">
+      <caption>A folder with its files as cards and its folders as glass folders</caption>
+      <image>https://example.invalid/cairn/screenshots/folder-light.png</image>
+    </screenshot>
+    <screenshot>
+      <caption>Free Up Space: what is safe to clear, and why</caption>
+      <image>https://example.invalid/cairn/screenshots/free-up-space-light.png</image>
+    </screenshot>
+  </screenshots>
+  <content_rating type="oars-1.1"/>
+  <branding>
+    <color type="primary" scheme_preference="light">#a497f2</color>
+    <color type="primary" scheme_preference="dark">#3a2f86</color>
+  </branding>
+  <releases>
+    <release version="1.0.0" date="2026-11-20">
+      <description>
+        <p>The first release: a file manager for Ubuntu that keeps folders tidy.</p>
+      </description>
+    </release>
+  </releases>
+</component>

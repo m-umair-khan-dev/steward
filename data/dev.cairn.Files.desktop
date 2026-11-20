@@ -1,0 +1,27 @@
+[Desktop Entry]
+Type=Application
+Name=Cairn
+GenericName=File Manager
+Comment=Browse your files and keep folders tidy
+Keywords=folder;files;manager;explore;disk;tidy;clean;space;
+Exec=cairn %U
+Icon=dev.cairn.Files
+Terminal=false
+StartupNotify=true
+StartupWMClass=dev.cairn.Files
+Categories=Utility;Core;System;FileTools;FileManager;Qt;
+MimeType=inode/directory;
+Actions=new-window;new-workspace;free-up-space;
+X-GNOME-UsesNotifications=false
+
+[Desktop Action new-window]
+Name=New Window
+Exec=cairn --new-window
+
+[Desktop Action new-workspace]
+Name=New Workspace
+Exec=cairn --new-workspace
+
+[Desktop Action free-up-space]
+Name=Free Up Space
+Exec=cairn --free-up-space

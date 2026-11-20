@@ -509,6 +509,15 @@ impl Controller {
         } else {
             gio::File::for_path(paths::expand(target, None))
         };
+        // A file (from the command line or ShowItems): its folder, with it selected.
+        if file.query_file_type(gio::FileQueryInfoFlags::NONE, gio::Cancellable::NONE)
+            == gio::FileType::Regular
+            && let Some(parent) = file.parent()
+        {
+            self.navigate(&parent, true);
+            self.select_when_shown(&file.uri());
+            return;
+        }
         self.navigate(&file, true);
     }
 
