@@ -6,6 +6,7 @@ app's state, accessibility tree, a screenshot and all logs are saved under
 artifacts/e2e/<test-id>/.
 """
 
+import os
 import re
 import subprocess
 import sys
@@ -35,19 +36,33 @@ def _failed(request) -> bool:
 
 
 @pytest.fixture(scope="session")
-def fixture_source(tmp_path_factory) -> Path:
-    """The fixture home, generated once per test run."""
+def fixture_source(tmp_path_factory) -> tuple[Path, dict]:
+    """The fixture home, generated once per test run, and the planted times
+    of its files (relative path: (atime_ns, mtime_ns)), taken before anything
+    reads them."""
     source = tmp_path_factory.mktemp("fixture-source") / "home"
     subprocess.run([sys.executable, "-I", str(MAKE_FIXTURE), str(source)], check=True,
                    capture_output=True)
-    return source
+    times = {}
+    for path in source.rglob("*"):
+        if path.is_file() and not path.is_symlink():
+            st = path.stat()
+            times[path.relative_to(source).as_posix()] = (st.st_atime_ns, st.st_mtime_ns)
+    return source, times
 
 
 @pytest.fixture
 def home(fixture_source, tmp_path) -> Home:
-    """A private copy of the fixture home for this test (sparse files stay sparse)."""
+    """A private copy of the fixture home for this test (sparse files stay sparse).
+
+    Copying reads every file, which moves the source's access times to now,
+    and `cp -a` copies those: the planted "not opened for 200 days" would be
+    lost. The planted times are put back on the copy."""
+    source, times = fixture_source
     dest = tmp_path / "home"
-    subprocess.run(["cp", "-a", "--sparse=always", str(fixture_source), str(dest)], check=True)
+    subprocess.run(["cp", "-a", "--sparse=always", str(source), str(dest)], check=True)
+    for rel, stamps in times.items():
+        os.utime(dest / rel, ns=stamps, follow_symlinks=False)
     copy = Home(dest)
     _ = copy.manifest  # read before the test can change the marker
     return copy

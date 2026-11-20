@@ -63,6 +63,7 @@ Window {
     readonly property var peek: parse(p.peek, ({ open: false }))
     readonly property var pane: parse(p.pane, ({ open: false }))
     readonly property var workspace: parse(p.workspace, ({ open: false }))
+    readonly property var tools: parse(p.tools, ({ page: "" }))
     // A text field has the keyboard: shortcuts it needs (copy, paste, undo,
     // Delete) are left to it.
     readonly property bool typing: !!activeFocusItem && activeFocusItem.cursorPosition !== undefined
@@ -203,9 +204,11 @@ Window {
             nav: win.nav
             prefs: win.prefs
             ops: win.ops
+            tool: ({ clean: "Free Up Space", installed: "Installed", about: "About This Computer" })[win.tools.page] || ""
         }
         PathBar {
             id: pathBar
+            visible: !win.tools.page
             z: 5
             anchors.top: header.bottom
             width: parent.width
@@ -214,8 +217,8 @@ Window {
 
         Item {
             id: body
-            anchors.top: pathBar.bottom
-            anchors.bottom: statusBar.top
+            anchors.top: win.tools.page ? header.bottom : pathBar.bottom
+            anchors.bottom: win.tools.page ? parent.bottom : statusBar.top
             width: parent.width
 
             readonly property bool showPreview: !!win.preview.visible && !win.pane.open
@@ -337,6 +340,14 @@ Window {
                 model: win.workspace
             }
 
+            // Tool pages (Phase 5) cover the folder too.
+            CleanPage {
+                z: 21
+                anchors.fill: parent
+                visible: win.tools.page === "clean"
+                model: win.tools.clean || ({ cards: [], groups: [], disk: { looking: true }, admin: { rows: [] } })
+            }
+
             RightPane {
                 visible: !!win.pane.open
                 x: content.width
@@ -357,6 +368,7 @@ Window {
 
         Rectangle {
             id: statusBar
+            visible: !win.tools.page
             anchors.bottom: parent.bottom
             width: parent.width
             height: win.pane.open ? 50 : 30

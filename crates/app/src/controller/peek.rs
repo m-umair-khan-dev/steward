@@ -92,7 +92,7 @@ impl Controller {
         }
     }
 
-    fn peek_list(&mut self, list: Vec<PathBuf>, at: usize) {
+    pub(super) fn peek_list(&mut self, list: Vec<PathBuf>, at: usize) {
         self.peek = PeekState {
             open: true,
             list,

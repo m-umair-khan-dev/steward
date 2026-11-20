@@ -4,7 +4,7 @@ comparison with the reference captures (P1-T16, HUMAN sign-off).
     make shell, then: docker/scripts/run-e2e python3 tests/tools/capture_screens.py
 
 Writes artifacts/screens/*.png, including frames taken while files fly into
-their kind folders.
+their kind folders. `--from 5` captures only Phase 5 and later screens.
 """
 
 import subprocess
@@ -36,9 +36,13 @@ def main() -> None:
         home = Home(source)
         session = Session(root / "session", home.path)
         session.start()
-        app = App(session, home, extra_env={"CAIRN_MOTION": "1"})
+        app = App(session, home, extra_env={"CAIRN_MOTION": "1",
+                                            "CAIRN_FAKE_NOW": home.manifest["now"]})
         try:
             app.launch()
+            if "--from" in sys.argv and int(sys.argv[sys.argv.index("--from") + 1]) >= 5:
+                later_phases(app, home)
+                return
             app.open_folder(home / "Downloads")
             app.action("win.toggle-preview")
             app.wait_idle()
@@ -189,10 +193,24 @@ def main() -> None:
             app.wait_idle()
             app.screenshot(OUT / "22-symbol-chooser.png")
             app.press("escape")
+            later_phases(app, home)
         finally:
             app.stop()
             session.stop()
     print("\n".join(sorted(str(p.relative_to(REPO)) for p in OUT.glob("*.png"))))
+
+
+def later_phases(app: App, home: Home) -> None:
+    """Phase 5: Free Up Space, a review page, Installed and About."""
+    app.action("win.tool-open", s("clean"))
+    wait_for(lambda: (c := app.state()["clean"]) and c["cards"] and not c["looking"] and c["disk"],
+             "Smart Clean", 60)
+    app.wait_idle()
+    app.screenshot(OUT / "23-free-up-space.png")
+    app.action("win.clean-review", s("duplicates"))
+    app.wait_idle()
+    app.screenshot(OUT / "24-review-duplicates.png")
+    app.action("win.clean-review", s(""))
 
 
 if __name__ == "__main__":

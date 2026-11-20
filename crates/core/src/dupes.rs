@@ -72,8 +72,22 @@ impl HashCache {
     }
 }
 
+/// Opens for reading without touching the access time: hashing a file is
+/// not opening it, and "not opened for 90 days" must stay true (Smart
+/// Clean, Downloads). O_NOATIME is refused for files of other users; those
+/// are opened normally.
+fn open_quietly(path: &Path) -> Option<std::fs::File> {
+    use std::os::unix::fs::OpenOptionsExt;
+    std::fs::OpenOptions::new() // E2-13 allow: opens for reading only
+        .read(true)
+        .custom_flags(rustix::fs::OFlags::NOATIME.bits() as i32)
+        .open(path)
+        .or_else(|_| std::fs::File::open(path))
+        .ok()
+}
+
 fn hash_file(path: &Path, limit: Option<usize>) -> Option<Vec<u8>> {
-    let mut file = std::fs::File::open(path).ok()?;
+    let mut file = open_quietly(path)?;
     let mut hasher = blake3::Hasher::new();
     let mut buffer = vec![0u8; 1 << 16];
     let mut read = 0usize;

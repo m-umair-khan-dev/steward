@@ -12,6 +12,8 @@ Rectangle {
     property var prefs: ({})
     property var ops: ({ jobs: [] })
     property alias filterField: filter
+    /// A tool page's title ("Free Up Space"): the folder controls hide.
+    property string tool: ""
     height: 60
     color: Theme.pane
     Accessible.role: Accessible.ToolBar
@@ -46,7 +48,7 @@ Rectangle {
         }
         Text {
             anchors.verticalCenter: parent.verticalCenter
-            text: root.folder.title || ""
+            text: root.tool || root.folder.title || ""
             color: Theme.ink
             font.pixelSize: 21
             font.weight: Font.DemiBold
@@ -64,18 +66,21 @@ Rectangle {
         spacing: 8
 
         Segmented {
+            visible: !root.tool
             name: "Group by"
             options: [{ id: "none", label: "None" }, { id: "kind", label: "Kind" }, { id: "created", label: "Date" }]
             current: root.folder.groupBy || "none"
             onPicked: id => p.activate("win.group-by", id)
         }
         Segmented {
+            visible: !root.tool
             name: "View"
             options: [{ id: "list", icon: "list", a11y: "List" }, { id: "grid", icon: "grid", a11y: "Grid" }]
             current: root.folder.viewMode || "grid"
             onPicked: id => p.activate("win.view-mode", id)
         }
         IconButton {
+            visible: !root.tool
             icon: "sort"; label: "Sort and size"
             onClicked: sortMenu.popup()
             MenuPopup {
@@ -96,12 +101,14 @@ Rectangle {
             }
         }
         IconButton {
+            visible: !root.tool
             icon: "preview"; label: "Preview pane"
             checked: !!root.prefs.preview
             onClicked: p.activate("win.toggle-preview", "")
         }
         TextField {
             id: filter
+            visible: !root.tool
             // Narrower on small windows, so the folder title keeps its room.
             width: root.width < 1100 ? 150 : 200
             height: 36

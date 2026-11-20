@@ -1,0 +1,65 @@
+# Developer caches Smart Clean may suggest (DESIGN.md §4.3, P5-T03).
+#
+# Only download and build caches that their tool rebuilds by itself: clearing
+# one loses nothing but time. Nothing else is ever suggested as a cache, however
+# big it is or whatever it is called. Paths are relative to the home folder.
+#
+# Format: one [[cache]] table per entry with string values only.
+#   id      stable identifier
+#   name    shown as the row's title
+#   path    folder, relative to home
+#   reason  what happens after clearing it, shown next to the size
+
+[[cache]]
+id = "npm"
+name = "npm download cache"
+path = ".npm/_cacache"
+reason = "npm downloads packages again"
+
+[[cache]]
+id = "yarn"
+name = "Yarn cache"
+path = ".cache/yarn"
+reason = "Yarn downloads packages again"
+
+[[cache]]
+id = "pip"
+name = "pip cache"
+path = ".cache/pip"
+reason = "pip downloads packages again"
+
+[[cache]]
+id = "cargo"
+name = "Cargo registry cache"
+path = ".cargo/registry/cache"
+reason = "Cargo downloads crates again"
+
+[[cache]]
+id = "go"
+name = "Go build cache"
+path = ".cache/go-build"
+reason = "Go rebuilds it; the next build is slower"
+
+[[cache]]
+id = "gradle"
+name = "Gradle caches"
+path = ".gradle/caches"
+reason = "Gradle downloads and builds them again"
+
+[[cache]]
+id = "ccache"
+name = "ccache"
+path = ".cache/ccache"
+reason = "The next C and C++ builds are slower"
+
+[[cache]]
+id = "ccache-old"
+name = "ccache"
+path = ".ccache"
+reason = "The next C and C++ builds are slower"
+
+[[cache]]
+id = "homebrew"
+name = "Homebrew downloads"
+path = ".cache/Homebrew/downloads"
+reason = "Homebrew downloads them again if needed"

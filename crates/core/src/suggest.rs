@@ -13,7 +13,7 @@ use crate::index::Index;
 pub const UNTOUCHED_DAYS: i64 = 90;
 
 /// What the system's package database says. A trait so tests can stand in.
-pub trait PackageDb {
+pub trait PackageDb: Send + Sync {
     /// (package, version) of a `.deb` file.
     fn deb_fields(&self, deb: &Path) -> Option<(String, String)>;
     /// The installed version of a package, if it is installed.

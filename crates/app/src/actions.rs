@@ -84,6 +84,7 @@ pub const ACCELS: &[(&str, &str, &[&str], &str)] = &[
     ("win.copy-across", "", &["F5"], "Copy to the other pane"),
     ("win.move-across", "", &["F6"], "Move to the other pane"),
     ("win.swap-panes", "", &["Ctrl+U"], "Swap the two panes"),
+    ("win.tool-open", "clean", &["Ctrl+Shift+K"], "Free Up Space"),
     ("win.workspace-open", "#1", &["Alt+1"], "Open workspace 1"),
     ("win.workspace-open", "#2", &["Alt+2"], "Open workspace 2"),
     ("win.workspace-open", "#3", &["Alt+3"], "Open workspace 3"),
@@ -306,6 +307,31 @@ fn create() -> (gio::SimpleActionGroup, gio::SimpleActionGroup) {
         controller::with(|c| c.start_indexer())
     });
     simple(&win, "tidy", || controller::with(|c| c.plan_tidy()));
+    with_string(&win, "tool-open", |page| {
+        controller::with(|c| c.open_tool(page))
+    });
+    simple(&win, "tool-close", || controller::with(|c| c.close_tool()));
+    with_string(&win, "clean-review", |id| {
+        controller::with(|c| c.clean_review(id))
+    });
+    simple(&win, "clean-look-again", || {
+        controller::with(|c| c.clean_look_again())
+    });
+    with_string(&win, "clean-tick", |what| {
+        controller::with(|c| c.clean_tick(what))
+    });
+    with_string(&win, "clean-trash", |id| {
+        controller::with(|c| c.clean_trash(id))
+    });
+    with_string(&win, "clean-copy", |id| {
+        controller::with(|c| c.clean_copy(id))
+    });
+    with_string(&win, "clean-show", |path| {
+        controller::with(|c| c.clean_show(path))
+    });
+    with_string(&win, "clean-peek", |path| {
+        controller::with(|c| c.clean_peek(path))
+    });
     simple(&win, "workspace-new", || {
         controller::with(|c| c.ask_new_workspace())
     });

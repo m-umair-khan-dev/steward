@@ -561,7 +561,9 @@ impl Controller {
             self.ops.pending_select = created;
             self.apply_pending_select();
         }
-        if let Some(text) = self.report_text(&report) {
+        let clean_text = self.clean_report_text(&report);
+        self.clean_after_op(report.outcome == Outcome::Undo);
+        if let Some(text) = clean_text.or_else(|| self.report_text(&report)) {
             let undo = report.outcome != Outcome::Undo
                 && report.done > 0
                 && report.kind != "empty-trash"

@@ -24,6 +24,7 @@ import hashlib
 import io
 import json
 import os
+import re
 import shutil
 import struct
 import sys
@@ -33,7 +34,7 @@ import zlib
 from datetime import datetime, timezone
 from pathlib import Path
 
-RECIPE_VERSION = 1
+RECIPE_VERSION = 2
 MARKER = ".cairn-fixture"
 NOW = int(datetime(2026, 11, 1, 12, 0, 0, tzinfo=timezone.utc).timestamp())
 DAY = 86_400
@@ -241,6 +242,7 @@ class Builder:
         self.root = root
         self.files: dict[str, dict] = {}
         self.dir_age: dict[str, float] = {}
+        self.links: dict[str, str] = {}
 
     def _path(self, rel: str) -> Path:
         path = self.root / rel
@@ -267,6 +269,11 @@ class Builder:
         os.chmod(path, mode)
         self._record(rel, size, age_days, atime_days, sparse=True)
 
+    def link(self, rel: str, target: str) -> None:
+        path = self._path(rel)
+        os.symlink(target, path)
+        self.links[rel] = target
+
     def dir(self, rel: str, age_days: float = 1) -> None:
         (self.root / rel).mkdir(parents=True, exist_ok=True)
         self.dir_age[rel] = age_days
@@ -280,9 +287,12 @@ class Builder:
             mtime = int((NOW - info["age_days"] * DAY) * 10**9)
             atime = int((NOW - info["atime_days"] * DAY) * 10**9)
             os.utime(self.root / rel, ns=(atime, mtime))
+        for rel in self.links:
+            stamp = int((NOW - 20 * DAY) * 10**9)
+            os.utime(self.root / rel, ns=(stamp, stamp), follow_symlinks=False)
         # Directories last, deepest first, so setting children's times does not
         # disturb their parents'.
-        dirs = sorted((p for p in self.root.rglob("*") if p.is_dir()),
+        dirs = sorted((p for p in self.root.rglob("*") if p.is_dir() and not p.is_symlink()),
                       key=lambda p: len(p.parts), reverse=True)
         for path in dirs + [self.root]:
             rel = path.relative_to(self.root).as_posix() if path != self.root else ""
@@ -399,6 +409,20 @@ def build(root: Path) -> dict:
     for rel, size in dev_caches.items():
         b.sparse(rel, size, b"", 20)
     b.sparse(".var/app/org.example.Removed/data/state.bin", 50 * MIB, b"", 120, atime_days=120)
+    # Smart Clean (Phase 5): a Flatpak that is still installed (the tests' fake
+    # `flatpak` lists it), a Snap that is not, a symlink inside a cache that
+    # points at Documents (E5-06), and big folders called "cache" that are not
+    # on the allow-list (E5-03): one hidden, one in plain sight.
+    b.sparse(".var/app/org.example.Kept/data/state.bin", 20 * MIB, b"", 150, atime_days=150)
+    b.sparse("snap/retired-tool/common/data.bin", 30 * MIB, b"", 130, atime_days=130)
+    b.link(".npm/_cacache/docs", "../../Documents")
+    b.sparse(".config/Studio/cache/blob.bin", 700 * MIB, b"", 15)
+    for n in range(3):
+        b.sparse(f"Documents/cache/part-{n + 1}.bin", 100 * MIB, f"part {n + 1}".encode(), 15)
+    # Duplicates: a filed copy of a Downloads file (the Downloads one is spare),
+    # and two filed copies (one is kept, the other is the user's call).
+    b.file("Pictures/Backgrounds/wallpaper-4k.png", png(64, 36, seed=3), 2)
+    b.file("Pictures/Favourites/IMG_4100.jpg", jpeg("holiday-0"), 60)
 
     manifest = describe(b)
     b.finish(manifest)
@@ -461,7 +485,82 @@ def describe(b: Builder) -> dict:
                        for rel, size in dev_caches_of(files).items()},
         "installers": {"Downloads/photo-tool_3.2.0_amd64.deb": {"package": "photo-tool",
                                                                  "version": "3.2.0"}},
+        "clean": clean_cards(b, duplicates),
     }
+
+
+# Smart Clean (DESIGN.md §4.3), as the tests' fake tools describe the system:
+# photo-tool 3.2.0 is installed (dpkg), org.example.Kept is an installed
+# Flatpak, and no Snap is installed. Each path belongs to the first card that
+# finds it, in this order.
+DEV_CACHES = (".npm/_cacache", ".cache/yarn", ".cache/pip", ".cargo/registry/cache",
+              ".cache/go-build", ".gradle/caches", ".cache/ccache", ".ccache",
+              ".cache/Homebrew/downloads")
+BIG_FILE = 256 * MIB
+COPY_NAME = re.compile(r"( \(\d+\)| copy( \d+)?)(\.[^./]+)?$|^Copy of ", re.IGNORECASE)
+
+
+def clean_cards(b: Builder, duplicates: list[list[str]]) -> dict:
+    files = b.files
+
+    def under(prefix: str) -> list[str]:
+        return [rel for rel in files if rel.startswith(prefix + "/")]
+
+    def visible(rel: str) -> bool:
+        return not any(part.startswith(".") for part in rel.split("/"))
+
+    def age(rel: str) -> float:
+        return files[rel]["age_days"]
+
+    cards: dict[str, list[dict]] = {}
+    cards["dev_caches"] = [
+        {"path": c, "bytes": sum(files[r]["size"] for r in under(c)), "ticked": True}
+        for c in DEV_CACHES if under(c)]
+
+    dupes = []
+    for group in duplicates:
+        group = [rel for rel in group if visible(rel)]
+        if len(group) < 2:
+            continue
+        loose = lambda rel: rel.split("/", 1)[0] in ("Downloads", "Desktop")  # noqa: E731
+        copy_like = lambda rel: bool(COPY_NAME.search(rel.rsplit("/", 1)[-1]))  # noqa: E731
+        keep = min(group, key=lambda rel: (loose(rel), copy_like(rel), -age(rel), len(rel), rel))
+        for rel in sorted(group):
+            dupes.append({"path": rel, "bytes": files[rel]["size"], "keep": rel == keep,
+                          "ticked": rel != keep and (loose(rel) or copy_like(rel))})
+    cards["duplicates"] = dupes
+
+    cards["installers"] = [{"path": "Downloads/photo-tool_3.2.0_amd64.deb",
+                            "bytes": files["Downloads/photo-tool_3.2.0_amd64.deb"]["size"],
+                            "ticked": True}]
+    stale = "Documents/Projects/old-site/node_modules"
+    cards["stale_builds"] = [{"path": stale, "bytes": sum(files[r]["size"] for r in under(stale)),
+                              "ticked": False}]
+    cards["leftovers"] = [{"path": p, "bytes": sum(files[r]["size"] for r in under(p)), "ticked": False}
+                          for p in (".var/app/org.example.Removed", "snap/retired-tool")]
+    claimed = {i["path"] for card in cards.values() for i in card}
+
+    def free(rel: str) -> bool:
+        return not any(rel == c or rel.startswith(c + "/") for c in claimed)
+
+    big = sorted((rel for rel in files if visible(rel) and files[rel]["size"] >= BIG_FILE
+                  and not rel.endswith(PARTIAL_SUFFIXES) and free(rel)),
+                 key=lambda rel: (-files[rel]["size"], rel))
+    cards["big_files"] = [{"path": rel, "bytes": files[rel]["size"], "ticked": False} for rel in big]
+    claimed |= set(big)
+    cards["screencasts"] = [{"path": rel, "bytes": files[rel]["size"], "ticked": False}
+                            for rel in sorted(under("Videos/Screencasts")) if age(rel) >= 90 and free(rel)]
+    claimed |= {i["path"] for i in cards["screencasts"]}
+    old = [rel for rel in sorted(files) if rel.count("/") == 1 and rel.startswith("Downloads/")
+           and not rel.endswith(PARTIAL_SUFFIXES)
+           and min(files[rel]["age_days"], files[rel]["atime_days"]) >= 90 and free(rel)]
+    cards["old_downloads"] = [{"path": rel, "bytes": files[rel]["size"], "ticked": False} for rel in old]
+
+    totals = {card: sum(i["bytes"] for i in items if not i.get("keep")) for card, items in cards.items()}
+    ticked = sum(i["bytes"] for items in cards.values() for i in items if i["ticked"])
+    return {"cards": cards, "totals": totals, "ticked_bytes": ticked,
+            "not_listed": [".config/Studio/cache", "Documents/cache"],
+            "cache_symlink": {"path": ".npm/_cacache/docs", "target": "../../Documents"}}
 
 
 def dev_caches_of(files: dict) -> dict:
@@ -481,7 +580,10 @@ def digest(root: Path) -> str:
     for path in sorted(root.rglob("*")):
         st = path.lstat()
         rel = path.relative_to(root).as_posix()
-        kind = "d" if path.is_dir() else "f"
+        kind = "l" if path.is_symlink() else ("d" if path.is_dir() else "f")
+        if kind == "l":
+            hasher.update(f"{rel}\0l\0{os.readlink(path)}\0".encode())
+            continue
         hasher.update(f"{rel}\0{kind}\0{st.st_mode & 0o7777:o}\0{st.st_mtime_ns}\0".encode())
         if kind == "f":
             hasher.update(f"{st.st_size}\0".encode())

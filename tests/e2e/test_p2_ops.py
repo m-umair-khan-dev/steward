@@ -235,7 +235,7 @@ def _wl(session, *args, input_text=None):
 
 
 def test_E2_08_clipboard_formats(session, app, home):
-    """[verify in headless] See ADR 0011 if the compositor offers no clipboard
+    """[verify in headless] Skipped if the compositor offers no clipboard
     to clients without focus."""
     app.open_folder(home / "Downloads")
     app.select("notes.txt", "export.csv")
@@ -243,7 +243,7 @@ def test_E2_08_clipboard_formats(session, app, home):
     app.wait_idle()
     types = _wl(session, "wl-paste", "--list-types")
     if types.returncode != 0:
-        pytest.skip(f"no clipboard access for other clients here: {types.stderr.strip()} (ADR 0011)")
+        pytest.skip(f"no clipboard access for other clients here: {types.stderr.strip()}")
     offered = types.stdout.split()
     assert "x-special/gnome-copied-files" in offered and "text/uri-list" in offered
     gnome = _wl(session, "wl-paste", "--type", "x-special/gnome-copied-files").stdout

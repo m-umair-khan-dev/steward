@@ -129,6 +129,7 @@ impl Controller {
         {
             return;
         }
+        self.close_tool();
         self.workspace.open = Some(id);
         self.workspace.tab = "overview".into();
         self.close_search();

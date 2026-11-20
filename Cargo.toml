@@ -24,7 +24,7 @@ glib = "0.22"
 gio = "0.22"
 rusqlite = { version = "0.41", features = ["bundled"] }
 # Safe syscalls the standard library lacks: renameat2(RENAME_NOREPLACE), getuid.
-rustix = { version = "1", features = ["fs", "process"] }
+rustix = { version = "1", features = ["fs", "process", "system"] }
 serde = { version = "1", features = ["derive"] }
 serde_json = "1"
 # Duplicate finder: full-content hashes (DESIGN.md §7.1).

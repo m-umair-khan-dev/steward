@@ -49,6 +49,9 @@ const QML_FILES: &[&str] = &[
     "qml/WorkspacePage.qml",
     "qml/FolderStyleDialog.qml",
     "qml/MenuPopup.qml",
+    "qml/SymbolFolder.qml",
+    "qml/TickBox.qml",
+    "qml/CleanPage.qml",
 ];
 
 fn main() {

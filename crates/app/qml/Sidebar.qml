@@ -104,6 +104,20 @@ Rectangle {
                     Repeater { model: root.favorites; delegate: Row_ {} }
                 }
             }
+            // Tools (Phase 5): Free Up Space and Installed.
+            Heading { text: "Tools" }
+            Item {
+                width: parent.width
+                height: toolsList.implicitHeight
+                Accessible.role: Accessible.List
+                Accessible.name: "Tools"
+                Column {
+                    id: toolsList
+                    width: parent.width
+                    spacing: 2
+                    Repeater { model: root.model.tools || []; delegate: ToolRow {} }
+                }
+            }
             // "Locations ›" opens and closes, as in the reference.
             Heading {
                 id: locationsHeading
@@ -150,7 +164,8 @@ Rectangle {
         color: computerHover.hovered ? Theme.hover : "transparent"
         Accessible.role: Accessible.Button
         Accessible.name: "Computer"
-        Accessible.onPressAction: p.activate("win.go-to", "/")
+        Accessible.description: "About This Computer"
+        Accessible.onPressAction: p.activate("win.tool-open", "about")
         Rectangle { width: parent.width; height: 1; color: Theme.line }
         Icon { x: 6; anchors.verticalCenter: parent.verticalCenter; name: "computer"; size: 30; color: Theme.ink }
         Column {
@@ -169,7 +184,7 @@ Rectangle {
             }
         }
         HoverHandler { id: computerHover }
-        TapHandler { onTapped: p.activate("win.go-to", "/") }
+        TapHandler { onTapped: p.activate("win.tool-open", "about") }
     }
 
     component Heading: Text {
@@ -184,7 +199,7 @@ Rectangle {
     component Row_: Rectangle {
         id: row
         required property var modelData
-        readonly property bool selected: root.model.selected === modelData.key
+        readonly property bool selected: !root.model.page && root.model.selected === modelData.key
         x: 12
         width: root.width - 24
         height: 38
@@ -245,6 +260,37 @@ Rectangle {
                 menu.popup()
             }
         }
+    }
+
+    component ToolRow: Rectangle {
+        id: tool
+        required property var modelData
+        x: 12
+        width: root.width - 24
+        height: 38
+        radius: 10
+        color: modelData.selected ? Theme.alpha(Theme.accent, 0.16) : (toolHover.hovered ? Theme.hover : "transparent")
+        Accessible.role: Accessible.Button
+        Accessible.name: modelData.label
+        Accessible.onPressAction: p.activate("win.tool-open", modelData.id)
+        Icon { x: 10; anchors.verticalCenter: parent.verticalCenter; name: tool.modelData.icon; size: 20; color: Theme.accentText }
+        Text {
+            x: 42; anchors.verticalCenter: parent.verticalCenter
+            text: tool.modelData.label
+            color: Theme.ink
+            font.pixelSize: 15
+            font.weight: tool.modelData.selected ? Font.Bold : Font.Normal
+        }
+        Text {
+            visible: tool.modelData.count !== undefined && tool.modelData.count !== null
+            anchors.right: parent.right; anchors.rightMargin: 12
+            anchors.verticalCenter: parent.verticalCenter
+            text: tool.modelData.count === undefined || tool.modelData.count === null ? "" : tool.modelData.count
+            color: Theme.faint
+            font.pixelSize: 14
+        }
+        HoverHandler { id: toolHover }
+        TapHandler { onTapped: p.activate("win.tool-open", tool.modelData.id) }
     }
 
     component WorkspaceRow: Rectangle {

@@ -4,6 +4,7 @@
 //! shared by the app, the indexer and the command-line tool (DESIGN.md §7.1).
 //! It uses GLib and GIO for files, mounts and models.
 
+pub mod clean;
 pub mod clip;
 pub mod dupes;
 pub mod entry;
@@ -18,6 +19,7 @@ pub mod plan;
 pub mod sort;
 pub mod store;
 pub mod suggest;
+pub mod tools;
 pub mod workspace;
 
 pub use entry::{EntryData, FileEntry};

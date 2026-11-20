@@ -1,5 +1,8 @@
 <RCC>
   <qresource prefix="/icons">
+    <file alias="gauge.svg">icons/gauge.svg</file>
+    <file alias="shield.svg">icons/shield.svg</file>
+    <file alias="terminal.svg">icons/terminal.svg</file>
     <file alias="back.svg">icons/back.svg</file>
     <file alias="box.svg">icons/box.svg</file>
     <file alias="briefcase.svg">icons/briefcase.svg</file>

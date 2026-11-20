@@ -18,15 +18,19 @@ use serde_json::{Value, json};
 use cairn_core::sort::{self, GroupBy, SortKey};
 use cairn_core::{FileEntry, FolderModel, Kind, LoadState};
 
+mod about;
+mod clean;
 mod downloads;
 pub use downloads::downloads_folder;
 mod index;
+mod installed;
 mod ops;
 mod pane;
 mod peek;
 mod search;
 mod style;
 mod tidy;
+mod tools;
 mod workspaces;
 
 use crate::sidebar::{self, SidebarEntry};
@@ -133,7 +137,8 @@ pub mod dirty {
     pub const PEEK: u32 = 8192;
     pub const PANE: u32 = 16384;
     pub const WORKSPACE: u32 = 32768;
-    pub const ALL: u32 = 65535;
+    pub const TOOLS: u32 = 65536;
+    pub const ALL: u32 = 131071;
 }
 
 /// One-off things for QML to do.
@@ -191,6 +196,10 @@ pub struct Controller {
     pane: pane::PaneState,
     workspace: workspaces::WorkspaceState,
     style: style::StyleState,
+    tools: tools::ToolsState,
+    clean: clean::CleanState,
+    installed: installed::InstalledState,
+    about: about::AboutState,
     /// Path bar: folders whose name matches what is typed, and the one chosen.
     path_matches: Vec<PathBuf>,
     path_match: Option<usize>,
@@ -284,6 +293,10 @@ pub fn init(notifier: impl Fn() + 'static) {
         pane: pane::PaneState::default(),
         workspace: workspaces::WorkspaceState::default(),
         style: style::StyleState::default(),
+        tools: tools::ToolsState::default(),
+        clean: clean::CleanState::default(),
+        installed: installed::InstalledState::default(),
+        about: about::AboutState::default(),
         path_matches: Vec::new(),
         path_match: None,
         dialog: String::new(),
@@ -412,6 +425,7 @@ impl Controller {
     }
 
     pub fn navigate(&mut self, folder: &gio::File, record: bool) {
+        self.close_tool();
         if let Some(current) = self.current() {
             if current.equal(folder) {
                 self.model.reload();
@@ -449,6 +463,11 @@ impl Controller {
     }
 
     pub fn go_back(&mut self) {
+        // Back from a tool page returns to the folder under it.
+        if !self.tools.page.is_empty() {
+            self.close_tool();
+            return;
+        }
         if let Some(previous) = self.back.pop() {
             if let Some(current) = self.current() {
                 self.forward.push(current);
@@ -1598,6 +1617,13 @@ impl Controller {
                 "path": e.file.path().map(|p| p.display().to_string()).unwrap_or_else(|| e.file.uri().to_string()),
             })).collect::<Vec<_>>(),
             "workspaces": self.workspaces_json(),
+            "tools": [
+                { "id": "clean", "label": gettext("Free Up Space"), "icon": "gauge",
+                  "selected": self.tools.page == "clean" },
+                { "id": "installed", "label": gettext("Installed"), "icon": "package",
+                  "selected": self.tools.page == "installed", "count": self.installed_count() },
+            ],
+            "page": self.tools.page,
             "hidden": self.hidden,
             "selected": selected,
             "expanded": settings::get().boolean("sidebar-visible"),
@@ -1726,7 +1752,7 @@ impl Controller {
 
     pub fn nav_json(&self) -> Value {
         json!({
-            "back": !self.back.is_empty(),
+            "back": !self.back.is_empty() || !self.tools.page.is_empty(),
             "forward": !self.forward.is_empty(),
             "up": self.current().and_then(|f| f.parent()).is_some(),
         })
@@ -1836,6 +1862,8 @@ impl Controller {
             "pane": self.pane_test_json(),
             "workspace": self.workspace_test_json(),
             "folder_styles": self.styles_test_json(),
+            "tools": { "page": self.tools.page },
+            "clean": self.clean_test_json(),
             // Folder numbers as the cards show them, by name.
             "folder_stats": self.visible.iter().filter(|e| e.is_dir()).filter_map(|e| {
                 let (items, bytes) = self.folder_numbers(&e.data().file.path()?)?;
