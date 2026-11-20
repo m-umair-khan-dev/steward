@@ -38,6 +38,11 @@ QtObject {
     function deep(kind) { return (tints[kind] || tints.other)[0] }
     function light(kind) { return (tints[kind] || tints.other)[1] }
 
+    // QtQuick.Effects (blur, shadows, GPU tinting) is in Qt 6.5+. Ubuntu
+    // 24.04 has Qt 6.4: Main.qml checks at start-up and sets this; without it
+    // the Fx* components and Icon.qml use their fallbacks.
+    property bool effects: false
+
     readonly property int radius: 12
     readonly property int springMs: 220
 }

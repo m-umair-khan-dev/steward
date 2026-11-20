@@ -113,7 +113,9 @@ def test_E2_03_copy_paste_then_undo_removes_only_the_copies(app, home):
     app.wait_idle()
     for n in names:
         assert (home / "Documents" / n).read_bytes() == (home / "Downloads" / n).read_bytes()
-    assert sorted(app.folder()["selection"]) == sorted(names), "the copies are selected"
+    # The copies reach the folder through its file monitor, which is slower
+    # on older GLib (24.04): wait for the selection rather than read it once.
+    app.wait_for(lambda: sorted(app.folder()["selection"]) == sorted(names), "the copies to be selected")
 
     app.press("ctrl+z")
     app.wait_for(lambda: not any((home / "Documents" / n).exists() for n in names), "copies to go")

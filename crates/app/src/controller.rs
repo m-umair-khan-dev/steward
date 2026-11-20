@@ -341,6 +341,10 @@ pub fn init(notifier: impl Fn() + 'static) {
     with(|c| {
         c.motion = c.motion_wanted();
         if let Some(interface) = &c.interface {
+            // GNOME's dark mode: QML uses it where Qt cannot report it (Qt 6.4).
+            interface.connect_changed(Some("color-scheme"), |_, _| {
+                later(|c| c.mark(dirty::PREFS));
+            });
             interface.connect_changed(Some("enable-animations"), |_, _| {
                 later(|c| {
                     c.motion = c.motion_wanted();
@@ -1843,6 +1847,14 @@ impl Controller {
             "indexRunning": self.index.running,
             "home": paths::display_path(&glib::home_dir()),
             "defaultFileManager": s.boolean("default-file-manager"),
+            // GNOME's dark mode, for Qt versions that cannot report it (24.04).
+            "systemDark": self.interface.as_ref().is_some_and(|i| {
+                i.settings_schema()
+                    .is_some_and(|schema| schema.has_key("color-scheme"))
+                    && i.string("color-scheme") == "prefer-dark"
+            }),
+            // Test hook: force the Qt 6.4 fallbacks on any Qt.
+            "legacyFx": std::env::var("CAIRN_LEGACY_FX").is_ok_and(|v| v == "1"),
         })
     }
 

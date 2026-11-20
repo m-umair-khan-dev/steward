@@ -1,5 +1,4 @@
 import QtQuick
-import QtQuick.Effects
 
 // A tinted glass folder (ADR 0008, DESIGN.md §3.2): coloured back with a tab,
 // two sheets of paper, and a frosted front that really blurs what is behind.
@@ -56,9 +55,9 @@ Item {
         Behavior on y { enabled: Theme.motion; SpringAnimation { spring: 4; damping: 0.32 } }
         Behavior on scale { enabled: Theme.motion; SpringAnimation { spring: 4; damping: 0.32 } }
 
-        layer.enabled: true
-        layer.effect: MultiEffect {
-            shadowEnabled: true
+        layer.enabled: Theme.effects
+        layer.samplerName: "tex"
+        layer.effect: FxShadow {
             shadowColor: Theme.alpha(root.deep, 0.55)
             shadowBlur: root.lifted ? 0.9 : 0.5
             shadowVerticalOffset: root.lifted ? 8 : 3
@@ -87,6 +86,7 @@ Item {
 
         ShaderEffectSource {
             id: behindTexture
+            live: Theme.effects
             sourceItem: behind
             sourceRect: Qt.rect(front.x, front.y, front.width, front.height)
             visible: false
@@ -97,16 +97,11 @@ Item {
             visible: false
             layer.enabled: true
         }
-        MultiEffect {
+        // Frosted glass on Qt 6.5+; on Qt 6.4 the front stays translucent.
+        FxBlur {
             x: front.x; y: front.y; width: front.width; height: front.height
             source: behindTexture
-            blurEnabled: true
-            blur: 1.0
-            blurMax: 40
-            maskEnabled: true
-            maskSource: frontMask
-            maskThresholdMin: 0.5
-            maskSpreadAtMin: 1.0
+            mask: frontMask
         }
         Rectangle {
             id: front

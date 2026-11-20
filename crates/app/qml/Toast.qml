@@ -1,5 +1,4 @@
 import QtQuick
-import QtQuick.Effects
 
 // A toast that springs up from the bottom edge (DESIGN.md §3.5).
 Rectangle {
@@ -24,8 +23,9 @@ Rectangle {
     visible: opacity > 0.01
     Behavior on y { enabled: Theme.motion; SpringAnimation { spring: 3.5; damping: 0.3 } }
     Behavior on opacity { NumberAnimation { duration: 160 } }
-    layer.enabled: true
-    layer.effect: MultiEffect { shadowEnabled: true; shadowOpacity: 0.3; shadowBlur: 0.8; shadowVerticalOffset: 6 }
+    layer.enabled: Theme.effects
+    layer.samplerName: "tex"
+    layer.effect: FxShadow { shadowOpacity: 0.3; shadowBlur: 0.8; shadowVerticalOffset: 6 }
 
     Accessible.role: Accessible.AlertMessage
     Accessible.name: text

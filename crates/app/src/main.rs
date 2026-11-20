@@ -8,6 +8,7 @@ mod controller;
 mod dbus;
 mod file_manager;
 mod format;
+mod icons;
 mod launch;
 mod paths;
 mod report;

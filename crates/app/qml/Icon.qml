@@ -1,7 +1,8 @@
 import QtQuick
-import QtQuick.Effects
 
-// One of our own line icons (qml/icons), recoloured.
+// One of our own line icons (qml/icons), recoloured. With QtQuick.Effects
+// (Qt 6.5+) the GPU tints it; on Qt 6.4 the SVG itself is recoloured
+// (p.svgicon), which looks the same.
 Item {
     id: root
     property string name: "folder"
@@ -14,16 +15,18 @@ Item {
     Image {
         id: image
         anchors.fill: parent
-        source: root.name ? "qrc:/icons/" + root.name + ".svg" : ""
+        source: !root.name ? "" : (Theme.effects ? "qrc:/icons/" + root.name + ".svg" : p.svgicon(root.name, root.color.toString()))
         sourceSize: Qt.size(root.size * 2, root.size * 2)
-        visible: false
+        visible: !Theme.effects
         smooth: true
     }
-    MultiEffect {
+    Loader {
         anchors.fill: parent
-        source: image
-        brightness: 1.0
-        colorization: 1.0
-        colorizationColor: root.color
+        active: Theme.effects
+        source: "qrc:/fx/Tint.qml"
+        onLoaded: {
+            item.source = image
+            item.colorizationColor = Qt.binding(() => root.color)
+        }
     }
 }

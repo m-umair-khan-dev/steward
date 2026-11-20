@@ -1,5 +1,4 @@
 import QtQuick
-import QtQuick.Effects
 
 // Pill-shaped segmented control whose selection slides (DESIGN.md §3.4).
 // Options: [{ id, label?, icon?, a11y }].

@@ -102,7 +102,9 @@ def click(app, name: str, role: str | None, within: str | None) -> None:
         if node is not None:
             names = actions_of(node)
             if names:
-                index = next((names.index(a) for a in PREFERRED_ACTIONS if a in names), 0)
+                # Qt 6.4 names them "Press" and "Toggle"; newer Qt "press", "toggle".
+                lower = [n.lower() for n in names]
+                index = next((lower.index(a) for a in PREFERRED_ACTIONS if a in lower), 0)
                 node.get_action_iface().do_action(index)
                 return
         if time.monotonic() > deadline:

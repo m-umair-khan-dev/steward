@@ -1,6 +1,5 @@
 import QtQuick
 import QtQuick.Controls.Basic
-import QtQuick.Effects
 
 // A dialog drawn inside the window (scrim plus a rounded card). It closes
 // through the presenter so the state the tests read stays true.
@@ -37,8 +36,9 @@ FocusScope {
         focus: true
         scale: root.visible ? 1 : 0.94
         Behavior on scale { enabled: Theme.motion; SpringAnimation { spring: 4; damping: 0.35 } }
-        layer.enabled: true
-        layer.effect: MultiEffect { shadowEnabled: true; shadowOpacity: 0.3; shadowBlur: 1.0; shadowVerticalOffset: 10 }
+        layer.enabled: Theme.effects
+        layer.samplerName: "tex"
+        layer.effect: FxShadow { shadowOpacity: 0.3; shadowBlur: 1.0; shadowVerticalOffset: 10 }
         Keys.onEscapePressed: root.close()
         TapHandler {} // keeps clicks on the card from reaching the scrim
 

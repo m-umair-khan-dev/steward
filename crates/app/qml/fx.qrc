@@ -1,0 +1,10 @@
+<RCC>
+  <!-- Effects that need Qt 6.5+ (QtQuick.Effects). Kept out of the QML module so
+       Qt 6.4 (Ubuntu 24.04) never compiles or loads them; Theme.effects says
+       whether they can be used (feature check at start-up, Main.qml). -->
+  <qresource prefix="/fx">
+    <file alias="Shadow.qml">fx/Shadow.qml</file>
+    <file alias="Tint.qml">fx/Tint.qml</file>
+    <file alias="Blur.qml">fx/Blur.qml</file>
+  </qresource>
+</RCC>

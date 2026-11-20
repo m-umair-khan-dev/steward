@@ -46,10 +46,16 @@ RUN --mount=type=cache,target=/var/cache/apt,sharing=locked \
     apt-get update && \
     apt-get install -y --no-install-recommends \
       qt6-base-dev qt6-base-dev-tools qt6-declarative-dev qt6-declarative-dev-tools qmake6 \
-      qml6-module-qtquick qml6-module-qtquick-window qml6-module-qtquick-effects \
+      qml6-module-qtquick qml6-module-qtquick-window \
       qml6-module-qtquick-shapes qml6-module-qtqml-workerscript qml6-module-qtquick-templates \
       qml6-module-qtquick-controls qml6-module-qtquick-layouts \
-      qt6-wayland qt6-qpa-plugins qt6-svg-plugins libqt6svg6 libgl-dev
+      qt6-wayland qt6-qpa-plugins libqt6svg6 libgl-dev && \
+    # Only in Qt 6.5+ (not on 24.04, which has Qt 6.4): installed where they
+    # exist; the app checks for QtQuick.Effects at run time.
+    for optional in qml6-module-qtquick-effects qt6-svg-plugins; do \
+      if apt-cache show "$optional" >/dev/null 2>&1; then \
+        apt-get install -y --no-install-recommends "$optional"; fi; \
+    done
 # Peek (Phase 3): PDF pages, audio and video, and the folder picker in Preferences.
 RUN --mount=type=cache,target=/var/cache/apt,sharing=locked \
     --mount=type=cache,target=/var/lib/apt,sharing=locked \
@@ -108,9 +114,10 @@ USER ${HOST_UID}:${HOST_GID}
 
 # ---- build: release binaries -------------------------------------------------
 FROM base AS build
+ARG UBUNTU_VERSION=unknown
 COPY . .
 RUN --mount=type=cache,target=/usr/local/cargo/registry \
-    --mount=type=cache,target=/var/cache/cargo-target \
+    --mount=type=cache,id=cargo-target-build-${UBUNTU_VERSION},target=/var/cache/cargo-target \
     cargo build --release --locked -p cairn -p cairn-indexer -p cairn-cli && \
     mkdir -p /out && \
     cp "${CARGO_TARGET_DIR}/release/cairn" "${CARGO_TARGET_DIR}/release/cairn-indexer" \
@@ -120,6 +127,9 @@ RUN --mount=type=cache,target=/usr/local/cargo/registry \
 FROM base AS package
 SHELL ["/bin/bash", "-o", "pipefail", "-c"]
 ARG CARGO_DEB_VERSION
+# One build cache per Ubuntu release: objects built against one release's Qt
+# must never be linked on another (24.04 has Qt 6.4, 26.10 Qt 6.11).
+ARG UBUNTU_VERSION=unknown
 RUN --mount=type=cache,target=/var/cache/apt,sharing=locked \
     --mount=type=cache,target=/var/lib/apt,sharing=locked \
     apt-get update && apt-get install -y --no-install-recommends lintian
@@ -128,7 +138,7 @@ RUN --mount=type=cache,target=/usr/local/cargo/registry \
 COPY . .
 # E6-07: lintian on the package, with the accepted tags (each with its reason).
 RUN --mount=type=cache,target=/usr/local/cargo/registry \
-    --mount=type=cache,target=/var/cache/cargo-target \
+    --mount=type=cache,id=cargo-target-package-${UBUNTU_VERSION},target=/var/cache/cargo-target \
     packaging/build-deb /out && \
     lintian --fail-on error,warning --suppress-tags-from-file docker/scripts/lintian-accepted /out/*.deb
 

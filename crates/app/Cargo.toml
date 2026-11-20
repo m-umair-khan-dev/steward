@@ -71,3 +71,14 @@ assets = [
     ["../../target/package/cairn.1.gz", "usr/share/man/man1/", "644"],
     ["../../packaging/debian/copyright", "usr/share/doc/cairn/", "644"],
 ]
+
+# Ubuntu 24.04 (GNOME 46, Qt 6.4): no qml6-module-qtquick-effects (the app falls
+# back without blur and shadows) and the SVG plugin is in libqt6svg6.
+# packaging/build-deb picks this variant on 24.04.
+[package.metadata.deb.variants.ubuntu2404]
+name = "cairn"   # a variant would otherwise be named cairn-ubuntu2404
+depends = """$auto, qml6-module-qtquick, qml6-module-qtquick-window, qml6-module-qtquick-controls, \
+qml6-module-qtquick-templates, qml6-module-qtquick-layouts, \
+qml6-module-qtquick-shapes, qml6-module-qtqml-workerscript, qml6-module-qtquick-dialogs, \
+qml6-module-qtquick-pdf, qml6-module-qtmultimedia, qml6-module-qtcore, qt6-wayland, libqt6svg6, \
+shared-mime-info, dbus-user-session | dbus-x11"""

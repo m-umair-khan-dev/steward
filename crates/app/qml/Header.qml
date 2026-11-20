@@ -1,6 +1,5 @@
 import QtQuick
 import QtQuick.Controls.Basic
-import QtQuick.Effects
 
 // The header (DESIGN.md §3.3; reference smart-downloads.png): back/forward
 // pill, folder title, grouping and view controls, preview toggle, filter
@@ -36,8 +35,9 @@ Rectangle {
             width: 78; height: 38; radius: 19
             color: Theme.pane
             border.color: Theme.line
-            layer.enabled: true
-            layer.effect: MultiEffect { shadowEnabled: true; shadowOpacity: 0.10; shadowBlur: 0.5; shadowVerticalOffset: 1 }
+            layer.enabled: Theme.effects
+            layer.samplerName: "tex"
+            layer.effect: FxShadow { shadowOpacity: 0.10; shadowBlur: 0.5; shadowVerticalOffset: 1 }
             Row {
                 anchors.centerIn: parent
                 IconButton { width: 36; height: 32; flat: true; icon: "back"; label: p.t("Back")

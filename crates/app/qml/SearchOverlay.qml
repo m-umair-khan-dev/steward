@@ -1,6 +1,5 @@
 import QtQuick
 import QtQuick.Controls.Basic
-import QtQuick.Effects
 
 // Find anything (Ctrl+K, P3-T07, P3-T09; reference: search.png). The field
 // types the query; Down moves into the results, where the arrows move,
@@ -56,8 +55,9 @@ FocusScope {
         radius: 32
         color: Theme.card
         border.color: Theme.line
-        layer.enabled: true
-        layer.effect: MultiEffect { shadowEnabled: true; shadowOpacity: 0.18; shadowBlur: 0.8; shadowVerticalOffset: 6 }
+        layer.enabled: Theme.effects
+        layer.samplerName: "tex"
+        layer.effect: FxShadow { shadowOpacity: 0.18; shadowBlur: 0.8; shadowVerticalOffset: 6 }
         TextField {
             id: field
             anchors.fill: parent
@@ -89,8 +89,9 @@ FocusScope {
         color: Theme.card
         border.color: Theme.line
         clip: true
-        layer.enabled: true
-        layer.effect: MultiEffect { shadowEnabled: true; shadowOpacity: 0.18; shadowBlur: 0.8; shadowVerticalOffset: 6 }
+        layer.enabled: Theme.effects
+        layer.samplerName: "tex"
+        layer.effect: FxShadow { shadowOpacity: 0.18; shadowBlur: 0.8; shadowVerticalOffset: 6 }
         Accessible.role: Accessible.List
         Accessible.name: p.t("Search results")
 

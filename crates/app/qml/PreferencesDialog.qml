@@ -71,7 +71,9 @@ Sheet {
                 anchors.right: parent.right; anchors.verticalCenter: parent.verticalCenter
                 checked: !!root.prefs.showHidden
                 Accessible.name: p.t("Show hidden files")
-                onToggled: p.setpref("show-hidden", checked ? "true" : "false")
+                // Any change (a click, or an accessibility Toggle, which on Qt 6.4 does
+                // not emit toggled()); writes only when it differs from the setting.
+                onCheckedChanged: if (checked !== !!root.prefs.showHidden) p.setpref("show-hidden", checked ? "true" : "false")
             }
         }
 
@@ -89,7 +91,9 @@ Sheet {
                 anchors.right: parent.right; anchors.verticalCenter: parent.verticalCenter
                 checked: !!root.prefs.defaultFileManager
                 Accessible.name: p.t("Use as default file manager")
-                onToggled: p.setpref("default-file-manager", checked ? "true" : "false")
+                // Any change (a click, or an accessibility Toggle, which on Qt 6.4 does
+                // not emit toggled()); writes only when it differs from the setting.
+                onCheckedChanged: if (checked !== !!root.prefs.defaultFileManager) p.setpref("default-file-manager", checked ? "true" : "false")
             }
         }
 
@@ -186,7 +190,9 @@ Sheet {
                 anchors.right: parent.right; anchors.verticalCenter: parent.verticalCenter
                 checked: !!root.prefs.indexPaused
                 Accessible.name: p.t("Pause indexing")
-                onToggled: p.activate("win.index-paused", checked ? "true" : "false")
+                // Any change (a click, or an accessibility Toggle, which on Qt 6.4 does
+                // not emit toggled()); writes only when it differs from the setting.
+                onCheckedChanged: if (checked !== !!root.prefs.indexPaused) p.activate("win.index-paused", checked ? "true" : "false")
             }
         }
         Item {
@@ -196,7 +202,9 @@ Sheet {
                 anchors.right: parent.right; anchors.verticalCenter: parent.verticalCenter
                 checked: !!root.prefs.indexPauseOnBattery
                 Accessible.name: p.t("Pause on battery")
-                onToggled: p.setpref("index-pause-on-battery", checked ? "true" : "false")
+                // Any change (a click, or an accessibility Toggle, which on Qt 6.4 does
+                // not emit toggled()); writes only when it differs from the setting.
+                onCheckedChanged: if (checked !== !!root.prefs.indexPauseOnBattery) p.setpref("index-pause-on-battery", checked ? "true" : "false")
             }
         }
         Text {

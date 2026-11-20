@@ -69,7 +69,26 @@ Window {
     readonly property bool typing: !!activeFocusItem && activeFocusItem.cursorPosition !== undefined
 
     // Style.
-    readonly property bool systemDark: Qt.styleHints.colorScheme === Qt.ColorScheme.Dark
+    // The system's dark mode: Qt 6.5+ reports it; on Qt 6.4 the controller
+    // reads GNOME's own setting (prefs.systemDark).
+    readonly property bool systemDark: Qt.styleHints.colorScheme !== undefined
+                                       ? Qt.styleHints.colorScheme === 2 /* Qt.ColorScheme.Dark */
+                                       : !!win.prefs.systemDark
+
+    // Feature check (Ubuntu 24.04 has Qt 6.4): can QtQuick.Effects be used?
+    // Probed once at start-up; CAIRN_LEGACY_FX=1 (prefs.legacyFx) forces the
+    // fallback so it can be tested on newer Qt.
+    property bool effectsAvailable: false
+    function probeEffects() {
+        try {
+            Qt.createQmlObject("import QtQuick; import QtQuick.Effects; MultiEffect {}", win, "effects-probe").destroy()
+            return true
+        } catch (error) {
+            console.info("QtQuick.Effects is not available; using the fallbacks")
+            return false
+        }
+    }
+    Binding { target: Theme; property: "effects"; value: win.effectsAvailable && !win.prefs.legacyFx }
     Binding {
         target: Theme; property: "dark"
         value: win.prefs.colorScheme === "dark" || (win.prefs.colorScheme !== "light" && win.systemDark)
@@ -96,7 +115,7 @@ Window {
     onWidthChanged: report()
     onHeightChanged: report()
     onActiveChanged: report()
-    Component.onCompleted: { report(); p.darkmode(Theme.dark) }
+    Component.onCompleted: { effectsAvailable = probeEffects(); report(); p.darkmode(Theme.dark) }
 
     // Keyboard shortcuts from the one table (actions.rs).
     Instantiator {

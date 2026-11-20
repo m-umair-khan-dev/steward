@@ -1,6 +1,5 @@
 import QtQuick
 import QtQuick.Controls.Basic
-import QtQuick.Effects
 
 // The queue (P2-T07): running and waiting jobs with progress and Cancel.
 Popup {
@@ -12,8 +11,9 @@ Popup {
         radius: 14
         color: Theme.card
         border.color: Theme.line
-        layer.enabled: true
-        layer.effect: MultiEffect { shadowEnabled: true; shadowOpacity: 0.22; shadowBlur: 0.8; shadowVerticalOffset: 6 }
+        layer.enabled: Theme.effects
+        layer.samplerName: "tex"
+        layer.effect: FxShadow { shadowOpacity: 0.22; shadowBlur: 0.8; shadowVerticalOffset: 6 }
     }
     contentItem: Column {
         spacing: 12

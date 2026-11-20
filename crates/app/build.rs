@@ -49,6 +49,8 @@ const QML_FILES: &[&str] = &[
     "qml/WorkspacePage.qml",
     "qml/FolderStyleDialog.qml",
     "qml/MenuPopup.qml",
+    "qml/FxShadow.qml",
+    "qml/FxBlur.qml",
     "qml/SymbolFolder.qml",
     "qml/TickBox.qml",
     "qml/CleanPage.qml",
@@ -71,6 +73,9 @@ fn main() {
     let builder = CxxQtBuilder::new_qml_module(QmlModule::new("dev.cairn.files").qml_files(files))
         .qt_module("Quick")
         .qrc("qml/icons.qrc")
+        // Qt 6.5+ effects, outside the QML module (see qml/fx.qrc).
+        .qrc("qml/fx.qrc")
+        .qrc("qml/local.qrc")
         .files(["src/bridge.rs"]);
     // SAFETY: `cc_builder` is unsafe because changing compiler flags could
     // make the generated code unsound. We only add an include folder and our
@@ -101,6 +106,35 @@ fn main() {
         .status()
         .expect("run glib-compile-schemas");
     assert!(status.success(), "glib-compile-schemas failed");
+
+    // Icons as text, for recolouring them on Qt 6.4 (src/icons.rs).
+    let icons_dir = manifest_dir.join("qml/icons");
+    println!("cargo:rerun-if-changed={}", icons_dir.display());
+    let mut names: Vec<String> = fs::read_dir(&icons_dir)
+        .expect("qml/icons")
+        .flatten()
+        .filter_map(|e| {
+            e.file_name()
+                .to_str()?
+                .strip_suffix(".svg")
+                .map(str::to_string)
+        })
+        .collect();
+    names.sort();
+    let table: String = names
+        .iter()
+        .map(|n| {
+            format!(
+                "    ({n:?}, include_str!({:?})),\n",
+                icons_dir.join(format!("{n}.svg")).display().to_string()
+            )
+        })
+        .collect();
+    fs::write(
+        out_dir.join("icons.rs"),
+        format!("pub const ICONS: &[(&str, &str)] = &[\n{table}];\n"),
+    )
+    .expect("write icons.rs");
 
     // Translations (P6-T04): po/<lang>.po -> OUT_DIR/locale/<lang>/LC_MESSAGES/cairn.mo
     // for development and test builds (installed builds use /usr/share/locale).

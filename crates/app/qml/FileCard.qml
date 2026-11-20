@@ -1,5 +1,4 @@
 import QtQuick
-import QtQuick.Effects
 
 // A file card (DESIGN.md §3.2): preview area (thumbnail or tinted art),
 // coloured type badge, name, kind and size.
@@ -55,9 +54,9 @@ Item {
         border.width: root.selected ? 2 : 1
         Behavior on border.color { ColorAnimation { duration: 160 } }
 
-        layer.enabled: true
-        layer.effect: MultiEffect {
-            shadowEnabled: true
+        layer.enabled: Theme.effects
+        layer.samplerName: "tex"
+        layer.effect: FxShadow {
             shadowColor: "#1a1240"
             shadowOpacity: root.lifted ? 0.22 : 0.06
             shadowBlur: root.lifted ? 0.8 : 0.3

@@ -1,6 +1,5 @@
 import QtQuick
 import QtQuick.Controls.Basic
-import QtQuick.Effects
 
 // A menu in our style. model: [{ text, action, param, checked } | { separator: true }].
 Menu {
@@ -13,8 +12,9 @@ Menu {
         radius: 12
         color: Theme.card
         border.color: Theme.line
-        layer.enabled: true
-        layer.effect: MultiEffect { shadowEnabled: true; shadowOpacity: 0.22; shadowBlur: 0.8; shadowVerticalOffset: 6 }
+        layer.enabled: Theme.effects
+        layer.samplerName: "tex"
+        layer.effect: FxShadow { shadowOpacity: 0.22; shadowBlur: 0.8; shadowVerticalOffset: 6 }
     }
 
     Instantiator {

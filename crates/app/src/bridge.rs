@@ -125,6 +125,10 @@ pub mod qobject {
         /// A user-visible string from QML, translated (gettext).
         #[qinvokable]
         fn t(self: &Presenter, text: &QString) -> QString;
+        /// One of our icons recoloured, as a data URL (Qt 6.4 fallback for
+        /// GPU tinting).
+        #[qinvokable]
+        fn svgicon(self: &Presenter, name: &QString, color: &QString) -> QString;
     }
 
     impl cxx_qt::Threading for Presenter {}
@@ -240,6 +244,13 @@ impl qobject::Presenter {
                 }
             }
         }
+    }
+
+    pub fn svgicon(&self, name: &QString, color: &QString) -> QString {
+        q(&crate::icons::recoloured(
+            &name.to_string(),
+            &color.to_string(),
+        ))
     }
 
     pub fn t(&self, text: &QString) -> QString {

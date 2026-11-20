@@ -48,6 +48,8 @@ class App:
             # GPU shader caches belong to the machine, not the fixture home
             # (the index would count them, E3-01).
             "MESA_SHADER_CACHE_DIR": str(self.session.root / "mesa-app"),
+            # Qt's shader cache too (Qt 6.4 writes it at start-up, 24.04).
+            "QT_DISABLE_SHADER_DISK_CACHE": "1",
             "QT_LINUX_ACCESSIBILITY_ALWAYS_ON": "1",
             "QT_WAYLAND_DISABLE_WINDOWDECORATION": "1",
         } | self.extra_env

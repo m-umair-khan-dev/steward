@@ -1,6 +1,5 @@
 import QtQuick
 import QtQuick.Controls.Basic
-import QtQuick.Effects
 import QtQuick.Pdf
 import QtMultimedia
 
@@ -38,8 +37,9 @@ FocusScope {
         color: Theme.card
         border.color: Theme.line
         clip: true
-        layer.enabled: true
-        layer.effect: MultiEffect { shadowEnabled: true; shadowOpacity: 0.3; shadowBlur: 1.0; shadowVerticalOffset: 10 }
+        layer.enabled: Theme.effects
+        layer.samplerName: "tex"
+        layer.effect: FxShadow { shadowOpacity: 0.3; shadowBlur: 1.0; shadowVerticalOffset: 10 }
         Accessible.role: Accessible.Dialog
         Accessible.name: p.t("Peek: ") + (root.model.name || "")
         MouseArea { anchors.fill: parent }  // clicks inside do not close

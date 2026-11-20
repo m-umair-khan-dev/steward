@@ -71,7 +71,8 @@ e2e: images ## End-to-end tests (make e2e k=E0_03 for one)
 
 # Packaging (P6-T08). One .deb per Ubuntu release, built and tested in Docker.
 DEB_BUILD = docker build -f docker/desktop.Dockerfile \
-	--build-arg UBUNTU_IMAGE=$(UBUNTU_IMAGE) --build-arg CARGO_DEB_VERSION=$(CARGO_DEB_VERSION)
+	--build-arg UBUNTU_IMAGE=$(UBUNTU_IMAGE) --build-arg UBUNTU_VERSION=$(UBUNTU_VERSION) \
+	--build-arg CARGO_DEB_VERSION=$(CARGO_DEB_VERSION)
 
 deb: ## Build the .deb for UBUNTU_VERSION into dist/
 	$(DEB_BUILD) --target artifact --output type=local,dest=dist/$(UBUNTU_VERSION) .
