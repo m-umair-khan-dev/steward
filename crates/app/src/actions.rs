@@ -79,6 +79,11 @@ pub const ACCELS: &[(&str, &str, &[&str], &str)] = &[
     ),
     ("win.peek", "", &["Space"], "Peek at a file"),
     ("win.tidy", "", &["Ctrl+Shift+O"], "Tidy this folder"),
+    ("win.dual-pane", "", &["F3"], "Split into two panes"),
+    ("win.switch-pane", "", &["Tab"], "Switch pane"),
+    ("win.copy-across", "", &["F5"], "Copy to the other pane"),
+    ("win.move-across", "", &["F6"], "Move to the other pane"),
+    ("win.swap-panes", "", &["Ctrl+U"], "Swap the two panes"),
 ];
 
 /// Shortcuts that text fields need for themselves: QML turns these off while
@@ -91,6 +96,7 @@ const TEXT_KEYS: &[&str] = &[
     "win.undo",
     "win.redo",
     "win.peek",
+    "win.switch-pane",
 ];
 
 thread_local! {
@@ -291,6 +297,35 @@ fn create() -> (gio::SimpleActionGroup, gio::SimpleActionGroup) {
         controller::with(|c| c.start_indexer())
     });
     simple(&win, "tidy", || controller::with(|c| c.plan_tidy()));
+    simple(&win, "dual-pane", || {
+        controller::with(|c| c.toggle_dual_pane())
+    });
+    simple(&win, "switch-pane", || {
+        controller::with(|c| c.switch_pane())
+    });
+    simple(&win, "copy-across", || {
+        controller::with(|c| c.across(false))
+    });
+    simple(&win, "move-across", || controller::with(|c| c.across(true)));
+    simple(&win, "swap-panes", || controller::with(|c| c.swap_panes()));
+    with_string(&win, "pane-go", |path| {
+        controller::with(|c| c.pane_go(path))
+    });
+    with_string(&win, "pane-key", |key| {
+        controller::with(|c| c.pane_key(key))
+    });
+    with_string(&win, "pane-open", |pos| {
+        controller::with(|c| c.pane_open(pos.parse().unwrap_or(0)))
+    });
+    with_string(&win, "pane-pick", |arg| {
+        let (pos, mode) = arg.split_once(':').unwrap_or((arg, "0"));
+        controller::with(|c| {
+            c.pane_pick(pos.parse().unwrap_or(usize::MAX), mode.parse().unwrap_or(0))
+        })
+    });
+    with_string(&win, "pane-activate", |side| {
+        controller::with(|c| c.pane_activate(side == "right"))
+    });
     simple(&win, "tidy-downloads", || {
         controller::with(|c| c.tidy_downloads())
     });

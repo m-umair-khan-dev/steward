@@ -61,6 +61,7 @@ Window {
     readonly property var ops: parse(p.ops, ({ jobs: [], trash: false }))
     readonly property var search: parse(p.search, ({ open: false }))
     readonly property var peek: parse(p.peek, ({ open: false }))
+    readonly property var pane: parse(p.pane, ({ open: false }))
     // A text field has the keyboard: shortcuts it needs (copy, paste, undo,
     // Delete) are left to it.
     readonly property bool typing: !!activeFocusItem && activeFocusItem.cursorPosition !== undefined
@@ -216,17 +217,28 @@ Window {
             anchors.bottom: statusBar.top
             width: parent.width
 
-            readonly property bool showPreview: !!win.preview.visible
+            readonly property bool showPreview: !!win.preview.visible && !win.pane.open
             readonly property int previewWidth: showPreview ? Math.min(320, Math.max(260, body.width * 0.26)) : 0
 
             FocusScope {
                 id: content
-                width: parent.width - body.previewWidth
+                width: win.pane.open ? Math.round(parent.width / 2) : parent.width - body.previewWidth
                 height: parent.height
                 focus: true
                 Behavior on width { enabled: Theme.motion; NumberAnimation { duration: 220; easing.type: Easing.OutCubic } }
 
                 Keys.onPressed: event => {
+                    // Dual pane: keys go to the active pane.
+                    if (win.pane.open && win.pane.rightActive) {
+                        const paneKeys = { [Qt.Key_Up]: "up", [Qt.Key_Down]: "down", [Qt.Key_Home]: "home",
+                                           [Qt.Key_End]: "end", [Qt.Key_Return]: "return", [Qt.Key_Enter]: "return",
+                                           [Qt.Key_Backspace]: "back" }
+                        if (event.key in paneKeys) {
+                            p.activate("win.pane-key", paneKeys[event.key])
+                            event.accepted = true
+                            return
+                        }
+                    }
                     const keys = { [Qt.Key_Left]: "left", [Qt.Key_Right]: "right", [Qt.Key_Up]: "up",
                                    [Qt.Key_Down]: "down", [Qt.Key_Home]: "home", [Qt.Key_End]: "end" }
                     if (event.key in keys && !(event.modifiers & Qt.AltModifier)) {
@@ -254,6 +266,15 @@ Window {
                     }
                 }
 
+                PaneHeader {
+                    id: leftHeader
+                    width: parent.width
+                    visible: !!win.pane.open
+                    crumbs: win.pane.leftCrumbs || []
+                    summary: win.pane.leftSummary || ""
+                    active: !win.pane.rightActive
+                    onCrumb: path => p.activate("win.go-to", path)
+                }
                 TrashBar {
                     id: trashBar
                     width: parent.width
@@ -264,13 +285,14 @@ Window {
                 ChipRow {
                     id: chips
                     width: parent.width
-                    visible: !win.ops.trash && (win.folder.page === "grid" || win.folder.page === "list")
+                    y: leftHeader.visible ? leftHeader.height : 0
+                    visible: !win.pane.open && !win.ops.trash && (win.folder.page === "grid" || win.folder.page === "list")
                     chips: win.folder.chips || []
                     summary: win.folder.summary || ""
                 }
 
                 FolderGrid {
-                    anchors.top: chips.visible ? chips.bottom : (trashBar.visible ? trashBar.bottom : parent.top)
+                    anchors.top: leftHeader.visible ? leftHeader.bottom : (chips.visible ? chips.bottom : (trashBar.visible ? trashBar.bottom : parent.top))
                     anchors.bottom: parent.bottom
                     width: parent.width
                     visible: win.folder.page === "grid"
@@ -286,7 +308,7 @@ Window {
                     onItemMenu: pos => win.itemMenuAt(pos)
                 }
                 FolderList {
-                    anchors.top: chips.visible ? chips.bottom : (trashBar.visible ? trashBar.bottom : parent.top)
+                    anchors.top: leftHeader.visible ? leftHeader.bottom : (chips.visible ? chips.bottom : (trashBar.visible ? trashBar.bottom : parent.top))
                     anchors.bottom: parent.bottom
                     width: parent.width
                     visible: win.folder.page === "list"
@@ -306,6 +328,14 @@ Window {
                 }
             }
 
+            RightPane {
+                visible: !!win.pane.open
+                x: content.width
+                width: parent.width - content.width
+                height: parent.height
+                model: win.pane
+            }
+
             PreviewPane {
                 anchors.right: parent.right
                 width: Math.max(body.previewWidth, 0)
@@ -320,10 +350,27 @@ Window {
             id: statusBar
             anchors.bottom: parent.bottom
             width: parent.width
-            height: 30
+            height: win.pane.open ? 50 : 30
             color: Theme.pane
             Rectangle { width: parent.width; height: 1; color: Theme.line }
+            // Dual pane: copy and move across, with their keys (reference footer).
+            Row {
+                visible: !!win.pane.open
+                x: 14; anchors.verticalCenter: parent.verticalCenter
+                spacing: 8
+                PillButton { implicitHeight: 30; primary: true
+                             text: "Copy to “" + (win.pane.target || "") + "”   F5"
+                             onClicked: p.activate("win.copy-across", "") }
+                PillButton { implicitHeight: 30; text: "Move   F6"; onClicked: p.activate("win.move-across", "") }
+            }
             Text {
+                visible: !!win.pane.open
+                anchors.right: parent.right; anchors.rightMargin: 18; anchors.verticalCenter: parent.verticalCenter
+                text: "Tab switches pane · drag to move, Ctrl-drag to copy"
+                color: Theme.muted; font.pixelSize: 12
+            }
+            Text {
+                visible: !win.pane.open
                 x: 22; anchors.verticalCenter: parent.verticalCenter
                 text: win.folder.status || ""
                 color: Theme.muted

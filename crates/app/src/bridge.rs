@@ -48,6 +48,7 @@ pub mod qobject {
         #[qproperty(QString, ops)]
         #[qproperty(QString, search)]
         #[qproperty(QString, peek)]
+        #[qproperty(QString, pane)]
         type Presenter = super::PresenterRust;
 
         #[qsignal]
@@ -145,6 +146,7 @@ pub struct PresenterRust {
     ops: QString,
     search: QString,
     peek: QString,
+    pane: QString,
 }
 
 fn q(text: &str) -> QString {
@@ -189,6 +191,7 @@ impl qobject::Presenter {
             push(dirty::OPS, c.ops_json());
             push(dirty::SEARCH, c.search_json());
             push(dirty::PEEK, c.peek_json());
+            push(dirty::PANE, c.pane_json());
             (updates, events, c.dialog_data().to_string())
         });
         for (flag, value) in updates {
@@ -208,6 +211,7 @@ impl qobject::Presenter {
                 dirty::OPS => this.set_ops(value),
                 dirty::SEARCH => this.set_search(value),
                 dirty::PEEK => this.set_peek(value),
+                dirty::PANE => this.set_pane(value),
                 _ => this.set_prefs(value),
             }
         }

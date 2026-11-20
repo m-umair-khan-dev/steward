@@ -22,6 +22,7 @@ mod downloads;
 pub use downloads::downloads_folder;
 mod index;
 mod ops;
+mod pane;
 mod peek;
 mod search;
 mod tidy;
@@ -128,7 +129,8 @@ pub mod dirty {
     pub const OPS: u32 = 2048;
     pub const SEARCH: u32 = 4096;
     pub const PEEK: u32 = 8192;
-    pub const ALL: u32 = 16383;
+    pub const PANE: u32 = 16384;
+    pub const ALL: u32 = 32767;
 }
 
 /// One-off things for QML to do.
@@ -183,6 +185,7 @@ pub struct Controller {
     peek: peek::PeekState,
     tidy: tidy::TidyState,
     downloads: downloads::DownloadsState,
+    pane: pane::PaneState,
     /// Path bar: folders whose name matches what is typed, and the one chosen.
     path_matches: Vec<PathBuf>,
     path_match: Option<usize>,
@@ -273,6 +276,7 @@ pub fn init(notifier: impl Fn() + 'static) {
         peek: peek::PeekState::default(),
         tidy: tidy::TidyState::default(),
         downloads: downloads::DownloadsState::default(),
+        pane: pane::PaneState::default(),
         path_matches: Vec::new(),
         path_match: None,
         dialog: String::new(),
@@ -329,7 +333,20 @@ pub fn init(notifier: impl Fn() + 'static) {
         index::start(c);
         c.reload_sidebar();
         c.refresh_home_space();
-        c.navigate(&gio::File::for_path(glib::home_dir()), false);
+        // Dual pane comes back with both its folders (E4-10).
+        let s = settings::get();
+        let dual = s.boolean("dual-pane");
+        let left = std::path::PathBuf::from(s.string("pane-left").as_str());
+        let right = std::path::PathBuf::from(s.string("pane-right").as_str());
+        let start = if dual && left.is_dir() {
+            left
+        } else {
+            glib::home_dir()
+        };
+        c.navigate(&gio::File::for_path(start), false);
+        if dual {
+            c.set_dual_pane(true, right.is_dir().then_some(right));
+        }
     });
 }
 
@@ -417,6 +434,9 @@ impl Controller {
         actions::set_enabled("forward", !self.forward.is_empty());
         actions::set_enabled("up", folder.parent().is_some());
         self.mark(dirty::ALL & !dirty::PREFS);
+        if self.pane.open {
+            self.remember_panes();
+        }
     }
 
     pub fn go_back(&mut self) {
@@ -697,6 +717,7 @@ impl Controller {
 
     /// mode: 0 replace, 1 toggle (Ctrl), 2 range (Shift).
     pub fn pick(&mut self, position: usize, mode: i32) {
+        self.pane_activate(false);
         let Some(uri) = self.entry_at(position).map(|e| e.data().uri()) else {
             if mode == 0 {
                 self.selection.clear();
@@ -1797,6 +1818,7 @@ impl Controller {
             "peek": self.peek_test_json(),
             "tidy": self.tidy_test_json(),
             "downloads": self.downloads_test_json(),
+            "pane": self.pane_test_json(),
             // Folder numbers as the cards show them, by name.
             "folder_stats": self.visible.iter().filter(|e| e.is_dir()).filter_map(|e| {
                 let (items, bytes) = self.folder_numbers(&e.data().file.path()?)?;

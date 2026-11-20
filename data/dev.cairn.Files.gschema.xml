@@ -59,6 +59,18 @@
       <default>false</default>
       <summary>Window maximized</summary>
     </key>
+    <key name="dual-pane" type="b">
+      <default>false</default>
+      <summary>Two panes are open</summary>
+    </key>
+    <key name="pane-left" type="s">
+      <default>''</default>
+      <summary>The left pane's folder</summary>
+    </key>
+    <key name="pane-right" type="s">
+      <default>''</default>
+      <summary>The right pane's folder</summary>
+    </key>
     <key name="downloads-folder" type="s">
       <default>''</default>
       <summary>The folder treated as Downloads</summary>
