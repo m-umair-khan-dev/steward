@@ -732,8 +732,13 @@ impl Controller {
                 self.thumbs.entry(entry.data().uri()).or_insert(path);
             }
         }
-        let uris: HashSet<String> = visible.iter().map(|e| e.data().uri()).collect();
-        self.selection.retain(|uri| uris.contains(uri));
+        // Drop selected items that are gone, but only once the listing is
+        // complete: while a folder reloads, the list is briefly empty and the
+        // selection must survive it.
+        if !matches!(self.model.state(), LoadState::Loading) {
+            let uris: HashSet<String> = visible.iter().map(|e| e.data().uri()).collect();
+            self.selection.retain(|uri| uris.contains(uri));
+        }
         self.visible = visible;
         self.apply_pending_select();
         self.mark(

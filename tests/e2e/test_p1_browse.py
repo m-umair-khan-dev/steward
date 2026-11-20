@@ -241,7 +241,8 @@ def test_E1_14_shortcuts_window(app):
     def listed():
         # The shortcuts window spreads them over pages; count every page.
         names = app.a11y_names(showing_only=False)
-        missing = [t for t in titles if t not in names]
+        # Since P6-T05 each row's name also carries its keys ("Back: Alt+Left").
+        missing = [t for t in titles if not any(n == t or n.startswith(t + ": ") for n in names)]
         return not missing
 
     app.wait_for(listed, "the shortcuts window to list every shortcut")

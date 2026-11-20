@@ -4,8 +4,8 @@ Read this first in every session (AGENTS.md rule 2). Update it before stopping.
 
 ## Current phase
 
-**Phase 5: Smart Clean, Installed and About This Computer**, complete on
-26.10 (gate green 2026-11-20), pending the HUMAN checks below. Phase 6 waits
+**Phase 6: Release 1.0**, complete on 26.10 (gate green 2026-11-20) except
+the website (P6-T10), which is on hold. HUMAN checks below. Phase 7 waits
 for the product owner's go-ahead.
 
 ## Release targets
@@ -277,6 +277,61 @@ Test harness fixes:
 - Qt's shader cache (`~/.cache/qtshadercache-*`) counts as the app's own
   data in read-only checks.
 
+## Phase 6: Release 1.0 (complete on 26.10, website on hold)
+
+| ID | Task | Status | Notes |
+|---|---|---|---|
+| P6-T01 | Welcome on first run: demo, tour, make it yours | done | E6-01 |
+| P6-T02 | What's New once after an update, from the release notes | done | E6-02 |
+| P6-T03 | Preferences: General, Appearance, Shortcuts, Search and Index | done | Preferences pages test; E6-04 |
+| P6-T04 | Translations: gettext everywhere, drafts in five languages, pseudo-locale | done | E6-03 |
+| P6-T05 | Accessibility pass | done | E6-04 |
+| P6-T06 | Desktop file with actions, AppStream, placeholder icons | done | E6-07 (metadata); desktop-actions test |
+| P6-T07 | Optional default file manager: FileManager1, folder handler | done | E6-09 |
+| P6-T08 | Packaging: cargo-deb, user unit for the indexer, lintian | done | E6-05 (`make deb-test`: apt install in a clean Ubuntu, 6 smoke scenarios); lintian no errors or warnings |
+| P6-T09 | apt repository tooling: aptrepo image, publish-apt, dev key, apt-install-e2e | done | E6-06 (`make apt-e2e`: install 1.0.0-1, upgrade to 1.0.0.1-1) |
+| P6-T10 | Website | ON HOLD | Paused by the product owner on 2026-11-20; draft in site/ (see site/README.md). E6-08 waits with it |
+| P6-T11 | Screenshot generator (`make shots`) | done | 8 screens, light and dark, in artifacts/shots/ |
+| P6-T12 | Release workflow; compose.yaml, compose.test.yaml, compose.prod.yaml | done (dry run HUMAN) | `.github/workflows/release.yml`; a -dry tag publishes to ci. The local equivalent (`make deb deb-test apt-e2e`) passes |
+| P6-T13 | Report a Bug; SECURITY.md; code of conduct | done | Report-a-bug test |
+| P6-T14 | Performance pass, docs/perf.md | done | Search met; launch, big folder and memory missed, explained with issues to file (docs/perf.md) |
+
+E6-10 (the full regression on 24.04 and 26.04) is the final task after
+Phase 9 (ADR 0007), not part of this phase's gate.
+
+Decisions and findings:
+- Version 1.0.0. Release notes live in site/src/content/changelog/<version>.md
+  and feed What's New, the Debian changelog and (later) the site; a version
+  without notes does not build.
+- Test builds skip the welcome unless CAIRN_NO_WELCOME is set empty (E6-01
+  does); release builds always show it on a first run.
+- QML strings go through `p.t()` (gettext on the presenter); the five
+  catalogs are AI drafts, marked so in their headers (HUMAN review).
+  Some messages are sentence fragments joined in code; whole sentences with
+  placeholders are a later improvement.
+- Cairn has one window, so the desktop file's "New Window" brings the window
+  forward at the Home folder. A second launch hands its request to the
+  running Cairn over org.gtk.Actions.
+- FileManager1 is served only while Cairn runs and Files does not own the
+  name; no D-Bus activation file, because it would clash with Nautilus's.
+- Smoke scenarios (tests/e2e/test_smoke.py) use only public interfaces so
+  they run against the installed release build, which has no Test1. E0-01
+  and E1-01 lost the smoke mark: they need Test1.
+- Lintian runs in the package stage; the clean install-test image has only
+  what a user's machine would.
+- Docker's Ubuntu image skips translations; the install-test image re-enables
+  them so the test sees what a desktop gets.
+- Performance: two fixes; three targets missed and explained in docs/perf.md
+  (measured on software OpenGL in a container).
+- Scenario change (rule 7): E1-14 accepts a shortcut row named
+  "Back: Alt+Left": since P6-T05 each row's accessible name carries its keys,
+  so screen readers hear them.
+- Bug found by the gate under load: reloading the folder on screen briefly
+  emptied the list and dropped the selection (E1-03). The selection is now
+  pruned only once a listing is complete.
+- Scenario change (rule 7): E3-11 opens the Search and Index page before
+  clicking Pause indexing, because P6-T03 moved the index settings there.
+
 ## Blocked / waiting for a human
 
 - Enable CI once the repository is on its Git host (P0-T07).
@@ -298,12 +353,30 @@ Test harness fixes:
   compare About with Settings › System › About, and read every suggestion's
   reason for clarity. Check the sidebar's Installed count against
   `apt list --installed`, `snap list` and `flatpak list`.
+- Phase 6 (from DESIGN.md's HUMAN list):
+  - final name and icon (the icon is a placeholder);
+  - review the five translations, or mark them beta;
+  - create the project signing key and store it as APT_SIGNING_KEY in CI;
+  - choose hosting and DNS; set the repository URL in Cargo.toml and the
+    placeholder addresses (maintainer, security, conduct, metainfo, the
+    download page);
+  - enable Actions and push a -dry tag to see the release workflow publish
+    to ci;
+  - install from staging on real 24.04 and 26.04 machines and use it for a
+    day;
+  - one pass with the Orca screen reader;
+  - measure launch and memory on real hardware (docs/perf.md);
+  - file the performance issues listed in docs/perf.md;
+  - tag the release.
+- Website (P6-T10) is on hold by the product owner's decision; E6-08 waits
+  with it. The draft is in site/.
 - Docker Desktop on this machine needs the user in the `kvm` group (done on
   2026-11-19); without it Docker Desktop stops at start-up after a reboot.
 
 ## Next
 
-- Phase 6 (Release 1.0) waits for the product owner's go-ahead.
+- Phase 7 (Developer and content tools) waits for the product owner's
+  go-ahead. The website (P6-T10) resumes when the product owner says so.
 - Known gaps to look at in Phase 6:
   - The collapsed sidebar rail does not list the tool pages yet.
   - Smart Clean walks the home folder instead of using the index (fine on

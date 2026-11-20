@@ -111,6 +111,8 @@ lint: images lint-host ## Formatting, clippy, Dockerfile and Compose checks
 
 lint-host:
 	docker run --rm -i $(HADOLINT_IMAGE) hadolint --ignore DL3008 --ignore DL3059 - < docker/desktop.Dockerfile
+	docker run --rm -i $(HADOLINT_IMAGE) hadolint --ignore DL3008 - < docker/aptrepo.Dockerfile
+	docker compose -f compose.yaml -f compose.test.yaml config -q
 	$(COMPOSE) config -q
 	$(COMPOSE) --profile build config -q
 

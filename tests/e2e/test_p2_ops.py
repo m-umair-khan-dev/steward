@@ -186,8 +186,13 @@ def test_E2_06_undo_never_overwrites(app, home):
     app.open_folder(home / "Downloads")
     app.select("notes.txt")
     app.press("ctrl+x")
+    # Key presses travel through the compositor: wait for their effect, not
+    # just an idle queue (under load the paste may not have started yet).
+    app.wait_for(lambda: (app.state()["last_toast"] or "").startswith("Cut"), "the cut")
     app.open_folder(home / "Documents")
     app.press("ctrl+v")
+    app.wait_for(lambda: (home / "Documents" / "notes.txt").exists()
+                 and not (home / "Downloads" / "notes.txt").exists(), "the paste")
     app.wait_idle()
     old_place = home / "Downloads" / "notes.txt"
     old_place.write_text("a new file with the old name\n")

@@ -112,7 +112,11 @@ fn main() {
             continue;
         }
         println!("cargo:rerun-if-changed={}", path.display());
-        let lang = path.file_stem().expect("a po file has a name").to_string_lossy().into_owned();
+        let lang = path
+            .file_stem()
+            .expect("a po file has a name")
+            .to_string_lossy()
+            .into_owned();
         let dir = out_dir.join("locale").join(&lang).join("LC_MESSAGES");
         fs::create_dir_all(&dir).expect("create the locale folder");
         let status = Command::new("msgfmt")

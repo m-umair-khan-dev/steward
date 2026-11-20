@@ -28,7 +28,8 @@ pub fn run() -> ExitCode {
             .set_application_display_name(&QString::from("Cairn"));
         app.as_mut()
             .set_application_version(&QString::from(env!("CARGO_PKG_VERSION")));
-        app.as_mut().set_organization_domain(&QString::from("cairn.dev"));
+        app.as_mut()
+            .set_organization_domain(&QString::from("cairn.dev"));
         // The Wayland app ID, so the shell matches the window to its desktop file.
         QGuiApplication::set_desktop_file_name(&QString::from(cairn_core::APP_ID));
     }

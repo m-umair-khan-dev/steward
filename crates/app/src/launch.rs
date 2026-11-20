@@ -35,16 +35,16 @@ pub fn parse(args: &[String]) -> Vec<Request> {
     let mut out = Vec::new();
     for arg in args {
         match arg.as_str() {
-            "--new-window" => out.push(win(
-                "go-to",
-                Some(glib::home_dir().display().to_string()),
-            )),
+            "--new-window" => out.push(win("go-to", Some(glib::home_dir().display().to_string()))),
             "--new-workspace" => out.push(win("workspace-new", None)),
             "--free-up-space" => out.push(win("tool-open", Some("clean".into()))),
             other if other.starts_with("--") => {}
             path => {
                 let file = gio::File::for_commandline_arg(path);
-                let target = file.path().map(|p| p.display().to_string()).unwrap_or_else(|| file.uri().to_string());
+                let target = file
+                    .path()
+                    .map(|p| p.display().to_string())
+                    .unwrap_or_else(|| file.uri().to_string());
                 out.push(win("go-to", Some(target)));
             }
         }
@@ -108,7 +108,10 @@ pub fn forward(requests: &[Request]) -> bool {
             5000,
             gio::Cancellable::NONE,
         ) {
-            eprintln!("cairn: could not pass {} to the running Cairn: {error}", request.name);
+            eprintln!(
+                "cairn: could not pass {} to the running Cairn: {error}",
+                request.name
+            );
         }
     }
     true
@@ -136,7 +139,9 @@ mod tests {
 
     #[test]
     fn options_and_paths() {
-        let args: Vec<String> = ["--free-up-space", "--bogus", "/tmp"].map(String::from).to_vec();
+        let args: Vec<String> = ["--free-up-space", "--bogus", "/tmp"]
+            .map(String::from)
+            .to_vec();
         let requests = parse(&args);
         assert_eq!(requests[0], win("tool-open", Some("clean".into())));
         assert_eq!(requests[1], win("go-to", Some("/tmp".into())));

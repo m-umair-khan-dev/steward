@@ -157,6 +157,8 @@ COPY --from=package /out/ /tmp/deb/
 # Docker's Ubuntu image skips translations and man pages to stay small; a
 # desktop installs them, and the test checks they arrive.
 RUN rm -f /etc/dpkg/dpkg.cfg.d/excludes
+# Recommends are installed on purpose: a user's apt installs them too.
+# hadolint ignore=DL3015
 RUN --mount=type=cache,target=/var/cache/apt,sharing=locked \
     --mount=type=cache,target=/var/lib/apt,sharing=locked \
     apt-get update && apt-get install -y /tmp/deb/*.deb
@@ -165,7 +167,7 @@ WORKDIR /workspace
 COPY tests/ tests/
 COPY docker/scripts/ docker/scripts/
 RUN chown -R tester /workspace
-USER tester
+USER 1000:1000
 ENV CAIRN_BIN=/usr/bin/cairn \
     CAIRN_INSTALLED=1
 CMD ["docker/scripts/run-install-test"]
