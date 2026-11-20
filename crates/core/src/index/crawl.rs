@@ -103,11 +103,12 @@ impl Index {
         let kind = kind_of(&name, meta);
         self.conn
             .prepare_cached(
-                "INSERT INTO entry (parent_id, name, path, is_dir, hidden, size, mtime, kind, scanned_at)
-                 VALUES (?1, ?2, ?3, ?4, ?5, ?6, ?7, ?8, ?9)
+                "INSERT INTO entry (parent_id, name, path, is_dir, hidden, size, mtime, kind, scanned_at, dev, inode)
+                 VALUES (?1, ?2, ?3, ?4, ?5, ?6, ?7, ?8, ?9, ?10, ?11)
                  ON CONFLICT(path) DO UPDATE SET parent_id = excluded.parent_id,
                      is_dir = excluded.is_dir, hidden = excluded.hidden, size = excluded.size,
-                     mtime = excluded.mtime, kind = excluded.kind, scanned_at = excluded.scanned_at
+                     mtime = excluded.mtime, kind = excluded.kind, scanned_at = excluded.scanned_at,
+                     dev = excluded.dev, inode = excluded.inode
                  RETURNING id",
             )?
             .query_row(
@@ -120,7 +121,9 @@ impl Index {
                     if is_link { 0 } else { meta.len() as i64 },
                     meta.mtime(),
                     kind,
-                    generation
+                    generation,
+                    meta.dev() as i64,
+                    meta.ino() as i64
                 ],
                 |r| r.get(0),
             )

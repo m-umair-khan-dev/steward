@@ -45,9 +45,14 @@ fn default_entries() -> Vec<SidebarEntry> {
             } else {
                 place.label
             },
+            // The Downloads entry follows the preference (P4-T06).
+            file: if place.key == "place:downloads" {
+                gio::File::for_path(crate::controller::downloads_folder())
+            } else {
+                gio::File::for_path(&place.path)
+            },
             key: place.key,
             section: "favorites",
-            file: gio::File::for_path(&place.path),
             can_eject: false,
         })
         .collect();

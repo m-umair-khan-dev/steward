@@ -563,6 +563,7 @@ impl Controller {
         if report.kind == "empty-trash" || self.in_trash() {
             self.reload();
         }
+        self.refresh_suggestions();
     }
 
     /// The toast for a finished report (None: nothing worth saying).

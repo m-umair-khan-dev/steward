@@ -72,3 +72,133 @@ fn tidy_plan_equals_the_manifest() {
     assert!(plan.moves.iter().all(|m| !m.from.is_dir()));
     let _ = std::fs::remove_dir_all(&root);
 }
+
+#[test]
+fn duplicates_match_the_planted_ones() {
+    use cairn_core::dupes;
+    let (root, manifest) = fixture("dupes");
+    let mut files = Vec::new();
+    let mut stack = vec![root.clone()];
+    while let Some(dir) = stack.pop() {
+        for entry in std::fs::read_dir(&dir).unwrap().flatten() {
+            let path = entry.path();
+            let meta = path.symlink_metadata().unwrap();
+            if meta.is_dir() {
+                stack.push(path);
+            } else if meta.is_file() && path.file_name().unwrap() != ".cairn-fixture" {
+                files.push(path);
+            }
+        }
+    }
+    let cache = dupes::HashCache::in_memory().unwrap();
+    let found: Vec<Vec<String>> = dupes::find(&files, &cache, &|| true)
+        .into_iter()
+        .map(|g| {
+            g.iter()
+                .map(|p| p.strip_prefix(&root).unwrap().display().to_string())
+                .collect()
+        })
+        .collect();
+    let mut expected: Vec<Vec<String>> = manifest["duplicates"]
+        .as_array()
+        .unwrap()
+        .iter()
+        .map(|g| {
+            let mut paths: Vec<String> = g
+                .as_array()
+                .unwrap()
+                .iter()
+                .map(|p| p.as_str().unwrap().to_string())
+                .collect();
+            paths.sort();
+            paths
+        })
+        .collect();
+    expected.sort();
+    assert_eq!(found, expected);
+    // A second look reads the cache: same answer.
+    let again: usize = dupes::find(&files, &cache, &|| true).len();
+    assert_eq!(again, expected.len());
+    let _ = std::fs::remove_dir_all(&root);
+}
+
+struct FakePackages {
+    installed: Option<&'static str>,
+}
+
+impl cairn_core::suggest::PackageDb for FakePackages {
+    fn deb_fields(&self, deb: &Path) -> Option<(String, String)> {
+        cairn_core::suggest::Dpkg.deb_fields(deb)
+    }
+    fn installed(&self, _package: &str) -> Option<String> {
+        self.installed.map(str::to_string)
+    }
+    fn at_least(&self, a: &str, b: &str) -> bool {
+        cairn_core::suggest::Dpkg.at_least(a, b)
+    }
+}
+
+#[test]
+fn downloads_suggestions() {
+    use cairn_core::suggest;
+    let (root, manifest) = fixture("suggest");
+    let downloads = root.join("Downloads");
+    let cache = cairn_core::dupes::HashCache::in_memory().unwrap();
+    let now = glib::DateTime::from_iso8601(manifest["now"].as_str().unwrap(), None)
+        .unwrap()
+        .to_unix();
+    let same = suggest::downloads(
+        &downloads,
+        now,
+        &FakePackages {
+            installed: Some("3.2.0"),
+        },
+        None,
+        &cache,
+    );
+    let names = |items: &[suggest::Item]| -> Vec<String> {
+        items
+            .iter()
+            .map(|i| i.path.file_name().unwrap().to_string_lossy().into_owned())
+            .collect()
+    };
+    assert_eq!(
+        names(&same.installers),
+        vec!["photo-tool_3.2.0_amd64.deb".to_string()]
+    );
+    let older = suggest::downloads(
+        &downloads,
+        now,
+        &FakePackages {
+            installed: Some("3.1.0"),
+        },
+        None,
+        &cache,
+    );
+    assert!(
+        older.installers.is_empty(),
+        "an older installed version: keep the installer"
+    );
+    let none = suggest::downloads(
+        &downloads,
+        now,
+        &FakePackages { installed: None },
+        None,
+        &cache,
+    );
+    assert!(none.installers.is_empty());
+    // Untouched for 90 days, as the manifest counts them.
+    let mut untouched = names(&same.untouched);
+    untouched.sort();
+    let mut expected: Vec<String> = manifest["downloads"]["untouched_90_days"]
+        .as_array()
+        .unwrap()
+        .iter()
+        .map(|v| v.as_str().unwrap().to_string())
+        .collect();
+    expected.sort();
+    assert_eq!(untouched, expected);
+    // Every duplicate suggested has an identical file elsewhere in the list.
+    assert!(same.duplicates.iter().all(|d| d.why.starts_with("same as")));
+    let _ = std::fs::remove_dir_all(&root);
+}

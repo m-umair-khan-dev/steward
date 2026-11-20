@@ -13,6 +13,7 @@ glib.workspace = true
 gio.workspace = true
 rusqlite.workspace = true
 rustix.workspace = true
+blake3.workspace = true
 
 [dev-dependencies]
 serde_json.workspace = true

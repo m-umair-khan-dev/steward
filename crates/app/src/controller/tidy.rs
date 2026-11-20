@@ -40,6 +40,11 @@ impl Controller {
         if self.in_trash() {
             return;
         }
+        self.plan_tidy_in(&folder);
+    }
+
+    pub fn plan_tidy_in(&mut self, folder: &std::path::Path) {
+        let folder = folder.to_path_buf();
         let plan = match plan::tidy(&folder, plan::now()) {
             Ok(plan) => plan,
             Err(error) => {

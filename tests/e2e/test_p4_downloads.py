@@ -96,3 +96,53 @@ def test_E4_05_a_name_already_in_the_kind_folder(app, home):
     app.press("ctrl+z")
     app.wait_idle()
     assert home.snapshot("Downloads") == before
+
+
+def _fake_dpkg_query(folder: Path, version: str) -> None:
+    """A stand-in for dpkg-query (DESIGN.md §10.2): reports photo-tool installed."""
+    folder.mkdir(exist_ok=True)
+    script = folder / "dpkg-query"
+    script.write_text(f"#!/bin/sh\necho \"$@\" >> {folder}/calls.log\necho 'installed {version}'\n")
+    script.chmod(0o755)
+
+
+def test_E4_06_installer_for_an_installed_app(session, home, app_factory, tmp_path):
+    fake = tmp_path / "fake-bin"
+    _fake_dpkg_query(fake, "3.2.0")
+    app = app_factory(extra_env={"PATH": f"{fake}:{session.base_env()['PATH']}"})
+    app.open_folder(home / "Downloads")
+    found = app.wait_for(lambda: (d := app.state()["downloads"]) and d["installers"] is not None
+                         and not d["computing"] and d, "the suggestions")
+    calls = (fake / "calls.log").read_text() if (fake / "calls.log").exists() else "never called"
+    assert found["installers"] == ["photo-tool_3.2.0_amd64.deb"], calls
+
+    _fake_dpkg_query(fake, "3.1.0")  # an older version is installed
+    app.action("win.reload")
+    app.wait_for(lambda: (d := app.state()["downloads"]) and not d["computing"] and d["installers"] == [],
+                 "the installer to no longer be suggested", timeout=15)
+
+
+def test_E4_07_grouping_moves_nothing(app, home):
+    app.open_folder(home / "Downloads")
+    before = home.snapshot("Downloads")
+    app.action("win.group-by", s("kind"))
+    app.wait_for(lambda: app.folder()["group_by"] == "kind", "grouping by kind")
+    app.action("win.group-by", s("none"))
+    app.wait_for(lambda: app.folder()["group_by"] == "none", "no grouping")
+    app.wait_idle()
+    assert home.snapshot("Downloads") == before
+
+
+def test_E4_08_another_folder_as_downloads(app, home):
+    chosen = home / "Documents" / "Invoices"
+    app.action("win.set-downloads", s(str(chosen)))
+    app.wait_for(lambda: app.state()["downloads"]["folder"] == str(chosen), "the preference")
+    entries = {e["key"]: e for e in app.state()["sidebar"]["entries"]}
+    app.wait_for(lambda: {e["key"]: e for e in app.state()["sidebar"]["entries"]}["place:downloads"]["path"]
+                 == str(chosen), "the sidebar's Downloads entry")
+    del entries
+    app.action("win.tidy-downloads")
+    app.wait_for(lambda: (d := app.state()["active_window"]["dialog"]) and d["type"] == "tidy", "the Tidy plan")
+    plan = app.state()["tidy"]
+    assert plan["moves"] and all(Path(m["from"]).parent == chosen for m in plan["moves"])
+    assert app.folder()["path"] == str(chosen)

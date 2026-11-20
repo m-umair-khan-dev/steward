@@ -5,6 +5,7 @@
 //! It uses GLib and GIO for files, mounts and models.
 
 pub mod clip;
+pub mod dupes;
 pub mod entry;
 pub mod folder;
 pub mod guard;
@@ -16,6 +17,7 @@ pub mod places;
 pub mod plan;
 pub mod sort;
 pub mod store;
+pub mod suggest;
 
 pub use entry::{EntryData, FileEntry};
 pub use folder::{FolderModel, LoadState};

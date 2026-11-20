@@ -50,6 +50,23 @@ Sheet {
             }
         }
 
+        // Which folder is Downloads (P4-T06).
+        Item {
+            width: parent.width; height: 48
+            Text { anchors.verticalCenter: parent.verticalCenter; text: "Downloads folder"; color: Theme.ink; font.pixelSize: 14 }
+            TextField {
+                id: downloadsField
+                anchors.right: parent.right; anchors.verticalCenter: parent.verticalCenter
+                width: 230
+                placeholderText: "The system’s Downloads"
+                text: root.prefs.downloadsFolder || ""
+                Accessible.name: "Downloads folder"
+                color: Theme.ink
+                background: Rectangle { radius: 9; color: Theme.pane; border.color: Theme.line }
+                onAccepted: p.activate("win.set-downloads", text)
+            }
+        }
+
         // Search and index (P3-T12).
         Text { text: "SEARCH AND INDEX"; color: Theme.faint; font.pixelSize: 12; font.weight: Font.DemiBold
                font.letterSpacing: 0.6; topPadding: 14; bottomPadding: 4 }

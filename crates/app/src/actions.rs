@@ -291,6 +291,15 @@ fn create() -> (gio::SimpleActionGroup, gio::SimpleActionGroup) {
         controller::with(|c| c.start_indexer())
     });
     simple(&win, "tidy", || controller::with(|c| c.plan_tidy()));
+    simple(&win, "tidy-downloads", || {
+        controller::with(|c| c.tidy_downloads())
+    });
+    with_string(&win, "suggest-trash", |id| {
+        controller::with(|c| c.trash_suggestion(id))
+    });
+    with_string(&win, "set-downloads", |path| {
+        controller::with(|c| c.set_downloads_folder(path))
+    });
     simple(&win, "tidy-run", || controller::with(|c| c.run_tidy()));
     simple(&win, "tidy-cancel", || {
         controller::with(|c| c.cancel_tidy())

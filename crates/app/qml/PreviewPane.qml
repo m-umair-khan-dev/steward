@@ -77,6 +77,57 @@ Rectangle {
                 }
                 Text { visible: (root.model.more || 0) > 0; text: "and " + root.model.more + " more kinds"
                        color: Theme.faint; font.pixelSize: 12; topPadding: 4 }
+
+                // Smart Downloads (P4-T05; reference: smart-downloads.png).
+                Column {
+                    visible: !!root.model.suggestions
+                    width: parent.width
+                    spacing: 10
+                    topPadding: 14
+                    Text { text: "SUGGESTIONS"; color: Theme.faint; font.pixelSize: 12; font.weight: Font.DemiBold
+                           font.letterSpacing: 0.6
+                           visible: ((root.model.suggestions || {}).cards || []).length > 0 }
+                    Text { visible: !!(root.model.suggestions || {}).computing
+                                    && ((root.model.suggestions || {}).cards || []).length === 0
+                           text: "Looking for things to clear…"; color: Theme.faint; font.pixelSize: 12 }
+                    Repeater {
+                        model: (root.model.suggestions || {}).cards || []
+                        delegate: Rectangle {
+                            id: card
+                            required property var modelData
+                            width: parent.width
+                            height: cardColumn.implicitHeight + 24
+                            radius: 12
+                            color: Theme.sunken
+                            border.color: Theme.line
+                            Accessible.role: Accessible.Grouping
+                            Accessible.name: modelData.title
+                            Column {
+                                id: cardColumn
+                                x: 14; y: 12
+                                width: parent.width - 28
+                                spacing: 4
+                                Text { width: parent.width; text: card.modelData.title; color: Theme.ink
+                                       font.pixelSize: 13; font.weight: Font.Bold; wrapMode: Text.WordWrap }
+                                Text { width: parent.width; text: card.modelData.text; color: Theme.muted
+                                       font.pixelSize: 12; wrapMode: Text.WordWrap }
+                                Item { width: 1; height: 4 }
+                                PillButton {
+                                    text: "Move to Trash"
+                                    implicitHeight: 30
+                                    onClicked: p.activate("win.suggest-trash", card.modelData.id)
+                                }
+                            }
+                        }
+                    }
+                    PillButton {
+                        width: parent.width
+                        implicitHeight: 42
+                        text: "Tidy Downloads…"
+                        primary: true
+                        onClicked: p.activate("win.tidy-downloads", "")
+                    }
+                }
             }
 
             // --- one item -----------------------------------------------------

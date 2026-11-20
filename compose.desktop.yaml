@@ -113,7 +113,9 @@ services:
       CAIRN_COMPOSITOR: ${CAIRN_COMPOSITOR:-}
     tmpfs:
       - /home/dev:uid=${HOST_UID:-1000},gid=${HOST_GID:-1000}
-      - /tmp:uid=${HOST_UID:-1000},gid=${HOST_GID:-1000},mode=1777
+      # exec: tests put stand-in programs (dpkg-query, snap, editors) on PATH
+      # in their temporary folders (DESIGN.md §10.2).
+      - /tmp:uid=${HOST_UID:-1000},gid=${HOST_GID:-1000},mode=1777,exec
     command: ["docker/scripts/run-e2e"]
 
   # Formatting and clippy (Dockerfile and Compose checks run from the Makefile).

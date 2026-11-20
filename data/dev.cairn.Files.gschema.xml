@@ -59,6 +59,11 @@
       <default>false</default>
       <summary>Window maximized</summary>
     </key>
+    <key name="downloads-folder" type="s">
+      <default>''</default>
+      <summary>The folder treated as Downloads</summary>
+      <description>Empty means the system's Downloads folder.</description>
+    </key>
     <key name="index-roots" type="as">
       <default>[]</default>
       <summary>Folders the search index covers</summary>

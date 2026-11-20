@@ -16,7 +16,7 @@ pub use crawl::{Control, CrawlStats, Rules};
 pub use query::{Hit, rank};
 
 /// Bump when the schema changes: an index with another version is rebuilt.
-pub const SCHEMA_VERSION: i64 = 1;
+pub const SCHEMA_VERSION: i64 = 2;
 
 const SCHEMA: &str = "
 CREATE TABLE entry (
@@ -32,10 +32,14 @@ CREATE TABLE entry (
     tree_size INTEGER NOT NULL DEFAULT 0,   -- folders: bytes of every file inside
     tree_files INTEGER NOT NULL DEFAULT 0,  -- folders: files inside, at any depth
     child_count INTEGER NOT NULL DEFAULT 0, -- folders: visible items directly inside
-    scanned_at INTEGER NOT NULL
+    scanned_at INTEGER NOT NULL,
+    dev INTEGER NOT NULL DEFAULT 0,     -- filesystem (st_dev) and inode: re-find
+    inode INTEGER NOT NULL DEFAULT 0    -- an item after a rename (workspaces)
 );
 CREATE INDEX entry_parent ON entry (parent_id);
 CREATE INDEX entry_name ON entry (name COLLATE NOCASE);
+CREATE INDEX entry_size ON entry (size) WHERE is_dir = 0;
+CREATE INDEX entry_inode ON entry (inode);
 CREATE VIRTUAL TABLE name_fts USING fts5 (name, content='entry', content_rowid='id', tokenize='trigram');
 CREATE TRIGGER entry_ai AFTER INSERT ON entry BEGIN
     INSERT INTO name_fts (rowid, name) VALUES (new.id, new.name);
@@ -296,6 +300,32 @@ impl Index {
             }
         }
         tx.commit()
+    }
+
+    /// Visible files of exactly `size` bytes (duplicate candidates).
+    pub fn files_of_size(&self, size: u64) -> Vec<PathBuf> {
+        self.conn
+            .prepare_cached("SELECT path FROM entry WHERE is_dir = 0 AND size = ?1 AND hidden = 0 AND kind != 'link'")
+            .and_then(|mut s| {
+                s.query_map(params![size as i64], |r| r.get::<_, String>(0))
+                    .map(|rows| rows.flatten().map(PathBuf::from).collect())
+            })
+            .unwrap_or_default()
+    }
+
+    /// Where the item with this filesystem and inode is now, if indexed
+    /// (an item renamed or moved on the same filesystem keeps its inode).
+    pub fn path_of_inode(&self, dev: u64, inode: u64) -> Option<PathBuf> {
+        self.conn
+            .query_row(
+                "SELECT path FROM entry WHERE inode = ?1 AND dev = ?2",
+                params![inode as i64, dev as i64],
+                |r| r.get::<_, String>(0),
+            )
+            .optional()
+            .ok()
+            .flatten()
+            .map(PathBuf::from)
     }
 
     /// Every indexed folder at or under `path`, shallowest first (the

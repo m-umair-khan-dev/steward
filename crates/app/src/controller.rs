@@ -18,6 +18,8 @@ use serde_json::{Value, json};
 use cairn_core::sort::{self, GroupBy, SortKey};
 use cairn_core::{FileEntry, FolderModel, Kind, LoadState};
 
+mod downloads;
+pub use downloads::downloads_folder;
 mod index;
 mod ops;
 mod peek;
@@ -180,6 +182,7 @@ pub struct Controller {
     search: search::SearchState,
     peek: peek::PeekState,
     tidy: tidy::TidyState,
+    downloads: downloads::DownloadsState,
     /// Path bar: folders whose name matches what is typed, and the one chosen.
     path_matches: Vec<PathBuf>,
     path_match: Option<usize>,
@@ -269,6 +272,7 @@ pub fn init(notifier: impl Fn() + 'static) {
         search: search::SearchState::default(),
         peek: peek::PeekState::default(),
         tidy: tidy::TidyState::default(),
+        downloads: downloads::DownloadsState::default(),
         path_matches: Vec::new(),
         path_match: None,
         dialog: String::new(),
@@ -455,6 +459,7 @@ impl Controller {
     fn on_load_state(&mut self, state: &LoadState) {
         self.state = state.clone();
         if *state == LoadState::Ready {
+            self.refresh_suggestions();
             self.recompute();
             if let Some(started) = self.load_started.take() {
                 self.last_load_ms = Some(started.elapsed().as_millis() as u64);
@@ -602,6 +607,10 @@ impl Controller {
             }
             "sidebar-visible" => {
                 actions::set_state("toggle-sidebar", &settings.boolean(key).to_variant())
+            }
+            "downloads-folder" => {
+                self.reload_sidebar();
+                self.refresh_suggestions();
             }
             _ => {}
         }
@@ -1642,6 +1651,7 @@ impl Controller {
         json!({
             "visible": visible,
             "mode": "overview",
+            "suggestions": self.suggestions_json(),
             "title": self.folder_title(),
             "total": format::size(bytes),
             "counts": format!("{} · {}", format::folders(folders), format::files(files)),
@@ -1701,6 +1711,7 @@ impl Controller {
             "maximized": s.boolean("window-maximized"),
             "motion": self.motion,
             // Search and index (P3-T12).
+            "downloadsFolder": crate::paths::display_path(&downloads_folder()),
             "indexRoots": s.strv("index-roots").iter().map(|r| r.to_string()).collect::<Vec<_>>(),
             "indexExclude": s.strv("index-exclude").iter().map(|r| r.to_string()).collect::<Vec<_>>(),
             "indexPaused": s.boolean("index-paused"),
@@ -1785,6 +1796,7 @@ impl Controller {
             "search": self.search_test_json(),
             "peek": self.peek_test_json(),
             "tidy": self.tidy_test_json(),
+            "downloads": self.downloads_test_json(),
             // Folder numbers as the cards show them, by name.
             "folder_stats": self.visible.iter().filter(|e| e.is_dir()).filter_map(|e| {
                 let (items, bytes) = self.folder_numbers(&e.data().file.path()?)?;

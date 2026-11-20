@@ -27,6 +27,8 @@ rusqlite = { version = "0.41", features = ["bundled"] }
 rustix = { version = "1", features = ["fs", "process"] }
 serde = { version = "1", features = ["derive"] }
 serde_json = "1"
+# Duplicate finder: full-content hashes (DESIGN.md §7.1).
+blake3 = "1"
 
 [workspace.lints.rust]
 # Denied, not forbidden: the cxx-qt bridge module needs `unsafe extern "C++"` (ADR 0009).
