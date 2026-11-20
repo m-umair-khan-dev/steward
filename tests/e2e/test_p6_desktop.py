@@ -45,3 +45,26 @@ def test_desktop_actions_reach_the_running_window(app, home):
     app.wait_for(lambda: app.folder()["path"] == str(home / "Documents")
                  and app.folder()["selection"] == ["Notes.md"], "the file, selected in its folder")
     assert app.state()["tools"]["page"] == ""
+
+
+def test_E6_09_show_items_with_the_option_on(app, home):
+    from gi.repository import Gio, GLib
+
+    app.action("app.preferences")
+    app.wait_for(lambda: app.state()["active_window"]["dialog"], "Preferences")
+    app.a11y_click("Use as default file manager", within="Preferences")
+    app.press("escape")
+    target = home / "Downloads" / "Invoice-0923.pdf"
+
+    def owned() -> bool:
+        reply = app.bus.call_sync("org.freedesktop.DBus", "/org/freedesktop/DBus", "org.freedesktop.DBus",
+                                  "NameHasOwner", GLib.Variant("(s)", ("org.freedesktop.FileManager1",)),
+                                  None, Gio.DBusCallFlags.NONE, 2000, None)
+        return reply.unpack()[0]
+
+    app.wait_for(owned, "Cairn to answer as the file manager")
+    app.bus.call_sync("org.freedesktop.FileManager1", "/org/freedesktop/FileManager1",
+                      "org.freedesktop.FileManager1", "ShowItems",
+                      GLib.Variant("(ass)", ([target.as_uri()], "")), None, Gio.DBusCallFlags.NONE, 5000, None)
+    app.wait_for(lambda: app.folder()["path"] == str(target.parent)
+                 and app.folder()["selection"] == [target.name], "the file, selected in its folder")

@@ -138,6 +138,9 @@ msgstr "[ÇÖÑTÉÑTS ~~]"
 msgid "Cairn"
 msgstr "[Çàîrñ ~~]"
 
+msgid "Cairn answers other apps now; folders open in it once Cairn is installed"
+msgstr "[Çàîrñ àñswérs öthér àpps ñöw; földérs öpéñ îñ ît öñçé Çàîrñ îs îñstàlléd ~~~~~~~~~~~~~~~~~~~~~~~~]"
+
 msgid "Cairn never runs these. Copy a command and run it in a terminal if you want to."
 msgstr "[Çàîrñ ñévér rüñs thésé. Çöpý à çömmàñd àñd rüñ ît îñ à térmîñàl îf ýöü wàñt tö. ~~~~~~~~~~~~~~~~~~~~~~~~~~]"
 
@@ -401,6 +404,9 @@ msgstr "[Földérs ~~]"
 
 msgid "Folders and files by name, as you type."
 msgstr "[Földérs àñd fîlés bý ñàmé, às ýöü týpé. ~~~~~~~~~~~~~]"
+
+msgid "Folders open in Cairn, and other apps' “Show in folder” comes here."
+msgstr "[Földérs öpéñ îñ Çàîrñ, àñd öthér àpps' “Shöw îñ földér” çömés héré. ~~~~~~~~~~~~~~~~~~~~~~]"
 
 msgid "Folders with that name"
 msgstr "[Földérs wîth thàt ñàmé ~~~~~~~]"
@@ -1247,6 +1253,9 @@ msgstr "[Üp ~~]"
 
 msgid "Up to the parent folder"
 msgstr "[Üp tö thé pàréñt földér ~~~~~~~]"
+
+msgid "Use as default file manager"
+msgstr "[Üsé às défàült fîlé màñàgér ~~~~~~~~~]"
 
 msgid "Used"
 msgstr "[Üséd ~~]"

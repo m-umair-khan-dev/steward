@@ -105,8 +105,10 @@ def catalogs() -> list[Path]:
 
 def update() -> None:
     for po in catalogs():
-        subprocess.run(["msgmerge", "--quiet", "--update", "--backup=none", "--no-fuzzy-matching",
+        subprocess.run(["msgmerge", "--quiet", "--update", "--backup=none", "--no-fuzzy-matching", "--no-wrap",
                         str(po), str(POT)], check=True)
+        # One line per string, so diffs stay readable.
+        subprocess.run(["msgcat", "--no-wrap", "-o", str(po), str(po)], check=True)
         print(f"updated {po.name}")
 
 

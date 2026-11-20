@@ -103,5 +103,10 @@
       <summary>The last version that ran</summary>
       <description>What's New shows once when the app runs a newer version than this (P6-T02).</description>
     </key>
+    <key name="default-file-manager" type="b">
+      <default>false</default>
+      <summary>Use Cairn as the default file manager</summary>
+      <description>Open folders in Cairn and answer other apps' "Show in folder" (org.freedesktop.FileManager1) while Cairn runs (P6-T07).</description>
+    </key>
   </schema>
 </schemalist>

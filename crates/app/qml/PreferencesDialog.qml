@@ -75,6 +75,24 @@ Sheet {
             }
         }
 
+        // Use as the default file manager (P6-T07).
+        Item {
+            width: parent.width; height: 56
+            Column {
+                anchors.verticalCenter: parent.verticalCenter
+                width: parent.width - 70
+                Text { text: p.t("Use as default file manager"); color: Theme.ink; font.pixelSize: 14 }
+                Text { width: parent.width; wrapMode: Text.WordWrap; color: Theme.muted; font.pixelSize: 12
+                       text: p.t("Folders open in Cairn, and other apps' “Show in folder” comes here.") }
+            }
+            Switch {
+                anchors.right: parent.right; anchors.verticalCenter: parent.verticalCenter
+                checked: !!root.prefs.defaultFileManager
+                Accessible.name: p.t("Use as default file manager")
+                onToggled: p.setpref("default-file-manager", checked ? "true" : "false")
+            }
+        }
+
         // Which folder is Downloads (P4-T06).
         Item {
             width: parent.width; height: 48

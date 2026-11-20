@@ -371,6 +371,9 @@ pub fn init(notifier: impl Fn() + 'static) {
             c.set_dual_pane(true, right.is_dir().then_some(right));
         }
         c.first_run_check();
+        if settings::get().boolean("default-file-manager") {
+            crate::file_manager::serve(true);
+        }
     });
 }
 
@@ -680,6 +683,16 @@ impl Controller {
             "downloads-folder" => {
                 self.reload_sidebar();
                 self.refresh_suggestions();
+            }
+            "default-file-manager" => {
+                let on = settings.boolean(key);
+                crate::file_manager::serve(on);
+                if !crate::file_manager::set_default_for_folders(on) && on {
+                    self.emit(Event::Toast(
+                        gettext("Cairn answers other apps now; folders open in it once Cairn is installed"),
+                        false,
+                    ));
+                }
             }
             _ => {}
         }
@@ -1813,6 +1826,7 @@ impl Controller {
             "indexPauseOnBattery": s.boolean("index-pause-on-battery"),
             "indexRunning": self.index.running,
             "home": paths::display_path(&glib::home_dir()),
+            "defaultFileManager": s.boolean("default-file-manager"),
         })
     }
 
