@@ -122,7 +122,7 @@ Item {
             flat: true
             icon: "more"
             rotation: 90
-            label: "More for " + root.name
+            label: p.t("More for ") + root.name
             opacity: root.lifted || root.selected ? 1 : 0.55
             onClicked: { root.tapped(0); root.menuRequested() }
         }

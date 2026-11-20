@@ -11,7 +11,7 @@ Rectangle {
     height: 50
     color: Theme.pane
     Accessible.role: Accessible.Grouping
-    Accessible.name: active ? "Active pane" : "Pane"
+    Accessible.name: active ? p.t("Active pane") : p.t("Pane")
 
     Icon { x: 18; anchors.verticalCenter: parent.verticalCenter; name: "folder"; size: 20; color: Theme.deep("folders") }
     Row {

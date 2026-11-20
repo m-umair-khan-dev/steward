@@ -5,7 +5,7 @@ import QtQuick.Controls.Basic
 Sheet {
     id: root
     property var accels: []
-    title: "Keyboard Shortcuts"
+    title: p.t("Keyboard Shortcuts")
     cardWidth: 520
     cardHeight: 560
     ListView {

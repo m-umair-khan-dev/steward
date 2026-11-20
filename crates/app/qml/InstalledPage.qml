@@ -10,7 +10,7 @@ Rectangle {
     property var model: ({ looking: true, tools: [], filters: [], packages: [] })
     color: Theme.pane
     Accessible.role: Accessible.Pane
-    Accessible.name: "Installed"
+    Accessible.name: p.t("Installed")
 
     Column {
         id: head
@@ -32,7 +32,7 @@ Rectangle {
                     Row {
                         id: titleRow
                         spacing: 12
-                        Text { text: root.model.looking && !root.model.title ? "Looking…" : (root.model.title || "")
+                        Text { text: root.model.looking && !root.model.title ? p.t("Looking…") : (root.model.title || "")
                                color: Theme.ink; font.pixelSize: 30; font.weight: Font.Bold
                                Accessible.role: Accessible.Heading; Accessible.name: text }
                         Text { text: root.model.summary || ""; color: Theme.muted; font.pixelSize: 15
@@ -41,8 +41,8 @@ Rectangle {
                     Row {
                         anchors.right: parent.right
                         spacing: 8
-                        PillButton { text: "Save List…"; enabled: !!root.model.title; onClicked: saveDialog.open() }
-                        IconButton { icon: "redo"; label: "Look again"; onClicked: p.activate("win.installed-refresh", "") }
+                        PillButton { text: p.t("Save List…"); enabled: !!root.model.title; onClicked: saveDialog.open() }
+                        IconButton { icon: "redo"; label: p.t("Look again"); onClicked: p.activate("win.installed-refresh", "") }
                     }
                 }
                 // One bar, a part per tool.
@@ -64,7 +64,7 @@ Rectangle {
                     width: parent.width
                     spacing: 10
                     Accessible.role: Accessible.List
-                    Accessible.name: "Tools"
+                    Accessible.name: p.t("Tools")
                     Repeater {
                         model: root.model.tools || []
                         delegate: Rectangle {
@@ -76,7 +76,7 @@ Rectangle {
                             border.color: modelData.selected ? Theme.accent : "transparent"
                             Accessible.role: Accessible.Button
                             Accessible.name: modelData.name
-                            Accessible.description: modelData.count + " packages, " + modelData.bytesText
+                            Accessible.description: modelData.count + p.t(" packages, ") + modelData.bytesText
                             Accessible.onPressAction: p.activate("win.installed-tool", modelData.id)
                             Row {
                                 id: chipRow
@@ -101,7 +101,7 @@ Rectangle {
         Row {
             spacing: 10
             Accessible.role: Accessible.PageTabList
-            Accessible.name: "Filters"
+            Accessible.name: p.t("Filters")
             Repeater {
                 model: root.model.filters || []
                 delegate: Rectangle {
@@ -140,10 +140,10 @@ Rectangle {
         Item {
             id: columns
             width: parent.width; height: 40
-            Text { x: 18; anchors.verticalCenter: parent.verticalCenter; text: "Name"; color: Theme.muted; font.pixelSize: 13; font.weight: Font.DemiBold }
-            Text { x: parent.width * 0.55; anchors.verticalCenter: parent.verticalCenter; text: "Tool"; color: Theme.muted; font.pixelSize: 13; font.weight: Font.DemiBold }
-            Text { x: parent.width * 0.70; anchors.verticalCenter: parent.verticalCenter; text: "Why it’s here"; color: Theme.muted; font.pixelSize: 13; font.weight: Font.DemiBold }
-            Text { anchors.right: parent.right; anchors.rightMargin: 64; anchors.verticalCenter: parent.verticalCenter; text: "Size"; color: Theme.muted; font.pixelSize: 13; font.weight: Font.DemiBold }
+            Text { x: 18; anchors.verticalCenter: parent.verticalCenter; text: p.t("Name"); color: Theme.muted; font.pixelSize: 13; font.weight: Font.DemiBold }
+            Text { x: parent.width * 0.55; anchors.verticalCenter: parent.verticalCenter; text: p.t("Tool"); color: Theme.muted; font.pixelSize: 13; font.weight: Font.DemiBold }
+            Text { x: parent.width * 0.70; anchors.verticalCenter: parent.verticalCenter; text: p.t("Why it’s here"); color: Theme.muted; font.pixelSize: 13; font.weight: Font.DemiBold }
+            Text { anchors.right: parent.right; anchors.rightMargin: 64; anchors.verticalCenter: parent.verticalCenter; text: p.t("Size"); color: Theme.muted; font.pixelSize: 13; font.weight: Font.DemiBold }
             Rectangle { anchors.bottom: parent.bottom; width: parent.width; height: 1; color: Theme.line }
         }
         ListView {
@@ -155,7 +155,7 @@ Rectangle {
             boundsBehavior: Flickable.StopAtBounds
             model: root.model.packages || []
             Accessible.role: Accessible.List
-            Accessible.name: "Packages"
+            Accessible.name: p.t("Packages")
             ScrollBar.vertical: ScrollBar { policy: ScrollBar.AsNeeded }
             delegate: Rectangle {
                 id: row
@@ -200,7 +200,7 @@ Rectangle {
                 IconButton {
                     anchors.right: parent.right; anchors.rightMargin: 16; anchors.verticalCenter: parent.verticalCenter
                     width: 30; height: 30; iconSize: 15; flat: true; icon: "copy"
-                    label: "Copy the command that removes " + row.modelData.name
+                    label: p.t("Copy the command that removes ") + row.modelData.name
                     onClicked: p.activate("win.installed-copy", row.modelData.key)
                 }
             }
@@ -208,14 +208,14 @@ Rectangle {
         Text {
             anchors.centerIn: parent
             visible: !!root.model.looking && (root.model.packages || []).length === 0
-            text: "Asking apt, Snap, Flatpak and the other tools…"
+            text: p.t("Asking apt, Snap, Flatpak and the other tools…")
             color: Theme.muted; font.pixelSize: 15
         }
     }
 
     FileDialog {
         id: saveDialog
-        title: "Save the List"
+        title: p.t("Save the List")
         fileMode: FileDialog.SaveFile
         onAccepted: p.activate("win.installed-save", selectedFile.toString())
     }

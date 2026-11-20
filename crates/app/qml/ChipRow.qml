@@ -22,7 +22,7 @@ Item {
             y: 1
             spacing: 6
             Accessible.role: Accessible.Grouping
-            Accessible.name: "Filter by kind"
+            Accessible.name: p.t("Filter by kind")
             Repeater {
                 model: root.chips
                 // White with a border and a kind dot; the active chip is

@@ -134,7 +134,7 @@ Item {
                 y: 5
                 width: 16; height: 16
                 Accessible.role: Accessible.Button
-                Accessible.name: "About " + root.label
+                Accessible.name: p.t("About ") + root.label
                 Accessible.onPressAction: root.infoRequested()
                 Icon { anchors.fill: parent; name: "info"; size: 16; color: Qt.rgba(1, 1, 1, 0.92) }
                 MouseArea { anchors.fill: parent; anchors.margins: -4; onClicked: root.infoRequested() }

@@ -13,7 +13,7 @@ Item {
     onAnchorChanged: if (anchor >= 0 && anchor < items.length) list.positionViewAtIndex(anchor, ListView.Contain)
 
     Accessible.role: Accessible.List
-    Accessible.name: "Folder contents"
+    Accessible.name: p.t("Folder contents")
 
     function modes(modifiers) {
         if (modifiers & Qt.ControlModifier) return 1
@@ -30,7 +30,7 @@ Item {
         width: parent.width
         height: 34
         Repeater {
-            model: [["Name", 54], ["Kind", root.kindX], ["Size", root.sizeX], ["Modified", root.dateX]]
+            model: [[p.t("Name"), 54], [p.t("Kind"), root.kindX], [p.t("Size"), root.sizeX], [p.t("Modified"), root.dateX]]
             delegate: Text {
                 required property var modelData
                 x: modelData[1]

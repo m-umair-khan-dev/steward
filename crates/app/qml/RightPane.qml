@@ -8,7 +8,7 @@ Rectangle {
     property var model: ({ items: [], crumbs: [] })
     color: Theme.pane
     Accessible.role: Accessible.Pane
-    Accessible.name: "Right pane"
+    Accessible.name: p.t("Right pane")
 
     Rectangle { width: 1; height: parent.height; color: Theme.line }
 
@@ -26,12 +26,12 @@ Rectangle {
         anchors.top: header.bottom
         width: parent.width
         height: 34
-        Text { x: 22; anchors.verticalCenter: parent.verticalCenter; text: "Name"; color: Theme.faint
+        Text { x: 22; anchors.verticalCenter: parent.verticalCenter; text: p.t("Name"); color: Theme.faint
                font.pixelSize: 12; font.weight: Font.DemiBold }
-        Text { x: parent.width * 0.58; anchors.verticalCenter: parent.verticalCenter; text: "Modified"
+        Text { x: parent.width * 0.58; anchors.verticalCenter: parent.verticalCenter; text: p.t("Modified")
                color: Theme.faint; font.pixelSize: 12; font.weight: Font.DemiBold }
         Text { anchors.right: parent.right; anchors.rightMargin: 22; anchors.verticalCenter: parent.verticalCenter
-               text: "Size"; color: Theme.faint; font.pixelSize: 12; font.weight: Font.DemiBold }
+               text: p.t("Size"); color: Theme.faint; font.pixelSize: 12; font.weight: Font.DemiBold }
     }
 
     ListView {
@@ -44,7 +44,7 @@ Rectangle {
         boundsBehavior: Flickable.StopAtBounds
         ScrollBar.vertical: ScrollBar {}
         Accessible.role: Accessible.List
-        Accessible.name: "Right pane contents"
+        Accessible.name: p.t("Right pane contents")
         delegate: Rectangle {
             id: line
             required property var modelData

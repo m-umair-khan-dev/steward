@@ -11,7 +11,7 @@ Rectangle {
     property int locating: -1
     color: Theme.pane
     Accessible.role: Accessible.Pane
-    Accessible.name: "Workspace " + (model.name || "")
+    Accessible.name: p.t("Workspace ") + (model.name || "")
 
     Rectangle {
         id: banner
@@ -39,8 +39,8 @@ Rectangle {
             Row {
                 anchors.right: parent.right; anchors.verticalCenter: parent.verticalCenter
                 spacing: 8
-                PillButton { text: "+ Add Folder"; primary: true; onClicked: addDialog.open() }
-                IconButton { icon: "more"; label: "Workspace settings"
+                PillButton { text: p.t("+ Add Folder"); primary: true; onClicked: addDialog.open() }
+                IconButton { icon: "more"; label: p.t("Workspace settings")
                              onClicked: p.activate("win.workspace-edit-ask", String(root.model.id)) }
             }
         }
@@ -93,7 +93,7 @@ Rectangle {
             width: parent.width
             spacing: 18
             Accessible.role: Accessible.List
-            Accessible.name: "Workspace items"
+            Accessible.name: p.t("Workspace items")
             Repeater {
                 model: root.model.items || []
                 delegate: Rectangle {
@@ -130,7 +130,7 @@ Rectangle {
                         }
                         PillButton {
                             visible: card.modelData.state === "missing"
-                            text: "Locate…"
+                            text: p.t("Locate…")
                             implicitHeight: 28
                             onClicked: { root.locating = card.modelData.id; locateDialog.open() }
                         }
@@ -151,16 +151,16 @@ Rectangle {
     MenuPopup {
         id: itemMenu
         property int item: -1
-        model: [{ text: "Remove from Workspace", action: "win.workspace-remove", param: String(itemMenu.item) }]
+        model: [{ text: p.t("Remove from Workspace"), action: "win.workspace-remove", param: String(itemMenu.item) }]
     }
     FolderDialog {
         id: addDialog
-        title: "Add a folder to “" + (root.model.name || "") + "”"
+        title: p.t("Add a folder to “") + (root.model.name || "") + "”"
         onAccepted: p.activate("win.workspace-add", root.model.id + ":" + decodeURIComponent(selectedFolder.toString().replace("file://", "")))
     }
     FolderDialog {
         id: locateDialog
-        title: "Locate"
+        title: p.t("Locate")
         onAccepted: p.activate("win.workspace-locate", root.locating + ":" + decodeURIComponent(selectedFolder.toString().replace("file://", "")))
     }
 }

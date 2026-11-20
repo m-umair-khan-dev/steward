@@ -8,7 +8,7 @@ Rectangle {
     property var model: ({ mode: "empty" })
     color: Theme.paneSide
     Accessible.role: Accessible.Pane
-    Accessible.name: "Preview"
+    Accessible.name: p.t("Preview")
 
     Rectangle { width: 1; height: parent.height; color: Theme.line }
 
@@ -35,12 +35,12 @@ Rectangle {
                 Row {
                     spacing: 8
                     Text { id: total; text: root.model.total || ""; color: Theme.ink; font.pixelSize: 30; font.weight: Font.Bold }
-                    Text { text: "in all"; color: Theme.muted; font.pixelSize: 16
+                    Text { text: p.t("in all"); color: Theme.muted; font.pixelSize: 16
                            anchors.baseline: total.baseline }
                 }
                 Text { text: root.model.counts || ""; color: Theme.muted; font.pixelSize: 13 }
                 Item { width: 1; height: 10 }
-                Text { text: "WHAT TAKES THE SPACE"; color: Theme.faint; font.pixelSize: 12; font.weight: Font.DemiBold
+                Text { text: p.t("WHAT TAKES THE SPACE"); color: Theme.faint; font.pixelSize: 12; font.weight: Font.DemiBold
                        font.letterSpacing: 0.6
                        visible: (root.model.kinds || []).length > 0 }
                 Repeater {
@@ -75,7 +75,7 @@ Rectangle {
                                           easing.type: Easing.OutCubic; running: true }
                     }
                 }
-                Text { visible: (root.model.more || 0) > 0; text: "and " + root.model.more + " more kinds"
+                Text { visible: (root.model.more || 0) > 0; text: p.t("and ") + root.model.more + " more kinds"
                        color: Theme.faint; font.pixelSize: 12; topPadding: 4 }
 
                 // Smart Downloads (P4-T05; reference: smart-downloads.png).
@@ -84,12 +84,12 @@ Rectangle {
                     width: parent.width
                     spacing: 10
                     topPadding: 14
-                    Text { text: "SUGGESTIONS"; color: Theme.faint; font.pixelSize: 12; font.weight: Font.DemiBold
+                    Text { text: p.t("SUGGESTIONS"); color: Theme.faint; font.pixelSize: 12; font.weight: Font.DemiBold
                            font.letterSpacing: 0.6
                            visible: ((root.model.suggestions || {}).cards || []).length > 0 }
                     Text { visible: !!(root.model.suggestions || {}).computing
                                     && ((root.model.suggestions || {}).cards || []).length === 0
-                           text: "Looking for things to clear…"; color: Theme.faint; font.pixelSize: 12 }
+                           text: p.t("Looking for things to clear…"); color: Theme.faint; font.pixelSize: 12 }
                     Repeater {
                         model: (root.model.suggestions || {}).cards || []
                         delegate: Rectangle {
@@ -113,7 +113,7 @@ Rectangle {
                                        font.pixelSize: 12; wrapMode: Text.WordWrap }
                                 Item { width: 1; height: 4 }
                                 PillButton {
-                                    text: "Move to Trash"
+                                    text: p.t("Move to Trash")
                                     implicitHeight: 30
                                     onClicked: p.activate("win.suggest-trash", card.modelData.id)
                                 }
@@ -123,7 +123,7 @@ Rectangle {
                     PillButton {
                         width: parent.width
                         implicitHeight: 42
-                        text: "Tidy Downloads…"
+                        text: p.t("Tidy Downloads…")
                         primary: true
                         onClicked: p.activate("win.tidy-downloads", "")
                     }
@@ -192,7 +192,7 @@ Rectangle {
                     width: parent.width
                     spacing: 2
                     topPadding: 6
-                    Text { text: "CONTENTS"; color: Theme.faint; font.pixelSize: 12; font.weight: Font.DemiBold
+                    Text { text: p.t("CONTENTS"); color: Theme.faint; font.pixelSize: 12; font.weight: Font.DemiBold
                            font.letterSpacing: 0.6; bottomPadding: 4 }
                     Repeater {
                         model: root.model.tree || []
@@ -232,21 +232,21 @@ Rectangle {
                     width: parent.width
                     spacing: 4
                     topPadding: 6
-                    Text { text: "CONTENTS"; color: Theme.faint; font.pixelSize: 12; font.weight: Font.DemiBold
+                    Text { text: p.t("CONTENTS"); color: Theme.faint; font.pixelSize: 12; font.weight: Font.DemiBold
                            font.letterSpacing: 0.6 }
                     Repeater {
                         model: root.model.children || []
                         delegate: Text { required property string modelData; text: modelData; color: Theme.ink
                                          font.pixelSize: 12; width: parent.width; elide: Text.ElideMiddle }
                     }
-                    Text { visible: (root.model.more || 0) > 0; text: "and " + root.model.more + " more"
+                    Text { visible: (root.model.more || 0) > 0; text: p.t("and ") + root.model.more + " more"
                            color: Theme.faint; font.pixelSize: 12 }
                 }
             }
 
             Text {
                 visible: root.model.mode === "empty"
-                text: "Nothing to preview"
+                text: p.t("Nothing to preview")
                 color: Theme.faint
                 font.pixelSize: 13
             }

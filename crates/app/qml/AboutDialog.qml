@@ -4,7 +4,7 @@ import QtQuick
 Sheet {
     id: root
     property string version: ""
-    title: "About"
+    title: p.t("About")
     cardWidth: 380
     Column {
         width: parent.width
@@ -18,14 +18,14 @@ Sheet {
             }
             Icon { anchors.centerIn: parent; name: "folder"; size: 38; color: "white" }
         }
-        Text { anchors.horizontalCenter: parent.horizontalCenter; text: "Cairn"; color: Theme.ink
+        Text { anchors.horizontalCenter: parent.horizontalCenter; text: p.t("Cairn"); color: Theme.ink
                font.pixelSize: 22; font.weight: Font.Bold }
-        Text { anchors.horizontalCenter: parent.horizontalCenter; text: "Version " + root.version; color: Theme.muted
+        Text { anchors.horizontalCenter: parent.horizontalCenter; text: p.t("Version ") + root.version; color: Theme.muted
                font.pixelSize: 13 }
         Text { width: parent.width; horizontalAlignment: Text.AlignHCenter; wrapMode: Text.WordWrap
-               text: "A file manager for Ubuntu that keeps folders tidy."; color: Theme.ink; font.pixelSize: 14
+               text: p.t("A file manager for Ubuntu that keeps folders tidy."); color: Theme.ink; font.pixelSize: 14
                topPadding: 6 }
-        Text { anchors.horizontalCenter: parent.horizontalCenter; text: "GPL-3.0-or-later"; color: Theme.faint
+        Text { anchors.horizontalCenter: parent.horizontalCenter; text: p.t("GPL-3.0-or-later"); color: Theme.faint
                font.pixelSize: 12; bottomPadding: 6 }
     }
 }

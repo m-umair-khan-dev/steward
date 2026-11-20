@@ -18,10 +18,10 @@ Popup {
     contentItem: Column {
         spacing: 12
         Accessible.role: Accessible.List
-        Accessible.name: "Operations"
+        Accessible.name: p.t("Operations")
         Text {
             visible: root.jobs.length === 0
-            text: "Nothing is running."
+            text: p.t("Nothing is running.")
             color: Theme.muted
             font.pixelSize: 13
         }
@@ -47,7 +47,7 @@ Popup {
                         anchors.verticalCenter: parent.verticalCenter
                         width: 28; height: 28; iconSize: 13
                         icon: "close"
-                        label: "Cancel " + parent.parent.modelData.summary
+                        label: p.t("Cancel ") + parent.parent.modelData.summary
                         onClicked: p.activate("win.cancel-job", parent.parent.modelData.id)
                     }
                 }
@@ -62,7 +62,7 @@ Popup {
                     }
                 }
                 Text {
-                    text: parent.modelData.running ? (parent.modelData.progress || "Working…") : "Waiting"
+                    text: parent.modelData.running ? (parent.modelData.progress || p.t("Working…")) : p.t("Waiting")
                     color: Theme.muted
                     font.pixelSize: 12
                 }

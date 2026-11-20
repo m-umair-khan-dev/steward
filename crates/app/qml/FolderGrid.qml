@@ -38,7 +38,7 @@ Item {
     onInFlightChanged: p.flying(inFlight)
 
     Accessible.role: Accessible.List
-    Accessible.name: "Folder contents"
+    Accessible.name: p.t("Folder contents")
 
     function modes(modifiers) {
         if (modifiers & Qt.ControlModifier) return 1

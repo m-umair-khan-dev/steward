@@ -5,7 +5,7 @@ import QtQuick.Controls.Basic
 Sheet {
     id: root
     property var info: ({ groups: [], left: [] })
-    title: "Tidy “" + (info.folder || "") + "”"
+    title: p.t("Tidy “") + (info.folder || "") + "”"
     cardWidth: 560
     cardHeight: 600
     function close() { p.activate("win.tidy-cancel", "") }
@@ -32,7 +32,7 @@ Sheet {
                 id: lists
                 width: parent.width
                 spacing: 10
-                Text { visible: (root.info.groups || []).length > 0; text: "WILL MOVE"; color: Theme.faint
+                Text { visible: (root.info.groups || []).length > 0; text: p.t("WILL MOVE"); color: Theme.faint
                        font.pixelSize: 12; font.weight: Font.DemiBold; font.letterSpacing: 0.6 }
                 Repeater {
                     model: root.info.groups || []
@@ -42,14 +42,14 @@ Sheet {
                         width: lists.width
                         spacing: 3
                         Accessible.role: Accessible.Grouping
-                        Accessible.name: "Will move to " + modelData.folder
+                        Accessible.name: p.t("Will move to ") + modelData.folder
                         Row {
                             spacing: 8
                             Rectangle { width: 12; height: 12; radius: 3; color: Theme.deep(group.modelData.kind)
                                         anchors.verticalCenter: parent.verticalCenter }
                             Text { text: group.modelData.folder + "  " + group.modelData.count; color: Theme.ink
                                    font.pixelSize: 14; font.weight: Font.DemiBold }
-                            Text { visible: !!group.modelData["new"]; text: "new folder"; color: Theme.accentText
+                            Text { visible: !!group.modelData["new"]; text: p.t("new folder"); color: Theme.accentText
                                    font.pixelSize: 12; anchors.verticalCenter: parent.verticalCenter }
                         }
                         Repeater {
@@ -60,7 +60,7 @@ Sheet {
                         }
                     }
                 }
-                Text { visible: (root.info.left || []).length > 0; text: "LEFT WHERE THEY ARE"; color: Theme.faint
+                Text { visible: (root.info.left || []).length > 0; text: p.t("LEFT WHERE THEY ARE"); color: Theme.faint
                        font.pixelSize: 12; font.weight: Font.DemiBold; font.letterSpacing: 0.6; topPadding: 6 }
                 Repeater {
                     model: root.info.left || []
@@ -81,8 +81,8 @@ Sheet {
             anchors.bottom: parent.bottom
             anchors.right: parent.right
             spacing: 8
-            PillButton { text: (root.info.empty ? "Close" : "Cancel"); onClicked: root.close() }
-            PillButton { visible: !root.info.empty; text: "Tidy"; primary: true; onClicked: p.activate("win.tidy-run", "") }
+            PillButton { text: (root.info.empty ? p.t("Close") : p.t("Cancel")); onClicked: root.close() }
+            PillButton { visible: !root.info.empty; text: p.t("Tidy"); primary: true; onClicked: p.activate("win.tidy-run", "") }
         }
     }
 }

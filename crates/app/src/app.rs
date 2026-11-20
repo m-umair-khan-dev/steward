@@ -4,7 +4,7 @@ use std::process::ExitCode;
 
 use cxx_qt_lib::{QGuiApplication, QQmlApplicationEngine, QString, QUrl};
 
-/// The gettext domain. Translations are wired up in Phase 6.
+/// The gettext domain (po/cairn.pot, P6-T04).
 const GETTEXT_DOMAIN: &str = "cairn";
 
 pub fn run() -> ExitCode {
@@ -33,8 +33,20 @@ pub fn run() -> ExitCode {
     ExitCode::from(u8::try_from(code).unwrap_or(1))
 }
 
+/// Where the message catalogs are: installed builds use the system's; test
+/// and development builds use the catalogs build.rs compiled from po/.
+fn locale_dir() -> &'static str {
+    if cfg!(any(debug_assertions, feature = "e2e")) {
+        concat!(env!("OUT_DIR"), "/locale")
+    } else {
+        "/usr/share/locale"
+    }
+}
+
 fn init_gettext() {
-    let _ = gettextrs::bindtextdomain(GETTEXT_DOMAIN, "/usr/share/locale");
+    // The locale itself is set by QGuiApplication (setlocale(LC_ALL, "")),
+    // before any message is looked up.
+    let _ = gettextrs::bindtextdomain(GETTEXT_DOMAIN, locale_dir());
     let _ = gettextrs::bind_textdomain_codeset(GETTEXT_DOMAIN, "UTF-8");
     let _ = gettextrs::textdomain(GETTEXT_DOMAIN);
 }

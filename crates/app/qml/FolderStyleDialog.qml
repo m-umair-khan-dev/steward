@@ -6,7 +6,7 @@ Sheet {
     property var info: ({ symbols: [], colors: [] })
     property string symbol: info.symbol || "document"
     property string color: info.color || "folders"
-    title: "Symbol and Colour"
+    title: p.t("Symbol and Colour")
     cardWidth: 460
     onVisibleChanged: if (visible) { root.symbol = info.symbol || "document"; root.color = info.color || "folders" }
 
@@ -17,7 +17,7 @@ Sheet {
             spacing: 16
             GlassFolder { width: 120; kind: root.color; symbol: root.symbol; label: root.info.name || ""; enabled: false }
             Text { anchors.verticalCenter: parent.verticalCenter; width: 260; wrapMode: Text.WordWrap
-                   text: "Choose how “" + (root.info.name || "") + "” looks. It keeps this look when renamed or moved."
+                   text: p.t("Choose how “") + (root.info.name || "") + p.t("” looks. It keeps this look when renamed or moved.")
                    color: Theme.muted; font.pixelSize: 13 }
         }
         Flow {
@@ -31,7 +31,7 @@ Sheet {
                     color: root.symbol === modelData ? Theme.alpha(Theme.accent, 0.18) : Theme.track
                     border.color: root.symbol === modelData ? Theme.accent : "transparent"
                     Accessible.role: Accessible.Button
-                    Accessible.name: "Symbol " + modelData
+                    Accessible.name: p.t("Symbol ") + modelData
                     Accessible.onPressAction: root.symbol = modelData
                     Icon { anchors.centerIn: parent; name: parent.modelData; size: 20; color: Theme.ink }
                     MouseArea { anchors.fill: parent; onClicked: root.symbol = parent.modelData }
@@ -49,7 +49,7 @@ Sheet {
                     border.color: root.color === modelData ? Theme.ink : "transparent"
                     border.width: 2
                     Accessible.role: Accessible.Button
-                    Accessible.name: "Colour " + modelData
+                    Accessible.name: p.t("Colour ") + modelData
                     Accessible.onPressAction: root.color = modelData
                     MouseArea { anchors.fill: parent; onClicked: root.color = parent.modelData }
                 }
@@ -58,9 +58,9 @@ Sheet {
         Row {
             anchors.right: parent.right
             spacing: 8
-            PillButton { text: "Automatic"; onClicked: p.activate("win.folder-style", "auto") }
-            PillButton { text: "Cancel"; onClicked: root.close() }
-            PillButton { text: "Apply"; primary: true; onClicked: p.activate("win.folder-style", root.symbol + "|" + root.color) }
+            PillButton { text: p.t("Automatic"); onClicked: p.activate("win.folder-style", "auto") }
+            PillButton { text: p.t("Cancel"); onClicked: root.close() }
+            PillButton { text: p.t("Apply"); primary: true; onClicked: p.activate("win.folder-style", root.symbol + "|" + root.color) }
         }
     }
 }

@@ -7,12 +7,12 @@ Item {
     property bool empty: true
     height: 54
     Accessible.role: Accessible.ToolBar
-    Accessible.name: "Trash"
+    Accessible.name: p.t("Trash")
 
     Text {
         x: 22
         anchors.verticalCenter: parent.verticalCenter
-        text: "Items here can be put back where they were."
+        text: p.t("Items here can be put back where they were.")
         color: Theme.muted
         font.pixelSize: 13
     }
@@ -21,7 +21,7 @@ Item {
         anchors.rightMargin: 22
         anchors.verticalCenter: parent.verticalCenter
         spacing: 8
-        PillButton { text: "Put Back"; enabled: root.hasSelection; onClicked: p.activate("win.restore", "") }
-        PillButton { text: "Empty Trash…"; enabled: !root.empty; destructive: true; onClicked: p.activate("win.empty-trash", "") }
+        PillButton { text: p.t("Put Back"); enabled: root.hasSelection; onClicked: p.activate("win.restore", "") }
+        PillButton { text: p.t("Empty Trash…"); enabled: !root.empty; destructive: true; onClicked: p.activate("win.empty-trash", "") }
     }
 }

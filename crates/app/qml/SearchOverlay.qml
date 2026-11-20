@@ -66,9 +66,9 @@ FocusScope {
             background: null
             color: Theme.ink
             font.pixelSize: 24
-            placeholderText: "Find folders and files"
+            placeholderText: p.t("Find folders and files")
             placeholderTextColor: Theme.faint
-            Accessible.name: "Find anything"
+            Accessible.name: p.t("Find anything")
             onTextChanged: p.searchquery(text)
             Keys.onPressed: event => root.keys(event, true)
         }
@@ -92,7 +92,7 @@ FocusScope {
         layer.enabled: true
         layer.effect: MultiEffect { shadowEnabled: true; shadowOpacity: 0.18; shadowBlur: 0.8; shadowVerticalOffset: 6 }
         Accessible.role: Accessible.List
-        Accessible.name: "Search results"
+        Accessible.name: p.t("Search results")
 
         Flickable {
             id: results
@@ -117,7 +117,7 @@ FocusScope {
                     visible: !root.model.running
                     spacing: 10
                     Text { text: root.model.status || ""; color: Theme.ink; font.pixelSize: 15 }
-                    PillButton { text: "Start Indexing"; primary: true; onClicked: p.activate("win.start-indexer", "") }
+                    PillButton { text: p.t("Start Indexing"); primary: true; onClicked: p.activate("win.start-indexer", "") }
                 }
 
                 Flow {
@@ -154,7 +154,7 @@ FocusScope {
 
                 Text {
                     visible: root.model.running && (root.model.ran || "") !== "" && (root.model.count || 0) === 0
-                    text: "Nothing is called that."
+                    text: p.t("Nothing is called that.")
                     color: Theme.muted; font.pixelSize: 15
                 }
 
@@ -207,7 +207,7 @@ FocusScope {
                 id: hints
                 anchors.right: parent.right; anchors.rightMargin: 20
                 anchors.verticalCenter: parent.verticalCenter
-                text: "↑↓ move   ↵ open   Space peek   Ctrl+↵ show in folder"
+                text: p.t("↑↓ move   ↵ open   Space peek   Ctrl+↵ show in folder")
                 color: Theme.muted; font.pixelSize: 13
             }
         }

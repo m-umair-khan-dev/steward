@@ -13,7 +13,7 @@ Rectangle {
     color: Theme.sidebar
     border.color: Theme.line
     Accessible.role: Accessible.Grouping
-    Accessible.name: "Sidebar rail"
+    Accessible.name: p.t("Sidebar rail")
 
     HoverHandler { onHoveredChanged: root.hoveredChanged_(hovered) }
 
@@ -30,7 +30,7 @@ Rectangle {
             }
             Icon { anchors.centerIn: parent; name: "folder"; size: 17; color: "white" }
             Accessible.role: Accessible.Button
-            Accessible.name: "Expand sidebar"
+            Accessible.name: p.t("Expand sidebar")
             Accessible.onPressAction: root.expand()
             TapHandler { onTapped: root.expand() }
         }
@@ -54,7 +54,7 @@ Rectangle {
     IconButton {
         anchors.bottom: parent.bottom; anchors.bottomMargin: 12
         anchors.horizontalCenter: parent.horizontalCenter
-        flat: true; icon: "computer"; label: "Computer"
+        flat: true; icon: "computer"; label: p.t("Computer")
         onClicked: p.activate("win.go-to", "/")
     }
 }

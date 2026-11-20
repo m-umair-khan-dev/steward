@@ -3,14 +3,14 @@ import QtQuick.Controls.Basic
 
 // Free Up Space (P5-T02 to P5-T07; reference: smart-clean.gif): the disk
 // ring, the cards in two groups, the review page with a sticky bar, the
-// "Needs administrator" rows (commands to copy, never run) and the Trash.
+// p.t("Needs administrator") rows (commands to copy, never run) and the Trash.
 Rectangle {
     id: root
     property var model: ({ cards: [], groups: [], disk: { looking: true }, admin: { rows: [] } })
     readonly property var review: model.review || null
     color: Theme.pane
     Accessible.role: Accessible.Pane
-    Accessible.name: "Free Up Space"
+    Accessible.name: p.t("Free Up Space")
 
     // --- overview ---------------------------------------------------------------
     Flickable {
@@ -34,16 +34,16 @@ Rectangle {
                     id: heading
                     width: parent.width - 160
                     spacing: 6
-                    Text { text: "Free Up Space"; color: Theme.ink; font.pixelSize: 28; font.weight: Font.Bold
+                    Text { text: p.t("Free Up Space"); color: Theme.ink; font.pixelSize: 28; font.weight: Font.Bold
                            Accessible.role: Accessible.Heading; Accessible.name: text }
                     Text {
                         width: parent.width; wrapMode: Text.WordWrap; color: Theme.muted; font.pixelSize: 14
-                        text: "Keep your disk roomy. Nothing goes until you have seen it; everything goes to the Trash, and Undo brings it back."
+                        text: p.t("Keep your disk roomy. Nothing goes until you have seen it; everything goes to the Trash, and Undo brings it back.")
                     }
                 }
                 PillButton {
                     anchors.right: parent.right
-                    text: "Look Again"
+                    text: p.t("Look Again")
                     onClicked: p.activate("win.clean-look-again", "")
                 }
             }
@@ -53,7 +53,7 @@ Rectangle {
                 width: parent.width; height: 170
                 radius: 18; color: Theme.card; border.color: Theme.line
                 Accessible.role: Accessible.Grouping
-                Accessible.name: "Disk"
+                Accessible.name: p.t("Disk")
                 Item {
                     id: ring
                     x: 26; anchors.verticalCenter: parent.verticalCenter
@@ -99,9 +99,9 @@ Rectangle {
                     spacing: 12
                     Row {
                         spacing: 10
-                        Text { text: (root.model.disk || {}).label || "Home disk"; color: Theme.ink
+                        Text { text: (root.model.disk || {}).label || p.t("Home disk"); color: Theme.ink
                                font.pixelSize: 17; font.weight: Font.Bold }
-                        Text { text: (root.model.disk || {}).usedText || "Looking…"; color: Theme.faint; font.pixelSize: 13
+                        Text { text: (root.model.disk || {}).usedText || p.t("Looking…"); color: Theme.faint; font.pixelSize: 13
                                anchors.baseline: parent.children[0].baseline }
                     }
                     Flow {
@@ -165,17 +165,17 @@ Rectangle {
                 width: parent.width
                 spacing: 14
                 visible: ((root.model.admin || {}).rows || []).length > 0
-                GroupHeading { group: "admin"; label: "Needs administrator"; total: "" }
+                GroupHeading { group: "admin"; label: p.t("Needs administrator"); total: "" }
                 Text {
                     width: parent.width; wrapMode: Text.WordWrap; color: Theme.muted; font.pixelSize: 13
-                    text: "Cairn never runs these. Copy a command and run it in a terminal if you want to."
+                    text: p.t("Cairn never runs these. Copy a command and run it in a terminal if you want to.")
                 }
                 Rectangle {
                     width: parent.width
                     height: adminRows.implicitHeight
                     radius: 14; color: Theme.card; border.color: Theme.line
                     Accessible.role: Accessible.List
-                    Accessible.name: "Needs administrator"
+                    Accessible.name: p.t("Needs administrator")
                     Column {
                         id: adminRows
                         width: parent.width
@@ -207,8 +207,8 @@ Rectangle {
                                     anchors.right: parent.right; anchors.rightMargin: 16
                                     anchors.verticalCenter: parent.verticalCenter
                                     implicitHeight: 32
-                                    text: "Copy"
-                                    Accessible.name: "Copy the command for " + adminRow.modelData.title
+                                    text: p.t("Copy")
+                                    Accessible.name: p.t("Copy the command for ") + adminRow.modelData.title
                                     onClicked: p.activate("win.clean-copy", adminRow.modelData.id)
                                 }
                             }
@@ -223,11 +223,11 @@ Rectangle {
                 radius: 14; color: Theme.card; border.color: Theme.line
                 Icon { x: 18; anchors.verticalCenter: parent.verticalCenter; name: "trash"; size: 22; color: Theme.muted }
                 Text { x: 54; anchors.verticalCenter: parent.verticalCenter; color: Theme.ink; font.pixelSize: 15
-                       text: "In the Trash: " + (root.model.trashText || "…") }
+                       text: p.t("In the Trash: ") + (root.model.trashText || "…") }
                 PillButton {
                     anchors.right: parent.right; anchors.rightMargin: 16; anchors.verticalCenter: parent.verticalCenter
                     implicitHeight: 32
-                    text: "Empty Trash…"
+                    text: p.t("Empty Trash…")
                     onClicked: p.activate("win.empty-trash", "")
                 }
             }
@@ -248,10 +248,10 @@ Rectangle {
             width: parent.width - 72
             spacing: 16
             Text {
-                text: "‹ All suggestions"
+                text: p.t("‹ All suggestions")
                 color: Theme.accentText; font.pixelSize: 15
                 Accessible.role: Accessible.Link
-                Accessible.name: "All suggestions"
+                Accessible.name: p.t("All suggestions")
                 Accessible.onPressAction: p.activate("win.clean-review", "")
                 TapHandler { onTapped: p.activate("win.clean-review", "") }
                 HoverHandler { cursorShape: Qt.PointingHandCursor }
@@ -278,10 +278,10 @@ Rectangle {
                 spacing: 10
                 TickBox {
                     checked: !!root.review && root.review.allTicked
-                    label: "Tick all"
+                    label: p.t("Tick all")
                     onToggled: p.activate("win.clean-tick", "card:" + root.review.id)
                 }
-                Text { text: "Tick all"; color: Theme.muted; font.pixelSize: 14; anchors.verticalCenter: parent.verticalCenter }
+                Text { text: p.t("Tick all"); color: Theme.muted; font.pixelSize: 14; anchors.verticalCenter: parent.verticalCenter }
             }
         }
 
@@ -294,7 +294,7 @@ Rectangle {
             boundsBehavior: Flickable.StopAtBounds
             model: root.review ? root.review.items : []
             Accessible.role: Accessible.List
-            Accessible.name: "Suggestions"
+            Accessible.name: p.t("Suggestions")
             ScrollBar.vertical: ScrollBar { policy: ScrollBar.AsNeeded }
             delegate: Rectangle {
                 id: row
@@ -311,7 +311,7 @@ Rectangle {
                     x: 18; anchors.verticalCenter: parent.verticalCenter
                     visible: !row.modelData.keep
                     checked: row.modelData.ticked
-                    label: "Tick " + row.modelData.title
+                    label: p.t("Tick ") + row.modelData.title
                     onToggled: p.activate("win.clean-tick", row.modelData.path)
                 }
                 Rectangle {
@@ -320,8 +320,8 @@ Rectangle {
                     width: 40; height: 22; radius: 11
                     color: Theme.alpha(Theme.accent, 0.14)
                     Accessible.role: Accessible.StaticText
-                    Accessible.name: "Keep " + row.modelData.title
-                    Text { anchors.centerIn: parent; text: "Keep"; color: Theme.accentText; font.pixelSize: 11; font.weight: Font.DemiBold }
+                    Accessible.name: p.t("Keep ") + row.modelData.title
+                    Text { anchors.centerIn: parent; text: p.t("Keep"); color: Theme.accentText; font.pixelSize: 11; font.weight: Font.DemiBold }
                 }
                 Column {
                     x: 60; anchors.verticalCenter: parent.verticalCenter
@@ -335,10 +335,10 @@ Rectangle {
                     anchors.verticalCenter: parent.verticalCenter
                     spacing: 6
                     IconButton { width: 28; height: 28; iconSize: 15; flat: true; icon: "preview"
-                                 visible: rowHover.hovered; label: "Peek at " + row.modelData.title
+                                 visible: rowHover.hovered; label: p.t("Peek at ") + row.modelData.title
                                  onClicked: p.activate("win.clean-peek", row.modelData.path) }
                     IconButton { width: 28; height: 28; iconSize: 15; flat: true; icon: "folder"
-                                 visible: rowHover.hovered; label: "Show " + row.modelData.title + " in its folder"
+                                 visible: rowHover.hovered; label: p.t("Show ") + row.modelData.title + " in its folder"
                                  onClicked: p.activate("win.clean-show", row.modelData.path) }
                     Text { text: row.modelData.why; color: Theme.muted; font.pixelSize: 13
                            anchors.verticalCenter: parent.verticalCenter
@@ -361,9 +361,9 @@ Rectangle {
             PillButton {
                 anchors.right: parent.right; anchors.rightMargin: 36; anchors.verticalCenter: parent.verticalCenter
                 primary: true
-                text: "Move to Trash"
+                text: p.t("Move to Trash")
                 enabled: !!root.review && root.review.tickedCount > 0
-                Accessible.name: "Move ticked items to the Trash"
+                Accessible.name: p.t("Move ticked items to the Trash")
                 onClicked: p.activate("win.clean-trash", root.review.id)
             }
         }
@@ -382,7 +382,7 @@ Rectangle {
             spacing: 4
             Icon { name: "shield"; size: 11; color: parent.parent.tone; visible: parent.parent.group === "safe"
                    anchors.verticalCenter: parent.verticalCenter }
-            Text { text: parent.parent.group === "safe" ? "Safe to clear" : (parent.parent.group === "admin" ? "Needs administrator" : "Your call")
+            Text { text: parent.parent.group === "safe" ? p.t("Safe to clear") : (parent.parent.group === "admin" ? p.t("Needs administrator") : p.t("Your call"))
                    color: parent.parent.tone; font.pixelSize: 11; font.weight: Font.DemiBold }
         }
     }
@@ -417,7 +417,7 @@ Rectangle {
         border.color: cardHover.hovered ? Theme.alpha(Theme.accent, 0.4) : Theme.line
         Accessible.role: Accessible.Button
         Accessible.name: modelData.title
-        Accessible.description: modelData.subtitle + ", " + (looking ? "looking" : modelData.totalText)
+        Accessible.description: modelData.subtitle + ", " + (looking ? p.t("looking") : modelData.totalText)
         Accessible.onPressAction: p.activate("win.clean-review", modelData.id)
         HoverHandler { id: cardHover; cursorShape: Qt.PointingHandCursor }
         TapHandler { onTapped: p.activate("win.clean-review", card.modelData.id) }

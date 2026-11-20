@@ -10,7 +10,7 @@ Rectangle {
     height: 40
     color: Theme.pane
     Accessible.role: Accessible.Grouping
-    Accessible.name: "Location"
+    Accessible.name: p.t("Location")
 
     Rectangle { anchors.bottom: parent.bottom; width: parent.width; height: 1; color: Theme.line }
 
@@ -59,7 +59,7 @@ Rectangle {
         visible: root.model.editing
         color: Theme.ink
         font.pixelSize: 13
-        Accessible.name: "Location"
+        Accessible.name: p.t("Location")
         background: Rectangle { radius: 8; color: Theme.track; border.color: Theme.accent; border.width: 1.5 }
         Keys.onTabPressed: (event) => { text = p.complete(text); cursorPosition = text.length; event.accepted = true }
         Keys.onDownPressed: p.activate("win.path-match", "down")
@@ -74,7 +74,7 @@ Rectangle {
         anchors.right: parent.right; anchors.rightMargin: 18
         anchors.verticalCenter: parent.verticalCenter
         visible: !root.model.editing
-        text: "Ctrl+L to type a path"
+        text: p.t("Ctrl+L to type a path")
         color: Theme.faint
         font.pixelSize: 12
     }
@@ -92,7 +92,7 @@ Rectangle {
         border.color: Theme.line
         z: 50
         Accessible.role: Accessible.List
-        Accessible.name: "Folders with that name"
+        Accessible.name: p.t("Folders with that name")
         Column {
             id: matchList
             x: 6; y: 6

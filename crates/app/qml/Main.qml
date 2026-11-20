@@ -13,7 +13,7 @@ Window {
     minimumWidth: 760
     minimumHeight: 480
     visible: true
-    title: "Cairn"
+    title: p.t("Cairn")
     flags: Qt.Window | Qt.FramelessWindowHint
     color: Theme.bg
 
@@ -204,7 +204,7 @@ Window {
             nav: win.nav
             prefs: win.prefs
             ops: win.ops
-            tool: ({ clean: "Free Up Space", installed: "Installed", about: "About This Computer" })[win.tools.page] || ""
+            tool: ({ clean: p.t("Free Up Space"), installed: p.t("Installed"), about: p.t("About This Computer") })[win.tools.page] || ""
         }
         PathBar {
             id: pathBar
@@ -394,14 +394,14 @@ Window {
                 x: 14; anchors.verticalCenter: parent.verticalCenter
                 spacing: 8
                 PillButton { implicitHeight: 30; primary: true
-                             text: "Copy to “" + (win.pane.target || "") + "”   F5"
+                             text: p.t("Copy to “") + (win.pane.target || "") + "”   F5"
                              onClicked: p.activate("win.copy-across", "") }
-                PillButton { implicitHeight: 30; text: "Move   F6"; onClicked: p.activate("win.move-across", "") }
+                PillButton { implicitHeight: 30; text: p.t("Move   F6"); onClicked: p.activate("win.move-across", "") }
             }
             Text {
                 visible: !!win.pane.open
                 anchors.right: parent.right; anchors.rightMargin: 18; anchors.verticalCenter: parent.verticalCenter
-                text: "Tab switches pane · drag to move, Ctrl-drag to copy"
+                text: p.t("Tab switches pane · drag to move, Ctrl-drag to copy")
                 color: Theme.muted; font.pixelSize: 12
             }
             Text {
@@ -428,34 +428,34 @@ Window {
     MenuPopup {
         id: itemMenu
         model: win.ops.trash ? [
-            { text: "Put Back", action: "win.restore", param: "" }
+            { text: p.t("Put Back"), action: "win.restore", param: "" }
         ] : [
-            { text: "Open", action: "win.open-selected", param: "" },
-            { text: "Open With…", action: "win.open-with", param: "", enabled: win.selectedCount === 1 },
+            { text: p.t("Open"), action: "win.open-selected", param: "" },
+            { text: p.t("Open With…"), action: "win.open-with", param: "", enabled: win.selectedCount === 1 },
             { separator: true },
-            { text: "Rename…", action: "win.rename", param: "", enabled: win.selectedCount === 1 },
-            { text: "Duplicate", action: "win.duplicate", param: "" },
-            { text: "Symbol and Colour…", action: "win.folder-style-ask", param: "", enabled: win.selectedCount === 1 },
+            { text: p.t("Rename…"), action: "win.rename", param: "", enabled: win.selectedCount === 1 },
+            { text: p.t("Duplicate"), action: "win.duplicate", param: "" },
+            { text: p.t("Symbol and Colour…"), action: "win.folder-style-ask", param: "", enabled: win.selectedCount === 1 },
             { separator: true },
-            { text: "Copy", action: "win.copy", param: "" },
-            { text: "Cut", action: "win.cut", param: "" },
+            { text: p.t("Copy"), action: "win.copy", param: "" },
+            { text: p.t("Cut"), action: "win.cut", param: "" },
             { separator: true },
-            { text: "Move to Trash", action: "win.trash", param: "" }
+            { text: p.t("Move to Trash"), action: "win.trash", param: "" }
         ].concat((win.sidebar.workspaces || []).length ? [{ separator: true }] : [])
-         .concat((win.sidebar.workspaces || []).map(w => ({ text: "Add to “" + w.name + "”", action: "win.workspace-add",
+         .concat((win.sidebar.workspaces || []).map(w => ({ text: p.t("Add to “") + w.name + "”", action: "win.workspace-add",
                                                             param: String(w.id) })))
     }
     MenuPopup {
         id: backgroundMenu
         model: win.ops.trash ? [
-            { text: "Empty Trash…", action: "win.empty-trash", param: "" },
-            { text: "Select All", action: "win.select-all", param: "" }
+            { text: p.t("Empty Trash…"), action: "win.empty-trash", param: "" },
+            { text: p.t("Select All"), action: "win.select-all", param: "" }
         ] : [
-            { text: "New Folder", action: "win.new-folder", param: "" },
-            { text: "Paste", action: "win.paste", param: "" },
+            { text: p.t("New Folder"), action: "win.new-folder", param: "" },
+            { text: p.t("Paste"), action: "win.paste", param: "" },
             { separator: true },
-            { text: "Select All", action: "win.select-all", param: "" },
-            { text: "Show Hidden Files", action: "win.show-hidden", param: "", checked: !!win.prefs.showHidden }
+            { text: p.t("Select All"), action: "win.select-all", param: "" },
+            { text: p.t("Show Hidden Files"), action: "win.show-hidden", param: "", checked: !!win.prefs.showHidden }
         ]
     }
 

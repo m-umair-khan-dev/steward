@@ -5,7 +5,7 @@ import QtQuick.Controls.Basic
 Sheet {
     id: root
     property var info: ({ file: "", apps: [] })
-    title: "Open With"
+    title: p.t("Open With")
     cardWidth: 420
     Column {
         width: parent.width

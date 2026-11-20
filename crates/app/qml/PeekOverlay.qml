@@ -41,7 +41,7 @@ FocusScope {
         layer.enabled: true
         layer.effect: MultiEffect { shadowEnabled: true; shadowOpacity: 0.3; shadowBlur: 1.0; shadowVerticalOffset: 10 }
         Accessible.role: Accessible.Dialog
-        Accessible.name: "Peek: " + (root.model.name || "")
+        Accessible.name: p.t("Peek: ") + (root.model.name || "")
         MouseArea { anchors.fill: parent }  // clicks inside do not close
 
         // Title bar.
@@ -68,9 +68,9 @@ FocusScope {
                 anchors.right: parent.right; anchors.rightMargin: 14
                 anchors.verticalCenter: parent.verticalCenter
                 spacing: 8
-                PillButton { text: "Open"; primary: true; implicitHeight: 32; onClicked: p.activate("win.peek-open", "") }
-                PillButton { text: "Info"; implicitHeight: 32; onClicked: root.info = !root.info }
-                IconButton { width: 32; height: 32; iconSize: 14; icon: "close"; label: "Close"
+                PillButton { text: p.t("Open"); primary: true; implicitHeight: 32; onClicked: p.activate("win.peek-open", "") }
+                PillButton { text: p.t("Info"); implicitHeight: 32; onClicked: root.info = !root.info }
+                IconButton { width: 32; height: 32; iconSize: 14; icon: "close"; label: p.t("Close")
                              onClicked: p.activate("win.peek-close", "") }
             }
             Rectangle { anchors.bottom: parent.bottom; width: parent.width; height: 1; color: Theme.line }
@@ -117,7 +117,7 @@ FocusScope {
                 x: 18; y: 16
                 width: parent.width - 36
                 spacing: 8
-                Text { text: "Info"; color: Theme.ink; font.pixelSize: 14; font.weight: Font.Bold }
+                Text { text: p.t("Info"); color: Theme.ink; font.pixelSize: 14; font.weight: Font.Bold }
                 Repeater {
                     model: root.model.facts || []
                     delegate: Item {
@@ -140,7 +140,7 @@ FocusScope {
             height: 44
             Text {
                 anchors.centerIn: parent
-                text: (root.model.position || "") + "    ← → to move · Space or Esc to close"
+                text: (root.model.position || "") + p.t("    ← → to move · Space or Esc to close")
                 color: Theme.muted; font.pixelSize: 12
             }
         }
@@ -178,7 +178,7 @@ FocusScope {
                 Text {
                     id: pageLabel
                     anchors.centerIn: parent
-                    text: "Page " + (pages.currentPage + 1) + " of " + doc.pageCount
+                    text: p.t("Page ") + (pages.currentPage + 1) + p.t(" of ") + doc.pageCount
                     color: "white"; font.pixelSize: 12
                     Accessible.role: Accessible.StaticText
                     Accessible.name: text
@@ -224,7 +224,7 @@ FocusScope {
                 anchors.bottom: parent.bottom; anchors.bottomMargin: 12
                 spacing: 8
                 PillButton {
-                    text: player.playbackState === MediaPlayer.PlayingState ? "Pause" : "Play"
+                    text: player.playbackState === MediaPlayer.PlayingState ? p.t("Pause") : p.t("Play")
                     onClicked: player.playbackState === MediaPlayer.PlayingState ? player.pause() : player.play()
                 }
             }

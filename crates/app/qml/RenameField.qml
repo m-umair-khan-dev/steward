@@ -17,7 +17,7 @@ TextField {
     font.pixelSize: 13
     padding: 4
     selectByMouse: true
-    Accessible.name: "New name"
+    Accessible.name: p.t("New name")
     background: Rectangle { radius: 7; color: Theme.card; border.color: Theme.accent; border.width: 2 }
 
     function finish(name) {

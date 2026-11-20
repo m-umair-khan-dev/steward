@@ -124,7 +124,8 @@ pub fn accels_json() -> Value {
         ACCELS
             .iter()
             .map(|(action, param, keys, description)| {
-                json!({ "action": action, "param": param, "keys": keys, "description": description,
+                json!({ "action": action, "param": param, "keys": keys,
+                        "description": gettextrs::gettext(*description),
                         "typing": TEXT_KEYS.contains(action) })
             })
             .collect(),

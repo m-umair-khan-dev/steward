@@ -9,7 +9,7 @@ Rectangle {
     property var model: ({ looking: true, sections: [] })
     color: Theme.pane
     Accessible.role: Accessible.Pane
-    Accessible.name: "About This Computer"
+    Accessible.name: p.t("About This Computer")
 
     Flickable {
         id: flick
@@ -29,13 +29,13 @@ Rectangle {
                 anchors.right: parent.right
                 spacing: 8
                 PillButton {
-                    text: root.model.hideNames ? "Show Names" : "Hide Names"
-                    Accessible.name: "Hide Names"
+                    text: root.model.hideNames ? p.t("Show Names") : p.t("Hide Names")
+                    Accessible.name: p.t("Hide Names")
                     Accessible.checkable: true
                     Accessible.checked: !!root.model.hideNames
                     onClicked: p.activate("win.about-hide-names", root.model.hideNames ? "false" : "true")
                 }
-                PillButton { text: "Copy as Text"; enabled: !root.model.looking; onClicked: p.activate("win.about-copy", "") }
+                PillButton { text: p.t("Copy as Text"); enabled: !root.model.looking; onClicked: p.activate("win.about-copy", "") }
             }
 
             // Our own drawing of a laptop (or a monitor for a desktop).
@@ -75,7 +75,7 @@ Rectangle {
 
             Text {
                 anchors.horizontalCenter: parent.horizontalCenter
-                text: root.model.looking ? "Looking…" : (root.model.title || "")
+                text: root.model.looking ? p.t("Looking…") : (root.model.title || "")
                 color: Theme.ink; font.pixelSize: 26; font.weight: Font.Bold
                 Accessible.role: Accessible.Heading; Accessible.name: text
             }
@@ -174,7 +174,7 @@ Rectangle {
                                         anchors.right: parent.right; anchors.rightMargin: 16; y: 30
                                         text: section.modelData.link || ""; color: Theme.accentText; font.pixelSize: 12; font.weight: Font.DemiBold
                                         Accessible.role: Accessible.Link
-                                        Accessible.name: "Free Up Space"
+                                        Accessible.name: p.t("Free Up Space")
                                         Accessible.onPressAction: p.activate("win.tool-open", "clean")
                                         TapHandler { onTapped: p.activate("win.tool-open", "clean") }
                                         HoverHandler { cursorShape: Qt.PointingHandCursor }

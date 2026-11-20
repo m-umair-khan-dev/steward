@@ -122,6 +122,9 @@ pub mod qobject {
         fn setpref(self: Pin<&mut Presenter>, key: &QString, value: &QString);
         #[qinvokable]
         fn refresh(self: Pin<&mut Presenter>);
+        /// A user-visible string from QML, translated (gettext).
+        #[qinvokable]
+        fn t(self: &Presenter, text: &QString) -> QString;
     }
 
     impl cxx_qt::Threading for Presenter {}
@@ -235,6 +238,14 @@ impl qobject::Presenter {
                 }
             }
         }
+    }
+
+    pub fn t(&self, text: &QString) -> QString {
+        let text = text.to_string();
+        if text.is_empty() {
+            return QString::default();
+        }
+        q(&gettextrs::gettext(text))
     }
 
     pub fn activate(self: Pin<&mut Self>, action: &QString, param: &QString) {

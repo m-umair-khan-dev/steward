@@ -56,6 +56,13 @@ RUN --mount=type=cache,target=/var/cache/apt,sharing=locked \
     apt-get install -y --no-install-recommends \
       qml6-module-qtquick-pdf qml6-module-qtmultimedia qml6-module-qtquick-dialogs \
       libqt6multimedia6
+# Translations (P6-T04): the locales the drafts cover, plus en_US for the
+# pseudo-locale, and fonts for Japanese and Chinese.
+RUN --mount=type=cache,target=/var/cache/apt,sharing=locked \
+    --mount=type=cache,target=/var/lib/apt,sharing=locked \
+    apt-get update && \
+    apt-get install -y --no-install-recommends locales fonts-noto-cjk && \
+    locale-gen en_US.UTF-8 de_DE.UTF-8 es_ES.UTF-8 fr_FR.UTF-8 ja_JP.UTF-8 zh_CN.UTF-8
 ENV QMAKE=qmake6 \
     QT_LINUX_ACCESSIBILITY_ALWAYS_ON=1
 WORKDIR /workspace

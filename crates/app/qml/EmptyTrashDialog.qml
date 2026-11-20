@@ -4,7 +4,7 @@ import QtQuick
 Sheet {
     id: root
     property var info: ({ count: "" })
-    title: "Empty the Trash?"
+    title: p.t("Empty the Trash?")
     cardWidth: 420
     Column {
         width: parent.width
@@ -12,15 +12,15 @@ Sheet {
         Text {
             width: parent.width
             wrapMode: Text.WordWrap
-            text: (root.info.count || "") + " will be deleted for good. This cannot be undone."
+            text: (root.info.count || "") + p.t(" will be deleted for good. This cannot be undone.")
             color: Theme.ink
             font.pixelSize: 14
         }
         Row {
             anchors.right: parent.right
             spacing: 8
-            PillButton { text: "Cancel"; onClicked: root.close() }
-            PillButton { text: "Empty Trash"; destructive: true; onClicked: p.activate("win.empty-trash-confirm", "") }
+            PillButton { text: p.t("Cancel"); onClicked: root.close() }
+            PillButton { text: p.t("Empty Trash"); destructive: true; onClicked: p.activate("win.empty-trash-confirm", "") }
         }
     }
 }

@@ -38,7 +38,7 @@ Rectangle {
         Text {
             anchors.left: badge.right; anchors.leftMargin: 12
             anchors.verticalCenter: parent.verticalCenter
-            text: "Cairn"
+            text: p.t("Cairn")
             color: Theme.ink
             font.pixelSize: 24; font.weight: Font.Bold
         }
@@ -49,7 +49,7 @@ Rectangle {
             flat: true
             icon: "sidebar"
             iconSize: 17
-            label: "Collapse sidebar"
+            label: p.t("Collapse sidebar")
             visible: !root.overlay
             onClicked: root.collapse()
         }
@@ -71,11 +71,11 @@ Rectangle {
             // Workspaces (P4-T08), with "+" to make one.
             Item {
                 width: parent.width; height: wsHeading.implicitHeight
-                Heading { id: wsHeading; text: "Workspaces" }
+                Heading { id: wsHeading; text: p.t("Workspaces") }
                 IconButton {
                     anchors.right: parent.right; anchors.rightMargin: 14
                     y: wsHeading.topPadding - 4
-                    width: 24; height: 24; iconSize: 13; flat: true; icon: "plus"; label: "New workspace"
+                    width: 24; height: 24; iconSize: 13; flat: true; icon: "plus"; label: p.t("New workspace")
                     onClicked: p.activate("win.workspace-new", "")
                 }
             }
@@ -83,7 +83,7 @@ Rectangle {
                 width: parent.width
                 height: wsList.implicitHeight
                 Accessible.role: Accessible.List
-                Accessible.name: "Workspaces"
+                Accessible.name: p.t("Workspaces")
                 Column {
                     id: wsList
                     width: parent.width
@@ -91,12 +91,12 @@ Rectangle {
                     Repeater { model: root.model.workspaces || []; delegate: WorkspaceRow {} }
                 }
             }
-            Heading { text: "Favorites" }
+            Heading { text: p.t("Favorites") }
             Item {
                 width: parent.width
                 height: favoritesList.implicitHeight
                 Accessible.role: Accessible.List
-                Accessible.name: "Sidebar"
+                Accessible.name: p.t("Sidebar")
                 Column {
                     id: favoritesList
                     width: parent.width
@@ -105,12 +105,12 @@ Rectangle {
                 }
             }
             // Tools (Phase 5): Free Up Space and Installed.
-            Heading { text: "Tools" }
+            Heading { text: p.t("Tools") }
             Item {
                 width: parent.width
                 height: toolsList.implicitHeight
                 Accessible.role: Accessible.List
-                Accessible.name: "Tools"
+                Accessible.name: p.t("Tools")
                 Column {
                     id: toolsList
                     width: parent.width
@@ -121,10 +121,10 @@ Rectangle {
             // "Locations ›" opens and closes, as in the reference.
             Heading {
                 id: locationsHeading
-                text: "Locations"
+                text: p.t("Locations")
                 visible: root.locations.length > 0
                 Accessible.role: Accessible.Button
-                Accessible.name: "Locations"
+                Accessible.name: p.t("Locations")
                 Accessible.onPressAction: root.locationsOpen = !root.locationsOpen
                 Icon {
                     x: parent.implicitWidth + 4
@@ -142,7 +142,7 @@ Rectangle {
                 visible: root.locations.length > 0 && height > 0
                 Behavior on height { enabled: Theme.motion; NumberAnimation { duration: 200; easing.type: Easing.OutCubic } }
                 Accessible.role: Accessible.List
-                Accessible.name: "Locations"
+                Accessible.name: p.t("Locations")
                 Column {
                     id: locationsList
                     width: parent.width
@@ -163,8 +163,8 @@ Rectangle {
         radius: 10
         color: root.model.page === "about" ? Theme.alpha(Theme.accent, 0.16) : (computerHover.hovered ? Theme.hover : "transparent")
         Accessible.role: Accessible.Button
-        Accessible.name: "Computer"
-        Accessible.description: "About This Computer"
+        Accessible.name: p.t("Computer")
+        Accessible.description: p.t("About This Computer")
         Accessible.onPressAction: p.activate("win.tool-open", "about")
         Rectangle { width: parent.width; height: 1; color: Theme.line }
         Icon { x: 6; anchors.verticalCenter: parent.verticalCenter; name: "computer"; size: 30; color: Theme.ink }
@@ -172,7 +172,7 @@ Rectangle {
             x: 46; anchors.verticalCenter: parent.verticalCenter
             width: parent.width - 52
             spacing: 5
-            Text { text: "Computer"; color: Theme.ink; font.pixelSize: 16; font.weight: Font.Bold }
+            Text { text: p.t("Computer"); color: Theme.ink; font.pixelSize: 16; font.weight: Font.Bold }
             Row {
                 spacing: 8
                 Rectangle {
@@ -235,7 +235,7 @@ Rectangle {
             anchors.right: parent.right; anchors.rightMargin: 4
             anchors.verticalCenter: parent.verticalCenter
             width: 26; height: 26; flat: true; icon: "eject"; iconSize: 14
-            label: "Eject " + row.modelData.label
+            label: p.t("Eject ") + row.modelData.label
             onClicked: p.activate("win.sidebar-eject", row.modelData.key)
         }
         HoverHandler { id: rowHover }
@@ -325,8 +325,8 @@ Rectangle {
     Menu {
         id: menu
         property string key: ""
-        MenuItem { text: "Move Up"; onTriggered: p.activate("win.sidebar-move-up", menu.key) }
-        MenuItem { text: "Move Down"; onTriggered: p.activate("win.sidebar-move-down", menu.key) }
-        MenuItem { text: "Hide"; onTriggered: p.activate("win.sidebar-hide", menu.key) }
+        MenuItem { text: p.t("Move Up"); onTriggered: p.activate("win.sidebar-move-up", menu.key) }
+        MenuItem { text: p.t("Move Down"); onTriggered: p.activate("win.sidebar-move-down", menu.key) }
+        MenuItem { text: p.t("Hide"); onTriggered: p.activate("win.sidebar-hide", menu.key) }
     }
 }

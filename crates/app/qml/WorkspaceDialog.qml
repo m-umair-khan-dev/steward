@@ -7,7 +7,7 @@ Sheet {
     property var info: ({ colors: [] })
     property bool editing: false
     property string color: info.color || ((info.colors || [])[0] || "folders")
-    title: editing ? "Edit Workspace" : "New Workspace"
+    title: editing ? p.t("Edit Workspace") : p.t("New Workspace")
     cardWidth: 440
     onVisibleChanged: if (visible) { name.text = info.name || ""; description.text = info.description || ""
                                      root.color = info.color || ((info.colors || [])[0] || "folders"); name.forceActiveFocus() }
@@ -24,8 +24,8 @@ Sheet {
         TextField {
             id: name
             width: parent.width
-            placeholderText: "Name, e.g. Taxes 2026"
-            Accessible.name: "Workspace name"
+            placeholderText: p.t("Name, e.g. Taxes 2026")
+            Accessible.name: p.t("Workspace name")
             color: Theme.ink
             background: Rectangle { radius: 9; color: Theme.pane; border.color: name.activeFocus ? Theme.accent : Theme.line }
             onAccepted: root.save()
@@ -34,8 +34,8 @@ Sheet {
             id: description
             visible: root.editing
             width: parent.width
-            placeholderText: "What it is for"
-            Accessible.name: "Workspace description"
+            placeholderText: p.t("What it is for")
+            Accessible.name: p.t("Workspace description")
             color: Theme.ink
             background: Rectangle { radius: 9; color: Theme.pane; border.color: Theme.line }
             onAccepted: root.save()
@@ -52,7 +52,7 @@ Sheet {
                     border.color: root.color === modelData ? Theme.ink : "transparent"
                     border.width: 2
                     Accessible.role: Accessible.Button
-                    Accessible.name: "Colour " + modelData
+                    Accessible.name: p.t("Colour ") + modelData
                     MouseArea { anchors.fill: parent; onClicked: root.color = parent.modelData }
                 }
             }
@@ -60,10 +60,10 @@ Sheet {
         Row {
             anchors.right: parent.right
             spacing: 8
-            PillButton { visible: root.editing; text: "Delete"; destructive: true
+            PillButton { visible: root.editing; text: p.t("Delete"); destructive: true
                          onClicked: p.activate("win.workspace-delete", String(root.info.id)) }
-            PillButton { text: "Cancel"; onClicked: root.close() }
-            PillButton { text: root.editing ? "Save" : "Create"; primary: true; onClicked: root.save() }
+            PillButton { text: p.t("Cancel"); onClicked: root.close() }
+            PillButton { text: root.editing ? p.t("Save") : p.t("Create"); primary: true; onClicked: root.save() }
         }
     }
 }

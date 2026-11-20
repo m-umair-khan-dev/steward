@@ -41,9 +41,9 @@ Rectangle {
             width: undoLabel.implicitWidth + 22; height: 28; radius: 14
             color: undoHover.hovered ? Qt.rgba(1, 1, 1, 0.22) : Qt.rgba(1, 1, 1, 0.12)
             Accessible.role: Accessible.Button
-            Accessible.name: "Undo"
+            Accessible.name: p.t("Undo")
             Accessible.onPressAction: { root.shown = false; p.activate("win.undo", "") }
-            Text { id: undoLabel; anchors.centerIn: parent; text: "Undo"; color: "white"; font.pixelSize: 13; font.weight: Font.Bold }
+            Text { id: undoLabel; anchors.centerIn: parent; text: p.t("Undo"); color: "white"; font.pixelSize: 13; font.weight: Font.Bold }
             HoverHandler { id: undoHover }
             TapHandler { onTapped: { root.shown = false; p.activate("win.undo", "") } }
         }

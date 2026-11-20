@@ -5,7 +5,7 @@ import QtQuick.Controls.Basic
 Sheet {
     id: root
     property var info: ({ name: "", folder: "" })
-    title: "Item Already Exists"
+    title: p.t("Item Already Exists")
     cardWidth: 460
     function close() { p.answer("skip", false) }
 
@@ -15,21 +15,21 @@ Sheet {
         Text {
             width: parent.width
             wrapMode: Text.WordWrap
-            text: "“" + (root.info.name || "") + "” is already in “" + (root.info.folder || "") + "”."
+            text: "“" + (root.info.name || "") + p.t("” is already in “") + (root.info.folder || "") + "”."
             color: Theme.ink
             font.pixelSize: 14
         }
         Text {
             width: parent.width
             wrapMode: Text.WordWrap
-            text: "Replace puts the existing item in the Trash, so Undo can bring it back."
+            text: p.t("Replace puts the existing item in the Trash, so Undo can bring it back.")
             color: Theme.muted
             font.pixelSize: 13
         }
         CheckBox {
             id: all
-            text: "Do this for every clash"
-            Accessible.name: "Apply to all"
+            text: p.t("Do this for every clash")
+            Accessible.name: p.t("Apply to all")
             // Purple, rounded (reference: smart-clean.png).
             indicator: Rectangle {
                 x: all.leftPadding
@@ -51,9 +51,9 @@ Sheet {
         Row {
             anchors.right: parent.right
             spacing: 8
-            PillButton { text: "Skip"; onClicked: p.answer("skip", all.checked) }
-            PillButton { text: "Keep Both"; onClicked: p.answer("keep-both", all.checked) }
-            PillButton { text: "Replace"; primary: true; onClicked: p.answer("replace", all.checked) }
+            PillButton { text: p.t("Skip"); onClicked: p.answer("skip", all.checked) }
+            PillButton { text: p.t("Keep Both"); onClicked: p.answer("keep-both", all.checked) }
+            PillButton { text: p.t("Replace"); primary: true; onClicked: p.answer("replace", all.checked) }
         }
     }
 }

@@ -35,7 +35,7 @@ export NEXTEST_VERSION NEXTEST_SHA256 WATCHEXEC_VERSION WATCHEXEC_SHA256
 COMPOSE := docker compose -f compose.desktop.yaml
 RUN := $(COMPOSE) run --rm
 
-.PHONY: help init images fixture app shell test e2e lint lint-host check check-all lockfile down clean
+.PHONY: help init images fixture app shell test e2e lint lint-host check check-all lockfile down clean i18n
 
 help: ## Show this help
 	@grep -hE '^[a-z-]+:.*## ' $(MAKEFILE_LIST) | awk -F':.*## ' '{printf "  make %-11s %s\n", $$1, $$2}'
@@ -68,6 +68,9 @@ test: images ## Unit and integration tests
 
 e2e: images ## End-to-end tests (make e2e k=E0_03 for one)
 	$(RUN) -e E2E_K="$(k)" e2e
+
+i18n: images ## Extract messages to po/cairn.pot, merge into po/*.po, remake the pseudo-locale
+	$(RUN) shell bash -c 'docker/scripts/i18n extract && docker/scripts/i18n update && docker/scripts/i18n pseudo && docker/scripts/i18n check'
 
 lint: images lint-host ## Formatting, clippy, Dockerfile and Compose checks
 	$(RUN) lint

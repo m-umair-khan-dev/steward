@@ -5,7 +5,7 @@ import QtQuick
 Sheet {
     id: root
     property var info: ({ items: [] })
-    title: "What’s New in Cairn " + (info.version || "")
+    title: p.t("What’s New in Cairn ") + (info.version || "")
     cardWidth: 520
     Column {
         width: parent.width
@@ -32,7 +32,7 @@ Sheet {
         }
         Item {
             width: parent.width; height: 44
-            PillButton { anchors.right: parent.right; anchors.bottom: parent.bottom; primary: true; text: "Continue"
+            PillButton { anchors.right: parent.right; anchors.bottom: parent.bottom; primary: true; text: p.t("Continue")
                          onClicked: p.activate("win.welcome-done", "") }
         }
     }

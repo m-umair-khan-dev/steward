@@ -1,0 +1,2259 @@
+# French translation of Cairn.
+# DRAFT: written by an AI model and not yet reviewed by a native speaker.
+# Please review before relying on it (DESIGN.md Phase 6, HUMAN).
+msgid ""
+msgstr ""
+"Project-Id-Version: cairn 1.0.0\n"
+"PO-Revision-Date: 2026-11-20 12:00+0000\n"
+"Last-Translator: AI draft (unreviewed)\n"
+"Language-Team: French\n"
+"Language: fr\n"
+"MIME-Version: 1.0\n"
+"Content-Type: text/plain; charset=UTF-8\n"
+"Content-Transfer-Encoding: 8bit\n"
+"Plural-Forms: nplurals=2; plural=(n > 1);\n"
+"X-Review-Status: draft, needs review by a native speaker\n"
+
+#: crates/app/qml/PeekOverlay.qml:143
+msgid "    ← → to move · Space or Esc to close"
+msgstr "    ← → pour passer · Espace ou Échap pour fermer"
+
+#: crates/app/qml/PeekOverlay.qml:181 crates/app/qml/WelcomeDialog.qml:38
+msgid " of "
+msgstr " sur "
+
+#: crates/app/qml/InstalledPage.qml:79
+msgid " packages, "
+msgstr " paquets, "
+
+#: crates/app/qml/EmptyTrashDialog.qml:15
+msgid " will be deleted for good. This cannot be undone."
+msgstr " seront supprimés définitivement. Impossible d’annuler."
+
+#: crates/app/src/format.rs:36
+msgid "%-e %b"
+msgstr "%-e %b"
+
+#: crates/app/src/format.rs:37
+msgid "%-e %b %Y"
+msgstr "%-e %b %Y"
+
+#: crates/app/qml/WorkspacePage.qml:42
+msgid "+ Add Folder"
+msgstr "+ Ajouter un dossier"
+
+#: crates/app/qml/AboutDialog.qml:26
+msgid "A file manager for Ubuntu that keeps folders tidy."
+msgstr ""
+"Un gestionnaire de fichiers pour Ubuntu qui garde les dossiers en ordre."
+
+#: crates/app/qml/PreferencesDialog.qml:210
+msgid "A folder to leave out, e.g. ~/Videos/Raw"
+msgstr "Un dossier à exclure, p. ex. ~/Vidéos/Brut"
+
+#: crates/app/qml/WelcomeDialog.qml:55
+msgid "A messy folder, sorted"
+msgstr "Un dossier en désordre, rangé"
+
+#: crates/app/qml/AboutDialog.qml:7
+msgid "About"
+msgstr "À propos"
+
+#: crates/app/qml/GlassFolder.qml:137
+msgid "About "
+msgstr "À propos de "
+
+#: crates/app/qml/Header.qml:191
+msgid "About Cairn"
+msgstr "À propos de Cairn"
+
+#: crates/app/qml/AboutPage.qml:12 crates/app/qml/Main.qml:207
+#: crates/app/qml/Sidebar.qml:167
+msgid "About This Computer"
+msgstr "À propos de cet ordinateur"
+
+#: crates/app/qml/PreferencesDialog.qml:104
+#: crates/app/qml/WelcomeDialog.qml:176 crates/app/qml/WelcomeDialog.qml:179
+msgid "Accent"
+msgstr "Couleur d’accent"
+
+#: crates/app/qml/PaneHeader.qml:14
+msgid "Active pane"
+msgstr "Volet actif"
+
+#: crates/app/qml/WorkspacePage.qml:158
+msgid "Add a folder to “"
+msgstr "Ajouter un dossier à “"
+
+#: crates/app/qml/Main.qml:445
+msgid "Add to “"
+msgstr "Ajouter à “"
+
+#: crates/app/src/controller/workspaces.rs:177
+msgid "Added"
+msgstr "Ajouté :"
+
+#: crates/app/src/controller.rs:1359 crates/app/src/controller/installed.rs:192
+#: crates/app/src/controller/search.rs:211
+msgid "All"
+msgstr "Tout"
+
+#: crates/app/qml/CleanPage.qml:254
+msgid "All suggestions"
+msgstr "Toutes les suggestions"
+
+#: crates/app/src/controller/ops.rs:110
+msgid "An operation was interrupted:"
+msgstr "Une opération a été interrompue :"
+
+#: crates/app/qml/PreferencesDialog.qml:110
+msgid ""
+"Animations follow the system: Settings › Accessibility › Seeing › Reduce "
+"Animation."
+msgstr ""
+"Les animations suivent le système : Paramètres › Accessibilité › Vision › "
+"Réduire les animations."
+
+#: crates/app/src/controller/installed.rs:43
+msgid "App"
+msgstr "Application"
+
+#: crates/app/src/controller/clean.rs:93
+msgid "App leftovers"
+msgstr "Restes d’applications"
+
+#: crates/app/src/controller/about.rs:301
+msgid "AppArmor"
+msgstr "AppArmor"
+
+#: crates/app/qml/PreferencesDialog.qml:38
+msgid "Appearance"
+msgstr "Apparence"
+
+#: crates/app/qml/FolderStyleDialog.qml:63
+msgid "Apply"
+msgstr "Appliquer"
+
+#: crates/app/qml/ClashDialog.qml:32
+msgid "Apply to all"
+msgstr "Appliquer à tous"
+
+#: crates/app/src/controller/clean.rs:473
+#: crates/app/src/controller/installed.rs:193
+msgid "Apps"
+msgstr "Applications"
+
+#: crates/app/src/controller/about.rs:316
+msgid "Architecture"
+msgstr "Architecture"
+
+#: crates/core/src/kind.rs
+msgid "Archives"
+msgstr "Archives"
+
+#: crates/app/qml/InstalledPage.qml:211
+msgid "Asking apt, Snap, Flatpak and the other tools…"
+msgstr "Interrogation d’apt, Snap, Flatpak et des autres outils…"
+
+#: crates/core/src/kind.rs
+msgid "Audio"
+msgstr "Audio"
+
+#: crates/app/qml/FolderStyleDialog.qml:61
+msgid "Automatic"
+msgstr "Automatique"
+
+#: crates/app/src/controller/about.rs:302
+msgid "Automatic security updates"
+msgstr "Mises à jour de sécurité automatiques"
+
+#: crates/app/qml/Header.qml:43 crates/app/qml/WelcomeDialog.qml:209
+#: crates/app/src/actions.rs:30
+msgid "Back"
+msgstr "Précédent"
+
+#: crates/app/src/controller/about.rs:205
+#: crates/app/src/controller/about.rs:234
+msgid "Battery"
+msgstr "Batterie"
+
+#: crates/app/src/controller/about.rs:218
+msgid "Battery health"
+msgstr "État de la batterie"
+
+#: crates/app/src/controller/clean.rs:101
+msgid "Big files"
+msgstr "Gros fichiers"
+
+#: crates/app/src/controller.rs:1492
+msgid "By kind"
+msgstr "Par type"
+
+#: crates/app/qml/PreviewPane.qml:195 crates/app/qml/PreviewPane.qml:235
+msgid "CONTENTS"
+msgstr "CONTENU"
+
+#: crates/app/qml/AboutDialog.qml:21 crates/app/qml/Main.qml:16
+#: crates/app/qml/PreferencesDialog.qml:105 crates/app/qml/Sidebar.qml:41
+msgid "Cairn"
+msgstr "Cairn"
+
+#: crates/app/qml/CleanPage.qml:171
+msgid ""
+"Cairn never runs these. Copy a command and run it in a terminal if you want "
+"to."
+msgstr ""
+"Cairn n’exécute jamais ces commandes. Copiez-en une et lancez-la dans un "
+"terminal si vous le souhaitez."
+
+#: crates/app/src/controller/installed.rs:195
+#: crates/app/src/controller/installed.rs:45
+msgid "Came with others"
+msgstr "Installé avec d’autres"
+
+#: crates/app/qml/EmptyTrashDialog.qml:22
+#: crates/app/qml/FolderStyleDialog.qml:62 crates/app/qml/TidyDialog.qml:84
+#: crates/app/qml/WorkspaceDialog.qml:65
+msgid "Cancel"
+msgstr "Annuler"
+
+#: crates/app/qml/JobsPopup.qml:50
+msgid "Cancel "
+msgstr "Annuler : "
+
+#: crates/app/src/controller/ops.rs:608
+msgid "Cancelled"
+msgstr "Annulé"
+
+#: crates/app/src/controller/tidy.rs:52
+msgid "Cannot tidy this folder:"
+msgstr "Impossible de ranger ce dossier :"
+
+#: crates/app/qml/PreferencesDialog.qml:106
+#: crates/app/qml/WelcomeDialog.qml:187 crates/app/qml/WelcomeDialog.qml:190
+msgid "Card size"
+msgstr "Taille des cartes"
+
+#: data/clean/dev-caches.toml
+msgid "Cargo downloads crates again"
+msgstr "Cargo retélécharge les crates"
+
+#: data/clean/dev-caches.toml
+msgid "Cargo registry cache"
+msgstr "Cache du registre Cargo"
+
+#: crates/app/qml/FolderStyleDialog.qml:20
+msgid "Choose how “"
+msgstr "Choisissez l’apparence de “"
+
+#: crates/app/qml/Header.qml:204 crates/app/qml/PeekOverlay.qml:73
+#: crates/app/qml/Sheet.qml:58 crates/app/qml/TidyDialog.qml:84
+msgid "Close"
+msgstr "Fermer"
+
+#: crates/core/src/kind.rs
+msgid "Code"
+msgstr "Code"
+
+#: crates/app/qml/Sidebar.qml:52
+msgid "Collapse sidebar"
+msgstr "Replier la barre latérale"
+
+#: crates/app/qml/FolderStyleDialog.qml:52
+#: crates/app/qml/WorkspaceDialog.qml:55
+msgid "Colour "
+msgstr "Couleur "
+
+#: crates/app/qml/Rail.qml:57 crates/app/qml/Sidebar.qml:166
+#: crates/app/qml/Sidebar.qml:175 crates/app/src/controller.rs:1253
+msgid "Computer"
+msgstr "Ordinateur"
+
+#: crates/app/src/controller/about.rs:308
+msgid "Computer name"
+msgstr "Nom de l’ordinateur"
+
+#: crates/app/src/controller/about.rs:220
+msgid "Condition"
+msgstr "État"
+
+#: crates/app/qml/WhatsNewDialog.qml:35
+msgid "Continue"
+msgstr "Continuer"
+
+#: crates/app/src/controller/ops.rs:278 crates/app/src/controller/ops.rs:616
+msgid "Copied"
+msgstr "Copié :"
+
+#: crates/app/src/controller/about.rs:160
+msgid "Copied as text"
+msgstr "Copié en texte"
+
+#: crates/app/src/controller/clean.rs:438
+msgid "Copied the command. Paste it into a terminal to run it."
+msgstr "Commande copiée. Collez-la dans un terminal pour l’exécuter."
+
+#: crates/app/src/controller/installed.rs:138
+msgid "Copied the remove command. Paste it into a terminal to run it."
+msgstr ""
+"Commande de suppression copiée. Collez-la dans un terminal pour l’exécuter."
+
+#: crates/app/qml/CleanPage.qml:210 crates/app/qml/Main.qml:440
+#: crates/app/src/actions.rs:69 crates/app/src/controller/ops.rs:332
+msgid "Copy"
+msgstr "Copier"
+
+#: crates/app/qml/AboutPage.qml:38
+msgid "Copy as Text"
+msgstr "Copier en texte"
+
+#: crates/app/src/controller/welcome.rs:139
+msgid "Copy or move across with F5 and F6."
+msgstr "Copiez ou déplacez de l’autre côté avec F5 et F6."
+
+#: crates/app/qml/CleanPage.qml:211
+msgid "Copy the command for "
+msgstr "Copier la commande pour "
+
+#: crates/app/qml/InstalledPage.qml:203
+msgid "Copy the command that removes "
+msgstr "Copier la commande qui supprime "
+
+#: crates/app/src/actions.rs:84
+msgid "Copy to the other pane"
+msgstr "Copier dans l’autre volet"
+
+#: crates/app/qml/Main.qml:397
+msgid "Copy to “"
+msgstr "Copier vers “"
+
+#: crates/app/src/controller/about.rs:311
+msgid "Cores"
+msgstr "Cœurs"
+
+#: crates/app/src/controller/style.rs:201
+msgid "Could not change the folder:"
+msgstr "Impossible de modifier le dossier :"
+
+#: crates/app/src/controller/ops.rs:605
+msgid "Could not do it for"
+msgstr "Impossible pour"
+
+#: crates/app/src/controller/ops.rs:599
+msgid "Could not put back"
+msgstr "Impossible de remettre en place :"
+
+#: crates/app/src/controller/ops.rs:601
+msgid "Could not redo"
+msgstr "Impossible de rétablir :"
+
+#: crates/app/src/controller/installed.rs:158
+msgid "Could not save the list"
+msgstr "Impossible d’enregistrer la liste"
+
+#: crates/app/src/controller.rs:1284
+msgid "Couldn't Open This Folder"
+msgstr "Impossible d’ouvrir ce dossier"
+
+#: crates/app/qml/WorkspaceDialog.qml:66
+msgid "Create"
+msgstr "Créer"
+
+#: crates/app/qml/Header.qml:92 crates/app/src/controller.rs:1674
+msgid "Created"
+msgstr "Créé"
+
+#: crates/app/qml/PathBar.qml:77
+msgid "Ctrl+L to type a path"
+msgstr "Ctrl+L pour saisir un chemin"
+
+#: crates/app/qml/Main.qml:441 crates/app/src/actions.rs:70
+#: crates/app/src/controller/ops.rs:276
+msgid "Cut"
+msgstr "Couper"
+
+#: crates/app/src/controller/about.rs:222
+msgid "Cycles"
+msgstr "Cycles"
+
+#: crates/app/qml/Header.qml:187 crates/app/qml/PreferencesDialog.qml:103
+#: crates/app/qml/WelcomeDialog.qml:169
+msgid "Dark"
+msgstr "Sombre"
+
+#: crates/app/src/controller/clean.rs:94
+msgid ""
+"Data that Flatpak and Snap apps left behind after they were removed, "
+"untouched for three months."
+msgstr ""
+"Données laissées par des applications Flatpak et Snap après leur "
+"suppression, intactes depuis trois mois."
+
+#: crates/app/qml/Header.qml:71
+msgid "Date"
+msgstr "Date"
+
+#: crates/app/qml/PreferencesDialog.qml:64
+msgid "Default view"
+msgstr "Vue par défaut"
+
+#: crates/app/qml/WorkspaceDialog.qml:63
+msgid "Delete"
+msgstr "Supprimer"
+
+#: crates/app/qml/Header.qml:95
+msgid "Descending"
+msgstr "Décroissant"
+
+#: crates/app/src/controller/clean.rs:61
+msgid "Developer caches"
+msgstr "Caches de développement"
+
+#: crates/app/qml/CleanPage.qml:56
+msgid "Disk"
+msgstr "Disque"
+
+#: crates/app/src/controller/about.rs:298
+msgid "Disk encryption"
+msgstr "Chiffrement du disque"
+
+#: crates/app/src/controller/about.rs:289
+#: crates/app/src/controller/about.rs:290
+msgid "Displays"
+msgstr "Écrans"
+
+#: crates/app/qml/ClashDialog.qml:31
+msgid "Do this for every clash"
+msgstr "Faire de même pour chaque conflit"
+
+#: crates/app/qml/WelcomeDialog.qml:27
+#: crates/app/src/controller/workspaces.rs:375 crates/core/src/kind.rs
+msgid "Documents"
+msgstr "Documents"
+
+#: crates/app/src/controller/search.rs:234
+msgid "Documents and files"
+msgstr "Documents et fichiers"
+
+#: crates/app/qml/PreferencesDialog.qml:81
+#: crates/app/qml/PreferencesDialog.qml:88
+msgid "Downloads folder"
+msgstr "Dossier des téléchargements"
+
+#: crates/app/src/controller/clean.rs:116
+msgid "Downloads nobody has opened, changed or added for 90 days."
+msgstr ""
+"Téléchargements que personne n’a ouverts, modifiés ou ajoutés depuis 90 "
+"jours."
+
+#: crates/app/src/controller/about.rs:256
+msgid "Drive"
+msgstr "Disque"
+
+#: crates/app/qml/Main.qml:437 crates/app/src/controller/ops.rs:260
+msgid "Duplicate"
+msgstr "Dupliquer"
+
+#: crates/app/src/controller/ops.rs:618
+msgid "Duplicated"
+msgstr "Dupliqué :"
+
+#: crates/app/src/controller/clean.rs:69
+msgid "Duplicates"
+msgstr "Doublons"
+
+#: crates/app/qml/WorkspaceDialog.qml:10
+msgid "Edit Workspace"
+msgstr "Modifier l’espace de travail"
+
+#: crates/app/qml/Sidebar.qml:238
+msgid "Eject "
+msgstr "Éjecter "
+
+#: crates/app/src/controller/ops.rs:629
+msgid "Emptied the Trash"
+msgstr "Corbeille vidée"
+
+#: crates/app/src/controller.rs:1333
+msgid "Empty"
+msgstr "Vide"
+
+#: crates/app/qml/EmptyTrashDialog.qml:23
+msgid "Empty Trash"
+msgstr "Vider la corbeille"
+
+#: crates/app/qml/CleanPage.qml:230 crates/app/qml/Main.qml:451
+#: crates/app/qml/TrashBar.qml:25
+msgid "Empty Trash…"
+msgstr "Vider la corbeille…"
+
+#: crates/app/src/controller/ops.rs:485
+msgid "Empty the Trash"
+msgstr "Vider la corbeille"
+
+#: crates/app/qml/EmptyTrashDialog.qml:7
+msgid "Empty the Trash?"
+msgstr "Vider la corbeille ?"
+
+#: crates/app/src/controller/about.rs:251
+msgid "Encrypted"
+msgstr "Chiffré"
+
+#: crates/app/qml/Header.qml:182
+msgid "Expand Sidebar"
+msgstr "Déplier la barre latérale"
+
+#: crates/app/qml/Rail.qml:33
+msgid "Expand sidebar"
+msgstr "Déplier la barre latérale"
+
+#: crates/app/qml/Sidebar.qml:94
+msgid "Favorites"
+msgstr "Favoris"
+
+#: crates/app/src/controller/ops.rs:132
+msgid "File operations are not available"
+msgstr "Les opérations sur les fichiers ne sont pas disponibles"
+
+#: crates/app/src/controller/about.rs:250
+msgid "File system"
+msgstr "Système de fichiers"
+
+#: crates/app/src/controller.rs:1559
+msgid "Files"
+msgstr "Fichiers"
+
+#: crates/app/qml/ChipRow.qml:25
+msgid "Filter by kind"
+msgstr "Filtrer par type"
+
+#: crates/app/qml/Header.qml:115 crates/app/qml/Header.qml:120
+#: crates/app/src/actions.rs:41
+msgid "Filter this folder"
+msgstr "Filtrer ce dossier"
+
+#: crates/app/qml/InstalledPage.qml:104
+msgid "Filters"
+msgstr "Filtres"
+
+#: crates/app/qml/SearchOverlay.qml:71 crates/app/src/controller/welcome.rs:137
+msgid "Find anything"
+msgstr "Tout trouver"
+
+#: crates/app/qml/SearchOverlay.qml:69
+msgid "Find folders and files"
+msgstr "Trouver des dossiers et des fichiers"
+
+#: crates/app/src/controller/about.rs:299
+msgid "Firewall"
+msgstr "Pare-feu"
+
+#: crates/app/src/controller.rs:1422 crates/app/src/controller.rs:1598
+#: crates/app/src/controller.rs:1665
+msgid "Folder"
+msgstr "Dossier"
+
+#: crates/app/src/controller.rs:1306
+msgid "Folder Is Empty"
+msgstr "Le dossier est vide"
+
+#: crates/app/qml/FolderGrid.qml:41 crates/app/qml/FolderList.qml:16
+msgid "Folder contents"
+msgstr "Contenu du dossier"
+
+#: crates/app/qml/PreferencesDialog.qml:211
+msgid "Folder to leave out"
+msgstr "Dossier à exclure"
+
+#: crates/app/src/controller.rs:1474 crates/app/src/controller.rs:1551
+#: crates/app/src/controller/search.rs:232
+#: crates/app/src/controller/workspaces.rs:373
+msgid "Folders"
+msgstr "Dossiers"
+
+#: crates/app/src/controller/welcome.rs:137
+msgid "Folders and files by name, as you type."
+msgstr "Dossiers et fichiers par nom, au fil de la frappe."
+
+#: crates/app/qml/PathBar.qml:95
+msgid "Folders with that name"
+msgstr "Dossiers portant ce nom"
+
+#: crates/app/qml/Header.qml:185
+msgid "Follow System Style"
+msgstr "Suivre le style du système"
+
+#: crates/app/src/controller/clean.rs:128
+msgid "For apps you already have"
+msgstr "Pour des applications déjà installées"
+
+#: crates/app/qml/Header.qml:45 crates/app/src/actions.rs:31
+msgid "Forward"
+msgstr "Suivant"
+
+#: crates/app/qml/WelcomeDialog.qml:127
+msgid "Four keys worth knowing"
+msgstr "Quatre touches à connaître"
+
+#: crates/app/src/controller/about.rs:243
+msgid "Free"
+msgstr "Libre"
+
+#: crates/app/qml/AboutPage.qml:177 crates/app/qml/CleanPage.qml:13
+#: crates/app/qml/CleanPage.qml:37 crates/app/qml/Main.qml:207
+msgid "Free Up Space"
+msgstr "Libérer de l’espace"
+
+#: crates/app/src/controller/about.rs:248
+msgid "Free Up Space…"
+msgstr "Libérer de l’espace…"
+
+#: crates/app/src/controller/welcome.rs:140
+msgid "Free up space"
+msgstr "Libérer de l’espace"
+
+#: crates/app/src/controller.rs:1419
+msgid "From"
+msgstr "De"
+
+#: crates/app/src/controller/clean.rs:130
+msgid "From apps no longer installed"
+msgstr "D’applications qui ne sont plus installées"
+
+#: crates/app/src/controller/about.rs:227
+msgid "Full charge"
+msgstr "Charge complète"
+
+#: crates/app/qml/AboutDialog.qml:28
+msgid "GPL-3.0-or-later"
+msgstr "GPL-3.0-or-later"
+
+#: crates/app/qml/PreferencesDialog.qml:38
+msgid "General"
+msgstr "Général"
+
+#: data/clean/dev-caches.toml
+msgid "Go build cache"
+msgstr "Cache de compilation Go"
+
+#: data/clean/dev-caches.toml
+msgid "Go rebuilds it; the next build is slower"
+msgstr "Go le reconstruit ; la prochaine compilation sera plus lente"
+
+#: data/clean/dev-caches.toml
+msgid "Gradle caches"
+msgstr "Caches Gradle"
+
+#: data/clean/dev-caches.toml
+msgid "Gradle downloads and builds them again"
+msgstr "Gradle les retélécharge et les recompile"
+
+#: crates/app/qml/Header.qml:78 crates/app/qml/PreferencesDialog.qml:65
+#: crates/app/src/actions.rs:48
+msgid "Grid"
+msgstr "Grille"
+
+#: crates/app/qml/Header.qml:70
+msgid "Group by"
+msgstr "Grouper par"
+
+#: crates/app/qml/Sidebar.qml:330
+msgid "Hide"
+msgstr "Masquer"
+
+#: crates/app/qml/AboutPage.qml:32 crates/app/qml/AboutPage.qml:33
+msgid "Hide Names"
+msgstr "Masquer les noms"
+
+#: crates/app/src/controller/about.rs:263
+msgid "High"
+msgstr "Élevée"
+
+#: crates/app/qml/PreferencesDialog.qml:186 crates/app/src/controller.rs:1252
+#: crates/app/src/sidebar.rs:44
+msgid "Home"
+msgstr "Dossier personnel"
+
+#: crates/app/qml/CleanPage.qml:102 crates/app/src/controller/clean.rs:489
+msgid "Home disk"
+msgstr "Disque personnel"
+
+#: crates/app/src/actions.rs:33
+msgid "Home folder"
+msgstr "Dossier personnel"
+
+#: data/clean/dev-caches.toml
+msgid "Homebrew downloads"
+msgstr "Téléchargements Homebrew"
+
+#: data/clean/dev-caches.toml
+msgid "Homebrew downloads them again if needed"
+msgstr "Homebrew les retélécharge si besoin"
+
+#: crates/app/src/controller/about.rs:280
+msgid "Hot"
+msgstr "Chaud"
+
+#: crates/app/qml/WelcomeDialog.qml:26
+#: crates/app/src/controller/workspaces.rs:374 crates/core/src/kind.rs
+msgid "Images"
+msgstr "Images"
+
+#: crates/app/src/controller/search.rs:233
+msgid "Images and videos"
+msgstr "Images et vidéos"
+
+#: crates/app/src/controller/clean.rs:534
+msgid "Images no container uses"
+msgstr "Images qu’aucun conteneur n’utilise"
+
+#: crates/app/src/controller/clean.rs:129
+msgid "In projects untouched for 6 months"
+msgstr "Dans des projets intacts depuis 6 mois"
+
+#: crates/app/src/controller/clean.rs:474
+msgid "In the Trash"
+msgstr "Dans la corbeille"
+
+#: crates/app/qml/CleanPage.qml:226
+msgid "In the Trash: "
+msgstr "Dans la corbeille : "
+
+#: crates/app/src/controller/about.rs:201
+#: crates/app/src/controller/about.rs:271
+msgid "In use"
+msgstr "Utilisé depuis"
+
+#: crates/app/src/controller/about.rs:336
+msgid "In use since"
+msgstr "En service depuis"
+
+#: crates/app/qml/PreferencesDialog.qml:186
+msgid "Indexed: "
+msgstr "Indexé : "
+
+#: crates/app/qml/PreferencesDialog.qml:160
+msgid "Indexing is paused."
+msgstr "L’indexation est suspendue."
+
+#: crates/app/qml/PeekOverlay.qml:120 crates/app/qml/PeekOverlay.qml:72
+msgid "Info"
+msgstr "Infos"
+
+#: crates/app/qml/InstalledPage.qml:13 crates/app/qml/Main.qml:207
+#: crates/app/src/controller.rs:1647
+msgid "Installed"
+msgstr "Installé"
+
+#: crates/app/src/controller/clean.rs:78
+msgid ""
+"Installer packages for apps that are already installed. Ticked only when "
+"they are in Downloads or on the Desktop, more than a week old, and not newer "
+"than what is installed."
+msgstr ""
+"Paquets d’installation d’applications déjà installées. Cochés seulement "
+"s’ils sont dans Téléchargements ou sur le Bureau, ont plus d’une semaine et "
+"ne sont pas plus récents que la version installée."
+
+#: crates/app/src/controller/clean.rs:77 crates/core/src/kind.rs
+msgid "Installers"
+msgstr "Installateurs"
+
+#: crates/app/src/controller.rs:1276
+msgid "It was moved or deleted, or its drive is no longer connected."
+msgstr "Il a été déplacé ou supprimé, ou son disque n’est plus connecté."
+
+#: crates/app/qml/ClashDialog.qml:8
+msgid "Item Already Exists"
+msgstr "L’élément existe déjà"
+
+#: crates/app/qml/TrashBar.qml:15
+msgid "Items here can be put back where they were."
+msgstr "Les éléments ici peuvent être remis à leur place."
+
+#: crates/app/qml/CleanPage.qml:324
+msgid "Keep"
+msgstr "Garder"
+
+#: crates/app/qml/CleanPage.qml:323
+msgid "Keep "
+msgstr "Garder "
+
+#: crates/app/qml/ClashDialog.qml:55
+msgid "Keep Both"
+msgstr "Garder les deux"
+
+#: crates/app/qml/CleanPage.qml:41
+msgid ""
+"Keep your disk roomy. Nothing goes until you have seen it; everything goes "
+"to the Trash, and Undo brings it back."
+msgstr ""
+"Gardez de la place sur votre disque. Rien ne part avant que vous l’ayez vu ; "
+"tout va dans la corbeille, et Annuler le ramène."
+
+#: crates/app/src/controller/clean.rs:147
+msgid "Kept"
+msgstr "Gardé"
+
+#: crates/app/src/controller/clean.rs:150
+msgid "Kept: the one in"
+msgstr "Gardé : celui dans"
+
+#: crates/app/src/controller/about.rs:331
+msgid "Kernel"
+msgstr "Noyau"
+
+#: crates/app/qml/Header.qml:190 crates/app/qml/ShortcutsDialog.qml:8
+msgid "Keyboard Shortcuts"
+msgstr "Raccourcis clavier"
+
+#: crates/app/qml/PreferencesDialog.qml:119
+msgid "Keyboard shortcuts"
+msgstr "Raccourcis clavier"
+
+#: crates/app/qml/FolderList.qml:33 crates/app/qml/Header.qml:71
+#: crates/app/qml/Header.qml:93 crates/app/src/controller.rs:1669
+msgid "Kind"
+msgstr "Type"
+
+#: crates/app/qml/TidyDialog.qml:63
+msgid "LEFT WHERE THEY ARE"
+msgstr "RESTENT À LEUR PLACE"
+
+#: crates/app/qml/PreferencesDialog.qml:107
+#: crates/app/qml/WelcomeDialog.qml:191
+msgid "Large"
+msgstr "Grande"
+
+#: crates/app/qml/Header.qml:97 crates/app/src/actions.rs:50
+msgid "Larger"
+msgstr "Plus grand"
+
+#: crates/app/qml/PreferencesDialog.qml:216
+msgid "Leave Out"
+msgstr "Exclure"
+
+#: crates/app/qml/PreferencesDialog.qml:189
+msgid "Left out"
+msgstr "Exclus"
+
+#: crates/app/qml/Header.qml:186 crates/app/qml/PreferencesDialog.qml:103
+#: crates/app/qml/WelcomeDialog.qml:169
+msgid "Light"
+msgstr "Clair"
+
+#: crates/app/qml/Header.qml:78 crates/app/qml/PreferencesDialog.qml:65
+#: crates/app/src/actions.rs:49
+msgid "List"
+msgstr "Liste"
+
+#: crates/app/qml/WorkspacePage.qml:163
+msgid "Locate"
+msgstr "Localiser"
+
+#: crates/app/qml/WorkspacePage.qml:133
+msgid "Locate…"
+msgstr "Localiser…"
+
+#: crates/app/qml/PathBar.qml:13 crates/app/qml/PathBar.qml:62
+msgid "Location"
+msgstr "Emplacement"
+
+#: crates/app/qml/Sidebar.qml:124 crates/app/qml/Sidebar.qml:127
+#: crates/app/qml/Sidebar.qml:145
+msgid "Locations"
+msgstr "Emplacements"
+
+#: crates/app/src/controller/clean.rs:522
+msgid "Logs over 200 MB; the newest are kept"
+msgstr "Journaux au-delà de 200 Mo ; les plus récents sont gardés"
+
+#: crates/app/qml/CleanPage.qml:46
+msgid "Look Again"
+msgstr "Chercher à nouveau"
+
+#: crates/app/qml/InstalledPage.qml:45
+msgid "Look again"
+msgstr "Chercher à nouveau"
+
+#: crates/app/qml/PreviewPane.qml:92
+msgid "Looking for things to clear…"
+msgstr "Recherche de ce qui peut être libéré…"
+
+#: crates/app/qml/AboutPage.qml:78 crates/app/qml/CleanPage.qml:104
+#: crates/app/qml/InstalledPage.qml:35 crates/app/src/controller/clean.rs:579
+msgid "Looking…"
+msgstr "Recherche…"
+
+#: crates/app/src/controller/about.rs:265
+msgid "Low"
+msgstr "Faible"
+
+#: crates/app/qml/Header.qml:167
+msgid "Main menu"
+msgstr "Menu principal"
+
+#: crates/app/qml/Header.qml:20
+msgid "Main toolbar"
+msgstr "Barre d’outils principale"
+
+#: crates/app/qml/WelcomeDialog.qml:159
+msgid "Make it yours"
+msgstr "Personnalisez-le"
+
+#: crates/app/qml/Header.qml:201
+msgid "Maximize"
+msgstr "Agrandir"
+
+#: crates/app/src/controller/about.rs:221
+msgid "Maximum capacity"
+msgstr "Capacité maximale"
+
+#: crates/app/qml/PreferencesDialog.qml:107
+#: crates/app/qml/WelcomeDialog.qml:191
+msgid "Medium"
+msgstr "Moyenne"
+
+#: crates/app/src/controller/about.rs:269
+msgid "Memory"
+msgstr "Mémoire"
+
+#: crates/app/qml/WelcomeDialog.qml:117
+msgid "Mess It Up Again"
+msgstr "Remettre le désordre"
+
+#: crates/app/qml/WelcomeDialog.qml:69
+msgid "Messy folder"
+msgstr "Dossier en désordre"
+
+#: crates/app/qml/Header.qml:199
+msgid "Minimize"
+msgstr "Réduire"
+
+#: crates/app/qml/FolderList.qml:33 crates/app/qml/Header.qml:91
+#: crates/app/qml/RightPane.qml:31 crates/app/src/controller.rs:1673
+msgid "Modified"
+msgstr "Modifié"
+
+#: crates/app/qml/FileCard.qml:125
+msgid "More for "
+msgstr "Plus pour "
+
+#: crates/app/src/controller/clean.rs:364
+#: crates/app/src/controller/clean.rs:610
+#: crates/app/src/controller/downloads.rs:105
+#: crates/app/src/controller/ops.rs:248
+msgid "Move"
+msgstr "Déplacer"
+
+#: crates/app/qml/Main.qml:399
+msgid "Move   F6"
+msgstr "Déplacer   F6"
+
+#: crates/app/qml/Sidebar.qml:329
+msgid "Move Down"
+msgstr "Descendre"
+
+#: crates/app/qml/Sidebar.qml:328
+msgid "Move Up"
+msgstr "Monter"
+
+#: crates/app/qml/CleanPage.qml:366
+msgid "Move ticked items to the Trash"
+msgstr "Mettre les éléments cochés à la corbeille"
+
+#: crates/app/qml/CleanPage.qml:364 crates/app/qml/Main.qml:443
+#: crates/app/qml/PreviewPane.qml:116
+msgid "Move to Trash"
+msgstr "Mettre à la corbeille"
+
+#: crates/app/src/actions.rs:68
+msgid "Move to the Trash"
+msgstr "Mettre à la corbeille"
+
+#: crates/app/src/actions.rs:85
+msgid "Move to the other pane"
+msgstr "Déplacer dans l’autre volet"
+
+#: crates/app/src/controller/clean.rs:384 crates/app/src/controller/ops.rs:615
+#: crates/app/src/controller/ops.rs:617
+msgid "Moved"
+msgstr "Déplacé :"
+
+#: crates/app/qml/FolderList.qml:33 crates/app/qml/Header.qml:89
+#: crates/app/qml/InstalledPage.qml:143 crates/app/qml/RightPane.qml:29
+msgid "Name"
+msgstr "Nom"
+
+#: crates/app/qml/WorkspaceDialog.qml:27
+msgid "Name, e.g. Taxes 2026"
+msgstr "Nom, p. ex. Impôts 2026"
+
+#: crates/app/qml/CleanPage.qml:168 crates/app/qml/CleanPage.qml:178
+#: crates/app/qml/CleanPage.qml:385 crates/app/qml/CleanPage.qml:6
+msgid "Needs administrator"
+msgstr "Nécessite un administrateur"
+
+#: crates/app/qml/Header.qml:177 crates/app/qml/Main.qml:454
+msgid "New Folder"
+msgstr "Nouveau dossier"
+
+#: crates/app/qml/WorkspaceDialog.qml:10
+msgid "New Workspace"
+msgstr "Nouvel espace de travail"
+
+#: crates/app/src/actions.rs:66 crates/app/src/controller/ops.rs:196
+msgid "New folder"
+msgstr "Nouveau dossier"
+
+#: crates/app/qml/RenameField.qml:20
+msgid "New name"
+msgstr "Nouveau nom"
+
+#: crates/app/qml/Sidebar.qml:78
+msgid "New workspace"
+msgstr "Nouvel espace de travail"
+
+#: crates/app/qml/WelcomeDialog.qml:212
+msgid "Next"
+msgstr "Suivant"
+
+#: crates/app/src/controller/about.rs:253
+msgid "No"
+msgstr "Non"
+
+#: crates/app/src/controller.rs:1290
+msgid "No Matches"
+msgstr "Aucun résultat"
+
+#: crates/app/src/controller.rs:899
+msgid "No app could open"
+msgstr "Aucune application n’a pu ouvrir"
+
+#: crates/app/src/controller.rs:1081 crates/app/src/controller/downloads.rs:132
+msgid "No folder called"
+msgstr "Aucun dossier nommé"
+
+#: crates/app/src/controller.rs:928
+msgid "No installed app can open this kind of file"
+msgstr "Aucune application installée ne peut ouvrir ce type de fichier"
+
+#: crates/app/src/controller.rs:1299
+msgid "No items in this folder are"
+msgstr "Aucun élément de ce dossier n’est"
+
+#: crates/app/src/controller.rs:1291
+msgid "No names in this folder contain what you typed."
+msgstr "Aucun nom dans ce dossier ne contient ce que vous avez saisi."
+
+#: crates/app/qml/Header.qml:71
+msgid "None"
+msgstr "Aucun"
+
+#: crates/app/src/controller/about.rs:191
+#: crates/app/src/controller/about.rs:282
+msgid "Normal"
+msgstr "Normal"
+
+#: crates/app/qml/Header.qml:99
+msgid "Normal Size"
+msgstr "Taille normale"
+
+#: crates/app/src/actions.rs:52
+msgid "Normal size"
+msgstr "Taille normale"
+
+#: crates/app/src/controller/clean.rs:177
+msgid "Not changed for"
+msgstr "Pas modifié depuis"
+
+#: crates/app/src/controller/downloads.rs:202
+msgid "Not changed in 90 days"
+msgstr "Pas modifié depuis 90 jours"
+
+#: crates/app/src/controller/workspaces.rs:300
+msgid "Not found"
+msgstr "Introuvable"
+
+#: crates/app/src/controller/clean.rs:175
+msgid "Not opened for"
+msgstr "Pas ouvert depuis"
+
+#: crates/app/src/controller/clean.rs:133
+msgid "Not opened for 90 days"
+msgstr "Pas ouvert depuis 90 jours"
+
+#: crates/app/src/controller/downloads.rs:200
+msgid "Not opened in 90 days"
+msgstr "Pas ouvert depuis 90 jours"
+
+#: crates/app/src/controller/ops.rs:611
+msgid "Nothing changed"
+msgstr "Rien n’a changé"
+
+#: crates/app/qml/SearchOverlay.qml:157
+msgid "Nothing is called that."
+msgstr "Rien ne s’appelle ainsi."
+
+#: crates/app/src/controller/tidy.rs:90
+msgid "Nothing is deleted, and Undo puts everything back."
+msgstr "Rien n’est supprimé, et Annuler remet tout en place."
+
+#: crates/app/src/controller.rs:1307
+msgid "Nothing is in this folder yet."
+msgstr "Ce dossier est encore vide."
+
+#: crates/app/qml/JobsPopup.qml:24
+msgid "Nothing is running."
+msgstr "Rien n’est en cours."
+
+#: crates/app/src/controller.rs:1296
+msgid "Nothing of This Kind"
+msgstr "Rien de ce type"
+
+#: crates/app/src/controller/ops.rs:309
+msgid "Nothing to paste"
+msgstr "Rien à coller"
+
+#: crates/app/qml/PreviewPane.qml:249
+msgid "Nothing to preview"
+msgstr "Rien à prévisualiser"
+
+#: crates/app/src/controller/ops.rs:596
+msgid "Nothing to redo"
+msgstr "Rien à rétablir"
+
+#: crates/app/src/controller/tidy.rs:87
+msgid "Nothing to tidy: every loose file is already in place."
+msgstr "Rien à ranger : chaque fichier isolé est déjà à sa place."
+
+#: crates/app/src/controller/ops.rs:594
+msgid "Nothing to undo"
+msgstr "Rien à annuler"
+
+#: crates/app/src/controller/about.rs:69
+msgid "Off"
+msgstr "Désactivé"
+
+#: crates/app/src/controller/clean.rs:513
+msgid "Old Snap revisions"
+msgstr "Anciennes révisions Snap"
+
+#: crates/app/src/controller/clean.rs:85
+msgid "Old build output"
+msgstr "Anciens résultats de compilation"
+
+#: crates/app/src/controller/clean.rs:115
+msgid "Old downloads"
+msgstr "Anciens téléchargements"
+
+#: crates/app/src/controller/clean.rs:525
+msgid "Old kernels"
+msgstr "Anciens noyaux"
+
+#: crates/app/src/controller/clean.rs:109
+msgid "Old screen recordings"
+msgstr "Anciens enregistrements d’écran"
+
+#: crates/app/src/controller/clean.rs:132
+msgid "Older than 90 days"
+msgstr "Plus de 90 jours"
+
+#: crates/app/src/controller/about.rs:68
+#: crates/app/src/controller/workspaces.rs:298
+msgid "On"
+msgstr "Activé"
+
+#: crates/app/src/controller/clean.rs:62
+msgid ""
+"Only places their tools rebuild by themselves. You lose nothing but time: "
+"the next build or install is slower."
+msgstr ""
+"Seulement les dossiers que leurs outils reconstruisent eux-mêmes. Vous ne "
+"perdez que du temps : la prochaine compilation ou installation sera plus "
+"lente."
+
+#: crates/app/qml/Main.qml:433 crates/app/qml/PeekOverlay.qml:71
+msgid "Open"
+msgstr "Ouvrir"
+
+#: crates/app/qml/OpenWithDialog.qml:8
+msgid "Open With"
+msgstr "Ouvrir avec"
+
+#: crates/app/qml/Main.qml:434
+msgid "Open With…"
+msgstr "Ouvrir avec…"
+
+#: crates/app/src/controller.rs:1281
+msgid "Open it from the folder that contains it."
+msgstr "Ouvrez-le depuis le dossier qui le contient."
+
+#: crates/app/src/actions.rs:88
+msgid "Open workspace 1"
+msgstr "Ouvrir l’espace de travail 1"
+
+#: crates/app/src/actions.rs:89
+msgid "Open workspace 2"
+msgstr "Ouvrir l’espace de travail 2"
+
+#: crates/app/src/actions.rs:90
+msgid "Open workspace 3"
+msgstr "Ouvrir l’espace de travail 3"
+
+#: crates/app/src/actions.rs:91
+msgid "Open workspace 4"
+msgstr "Ouvrir l’espace de travail 4"
+
+#: crates/app/src/actions.rs:92
+msgid "Open workspace 5"
+msgstr "Ouvrir l’espace de travail 5"
+
+#: crates/app/src/actions.rs:93
+msgid "Open workspace 6"
+msgstr "Ouvrir l’espace de travail 6"
+
+#: crates/app/src/actions.rs:94
+msgid "Open workspace 7"
+msgstr "Ouvrir l’espace de travail 7"
+
+#: crates/app/src/actions.rs:95
+msgid "Open workspace 8"
+msgstr "Ouvrir l’espace de travail 8"
+
+#: crates/app/src/actions.rs:96
+msgid "Open workspace 9"
+msgstr "Ouvrir l’espace de travail 9"
+
+#: crates/app/qml/Header.qml:139 crates/app/qml/JobsPopup.qml:21
+msgid "Operations"
+msgstr "Opérations"
+
+#: crates/core/src/kind.rs
+msgid "Other"
+msgstr "Autres"
+
+#: crates/app/src/controller/workspaces.rs:372
+msgid "Overview"
+msgstr "Vue d’ensemble"
+
+#: crates/app/qml/WelcomeDialog.qml:26 crates/core/src/kind.rs
+msgid "PDFs"
+msgstr "PDF"
+
+#: crates/app/src/controller/clean.rs:509
+msgid "Package downloads (apt)"
+msgstr "Paquets téléchargés (apt)"
+
+#: crates/app/qml/InstalledPage.qml:158 crates/app/src/controller/about.rs:335
+msgid "Packages"
+msgstr "Paquets"
+
+#: crates/app/src/controller/clean.rs:510
+msgid "Packages apt keeps after installing them"
+msgstr "Paquets qu’apt garde après les avoir installés"
+
+#: crates/app/qml/PeekOverlay.qml:181
+msgid "Page "
+msgstr "Page "
+
+#: crates/app/src/controller/peek.rs:189
+msgid "Pages"
+msgstr "Pages"
+
+#: crates/app/qml/PaneHeader.qml:14
+msgid "Pane"
+msgstr "Volet"
+
+#: crates/app/qml/Header.qml:178 crates/app/qml/Main.qml:455
+#: crates/app/src/actions.rs:71
+msgid "Paste"
+msgstr "Coller"
+
+#: crates/app/qml/PeekOverlay.qml:227
+msgid "Pause"
+msgstr "Pause"
+
+#: crates/app/qml/PreferencesDialog.qml:166
+#: crates/app/qml/PreferencesDialog.qml:170
+msgid "Pause indexing"
+msgstr "Suspendre l’indexation"
+
+#: crates/app/qml/PreferencesDialog.qml:176
+#: crates/app/qml/PreferencesDialog.qml:180
+msgid "Pause on battery"
+msgstr "Suspendre sur batterie"
+
+#: crates/app/qml/CleanPage.qml:338
+msgid "Peek at "
+msgstr "Aperçu de "
+
+#: crates/app/src/actions.rs:80
+msgid "Peek at a file"
+msgstr "Aperçu d’un fichier"
+
+#: crates/app/qml/PeekOverlay.qml:44
+msgid "Peek: "
+msgstr "Aperçu : "
+
+#: crates/app/qml/PeekOverlay.qml:227
+msgid "Play"
+msgstr "Lecture"
+
+#: crates/app/src/controller/about.rs:232
+msgid "Power"
+msgstr "Alimentation"
+
+#: crates/app/src/controller/about.rs:234
+msgid "Power adapter"
+msgstr "Adaptateur secteur"
+
+#: crates/app/qml/Header.qml:189 crates/app/qml/PreferencesDialog.qml:11
+#: crates/app/src/actions.rs:23
+msgid "Preferences"
+msgstr "Préférences"
+
+#: crates/app/qml/PreferencesDialog.qml:37
+msgid "Preferences pages"
+msgstr "Pages des préférences"
+
+#: crates/app/src/controller/about.rs:272
+msgid "Pressure"
+msgstr "Pression"
+
+#: crates/app/qml/PreviewPane.qml:11
+msgid "Preview"
+msgstr "Aperçu"
+
+#: crates/app/qml/Header.qml:105
+msgid "Preview pane"
+msgstr "Volet d’aperçu"
+
+#: crates/app/src/controller/about.rs:310
+msgid "Processor"
+msgstr "Processeur"
+
+#: crates/app/qml/Main.qml:431 crates/app/qml/TrashBar.qml:24
+msgid "Put Back"
+msgstr "Remettre en place"
+
+#: crates/app/src/controller/ops.rs:464 crates/app/src/controller/ops.rs:619
+msgid "Put back"
+msgstr "Remis en place :"
+
+#: crates/app/qml/Header.qml:193 crates/app/src/actions.rs:22
+msgid "Quit"
+msgstr "Quitter"
+
+#: crates/app/qml/PreferencesDialog.qml:218
+msgid "Rebuild"
+msgstr "Reconstruire"
+
+#: crates/app/qml/Header.qml:174 crates/app/src/actions.rs:73
+#: crates/app/src/controller/ops.rs:413
+msgid "Redo"
+msgstr "Rétablir"
+
+#: crates/app/qml/Header.qml:174
+msgid "Redo "
+msgstr "Rétablir : "
+
+#: crates/app/src/controller/ops.rs:602
+msgid "Redone:"
+msgstr "Rétabli :"
+
+#: crates/app/src/controller/about.rs:333
+msgid "Region"
+msgstr "Région"
+
+#: crates/app/src/actions.rs:34
+msgid "Reload"
+msgstr "Recharger"
+
+#: crates/app/qml/WorkspacePage.qml:154
+msgid "Remove from Workspace"
+msgstr "Retirer de l’espace de travail"
+
+#: crates/app/src/actions.rs:67 crates/app/src/controller/ops.rs:228
+msgid "Rename"
+msgstr "Renommer"
+
+#: crates/app/src/controller/ops.rs:622
+msgid "Renamed to"
+msgstr "Renommé en"
+
+#: crates/app/qml/Main.qml:436
+msgid "Rename…"
+msgstr "Renommer…"
+
+#: crates/app/qml/ClashDialog.qml:56
+msgid "Replace"
+msgstr "Remplacer"
+
+#: crates/app/qml/ClashDialog.qml:25
+msgid "Replace puts the existing item in the Trash, so Undo can bring it back."
+msgstr ""
+"Remplacer met l’élément existant à la corbeille, pour qu’Annuler puisse le "
+"ramener."
+
+#: crates/app/qml/Header.qml:183
+msgid "Restore Sidebar"
+msgstr "Rétablir la barre latérale"
+
+#: crates/app/qml/RightPane.qml:11
+msgid "Right pane"
+msgstr "Volet droit"
+
+#: crates/app/qml/RightPane.qml:47
+msgid "Right pane contents"
+msgstr "Contenu du volet droit"
+
+#: crates/app/qml/PreviewPane.qml:87
+msgid "SUGGESTIONS"
+msgstr "SUGGESTIONS"
+
+#: crates/app/qml/CleanPage.qml:385 crates/app/src/controller/clean.rs:622
+msgid "Safe to clear"
+msgstr "Sans risque"
+
+#: crates/app/qml/WorkspaceDialog.qml:66
+msgid "Save"
+msgstr "Enregistrer"
+
+#: crates/app/qml/InstalledPage.qml:44
+msgid "Save List…"
+msgstr "Enregistrer la liste…"
+
+#: crates/app/qml/InstalledPage.qml:218
+msgid "Save the List"
+msgstr "Enregistrer la liste"
+
+#: crates/app/src/controller/installed.rs:153
+msgid "Saved the list as"
+msgstr "Liste enregistrée sous"
+
+#: crates/app/src/controller/clean.rs:110
+msgid "Screen recordings older than 90 days."
+msgstr "Enregistrements d’écran de plus de 90 jours."
+
+#: crates/app/qml/PreferencesDialog.qml:39
+msgid "Search and Index"
+msgstr "Recherche et index"
+
+#: crates/app/qml/SearchOverlay.qml:95
+msgid "Search results"
+msgstr "Résultats de recherche"
+
+#: crates/app/src/controller/about.rs:300
+msgid "Secure Boot"
+msgstr "Démarrage sécurisé"
+
+#: crates/app/src/controller/about.rs:296
+msgid "Security"
+msgstr "Sécurité"
+
+#: crates/app/src/controller/welcome.rs:138
+msgid "See the plan, then sort. One Undo puts it back."
+msgstr "Voyez le plan, puis rangez. Un seul Annuler remet tout."
+
+#: crates/app/qml/Header.qml:179 crates/app/qml/Main.qml:452
+#: crates/app/qml/Main.qml:457
+msgid "Select All"
+msgstr "Tout sélectionner"
+
+#: crates/app/src/controller/about.rs:190
+msgid "Service recommended"
+msgstr "Révision conseillée"
+
+#: crates/app/src/controller/about.rs:332
+msgid "Shell"
+msgstr "Shell"
+
+#: crates/app/qml/PreferencesDialog.qml:39
+msgid "Shortcuts"
+msgstr "Raccourcis"
+
+#: crates/app/qml/CleanPage.qml:341
+msgid "Show "
+msgstr "Afficher "
+
+#: crates/app/qml/Header.qml:181 crates/app/qml/Main.qml:458
+msgid "Show Hidden Files"
+msgstr "Afficher les fichiers cachés"
+
+#: crates/app/qml/AboutPage.qml:32
+msgid "Show Names"
+msgstr "Afficher les noms"
+
+#: crates/app/qml/PreferencesDialog.qml:68
+#: crates/app/qml/PreferencesDialog.qml:73 crates/app/src/actions.rs:53
+msgid "Show hidden files"
+msgstr "Afficher les fichiers cachés"
+
+#: crates/app/qml/Sidebar.qml:99
+msgid "Sidebar"
+msgstr "Barre latérale"
+
+#: crates/app/qml/Rail.qml:16
+msgid "Sidebar rail"
+msgstr "Rail de la barre latérale"
+
+#: crates/app/qml/FolderList.qml:33 crates/app/qml/Header.qml:90
+#: crates/app/qml/InstalledPage.qml:146 crates/app/qml/RightPane.qml:34
+msgid "Size"
+msgstr "Taille"
+
+#: crates/app/qml/ClashDialog.qml:54 crates/app/qml/WelcomeDialog.qml:203
+msgid "Skip"
+msgstr "Passer"
+
+#: crates/app/qml/PreferencesDialog.qml:107
+#: crates/app/qml/WelcomeDialog.qml:191
+msgid "Small"
+msgstr "Petite"
+
+#: crates/app/qml/Header.qml:98 crates/app/src/actions.rs:51
+msgid "Smaller"
+msgstr "Plus petit"
+
+#: crates/app/src/controller/about.rs:328
+msgid "Software"
+msgstr "Logiciels"
+
+#: crates/app/src/controller/about.rs:264
+msgid "Some"
+msgstr "Moyenne"
+
+#: crates/app/src/controller/ops.rs:112
+msgid "Some items may be in their old place."
+msgstr "Certains éléments sont peut-être à leur ancienne place."
+
+#: crates/app/qml/WelcomeDialog.qml:117
+msgid "Sort It"
+msgstr "Ranger"
+
+#: crates/app/qml/Header.qml:84
+msgid "Sort and size"
+msgstr "Tri et taille"
+
+#: crates/app/qml/WelcomeDialog.qml:69
+msgid "Sorted folder"
+msgstr "Dossier rangé"
+
+#: crates/app/src/actions.rs:82
+msgid "Split into two panes"
+msgstr "Diviser en deux volets"
+
+#: crates/app/qml/SearchOverlay.qml:120
+msgid "Start Indexing"
+msgstr "Lancer l’indexation"
+
+#: crates/app/qml/WelcomeDialog.qml:212
+msgid "Start Using Cairn"
+msgstr "Commencer avec Cairn"
+
+#: crates/app/src/controller/about.rs:241
+msgid "Startup disk"
+msgstr "Disque de démarrage"
+
+#: crates/app/qml/WelcomeDialog.qml:38
+msgid "Step "
+msgstr "Étape "
+
+#: crates/app/qml/PreferencesDialog.qml:199
+msgid "Stop leaving out "
+msgstr "Ne plus exclure "
+
+#: crates/app/qml/PreferencesDialog.qml:102
+#: crates/app/qml/WelcomeDialog.qml:165 crates/app/qml/WelcomeDialog.qml:168
+msgid "Style"
+msgstr "Style"
+
+#: crates/app/qml/CleanPage.qml:297
+msgid "Suggestions"
+msgstr "Suggestions"
+
+#: crates/app/src/controller/about.rs:277
+msgid "Swap"
+msgstr "Swap"
+
+#: crates/app/src/actions.rs:86
+msgid "Swap the two panes"
+msgstr "Échanger les deux volets"
+
+#: crates/app/src/actions.rs:83
+msgid "Switch pane"
+msgstr "Changer de volet"
+
+#: crates/app/qml/FolderStyleDialog.qml:34
+msgid "Symbol "
+msgstr "Symbole "
+
+#: crates/app/qml/FolderStyleDialog.qml:9
+msgid "Symbol and Colour"
+msgstr "Symbole et couleur"
+
+#: crates/app/qml/Main.qml:438
+msgid "Symbol and Colour…"
+msgstr "Symbole et couleur…"
+
+#: crates/app/qml/PreferencesDialog.qml:103
+#: crates/app/qml/PreferencesDialog.qml:105
+#: crates/app/qml/WelcomeDialog.qml:169 crates/app/qml/WelcomeDialog.qml:180
+msgid "System"
+msgstr "Système"
+
+#: crates/app/src/controller/clean.rs:477
+msgid "System and other"
+msgstr "Système et autres"
+
+#: crates/app/src/controller/clean.rs:521
+msgid "System journal"
+msgstr "Journal système"
+
+#: crates/app/qml/Main.qml:404
+msgid "Tab switches pane · drag to move, Ctrl-drag to copy"
+msgstr "Tab change de volet · glisser déplace, Ctrl-glisser copie"
+
+#: crates/app/src/controller/workspaces.rs:222
+msgid "That place does not exist"
+msgstr "Cet emplacement n’existe pas"
+
+#: crates/app/src/controller/clean.rs:165
+msgid "The Flatpak is no longer installed"
+msgstr "Le Flatpak n’est plus installé"
+
+#: crates/app/src/controller/clean.rs:164
+msgid "The Snap is no longer installed"
+msgstr "Le Snap n’est plus installé"
+
+#: crates/app/src/controller/ops.rs:472
+msgid "The Trash is empty"
+msgstr "La corbeille est vide"
+
+#: crates/app/qml/PreferencesDialog.qml:159
+msgid "The index is not running."
+msgstr "L’index ne fonctionne pas."
+
+#: crates/app/qml/PreferencesDialog.qml:160
+msgid "The index is up to date and following changes."
+msgstr "L’index est à jour et suit les changements."
+
+#: crates/app/src/controller/clean.rs:102
+msgid ""
+"The largest files in your home folder, disk images included. Only you know "
+"whether you still need them."
+msgstr ""
+"Les plus gros fichiers de votre dossier personnel, images disque comprises. "
+"Vous seul savez si vous en avez encore besoin."
+
+#: data/clean/dev-caches.toml
+msgid "The next C and C++ builds are slower"
+msgstr "Les prochaines compilations C et C++ seront plus lentes"
+
+#: crates/app/src/controller/clean.rs:70
+msgid ""
+"The same contents in more than one place. One copy is always kept, a filed "
+"one first. Only copies that look spare are ticked: in Downloads or on the "
+"Desktop, or named like a copy."
+msgstr ""
+"Le même contenu à plusieurs endroits. Une copie est toujours gardée, de "
+"préférence une copie classée. Seules les copies qui semblent superflues sont "
+"cochées : dans Téléchargements ou sur le Bureau, ou nommées comme une copie."
+
+#: crates/app/src/controller/index.rs:326
+msgid "The search index is not running."
+msgstr "L’index de recherche ne fonctionne pas."
+
+#: crates/app/qml/PreferencesDialog.qml:86
+msgid "The system’s Downloads"
+msgstr "Téléchargements du système"
+
+#: crates/app/src/controller/about.rs:279
+msgid "Thermal state"
+msgstr "État thermique"
+
+#: crates/app/src/controller.rs:1275
+msgid "This Folder Is Gone"
+msgstr "Ce dossier n’existe plus"
+
+#: crates/app/src/controller.rs:1280
+msgid "This Is Not a Folder"
+msgstr "Ce n’est pas un dossier"
+
+#: crates/app/src/controller/about.rs:179
+msgid "This computer"
+msgstr "Cet ordinateur"
+
+#: crates/app/qml/CleanPage.qml:314
+msgid "Tick "
+msgstr "Cocher "
+
+#: crates/app/qml/CleanPage.qml:281 crates/app/qml/CleanPage.qml:284
+msgid "Tick all"
+msgstr "Tout cocher"
+
+#: crates/app/src/controller/ops.rs:637
+msgid "Tidied"
+msgstr "Rangé :"
+
+#: crates/app/qml/TidyDialog.qml:85 crates/app/src/controller/tidy.rs:116
+msgid "Tidy"
+msgstr "Ranger"
+
+#: crates/app/qml/PreviewPane.qml:126
+msgid "Tidy Downloads…"
+msgstr "Ranger les téléchargements…"
+
+#: crates/app/src/controller/welcome.rs:138
+msgid "Tidy a folder"
+msgstr "Ranger un dossier"
+
+#: crates/app/src/actions.rs:81
+msgid "Tidy this folder"
+msgstr "Ranger ce dossier"
+
+#: crates/app/qml/TidyDialog.qml:8
+msgid "Tidy “"
+msgstr "Ranger “"
+
+#: crates/app/src/format.rs:34
+msgid "Today, %H:%M"
+msgstr "Aujourd’hui, %H:%M"
+
+#: crates/app/qml/InstalledPage.qml:144
+msgid "Tool"
+msgstr "Outil"
+
+#: crates/app/qml/InstalledPage.qml:67 crates/app/qml/Sidebar.qml:108
+#: crates/app/qml/Sidebar.qml:113
+msgid "Tools"
+msgstr "Outils"
+
+#: crates/app/qml/TrashBar.qml:10 crates/app/src/controller.rs:1249
+#: crates/app/src/controller.rs:1758 crates/app/src/sidebar.rs:61
+msgid "Trash"
+msgstr "Corbeille"
+
+#: crates/app/src/controller/welcome.rs:139
+msgid "Two folders side by side"
+msgstr "Deux dossiers côte à côte"
+
+#: crates/app/qml/Header.qml:172 crates/app/qml/Toast.qml:44
+#: crates/app/qml/Toast.qml:46 crates/app/src/actions.rs:72
+msgid "Undo"
+msgstr "Annuler"
+
+#: crates/app/qml/Header.qml:172
+msgid "Undo "
+msgstr "Annuler : "
+
+#: crates/app/src/controller/ops.rs:600
+msgid "Undone:"
+msgstr "Annulé :"
+
+#: crates/app/src/controller/about.rs:174 crates/app/src/controller/about.rs:70
+msgid "Unknown"
+msgstr "Inconnu"
+
+#: crates/app/src/controller/clean.rs:533
+msgid "Unused Docker images"
+msgstr "Images Docker inutilisées"
+
+#: crates/app/src/controller/about.rs:197
+msgid "Up"
+msgstr "Allumé depuis"
+
+#: crates/app/src/actions.rs:32
+msgid "Up to the parent folder"
+msgstr "Vers le dossier parent"
+
+#: crates/app/src/controller/about.rs:244
+msgid "Used"
+msgstr "Utilisé"
+
+#: crates/app/src/controller/about.rs:309
+msgid "User"
+msgstr "Utilisateur"
+
+#: crates/app/qml/AboutDialog.qml:23
+msgid "Version "
+msgstr "Version "
+
+#: crates/app/qml/WelcomeDialog.qml:27 crates/core/src/kind.rs
+msgid "Videos"
+msgstr "Vidéos"
+
+#: crates/app/qml/Header.qml:77
+msgid "View"
+msgstr "Affichage"
+
+#: crates/app/qml/PreviewPane.qml:43
+msgid "WHAT TAKES THE SPACE"
+msgstr "CE QUI PREND DE LA PLACE"
+
+#: crates/app/qml/TidyDialog.qml:35
+msgid "WILL MOVE"
+msgstr "SERONT DÉPLACÉS"
+
+#: crates/app/qml/JobsPopup.qml:65
+msgid "Waiting"
+msgstr "En attente"
+
+#: crates/app/src/controller/about.rs:281
+msgid "Warm"
+msgstr "Tiède"
+
+#: crates/app/qml/WelcomeDialog.qml:11
+msgid "Welcome to Cairn"
+msgstr "Bienvenue dans Cairn"
+
+#: crates/app/src/controller/welcome.rs:140
+msgid "What is safe to clear, and why."
+msgstr "Ce qui peut être supprimé sans risque, et pourquoi."
+
+#: crates/app/qml/WorkspaceDialog.qml:37
+msgid "What it is for"
+msgstr "À quoi il sert"
+
+#: crates/app/qml/WhatsNewDialog.qml:8
+msgid "What’s New in Cairn "
+msgstr "Nouveautés de Cairn "
+
+#: crates/app/src/controller.rs:1676 crates/app/src/controller/peek.rs:192
+msgid "Where"
+msgstr "Emplacement"
+
+#: crates/app/qml/InstalledPage.qml:145
+msgid "Why it’s here"
+msgstr "Pourquoi il est là"
+
+#: crates/app/qml/TidyDialog.qml:45
+msgid "Will move to "
+msgstr "Sera déplacé vers "
+
+#: crates/app/qml/JobsPopup.qml:65
+msgid "Working…"
+msgstr "En cours…"
+
+#: crates/app/qml/WorkspacePage.qml:14
+msgid "Workspace "
+msgstr "Espace de travail "
+
+#: crates/app/qml/WorkspaceDialog.qml:38
+msgid "Workspace description"
+msgstr "Description de l’espace de travail"
+
+#: crates/app/qml/WorkspacePage.qml:96
+msgid "Workspace items"
+msgstr "Éléments de l’espace de travail"
+
+#: crates/app/qml/WorkspaceDialog.qml:28
+msgid "Workspace name"
+msgstr "Nom de l’espace de travail"
+
+#: crates/app/qml/WorkspacePage.qml:43
+msgid "Workspace settings"
+msgstr "Réglages de l’espace de travail"
+
+#: crates/app/qml/Sidebar.qml:74 crates/app/qml/Sidebar.qml:86
+msgid "Workspaces"
+msgstr "Espaces de travail"
+
+#: data/clean/dev-caches.toml
+msgid "Yarn cache"
+msgstr "Cache Yarn"
+
+#: data/clean/dev-caches.toml
+msgid "Yarn downloads packages again"
+msgstr "Yarn retélécharge les paquets"
+
+#: crates/app/src/controller/about.rs:252
+msgid "Yes (LUKS)"
+msgstr "Oui (LUKS)"
+
+#: crates/app/src/format.rs:35
+msgid "Yesterday, %H:%M"
+msgstr "Hier, %H:%M"
+
+#: crates/app/src/controller.rs:1270
+msgid "You Can't Open This Folder"
+msgstr "Vous ne pouvez pas ouvrir ce dossier"
+
+#: crates/app/qml/WelcomeDialog.qml:162
+msgid "You can change these any time in Preferences (Ctrl+,)."
+msgstr "Vous pouvez changer cela à tout moment dans les Préférences (Ctrl+,)."
+
+#: crates/app/src/controller/clean.rs:617
+msgid "You could free about"
+msgstr "Vous pourriez libérer environ"
+
+#: crates/app/src/controller.rs:1271
+msgid "You don't have permission to see what's inside."
+msgstr "Vous n’avez pas la permission de voir son contenu."
+
+#: crates/app/src/controller/installed.rs:194
+#: crates/app/src/controller/installed.rs:44
+msgid "You installed"
+msgstr "Installé par vous"
+
+#: crates/app/qml/CleanPage.qml:385 crates/app/src/controller/clean.rs:623
+msgid "Your call"
+msgstr "À vous de voir"
+
+#: crates/app/src/controller/clean.rs:472
+msgid "Your files"
+msgstr "Vos fichiers"
+
+#: crates/app/src/controller/tidy.rs:23
+msgid "added less than 2 minutes ago"
+msgstr "ajouté il y a moins de 2 minutes"
+
+#: crates/app/src/controller/downloads.rs:174
+msgid "already"
+msgstr "déjà"
+
+#: crates/app/qml/PreviewPane.qml:242 crates/app/qml/PreviewPane.qml:78
+msgid "and "
+msgstr "et "
+
+#: crates/app/src/controller.rs:1354
+msgid "available"
+msgstr "disponible"
+
+#: data/clean/dev-caches.toml
+msgid "ccache"
+msgstr "ccache"
+
+#: crates/app/src/controller/about.rs:225
+msgid "charged"
+msgstr "chargée"
+
+#: crates/app/src/controller/about.rs:212
+msgid "charging"
+msgstr "en charge"
+
+#: crates/app/src/controller/about.rs:36
+msgid "day"
+msgstr "jour"
+
+#: crates/app/src/controller/about.rs:36 crates/app/src/controller/clean.rs:179
+msgid "days"
+msgstr "jours"
+
+#: crates/app/src/controller/clean.rs:171
+msgid "days old"
+msgstr "jours"
+
+#: crates/app/src/controller/about.rs:228
+msgid "designed"
+msgstr "prévus"
+
+#: crates/app/src/controller/clean.rs:517
+msgid "disabled revisions kept for rollback"
+msgstr "révisions désactivées gardées pour revenir en arrière"
+
+#: crates/app/src/controller/about.rs:337
+msgid "estimate"
+msgstr "estimation"
+
+#: crates/app/src/controller/search.rs:278
+msgid "for"
+msgstr "pour"
+
+#: crates/app/src/controller.rs:1632
+msgid "free"
+msgstr "libre"
+
+#: crates/app/src/controller/clean.rs:492
+msgid "free of"
+msgstr "libres sur"
+
+#: crates/app/src/controller/about.rs:214
+msgid "fully charged"
+msgstr "pleinement chargée"
+
+#: crates/app/src/controller/tidy.rs:24
+msgid "hidden"
+msgstr "caché"
+
+#: crates/app/src/controller/about.rs:37 crates/app/src/controller/about.rs:42
+msgid "hour"
+msgstr "heure"
+
+#: crates/app/src/controller/about.rs:37 crates/app/src/controller/about.rs:42
+msgid "hours"
+msgstr "heures"
+
+#: crates/app/qml/PreviewPane.qml:38
+msgid "in all"
+msgstr "au total"
+
+#: crates/app/src/controller/downloads.rs:166
+msgid "installer"
+msgstr "installateur"
+
+#: crates/app/src/controller/downloads.rs:168
+msgid "installers"
+msgstr "installateurs"
+
+#: crates/app/src/controller/ops.rs:639
+msgid "into"
+msgstr "dans"
+
+#: crates/app/src/controller/clean.rs:154
+msgid "is installed"
+msgstr "est installé"
+
+#: crates/app/src/controller/ops.rs:78
+msgid "it is no longer there"
+msgstr "il n’est plus là"
+
+#: crates/app/src/controller/search.rs:277
+msgid "item"
+msgstr "élément"
+
+#: crates/app/src/controller/search.rs:277
+msgid "items"
+msgstr "éléments"
+
+#: crates/app/src/controller/downloads.rs:183
+msgid "likely duplicates"
+msgstr "doublons probables"
+
+#: crates/app/qml/CleanPage.qml:420
+msgid "looking"
+msgstr "recherche"
+
+#: crates/app/src/controller/about.rs:184
+msgid "memory"
+msgstr "de mémoire"
+
+#: crates/app/src/controller/about.rs:43
+msgid "minute"
+msgstr "minute"
+
+#: crates/app/src/controller/about.rs:43
+msgid "minutes"
+msgstr "minutes"
+
+#: crates/app/src/controller/about.rs:56 crates/app/src/controller/about.rs:61
+msgid "month"
+msgstr "mois"
+
+#: crates/app/src/controller/about.rs:56 crates/app/src/controller/about.rs:61
+#: crates/app/src/controller/clean.rs:161
+msgid "months"
+msgstr "mois"
+
+#: crates/app/qml/TidyDialog.qml:52
+msgid "new folder"
+msgstr "nouveau dossier"
+
+#: crates/app/src/controller/clean.rs:86
+msgid ""
+"node_modules, target, .venv and build folders in projects nobody has touched "
+"for six months. The project rebuilds them when you work on it again."
+msgstr ""
+"Dossiers node_modules, target, .venv et build dans des projets que personne "
+"n’a touchés depuis six mois. Le projet les reconstruit quand vous y "
+"retravaillez."
+
+#: crates/app/src/controller/about.rs:215
+msgid "not charging"
+msgstr "ne charge pas"
+
+#: crates/app/src/controller/clean.rs:529
+msgid "not running and not the newest"
+msgstr "ni en cours d’utilisation ni le plus récent"
+
+#: data/clean/dev-caches.toml
+msgid "npm download cache"
+msgstr "Cache de téléchargement npm"
+
+#: data/clean/dev-caches.toml
+msgid "npm downloads packages again"
+msgstr "npm retélécharge les paquets"
+
+#: crates/app/src/controller/clean.rs:126
+msgid "npm, pip, Cargo and more"
+msgstr "npm, pip, Cargo et d’autres"
+
+#: crates/app/src/controller/about.rs:228
+#: crates/app/src/controller/about.rs:275 crates/app/src/controller/ops.rs:723
+#: crates/app/src/controller/pane.rs:335
+msgid "of"
+msgstr "sur"
+
+#: crates/app/src/controller/about.rs:213
+msgid "on battery"
+msgstr "sur batterie"
+
+#: crates/app/src/controller/installed.rs:184
+msgid "on this computer, from"
+msgstr "sur cet ordinateur, depuis"
+
+#: crates/app/src/controller/clean.rs:131
+msgid "over 256 MB"
+msgstr "de plus de 256 Mo"
+
+#: crates/app/src/controller/installed.rs:183
+msgid "packages"
+msgstr "paquets"
+
+#: data/clean/dev-caches.toml
+msgid "pip cache"
+msgstr "Cache pip"
+
+#: data/clean/dev-caches.toml
+msgid "pip downloads packages again"
+msgstr "pip retélécharge les paquets"
+
+#: crates/app/src/controller/search.rs:277
+msgid "result"
+msgstr "résultat"
+
+#: crates/app/src/controller/search.rs:277
+msgid "results"
+msgstr "résultats"
+
+#: crates/app/src/controller.rs:1351 crates/app/src/controller/pane.rs:336
+msgid "selected"
+msgstr "sélectionné"
+
+#: crates/app/src/controller/clean.rs:545
+msgid "size unknown"
+msgstr "taille inconnue"
+
+#: crates/app/src/controller/ops.rs:82
+msgid "something went wrong"
+msgstr "une erreur s’est produite"
+
+#: crates/app/src/controller/tidy.rs:22
+msgid "still downloading"
+msgstr "téléchargement en cours"
+
+#: crates/app/src/controller/about.rs:187
+msgid "storage"
+msgstr "de stockage"
+
+#: crates/app/src/controller/ops.rs:80
+msgid "the disk is full"
+msgstr "le disque est plein"
+
+#: crates/app/src/controller/ops.rs:81
+msgid "the disk is read-only"
+msgstr "le disque est en lecture seule"
+
+#: crates/app/src/controller/ops.rs:77
+msgid "the name is taken"
+msgstr "le nom est déjà pris"
+
+#: crates/app/src/controller/about.rs:312
+msgid "threads"
+msgstr "threads"
+
+#: crates/app/src/controller/clean.rs:608
+#: crates/app/src/controller/clean.rs:620
+msgid "ticked"
+msgstr "coché"
+
+#: crates/app/src/controller/ops.rs:230 crates/app/src/controller/ops.rs:322
+#: crates/app/src/controller/ops.rs:334 crates/app/src/controller/ops.rs:389
+msgid "to"
+msgstr "vers"
+
+#: crates/app/src/controller/clean.rs:610
+msgid "to Trash"
+msgstr "à la corbeille"
+
+#: crates/app/src/controller/clean.rs:366
+#: crates/app/src/controller/clean.rs:387
+#: crates/app/src/controller/downloads.rs:107
+#: crates/app/src/controller/ops.rs:250
+msgid "to the Trash"
+msgstr "à la corbeille"
+
+#: crates/app/src/controller/installed.rs:185
+msgid "tool"
+msgstr "outil"
+
+#: crates/app/src/controller/installed.rs:185
+msgid "tools"
+msgstr "outils"
+
+#: crates/app/src/controller/ops.rs:190
+msgid "untitled folder"
+msgstr "dossier sans titre"
+
+#: crates/app/src/controller/clean.rs:159
+msgid "untouched for"
+msgstr "intact depuis"
+
+#: crates/app/src/controller/downloads.rs:197
+msgid "untouched for 90 days"
+msgstr "intacts depuis 90 jours"
+
+#: crates/app/src/controller/clean.rs:493
+msgid "used"
+msgstr "utilisé"
+
+#: crates/app/src/controller/about.rs:247
+#: crates/app/src/controller/about.rs:278
+msgid "used of"
+msgstr "utilisés sur"
+
+#: crates/app/src/controller/tidy.rs:89
+msgid "will move into"
+msgstr "iront dans"
+
+#: crates/app/src/controller/about.rs:57 crates/app/src/controller/about.rs:60
+msgid "year"
+msgstr "an"
+
+#: crates/app/src/controller/about.rs:57 crates/app/src/controller/about.rs:60
+msgid "years"
+msgstr "ans"
+
+#: crates/app/src/controller/ops.rs:79
+msgid "you do not have permission"
+msgstr "vous n’avez pas la permission"
+
+#: crates/app/src/controller/clean.rs:127
+msgid "you have twice"
+msgstr "en double"
+
+#: crates/app/src/format.rs:53
+msgid "{} file"
+msgid_plural "{} files"
+msgstr[0] "{} fichier"
+msgstr[1] "{} fichiers"
+
+#: crates/app/src/format.rs:49
+msgid "{} folder"
+msgid_plural "{} folders"
+msgstr[0] "{} dossier"
+msgstr[1] "{} dossiers"
+
+#: crates/app/src/format.rs:45
+msgid "{} item"
+msgid_plural "{} items"
+msgstr[0] "{} élément"
+msgstr[1] "{} éléments"
+
+#: crates/app/qml/ClashDialog.qml:18
+msgid "” is already in “"
+msgstr "” est déjà dans “"
+
+#: crates/app/qml/FolderStyleDialog.qml:20
+msgid "” looks. It keeps this look when renamed or moved."
+msgstr "”. Il garde cette apparence s’il est renommé ou déplacé."
+
+#: crates/app/qml/CleanPage.qml:251
+msgid "‹ All suggestions"
+msgstr "‹ Toutes les suggestions"
+
+#: crates/app/qml/SearchOverlay.qml:210
+msgid "↑↓ move   ↵ open   Space peek   Ctrl+↵ show in folder"
+msgstr ""
+"↑↓ se déplacer   ↵ ouvrir   Espace aperçu   Ctrl+↵ afficher dans le dossier"

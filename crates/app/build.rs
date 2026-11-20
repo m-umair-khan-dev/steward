@@ -101,4 +101,27 @@ fn main() {
         .status()
         .expect("run glib-compile-schemas");
     assert!(status.success(), "glib-compile-schemas failed");
+
+    // Translations (P6-T04): po/<lang>.po -> OUT_DIR/locale/<lang>/LC_MESSAGES/cairn.mo
+    // for development and test builds (installed builds use /usr/share/locale).
+    let po = manifest_dir.join("../../po");
+    println!("cargo:rerun-if-changed={}", po.display());
+    for entry in fs::read_dir(&po).into_iter().flatten().flatten() {
+        let path = entry.path();
+        if path.extension().is_none_or(|e| e != "po") {
+            continue;
+        }
+        println!("cargo:rerun-if-changed={}", path.display());
+        let lang = path.file_stem().expect("a po file has a name").to_string_lossy().into_owned();
+        let dir = out_dir.join("locale").join(&lang).join("LC_MESSAGES");
+        fs::create_dir_all(&dir).expect("create the locale folder");
+        let status = Command::new("msgfmt")
+            .arg("--check")
+            .arg("-o")
+            .arg(dir.join("cairn.mo"))
+            .arg(&path)
+            .status()
+            .expect("run msgfmt");
+        assert!(status.success(), "msgfmt failed for {}", path.display());
+    }
 }

@@ -8,7 +8,7 @@ Sheet {
     id: root
     property var info: ({ step: "demo", index: 0, count: 3, sorted: false, tour: [] })
     property var prefs: ({})
-    title: "Welcome to Cairn"
+    title: p.t("Welcome to Cairn")
     cardWidth: 620
 
     // Loose files of the demo, and the kind folder each one belongs in.
@@ -23,8 +23,8 @@ Sheet {
         { name: "talk.webm", kind: "videos", x: 0.86, y: 0.48, r: -6 }
     ]
     readonly property var kinds: [
-        { id: "images", label: "Images" }, { id: "pdfs", label: "PDFs" },
-        { id: "documents", label: "Documents" }, { id: "videos", label: "Videos" }
+        { id: "images", label: p.t("Images") }, { id: "pdfs", label: p.t("PDFs") },
+        { id: "documents", label: p.t("Documents") }, { id: "videos", label: p.t("Videos") }
     ]
 
     Column {
@@ -35,7 +35,7 @@ Sheet {
         Row {
             spacing: 6
             Accessible.role: Accessible.ProgressBar
-            Accessible.name: "Step " + (root.info.index + 1) + " of " + root.info.count
+            Accessible.name: p.t("Step ") + (root.info.index + 1) + p.t(" of ") + root.info.count
             Repeater {
                 model: root.info.count || 3
                 delegate: Rectangle {
@@ -52,7 +52,7 @@ Sheet {
             visible: root.info.step === "demo"
             width: parent.width
             spacing: 10
-            Text { text: "A messy folder, sorted"; color: Theme.ink; font.pixelSize: 22; font.weight: Font.Bold
+            Text { text: p.t("A messy folder, sorted"); color: Theme.ink; font.pixelSize: 22; font.weight: Font.Bold
                    Accessible.role: Accessible.Heading; Accessible.name: text }
             Text {
                 width: parent.width; wrapMode: Text.WordWrap; color: Theme.muted; font.pixelSize: 14
@@ -66,7 +66,7 @@ Sheet {
                 radius: 14; color: Theme.sunken
                 clip: true
                 Accessible.role: Accessible.Graphic
-                Accessible.name: root.info.sorted ? "Sorted folder" : "Messy folder"
+                Accessible.name: root.info.sorted ? p.t("Sorted folder") : p.t("Messy folder")
                 // Kind folders appear when sorted.
                 Row {
                     anchors.centerIn: parent
@@ -114,7 +114,7 @@ Sheet {
                 }
             }
             PillButton {
-                text: root.info.sorted ? "Mess It Up Again" : "Sort It"
+                text: root.info.sorted ? p.t("Mess It Up Again") : p.t("Sort It")
                 onClicked: p.activate("win.welcome-step", root.info.sorted ? "unsort" : "sort")
             }
         }
@@ -124,7 +124,7 @@ Sheet {
             visible: root.info.step === "tour"
             width: parent.width
             spacing: 10
-            Text { text: "Four keys worth knowing"; color: Theme.ink; font.pixelSize: 22; font.weight: Font.Bold
+            Text { text: p.t("Four keys worth knowing"); color: Theme.ink; font.pixelSize: 22; font.weight: Font.Bold
                    Accessible.role: Accessible.Heading; Accessible.name: text }
             Repeater {
                 model: root.info.tour || []
@@ -156,39 +156,39 @@ Sheet {
             visible: root.info.step === "yours"
             width: parent.width
             spacing: 12
-            Text { text: "Make it yours"; color: Theme.ink; font.pixelSize: 22; font.weight: Font.Bold
+            Text { text: p.t("Make it yours"); color: Theme.ink; font.pixelSize: 22; font.weight: Font.Bold
                    Accessible.role: Accessible.Heading; Accessible.name: text }
             Text { width: parent.width; wrapMode: Text.WordWrap; color: Theme.muted; font.pixelSize: 14
-                   text: "You can change these any time in Preferences (Ctrl+,)." }
+                   text: p.t("You can change these any time in Preferences (Ctrl+,).") }
             Item {
                 width: parent.width; height: 44
-                Text { anchors.verticalCenter: parent.verticalCenter; text: "Style"; color: Theme.ink; font.pixelSize: 14 }
+                Text { anchors.verticalCenter: parent.verticalCenter; text: p.t("Style"); color: Theme.ink; font.pixelSize: 14 }
                 Segmented {
                     anchors.right: parent.right; anchors.verticalCenter: parent.verticalCenter
-                    name: "Style"
-                    options: [{ id: "system", label: "System" }, { id: "light", label: "Light" }, { id: "dark", label: "Dark" }]
+                    name: p.t("Style")
+                    options: [{ id: "system", label: p.t("System") }, { id: "light", label: p.t("Light") }, { id: "dark", label: p.t("Dark") }]
                     current: root.prefs.colorScheme || "system"
                     onPicked: id => p.setpref("color-scheme", id)
                 }
             }
             Item {
                 width: parent.width; height: 44
-                Text { anchors.verticalCenter: parent.verticalCenter; text: "Accent"; color: Theme.ink; font.pixelSize: 14 }
+                Text { anchors.verticalCenter: parent.verticalCenter; text: p.t("Accent"); color: Theme.ink; font.pixelSize: 14 }
                 Segmented {
                     anchors.right: parent.right; anchors.verticalCenter: parent.verticalCenter
-                    name: "Accent"
-                    options: [{ id: "cairn", label: "Cairn" }, { id: "system", label: "System" }]
+                    name: p.t("Accent")
+                    options: [{ id: "cairn", label: p.t("Cairn") }, { id: "system", label: p.t("System") }]
                     current: root.prefs.accent || "cairn"
                     onPicked: id => p.setpref("accent", id)
                 }
             }
             Item {
                 width: parent.width; height: 44
-                Text { anchors.verticalCenter: parent.verticalCenter; text: "Card size"; color: Theme.ink; font.pixelSize: 14 }
+                Text { anchors.verticalCenter: parent.verticalCenter; text: p.t("Card size"); color: Theme.ink; font.pixelSize: 14 }
                 Segmented {
                     anchors.right: parent.right; anchors.verticalCenter: parent.verticalCenter
-                    name: "Card size"
-                    options: [{ id: "small", label: "Small" }, { id: "medium", label: "Medium" }, { id: "large", label: "Large" }]
+                    name: p.t("Card size")
+                    options: [{ id: "small", label: p.t("Small") }, { id: "medium", label: p.t("Medium") }, { id: "large", label: p.t("Large") }]
                     current: root.prefs.rowSize || "medium"
                     onPicked: id => p.setpref("row-size", id)
                 }
@@ -200,16 +200,16 @@ Sheet {
             width: parent.width; height: 40
             PillButton {
                 visible: root.info.index < root.info.count - 1
-                text: "Skip"
+                text: p.t("Skip")
                 onClicked: p.activate("win.welcome-done", "")
             }
             Row {
                 anchors.right: parent.right
                 spacing: 8
-                PillButton { visible: root.info.index > 0; text: "Back"; onClicked: p.activate("win.welcome-step", "back") }
+                PillButton { visible: root.info.index > 0; text: p.t("Back"); onClicked: p.activate("win.welcome-step", "back") }
                 PillButton {
                     primary: true
-                    text: root.info.index < root.info.count - 1 ? "Next" : "Start Using Cairn"
+                    text: root.info.index < root.info.count - 1 ? p.t("Next") : p.t("Start Using Cairn")
                     onClicked: p.activate(root.info.index < root.info.count - 1 ? "win.welcome-step" : "win.welcome-done",
                                           root.info.index < root.info.count - 1 ? "next" : "")
                 }

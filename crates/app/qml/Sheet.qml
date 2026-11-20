@@ -55,7 +55,7 @@ FocusScope {
             anchors.right: parent.right; anchors.rightMargin: 14
             y: 14
             width: 30; height: 30; iconSize: 14
-            icon: "close"; label: "Close"
+            icon: "close"; label: p.t("Close")
             onClicked: root.close()
         }
         Item {
