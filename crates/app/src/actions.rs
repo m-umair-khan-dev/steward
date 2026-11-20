@@ -351,6 +351,12 @@ fn create() -> (gio::SimpleActionGroup, gio::SimpleActionGroup) {
         controller::with(|c| c.about_hide_names(hide == "true"))
     });
     simple(&win, "about-copy", || controller::with(|c| c.about_copy()));
+    with_string(&win, "welcome-step", |change| {
+        controller::with(|c| c.welcome_step(change))
+    });
+    simple(&win, "welcome-done", || {
+        controller::with(|c| c.first_run_done())
+    });
     simple(&win, "workspace-new", || {
         controller::with(|c| c.ask_new_workspace())
     });

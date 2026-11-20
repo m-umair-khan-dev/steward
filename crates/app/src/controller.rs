@@ -31,6 +31,7 @@ mod search;
 mod style;
 mod tidy;
 mod tools;
+mod welcome;
 mod workspaces;
 
 use crate::sidebar::{self, SidebarEntry};
@@ -200,6 +201,7 @@ pub struct Controller {
     clean: clean::CleanState,
     installed: installed::InstalledState,
     about: about::AboutState,
+    welcome: welcome::WelcomeState,
     /// Path bar: folders whose name matches what is typed, and the one chosen.
     path_matches: Vec<PathBuf>,
     path_match: Option<usize>,
@@ -297,6 +299,7 @@ pub fn init(notifier: impl Fn() + 'static) {
         clean: clean::CleanState::default(),
         installed: installed::InstalledState::default(),
         about: about::AboutState::default(),
+        welcome: welcome::WelcomeState::default(),
         path_matches: Vec::new(),
         path_match: None,
         dialog: String::new(),
@@ -367,6 +370,7 @@ pub fn init(notifier: impl Fn() + 'static) {
         if dual {
             c.set_dual_pane(true, right.is_dir().then_some(right));
         }
+        c.first_run_check();
     });
 }
 
@@ -952,6 +956,18 @@ impl Controller {
     }
 
     pub fn close_dialog(&mut self) {
+        // The welcome and What's New show once, however they are closed.
+        let s = settings::get();
+        match self.dialog.as_str() {
+            "welcome" => {
+                let _ = s.set_boolean("welcome-shown", true);
+                let _ = s.set_string("last-version", env!("CARGO_PKG_VERSION"));
+            }
+            "whats-new" => {
+                let _ = s.set_string("last-version", env!("CARGO_PKG_VERSION"));
+            }
+            _ => {}
+        }
         self.dialog.clear();
         self.emit(Event::Dialog(String::new()));
     }
@@ -1874,6 +1890,7 @@ impl Controller {
             "clean": self.clean_test_json(),
             "installed": self.installed_test_json(),
             "about": self.about_test_json(),
+            "welcome": self.welcome_test_json(),
             // Folder numbers as the cards show them, by name.
             "folder_stats": self.visible.iter().filter(|e| e.is_dir()).filter_map(|e| {
                 let (items, bytes) = self.folder_numbers(&e.data().file.path()?)?;

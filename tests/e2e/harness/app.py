@@ -40,6 +40,8 @@ class App:
     def env(self) -> dict[str, str]:
         return self.session.base_env() | {
             "CAIRN_E2E": "1",
+            # No first-run welcome unless a test asks (E6-01 sets it empty).
+            "CAIRN_NO_WELCOME": "1",
             "G_DEBUG": "fatal-criticals",
             "RUST_BACKTRACE": "1",
             "QT_QPA_PLATFORM": "wayland",

@@ -54,6 +54,8 @@ const QML_FILES: &[&str] = &[
     "qml/CleanPage.qml",
     "qml/InstalledPage.qml",
     "qml/AboutPage.qml",
+    "qml/WelcomeDialog.qml",
+    "qml/WhatsNewDialog.qml",
 ];
 
 fn main() {

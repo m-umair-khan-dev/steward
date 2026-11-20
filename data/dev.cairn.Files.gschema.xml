@@ -93,5 +93,15 @@
       <default>true</default>
       <summary>Pause indexing while on battery</summary>
     </key>
+    <key name="welcome-shown" type="b">
+      <default>false</default>
+      <summary>The welcome was shown</summary>
+      <description>Set when the first-run welcome is finished or skipped (P6-T01).</description>
+    </key>
+    <key name="last-version" type="s">
+      <default>''</default>
+      <summary>The last version that ran</summary>
+      <description>What's New shows once when the app runs a newer version than this (P6-T02).</description>
+    </key>
   </schema>
 </schemalist>
