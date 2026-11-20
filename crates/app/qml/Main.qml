@@ -385,4 +385,5 @@ Window {
     OpenWithDialog { visible: p.dialog === "open-with"; info: win.dialogData }
     ClashDialog { visible: p.dialog === "clash"; info: win.dialogData }
     EmptyTrashDialog { visible: p.dialog === "empty-trash"; info: win.dialogData }
+    TidyDialog { visible: p.dialog === "tidy"; info: win.dialogData }
 }

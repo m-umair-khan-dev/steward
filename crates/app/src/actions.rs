@@ -78,6 +78,7 @@ pub const ACCELS: &[(&str, &str, &[&str], &str)] = &[
         "Find anything: folders and files",
     ),
     ("win.peek", "", &["Space"], "Peek at a file"),
+    ("win.tidy", "", &["Ctrl+Shift+O"], "Tidy this folder"),
 ];
 
 /// Shortcuts that text fields need for themselves: QML turns these off while
@@ -288,6 +289,11 @@ fn create() -> (gio::SimpleActionGroup, gio::SimpleActionGroup) {
     });
     simple(&win, "start-indexer", || {
         controller::with(|c| c.start_indexer())
+    });
+    simple(&win, "tidy", || controller::with(|c| c.plan_tidy()));
+    simple(&win, "tidy-run", || controller::with(|c| c.run_tidy()));
+    simple(&win, "tidy-cancel", || {
+        controller::with(|c| c.cancel_tidy())
     });
     with_string(&win, "index-paused", |v| {
         controller::with(|c| c.set_index_paused(v == "true"))

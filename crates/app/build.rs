@@ -41,6 +41,7 @@ const QML_FILES: &[&str] = &[
     "qml/FolderDrop.qml",
     "qml/SearchOverlay.qml",
     "qml/PeekOverlay.qml",
+    "qml/TidyDialog.qml",
     "qml/MenuPopup.qml",
 ];
 

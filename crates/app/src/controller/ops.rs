@@ -120,6 +120,11 @@ pub fn start(c: &mut Controller) {
 }
 
 impl Controller {
+    /// Queues a request for the engine (used by Tidy and the like).
+    pub fn submit_request(&mut self, request: Request, summary: String) {
+        self.submit(request, summary);
+    }
+
     fn submit(&mut self, request: Request, summary: String) {
         let Some(engine) = self.ops.engine.as_mut() else {
             self.emit(Event::Toast(
@@ -610,6 +615,19 @@ impl Controller {
                             .unwrap_or_default()
                     ),
                     "empty-trash" => gettext("Emptied the Trash"),
+                    "tidy" => {
+                        let mut folders: Vec<_> =
+                            report.created.iter().filter_map(|p| p.parent()).collect();
+                        folders.sort();
+                        folders.dedup();
+                        format!(
+                            "{} {} {} {}",
+                            gettext("Tidied"),
+                            format::files(report.done as u32),
+                            gettext("into"),
+                            format::folders(folders.len() as u32)
+                        )
+                    }
                     _ => return None,
                 })
             }

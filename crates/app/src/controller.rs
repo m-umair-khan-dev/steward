@@ -22,6 +22,7 @@ mod index;
 mod ops;
 mod peek;
 mod search;
+mod tidy;
 
 use crate::sidebar::{self, SidebarEntry};
 use crate::thumbnails::Thumbnailer;
@@ -178,6 +179,7 @@ pub struct Controller {
     index: index::IndexState,
     search: search::SearchState,
     peek: peek::PeekState,
+    tidy: tidy::TidyState,
     /// Path bar: folders whose name matches what is typed, and the one chosen.
     path_matches: Vec<PathBuf>,
     path_match: Option<usize>,
@@ -266,6 +268,7 @@ pub fn init(notifier: impl Fn() + 'static) {
         index: index::IndexState::default(),
         search: search::SearchState::default(),
         peek: peek::PeekState::default(),
+        tidy: tidy::TidyState::default(),
         path_matches: Vec::new(),
         path_match: None,
         dialog: String::new(),
@@ -1781,6 +1784,7 @@ impl Controller {
             "index": self.index_test_json(),
             "search": self.search_test_json(),
             "peek": self.peek_test_json(),
+            "tidy": self.tidy_test_json(),
             // Folder numbers as the cards show them, by name.
             "folder_stats": self.visible.iter().filter(|e| e.is_dir()).filter_map(|e| {
                 let (items, bytes) = self.folder_numbers(&e.data().file.path()?)?;
