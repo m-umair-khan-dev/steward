@@ -26,6 +26,7 @@ mod pane;
 mod peek;
 mod search;
 mod tidy;
+mod workspaces;
 
 use crate::sidebar::{self, SidebarEntry};
 use crate::thumbnails::Thumbnailer;
@@ -130,7 +131,8 @@ pub mod dirty {
     pub const SEARCH: u32 = 4096;
     pub const PEEK: u32 = 8192;
     pub const PANE: u32 = 16384;
-    pub const ALL: u32 = 32767;
+    pub const WORKSPACE: u32 = 32768;
+    pub const ALL: u32 = 65535;
 }
 
 /// One-off things for QML to do.
@@ -186,6 +188,7 @@ pub struct Controller {
     tidy: tidy::TidyState,
     downloads: downloads::DownloadsState,
     pane: pane::PaneState,
+    workspace: workspaces::WorkspaceState,
     /// Path bar: folders whose name matches what is typed, and the one chosen.
     path_matches: Vec<PathBuf>,
     path_match: Option<usize>,
@@ -277,6 +280,7 @@ pub fn init(notifier: impl Fn() + 'static) {
         tidy: tidy::TidyState::default(),
         downloads: downloads::DownloadsState::default(),
         pane: pane::PaneState::default(),
+        workspace: workspaces::WorkspaceState::default(),
         path_matches: Vec::new(),
         path_match: None,
         dialog: String::new(),
@@ -433,6 +437,7 @@ impl Controller {
         actions::set_enabled("back", !self.back.is_empty());
         actions::set_enabled("forward", !self.forward.is_empty());
         actions::set_enabled("up", folder.parent().is_some());
+        self.workspace.open = None;
         self.mark(dirty::ALL & !dirty::PREFS);
         if self.pane.open {
             self.remember_panes();
@@ -1583,6 +1588,7 @@ impl Controller {
                 "uri": e.file.uri().to_string(),
                 "path": e.file.path().map(|p| p.display().to_string()).unwrap_or_else(|| e.file.uri().to_string()),
             })).collect::<Vec<_>>(),
+            "workspaces": self.workspaces_json(),
             "hidden": self.hidden,
             "selected": selected,
             "expanded": settings::get().boolean("sidebar-visible"),
@@ -1819,6 +1825,7 @@ impl Controller {
             "tidy": self.tidy_test_json(),
             "downloads": self.downloads_test_json(),
             "pane": self.pane_test_json(),
+            "workspace": self.workspace_test_json(),
             // Folder numbers as the cards show them, by name.
             "folder_stats": self.visible.iter().filter(|e| e.is_dir()).filter_map(|e| {
                 let (items, bytes) = self.folder_numbers(&e.data().file.path()?)?;

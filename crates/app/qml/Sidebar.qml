@@ -68,6 +68,29 @@ Rectangle {
             width: parent.width
             spacing: 2
 
+            // Workspaces (P4-T08), with "+" to make one.
+            Item {
+                width: parent.width; height: wsHeading.implicitHeight
+                Heading { id: wsHeading; text: "Workspaces" }
+                IconButton {
+                    anchors.right: parent.right; anchors.rightMargin: 14
+                    y: wsHeading.topPadding - 4
+                    width: 24; height: 24; iconSize: 13; flat: true; icon: "plus"; label: "New workspace"
+                    onClicked: p.activate("win.workspace-new", "")
+                }
+            }
+            Item {
+                width: parent.width
+                height: wsList.implicitHeight
+                Accessible.role: Accessible.List
+                Accessible.name: "Workspaces"
+                Column {
+                    id: wsList
+                    width: parent.width
+                    spacing: 2
+                    Repeater { model: root.model.workspaces || []; delegate: WorkspaceRow {} }
+                }
+            }
             Heading { text: "Favorites" }
             Item {
                 width: parent.width
@@ -220,6 +243,35 @@ Rectangle {
             onTapped: (point) => {
                 menu.key = row.modelData.key
                 menu.popup()
+            }
+        }
+    }
+
+    component WorkspaceRow: Rectangle {
+        id: wsRow
+        required property var modelData
+        x: 12
+        width: root.width - 24
+        height: 38
+        radius: 10
+        color: modelData.open ? Theme.alpha(Theme.accent, 0.16) : (wsHover.hovered ? Theme.hover : "transparent")
+        Accessible.role: Accessible.Button
+        Accessible.name: modelData.name
+        Accessible.onPressAction: p.activate("win.workspace-open", String(modelData.id))
+        MiniFolder { x: 9; anchors.verticalCenter: parent.verticalCenter; size: 22; kind: wsRow.modelData.color }
+        Text { x: 42; anchors.verticalCenter: parent.verticalCenter; width: parent.width - 52; elide: Text.ElideRight
+               text: wsRow.modelData.name; color: Theme.ink; font.pixelSize: 15
+               font.weight: wsRow.modelData.open ? Font.Bold : Font.Normal }
+        HoverHandler { id: wsHover }
+        FolderDrop { id: wsDrop; anchors.fill: parent; target: "workspace:" + wsRow.modelData.id }
+        Rectangle { anchors.fill: parent; radius: parent.radius; color: "transparent"; border.color: Theme.accent
+                    border.width: 2; visible: wsDrop.containsDrag }
+        MouseArea {
+            anchors.fill: parent
+            acceptedButtons: Qt.LeftButton | Qt.RightButton
+            onClicked: mouse => {
+                if (mouse.button === Qt.RightButton) p.activate("win.workspace-edit-ask", String(wsRow.modelData.id))
+                else p.activate("win.workspace-open", String(wsRow.modelData.id))
             }
         }
     }

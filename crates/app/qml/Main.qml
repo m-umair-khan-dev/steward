@@ -62,6 +62,7 @@ Window {
     readonly property var search: parse(p.search, ({ open: false }))
     readonly property var peek: parse(p.peek, ({ open: false }))
     readonly property var pane: parse(p.pane, ({ open: false }))
+    readonly property var workspace: parse(p.workspace, ({ open: false }))
     // A text field has the keyboard: shortcuts it needs (copy, paste, undo,
     // Delete) are left to it.
     readonly property bool typing: !!activeFocusItem && activeFocusItem.cursorPosition !== undefined
@@ -328,6 +329,14 @@ Window {
                 }
             }
 
+            // A workspace page covers the folder while it is open.
+            WorkspacePage {
+                z: 20
+                anchors.fill: parent
+                visible: !!win.workspace.open
+                model: win.workspace
+            }
+
             RightPane {
                 visible: !!win.pane.open
                 x: content.width
@@ -405,7 +414,9 @@ Window {
             { text: "Cut", action: "win.cut", param: "" },
             { separator: true },
             { text: "Move to Trash", action: "win.trash", param: "" }
-        ]
+        ].concat((win.sidebar.workspaces || []).length ? [{ separator: true }] : [])
+         .concat((win.sidebar.workspaces || []).map(w => ({ text: "Add to “" + w.name + "”", action: "win.workspace-add",
+                                                            param: String(w.id) })))
     }
     MenuPopup {
         id: backgroundMenu
@@ -433,4 +444,6 @@ Window {
     ClashDialog { visible: p.dialog === "clash"; info: win.dialogData }
     EmptyTrashDialog { visible: p.dialog === "empty-trash"; info: win.dialogData }
     TidyDialog { visible: p.dialog === "tidy"; info: win.dialogData }
+    WorkspaceDialog { visible: p.dialog === "workspace-new"; info: win.dialogData; editing: false }
+    WorkspaceDialog { visible: p.dialog === "workspace-edit"; info: win.dialogData; editing: true }
 }

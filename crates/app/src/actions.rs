@@ -84,6 +84,15 @@ pub const ACCELS: &[(&str, &str, &[&str], &str)] = &[
     ("win.copy-across", "", &["F5"], "Copy to the other pane"),
     ("win.move-across", "", &["F6"], "Move to the other pane"),
     ("win.swap-panes", "", &["Ctrl+U"], "Swap the two panes"),
+    ("win.workspace-open", "#1", &["Alt+1"], "Open workspace 1"),
+    ("win.workspace-open", "#2", &["Alt+2"], "Open workspace 2"),
+    ("win.workspace-open", "#3", &["Alt+3"], "Open workspace 3"),
+    ("win.workspace-open", "#4", &["Alt+4"], "Open workspace 4"),
+    ("win.workspace-open", "#5", &["Alt+5"], "Open workspace 5"),
+    ("win.workspace-open", "#6", &["Alt+6"], "Open workspace 6"),
+    ("win.workspace-open", "#7", &["Alt+7"], "Open workspace 7"),
+    ("win.workspace-open", "#8", &["Alt+8"], "Open workspace 8"),
+    ("win.workspace-open", "#9", &["Alt+9"], "Open workspace 9"),
 ];
 
 /// Shortcuts that text fields need for themselves: QML turns these off while
@@ -297,6 +306,39 @@ fn create() -> (gio::SimpleActionGroup, gio::SimpleActionGroup) {
         controller::with(|c| c.start_indexer())
     });
     simple(&win, "tidy", || controller::with(|c| c.plan_tidy()));
+    simple(&win, "workspace-new", || {
+        controller::with(|c| c.ask_new_workspace())
+    });
+    with_string(&win, "workspace-create", |name| {
+        controller::with(|c| c.create_workspace(name))
+    });
+    with_string(&win, "workspace-open", |arg| {
+        controller::with(|c| c.open_workspace_arg(arg))
+    });
+    simple(&win, "workspace-close", || {
+        controller::with(|c| c.close_workspace())
+    });
+    with_string(&win, "workspace-tab", |tab| {
+        controller::with(|c| c.workspace_tab(tab))
+    });
+    with_string(&win, "workspace-add", |arg| {
+        controller::with(|c| c.add_to_workspace_arg(arg))
+    });
+    with_string(&win, "workspace-remove", |item| {
+        controller::with(|c| c.remove_from_workspace(item))
+    });
+    with_string(&win, "workspace-locate", |arg| {
+        controller::with(|c| c.locate_item(arg))
+    });
+    with_string(&win, "workspace-edit-ask", |id| {
+        controller::with(|c| c.ask_edit_workspace(id))
+    });
+    with_string(&win, "workspace-edit", |arg| {
+        controller::with(|c| c.edit_workspace(arg))
+    });
+    with_string(&win, "workspace-delete", |id| {
+        controller::with(|c| c.delete_workspace(id))
+    });
     simple(&win, "dual-pane", || {
         controller::with(|c| c.toggle_dual_pane())
     });

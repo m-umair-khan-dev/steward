@@ -44,6 +44,9 @@ const QML_FILES: &[&str] = &[
     "qml/TidyDialog.qml",
     "qml/RightPane.qml",
     "qml/PaneHeader.qml",
+    "qml/MiniFolder.qml",
+    "qml/WorkspaceDialog.qml",
+    "qml/WorkspacePage.qml",
     "qml/MenuPopup.qml",
 ];
 

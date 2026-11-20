@@ -352,6 +352,14 @@ impl Controller {
     /// folder on screen). Onto the Trash it means Move to Trash.
     pub fn dropped(&mut self, uris: &str, target: &str, ctrl: bool) {
         let sources: Vec<PathBuf> = uris.lines().map(str::trim).filter_map(path_of).collect();
+        // Onto a workspace in the sidebar: add, nothing moves.
+        if let Some(id) = target
+            .strip_prefix("workspace:")
+            .and_then(|i| i.parse().ok())
+        {
+            self.add_to_workspace(id, sources);
+            return;
+        }
         let dest = if target.is_empty() {
             self.current_path()
         } else {

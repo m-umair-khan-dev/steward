@@ -43,6 +43,28 @@ const MIGRATIONS: &[&str] = &[
         error TEXT
      );
      CREATE INDEX op_step_batch ON op_step (batch_id, seq);",
+    // 3: workspaces (DESIGN.md §7.1, P4-T08). Items keep their path plus
+    // filesystem and inode, so they can be found again after a rename.
+    "CREATE TABLE workspace (
+        id INTEGER PRIMARY KEY,
+        name TEXT NOT NULL,
+        description TEXT NOT NULL DEFAULT '',
+        color TEXT NOT NULL DEFAULT 'folders',
+        position INTEGER NOT NULL,
+        created_at INTEGER NOT NULL
+     );
+     CREATE TABLE workspace_item (
+        id INTEGER PRIMARY KEY,
+        workspace_id INTEGER NOT NULL REFERENCES workspace(id) ON DELETE CASCADE,
+        path TEXT NOT NULL,
+        dev INTEGER NOT NULL,
+        inode INTEGER NOT NULL,
+        volume_label TEXT,
+        mount_point TEXT,
+        is_dir INTEGER NOT NULL,
+        position INTEGER NOT NULL,
+        added_at INTEGER NOT NULL
+     );",
 ];
 
 /// How one folder was last shown. `None` fields fall back to the defaults.

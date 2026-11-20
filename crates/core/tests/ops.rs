@@ -937,3 +937,45 @@ fn a_plan_runs_as_one_batch_and_one_undo_restores_it_exactly() {
         "exactly as before, the PDFs folder gone too"
     );
 }
+
+#[test]
+fn workspace_items_are_found_again_after_a_rename() {
+    use cairn_core::workspace::Where;
+    let place = Place::new("workspace");
+    let store = Store::open(&place.root.join("app.db")).unwrap();
+    let invoices = place.write("Documents/Invoices/a.pdf", "A");
+    let folder = invoices.parent().unwrap().to_path_buf();
+    let file = place.write("Downloads/b.txt", "B");
+    let ws = store.create_workspace("Taxes", "archives").unwrap();
+    store.add_to_workspace(ws, &folder).unwrap();
+    store.add_to_workspace(ws, &file).unwrap();
+    assert!(
+        store.add_to_workspace(ws, &file).unwrap().is_none(),
+        "added once"
+    );
+    let items = store.workspace_items(ws).unwrap();
+    assert_eq!(items.len(), 2);
+
+    std::fs::rename(&folder, place.path("Documents/Invoices 2026")).unwrap();
+    std::fs::remove_file(&file).unwrap();
+    assert_eq!(
+        store.resolve_item(&items[0], None),
+        Where::Moved(place.path("Documents/Invoices 2026"))
+    );
+    assert_eq!(store.resolve_item(&items[1], None), Where::Missing);
+    // The record now holds the new name.
+    assert_eq!(
+        store.workspace_items(ws).unwrap()[0].path,
+        place.path("Documents/Invoices 2026")
+    );
+    // Locate… points the missing one somewhere else.
+    let replacement = place.write("Downloads/b-new.txt", "B");
+    assert!(store.relocate_item(items[1].id, &replacement).unwrap());
+    let fixed = &store.workspace_items(ws).unwrap()[1];
+    assert_eq!(store.resolve_item(fixed, None), Where::Here(replacement));
+    store.delete_workspace(ws).unwrap();
+    assert!(
+        store.workspace_items(ws).unwrap().is_empty(),
+        "items go with it"
+    );
+}

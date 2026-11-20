@@ -18,6 +18,7 @@ pub mod plan;
 pub mod sort;
 pub mod store;
 pub mod suggest;
+pub mod workspace;
 
 pub use entry::{EntryData, FileEntry};
 pub use folder::{FolderModel, LoadState};
