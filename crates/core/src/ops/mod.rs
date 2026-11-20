@@ -10,6 +10,7 @@
 
 mod fsx;
 pub mod journal;
+pub mod style;
 pub mod trash;
 mod worker;
 

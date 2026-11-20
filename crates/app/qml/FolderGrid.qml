@@ -215,7 +215,7 @@ Item {
         id: folderCard
         GlassFolder {
             width: root.metrics.folder || 168
-            kind: "folders"
+            kind: parent.modelData.color || "folders"
             label: parent.name
             count: parent.count
             size: parent.size

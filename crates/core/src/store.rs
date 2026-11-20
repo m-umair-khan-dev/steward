@@ -65,6 +65,16 @@ const MIGRATIONS: &[&str] = &[
         position INTEGER NOT NULL,
         added_at INTEGER NOT NULL
      );",
+    // 4: folder symbols and colours where extended attributes are not
+    // available (P4-T10). Keyed by filesystem and inode: survives renames.
+    "CREATE TABLE folder_style (
+        dev INTEGER NOT NULL,
+        inode INTEGER NOT NULL,
+        path TEXT NOT NULL,
+        symbol TEXT,
+        color TEXT,
+        PRIMARY KEY (dev, inode)
+     );",
 ];
 
 /// How one folder was last shown. `None` fields fall back to the defaults.

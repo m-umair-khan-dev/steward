@@ -339,6 +339,12 @@ fn create() -> (gio::SimpleActionGroup, gio::SimpleActionGroup) {
     with_string(&win, "workspace-delete", |id| {
         controller::with(|c| c.delete_workspace(id))
     });
+    simple(&win, "folder-style-ask", || {
+        controller::with(|c| c.ask_folder_style())
+    });
+    with_string(&win, "folder-style", |arg| {
+        controller::with(|c| c.set_folder_style(arg))
+    });
     simple(&win, "dual-pane", || {
         controller::with(|c| c.toggle_dual_pane())
     });

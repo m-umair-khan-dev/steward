@@ -25,6 +25,7 @@ mod ops;
 mod pane;
 mod peek;
 mod search;
+mod style;
 mod tidy;
 mod workspaces;
 
@@ -189,6 +190,7 @@ pub struct Controller {
     downloads: downloads::DownloadsState,
     pane: pane::PaneState,
     workspace: workspaces::WorkspaceState,
+    style: style::StyleState,
     /// Path bar: folders whose name matches what is typed, and the one chosen.
     path_matches: Vec<PathBuf>,
     path_match: Option<usize>,
@@ -281,6 +283,7 @@ pub fn init(notifier: impl Fn() + 'static) {
         downloads: downloads::DownloadsState::default(),
         pane: pane::PaneState::default(),
         workspace: workspaces::WorkspaceState::default(),
+        style: style::StyleState::default(),
         path_matches: Vec::new(),
         path_match: None,
         dialog: String::new(),
@@ -438,6 +441,7 @@ impl Controller {
         actions::set_enabled("forward", !self.forward.is_empty());
         actions::set_enabled("up", folder.parent().is_some());
         self.workspace.open = None;
+        self.forget_looks();
         self.mark(dirty::ALL & !dirty::PREFS);
         if self.pane.open {
             self.remember_panes();
@@ -1362,6 +1366,10 @@ impl Controller {
 
     fn item_json(&self, position: usize, entry: &FileEntry) -> Value {
         let data = entry.data();
+        let look = match data.file.path() {
+            Some(path) if data.is_dir => self.folder_look(&path, &data.uri(), &data.name),
+            _ => (folder_symbol(data).to_string(), "folders".to_string()),
+        };
         let meta = match data.file.path() {
             Some(path) if self.in_trash() => format!(
                 "{} {}",
@@ -1383,7 +1391,8 @@ impl Controller {
             "kind": data.kind.id(),
             "badge": tint::badge(&data.name, data.kind),
             "meta": meta,
-            "symbol": folder_symbol(data),
+            "symbol": look.0,
+            "color": look.1,
         })
     }
 
@@ -1826,6 +1835,7 @@ impl Controller {
             "downloads": self.downloads_test_json(),
             "pane": self.pane_test_json(),
             "workspace": self.workspace_test_json(),
+            "folder_styles": self.styles_test_json(),
             // Folder numbers as the cards show them, by name.
             "folder_stats": self.visible.iter().filter(|e| e.is_dir()).filter_map(|e| {
                 let (items, bytes) = self.folder_numbers(&e.data().file.path()?)?;
@@ -1840,39 +1850,9 @@ impl Controller {
     }
 }
 
-/// A folder's symbol on its glass front, from DESIGN.md §4.1's rules
-/// (special folders and a few names; Phase 4 completes the rules).
+/// A file card's symbol: its kind's (folders get theirs from style.rs).
 fn folder_symbol(data: &cairn_core::EntryData) -> &'static str {
-    if !data.is_dir {
-        return tint_symbol(data.kind);
-    }
-    let name = data.name.to_lowercase();
-    let home = glib::home_dir();
-    let special = [
-        (glib::UserDirectory::Desktop, "desktop"),
-        (glib::UserDirectory::Documents, "documents"),
-        (glib::UserDirectory::Downloads, "downloads"),
-        (glib::UserDirectory::Music, "music"),
-        (glib::UserDirectory::Pictures, "pictures"),
-        (glib::UserDirectory::Videos, "videos"),
-    ];
-    if let Some(path) = data.file.path() {
-        for (dir, icon) in special {
-            if glib::user_special_dir(dir).is_some_and(|p| p == path && p != home) {
-                return icon;
-            }
-        }
-    }
-    match name.as_str() {
-        n if n.contains("invoice") || n.contains("receipt") || n.contains("bill") => "receipt",
-        n if n.contains("tax") || n.contains("budget") => "coin",
-        n if n.contains("travel") || n.contains("trip") => "plane",
-        n if n.contains("client") || n.contains("work") => "briefcase",
-        n if n.contains("archive") || n.contains("backup") => "box",
-        n if n.contains("wallpaper") || n.contains("photo") || n.contains("picture") => "pictures",
-        n if n.contains("project") || n.contains("code") => "code",
-        _ => "document",
-    }
+    tint_symbol(data.kind)
 }
 
 fn tint_symbol(kind: Kind) -> &'static str {

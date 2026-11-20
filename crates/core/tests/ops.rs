@@ -979,3 +979,39 @@ fn workspace_items_are_found_again_after_a_rename() {
         "items go with it"
     );
 }
+
+#[test]
+fn a_chosen_folder_style_survives_a_rename_with_and_without_attributes() {
+    use cairn_core::ops::style::{self, Style};
+    let place = Place::new("style");
+    let store = Store::open(&place.root.join("app.db")).unwrap();
+    let chosen = Style {
+        symbol: Some("plane".into()),
+        color: Some("videos".into()),
+    };
+    for (folder, renamed, attrs) in [("A", "A2", true), ("B", "B2", false)] {
+        let path = place.path(folder);
+        std::fs::create_dir(&path).unwrap();
+        style::write_in(&path, &chosen, &store, attrs).unwrap();
+        std::fs::rename(&path, place.path(renamed)).unwrap();
+        assert_eq!(
+            style::read_in(&place.path(renamed), &store, attrs),
+            chosen,
+            "{folder}"
+        );
+    }
+    // B was written with attributes off: nothing on the folder, the database holds it.
+    assert!(
+        rustix::fs::getxattr(
+            place.path("B2").as_path(),
+            "user.cairn.symbol",
+            &mut [0u8; 64]
+        )
+        .is_err()
+    );
+    style::write_in(&place.path("B2"), &Style::default(), &store, false).unwrap();
+    assert!(
+        style::read_in(&place.path("B2"), &store, false).is_empty(),
+        "cleared"
+    );
+}

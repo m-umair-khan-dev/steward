@@ -409,6 +409,7 @@ Window {
             { separator: true },
             { text: "Rename…", action: "win.rename", param: "", enabled: win.selectedCount === 1 },
             { text: "Duplicate", action: "win.duplicate", param: "" },
+            { text: "Symbol and Colour…", action: "win.folder-style-ask", param: "", enabled: win.selectedCount === 1 },
             { separator: true },
             { text: "Copy", action: "win.copy", param: "" },
             { text: "Cut", action: "win.cut", param: "" },
@@ -445,5 +446,6 @@ Window {
     EmptyTrashDialog { visible: p.dialog === "empty-trash"; info: win.dialogData }
     TidyDialog { visible: p.dialog === "tidy"; info: win.dialogData }
     WorkspaceDialog { visible: p.dialog === "workspace-new"; info: win.dialogData; editing: false }
+    FolderStyleDialog { visible: p.dialog === "folder-style"; info: win.dialogData }
     WorkspaceDialog { visible: p.dialog === "workspace-edit"; info: win.dialogData; editing: true }
 }

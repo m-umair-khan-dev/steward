@@ -67,6 +67,8 @@ def test_E2_01_new_folder_and_rename_then_undo_both(app, home):
     app.press("return")
     app.wait_for(lambda: (home / "Downloads" / "todo.txt").exists(), "the file to be renamed")
     assert not (home / "Downloads" / "notes.txt").exists()
+    app.wait_idle()
+    assert "no app could open" not in (app.state()["last_toast"] or "").lower(), "Return only renamed"
 
     app.press("ctrl+z")
     app.wait_for(lambda: (home / "Downloads" / "notes.txt").exists(), "the rename to be undone")

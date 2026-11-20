@@ -30,7 +30,10 @@ TextField {
         select(0, !isFolder && dot > 0 ? dot : original.length)
         forceActiveFocus()
     }
-    onAccepted: finish(text)
-    Keys.onEscapePressed: finish("")
+    // TextInput passes Return on after "accepted"; here it must stop, or the
+    // folder view would also open the item that was just renamed.
+    Keys.onReturnPressed: event => { finish(text); event.accepted = true }
+    Keys.onEnterPressed: event => { finish(text); event.accepted = true }
+    Keys.onEscapePressed: event => { finish(""); event.accepted = true }
     onActiveFocusChanged: if (!activeFocus) finish(text)
 }
