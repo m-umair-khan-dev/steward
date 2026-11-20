@@ -1,0 +1,48 @@
+---
+// Every page: header with navigation and the theme toggle, then the page,
+// then the footer. No third-party requests: system fonts, local scripts.
+interface Props { title: string; description: string; wide?: boolean }
+const { title, description, wide = false } = Astro.props;
+const path = Astro.url.pathname;
+const nav = [
+  { href: "/docs/", label: "Guide" },
+  { href: "/download/", label: "Download" },
+  { href: "/changelog/", label: "Changelog" },
+  { href: "/contribute/", label: "Contribute" },
+  { href: "/search/", label: "Search" },
+];
+const full = title === "Cairn" ? "Cairn — a file manager for Ubuntu that keeps folders tidy" : `${title} · Cairn`;
+---
+<!doctype html>
+<html lang="en" data-theme="light">
+  <head>
+    <meta charset="utf-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1" />
+    <title>{full}</title>
+    <meta name="description" content={description} />
+    <link rel="icon" href="/icon.svg" type="image/svg+xml" />
+    <link rel="stylesheet" href="/styles.css" />
+    <script is:inline src="/theme.js"></script>
+  </head>
+  <body>
+    <a class="skip" href="#main">Skip to content</a>
+    <header class="top">
+      <a class="brand" href="/"><img src="/icon.svg" alt="" width="30" height="30" /> Cairn</a>
+      <nav aria-label="Site">
+        {nav.map((item) => (
+          <a href={item.href} aria-current={path.startsWith(item.href) ? "page" : undefined}>{item.label}</a>
+        ))}
+      </nav>
+      <button class="theme" type="button" id="theme-toggle" aria-label="Switch between light and dark">
+        <span class="sun" aria-hidden="true">☀</span><span class="moon" aria-hidden="true">☾</span>
+      </button>
+    </header>
+    <main id="main" class={wide ? "wide" : "narrow"} data-pagefind-body>
+      <slot />
+    </main>
+    <footer>
+      <p>Cairn is free software under the GPL 3.0 or later. It keeps no accounts, sends nothing, and tracks no one.</p>
+      <p><a href="/privacy/">Privacy</a> · <a href="/contribute/">Contribute</a> · <a href="/changelog/">Changelog</a></p>
+    </footer>
+  </body>
+</html>

@@ -1,0 +1,20 @@
+---
+import Base from "../layouts/Base.astro";
+---
+<Base title="Contribute" description="How to report a bug, translate Cairn, or send a change.">
+  <h1>Contribute</h1>
+  <p class="lead">Cairn is developed in the open. Every kind of help counts.</p>
+  <h2>Report a bug</h2>
+  <p>In Cairn, open the main menu and choose <strong>Report a Bug</strong>: it opens the issue tracker with your Cairn version and Ubuntu release filled in. Say what you did, what you expected, and what happened.</p>
+  <p>Security problems go to the maintainers privately; see <code>SECURITY.md</code> in the repository.</p>
+  <h2>Translate</h2>
+  <p>Translations live in <code>po/</code> as gettext files. The Spanish, French, German, Japanese and Chinese drafts were written by an AI model and need review by native speakers: corrections are very welcome.</p>
+  <h2>Send a change</h2>
+  <p>Everything builds and runs in Docker, so you need only Docker and <code>make</code>:</p>
+  <pre><code>make init     # images, a fake home folder, a development key
+make app      # run Cairn against the fake home
+make check    # the gate: lint, tests, end-to-end tests</code></pre>
+  <p>Cairn never runs against your real home folder while you develop. Read <code>CONTRIBUTING.md</code> and <code>AGENTS.md</code> before your first change, and add a test with it.</p>
+  <h2>Code of conduct</h2>
+  <p>Be kind and assume good intent. The full text is <code>CODE_OF_CONDUCT.md</code> in the repository.</p>
+</Base>

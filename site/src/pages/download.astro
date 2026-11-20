@@ -1,0 +1,35 @@
+---
+import Base from "../layouts/Base.astro";
+---
+<Base title="Download" description="Install Cairn on Ubuntu with apt, or download the .deb.">
+  <h1>Download Cairn</h1>
+  <p class="lead">Cairn is packaged for Ubuntu. Add its repository once, and updates arrive with your other system updates.</p>
+
+  <h2>With apt (recommended)</h2>
+  <p>Run these in a terminal. They add Cairn's signing key and repository, then install Cairn.</p>
+  <pre><code>sudo install -d -m 0755 /etc/apt/keyrings
+curl -fsSL https://example.invalid/apt/cairn.asc | sudo tee /etc/apt/keyrings/cairn.asc &gt; /dev/null
+. /etc/os-release
+printf 'Types: deb\nURIs: https://example.invalid/apt\nSuites: stable-%s\nComponents: main\nSigned-By: /etc/apt/keyrings/cairn.asc\n' "$VERSION_ID" \
+  | sudo tee /etc/apt/sources.list.d/cairn.sources
+sudo apt update
+sudo apt install cairn</code></pre>
+  <p>The key's fingerprint is published here when the project key is created. Check it before trusting the repository.</p>
+
+  <h2>The .deb file</h2>
+  <p>Each release also has a <code>.deb</code> for each supported Ubuntu release, attached to the release on the project's code host. Install it with <code>sudo apt install ./cairn_*.deb</code>. You will not get updates this way.</p>
+
+  <h2>Supported releases</h2>
+  <table>
+    <thead><tr><th>Ubuntu</th><th>Status</th></tr></thead>
+    <tbody>
+      <tr><td>26.10</td><td>Supported</td></tr>
+      <tr><td>26.04 LTS</td><td>Being tested for the next release</td></tr>
+      <tr><td>24.04 LTS</td><td>Being tested for the next release</td></tr>
+    </tbody>
+  </table>
+
+  <h2>Removing Cairn</h2>
+  <pre><code>sudo apt remove cairn</code></pre>
+  <p>Your files are never touched. Cairn's own data is in <code>~/.local/share/cairn</code> and <code>~/.cache/cairn</code>; delete them if you like.</p>
+</Base>

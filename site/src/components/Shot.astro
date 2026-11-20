@@ -1,0 +1,8 @@
+---
+// A screenshot in the visitor's theme: `make shots` writes <name>-light.png
+// and <name>-dark.png (P6-T11).
+interface Props { name: string; alt: string; class?: string; width?: number }
+const { name, alt, class: extra = "", width = 1280 } = Astro.props;
+---
+<img class={`only-light ${extra}`} src={`/screens/${name}-light.png`} alt={alt} width={width} height={Math.round(width * 0.625)} loading="lazy" />
+<img class={`only-dark ${extra}`} src={`/screens/${name}-dark.png`} alt={alt} width={width} height={Math.round(width * 0.625)} loading="lazy" />

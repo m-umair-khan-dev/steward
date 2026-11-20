@@ -1,0 +1,89 @@
+---
+import Base from "../layouts/Base.astro";
+import Shot from "../components/Shot.astro";
+
+const tiles = [
+  ["Tidy", "Sorts a messy folder into folders by kind. You see the plan first; one Undo puts it all back."],
+  ["Find anything", "Ctrl+K finds folders and files by name as you type, ranked so the one you meant comes first."],
+  ["Folder sizes", "Every folder shows its size and item count, worked out quietly in the background."],
+  ["Dual pane", "Two folders side by side. F5 copies across, F6 moves, Tab switches."],
+  ["Workspaces", "One page for a project's folders and files, wherever they live. Nothing moves."],
+  ["Free Up Space", "What is safe to clear, and why. Everything goes to the Trash, and Undo brings it back."],
+  ["Installed", "What apt, Snap, Flatpak, npm, pip and others installed, in one list, with why each is there."],
+  ["About This Computer", "Battery health, storage, memory, displays and security at a glance."],
+];
+const keys = [
+  ["Ctrl+K", "Find anything"], ["Ctrl+Shift+O", "Tidy this folder"], ["F3", "Two panes"],
+  ["F5 / F6", "Copy or move to the other pane"], ["Space", "Peek"], ["Ctrl+Z", "Undo the last file change"],
+  ["Ctrl+Shift+K", "Free Up Space"], ["Alt+1 … Alt+9", "Open a workspace"],
+];
+const faq = [
+  ["Does it replace Files?", "No. Cairn opens the same folders, so you can use both. If you like, Preferences can make Cairn the default for folders, and you can switch back any time."],
+  ["Is Free Up Space safe?", "It only suggests. Caches come from a strict list of folders their tools rebuild; everything else is unticked until you tick it. Whatever you clear goes to the Trash, and Undo brings it back."],
+  ["Which Ubuntu releases does it run on?", "Ubuntu 26.10 today; 24.04 LTS and 26.04 LTS are being tested for the next release."],
+  ["Does it send my files or their names anywhere?", "No. Cairn has no accounts and no telemetry. It reads your disk on your computer and nowhere else."],
+  ["Does it work with cloud drives and network shares?", "Yes, through the same GNOME services Files uses. Network folders are listed, not indexed."],
+  ["How do I contribute?", "Report a bug, translate, or send a change: the contribute page explains how."],
+];
+---
+<Base title="Cairn" description="Cairn is a file manager for Ubuntu that keeps folders tidy: it shows a plan before anything moves, and one Undo puts everything back." wide>
+  <section class="hero">
+    <h1>Your folders, tidy.<br />Without the guesswork.</h1>
+    <p class="lead">Cairn is a file manager for Ubuntu. It sorts the mess, shows a plan before anything moves, and puts everything back with one Undo.</p>
+    <p class="actions"><a class="button" href="/download/">Download for Ubuntu</a> <a class="button plain" href="/docs/">Read the guide</a></p>
+    <Shot name="folder" alt="Cairn showing a Downloads folder: folders as tinted glass folders, files as cards" class="shot" />
+  </section>
+
+  <h2>Everything you do with files, a little calmer</h2>
+  <div class="grid">
+    {tiles.map(([title, text]) => <div class="tile"><h3>{title}</h3><p>{text}</p></div>)}
+  </div>
+
+  <section class="feature">
+    <div class="text"><p class="kicker">Smart Downloads</p><h2>A messy Downloads, sorted in a breath</h2>
+      <p>Tidy shows exactly where each file will go, leaves anything still downloading alone, and moves nothing until you say so. One Undo restores every file and removes the folders it made.</p></div>
+    <Shot name="tidy" alt="The Tidy plan: files grouped under the folders they will move into" />
+  </section>
+  <section class="feature">
+    <div class="text"><p class="kicker">Free Up Space</p><h2>Get gigabytes back, and know why</h2>
+      <p>Developer caches, duplicates, installers for apps you already have, old build output and more, each with a reason. Clearly spare things are ticked; the rest is your call. Commands that need an administrator are shown to copy, never run.</p></div>
+    <Shot name="free-up-space" alt="Free Up Space: a disk ring and cards in two groups, Safe to clear and Your call" />
+  </section>
+  <section class="feature">
+    <div class="text"><p class="kicker">Workspaces</p><h2>Every project on one page</h2>
+      <p>Gather folders and files from anywhere, including other drives, without moving them. Rename or move a folder and the workspace finds it again.</p></div>
+    <Shot name="workspace" alt="A workspace page with a coloured banner and cards for its folders and files" />
+  </section>
+  <section class="feature">
+    <div class="text"><p class="kicker">Dual pane</p><h2>Two folders side by side</h2>
+      <p>Press F3 to split. F5 copies to the other pane and F6 moves, both with Undo.</p></div>
+    <Shot name="dual-pane" alt="Two folders side by side, the active one underlined" />
+  </section>
+  <section class="feature">
+    <div class="text"><p class="kicker">Search</p><h2>Find it as you type</h2>
+      <p>Ctrl+K searches every folder and file name in your home, ranked as you type. Space peeks at a result; Ctrl+Enter shows it in its folder.</p></div>
+    <Shot name="search" alt="The search overlay with ranked results" />
+  </section>
+
+  <h2>More in Cairn</h2>
+  <div class="grid">
+    <div class="tile"><h3>Peek</h3><p>Space shows a file without opening an app: pictures, PDFs, text, audio and video.</p></div>
+    <div class="tile"><h3>Installed</h3><p>Every package in one list, with why it is there and the command that would remove it.</p></div>
+    <div class="tile"><h3>About This Computer</h3><p>Battery, storage, memory, displays and security, read on your computer.</p></div>
+    <div class="tile"><h3>Folder symbols</h3><p>Invoices get a receipt, projects get code: set by what is inside, or by you.</p></div>
+  </div>
+
+  <h2>Keys worth knowing</h2>
+  <table class="keys">
+    <tbody>{keys.map(([key, what]) => <tr><td><kbd>{key}</kbd></td><td>{what}</td></tr>)}</tbody>
+  </table>
+
+  <h2>Questions</h2>
+  {faq.map(([q, a]) => <details><summary>{q}</summary><p>{a}</p></details>)}
+
+  <section class="closing">
+    <h2>Ready when you are</h2>
+    <p>Free software for Ubuntu. No account, no telemetry.</p>
+    <p><a class="button" href="/download/">Download</a></p>
+  </section>
+</Base>

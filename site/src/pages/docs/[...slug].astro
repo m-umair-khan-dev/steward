@@ -1,0 +1,31 @@
+---
+import Base from "../../layouts/Base.astro";
+import { getCollection, render } from "astro:content";
+
+export async function getStaticPaths() {
+  const pages = (await getCollection("docs")).sort((a, b) => a.data.order - b.data.order);
+  return pages.map((page) => ({ params: { slug: page.id }, props: { page, pages } }));
+}
+const { page, pages } = Astro.props;
+const { Content } = await render(page);
+const sections = ["Start", "Everyday", "Tools", "Reference"];
+---
+<Base title={page.data.title} description={page.data.description} wide>
+  <div class="docs">
+    <nav aria-label="Guide">
+      {sections.map((section) => (
+        <>
+          <h4>{section}</h4>
+          {pages.filter((p) => p.data.section === section).map((p) => (
+            <a href={`/docs/${p.id}/`} aria-current={p.id === page.id ? "page" : undefined}>{p.data.title}</a>
+          ))}
+        </>
+      ))}
+    </nav>
+    <article>
+      <h1>{page.data.title}</h1>
+      <p class="lead">{page.data.description}</p>
+      <Content />
+    </article>
+  </div>
+</Base>
