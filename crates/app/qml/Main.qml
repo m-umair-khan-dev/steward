@@ -348,6 +348,13 @@ Window {
                 model: win.tools.clean || ({ cards: [], groups: [], disk: { looking: true }, admin: { rows: [] } })
             }
 
+            InstalledPage {
+                z: 21
+                anchors.fill: parent
+                visible: win.tools.page === "installed"
+                model: win.tools.installed || ({ looking: true, tools: [], filters: [], packages: [] })
+            }
+
             RightPane {
                 visible: !!win.pane.open
                 x: content.width

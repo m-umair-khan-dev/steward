@@ -1,0 +1,32 @@
+# Installed packages: 30 from 8 tools
+# tool	name	version	why	bytes
+apt	bash	5.2.37-2ubuntu5	came-with	1916928
+apt	curl	8.14.1-2ubuntu1	you	524288
+apt	gimp	3.0.4-3	app	21504000
+apt	git	1:2.51.0-1ubuntu1	you	49152000
+apt	libc6	2.42-0ubuntu3	came-with	13107200
+apt	libgimp3.0-0t64	3.0.4-3	came-with	6348800
+apt	vlc	3.0.21-10	app	327680
+snap	bare	1.0	came-with	-
+snap	core24	20250829	came-with	-
+snap	firefox	145.0-1	you	-
+snap	snapd	2.72	came-with	-
+snap	spotless-notes	2.3.1	you	-
+flatpak	org.example.Painter	2.4.1	app	180300000
+flatpak	org.example.Notes	1.9	app	12500000
+flatpak	org.freedesktop.Platform	25.08	came-with	1100000000
+flatpak	org.gnome.Platform	49	came-with	1500000000
+npm	corepack	0.34.0	came-with	-
+npm	npm	11.6.2	came-with	-
+npm	prettier	3.6.2	you	-
+npm	typescript	5.9.3	you	-
+pipx	black	25.9.0	you	-
+pipx	httpie	3.2.4	you	-
+pip	requests	2.32.5	you	-
+pip	rich	14.1.0	you	-
+pip	urllib3	2.5.0	came-with	-
+cargo	cargo-nextest	0.9.104	you	-
+cargo	ripgrep	14.1.1	you	-
+gem	bundler	2.6.9	you	-
+gem	json	2.10.2	came-with	-
+gem	rake	13.3.0	you	-

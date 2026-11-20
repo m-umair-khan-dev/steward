@@ -1,0 +1,1 @@
+gimp, vlc, desktop-file-utils: /usr/share/applications

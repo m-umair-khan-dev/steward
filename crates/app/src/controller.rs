@@ -1864,6 +1864,7 @@ impl Controller {
             "folder_styles": self.styles_test_json(),
             "tools": { "page": self.tools.page },
             "clean": self.clean_test_json(),
+            "installed": self.installed_test_json(),
             // Folder numbers as the cards show them, by name.
             "folder_stats": self.visible.iter().filter(|e| e.is_dir()).filter_map(|e| {
                 let (items, bytes) = self.folder_numbers(&e.data().file.path()?)?;

@@ -1,0 +1,8 @@
+bash	5.2.37-2ubuntu5	1872	installed	GNU Bourne Again SHell
+curl	8.14.1-2ubuntu1	512	installed	command line tool for transferring data with URL syntax
+gimp	3.0.4-3	21000	installed	GNU Image Manipulation Program
+git	1:2.51.0-1ubuntu1	48000	installed	fast, scalable, distributed revision control system
+libc6	2.42-0ubuntu3	12800	installed	GNU C Library: Shared libraries
+libgimp3.0-0t64	3.0.4-3	6200	installed	libraries for the GNU Image Manipulation Program
+old-tool	1.0-1	100	config-files	removed, its settings are left
+vlc	3.0.21-10	320	installed	multimedia player and streamer

@@ -105,6 +105,25 @@ impl Request {
     }
 }
 
+/// Writes a new text file the user asked for (Save List, Copy as Text to a
+/// file): to a temporary name beside it first, then into place, so a reader
+/// never sees half a file. The user chose `path` in a save dialog, which
+/// already asked before replacing a file there.
+pub fn save_text(path: &Path, text: &str) -> std::io::Result<()> {
+    let dir = path
+        .parent()
+        .ok_or_else(|| std::io::Error::other("no folder"))?;
+    let temp = dir.join(format!(
+        ".{}.cairn-{}",
+        fsx::file_name(path),
+        std::process::id()
+    ));
+    std::fs::write(&temp, text)?;
+    std::fs::rename(&temp, path).inspect_err(|_| {
+        let _ = std::fs::remove_file(&temp);
+    })
+}
+
 /// What a drop does (P2-T05), as Files does it: a move within one
 /// filesystem, a copy onto another; holding Ctrl always copies. Dropping
 /// items onto the folder they are already in does nothing.

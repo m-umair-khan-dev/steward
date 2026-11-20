@@ -52,6 +52,7 @@ const QML_FILES: &[&str] = &[
     "qml/SymbolFolder.qml",
     "qml/TickBox.qml",
     "qml/CleanPage.qml",
+    "qml/InstalledPage.qml",
 ];
 
 fn main() {

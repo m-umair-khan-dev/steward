@@ -1,0 +1,75 @@
+{
+  "filters": {
+    "app": [
+      "apt:gimp",
+      "apt:vlc",
+      "flatpak:org.example.Notes",
+      "flatpak:org.example.Painter"
+    ],
+    "came-with": [
+      "apt:bash",
+      "apt:libc6",
+      "apt:libgimp3.0-0t64",
+      "flatpak:org.freedesktop.Platform",
+      "flatpak:org.gnome.Platform",
+      "gem:json",
+      "npm:corepack",
+      "npm:npm",
+      "pip:urllib3",
+      "snap:bare",
+      "snap:core24",
+      "snap:snapd"
+    ],
+    "you": [
+      "apt:curl",
+      "apt:git",
+      "cargo:cargo-nextest",
+      "cargo:ripgrep",
+      "gem:bundler",
+      "gem:rake",
+      "npm:prettier",
+      "npm:typescript",
+      "pip:requests",
+      "pip:rich",
+      "pipx:black",
+      "pipx:httpie",
+      "snap:firefox",
+      "snap:spotless-notes"
+    ]
+  },
+  "tools": {
+    "apt": {
+      "bytes": 92880896,
+      "count": 7
+    },
+    "cargo": {
+      "bytes": 0,
+      "count": 2
+    },
+    "flatpak": {
+      "bytes": 2792800000,
+      "count": 4
+    },
+    "gem": {
+      "bytes": 0,
+      "count": 3
+    },
+    "npm": {
+      "bytes": 0,
+      "count": 4
+    },
+    "pip": {
+      "bytes": 0,
+      "count": 3
+    },
+    "pipx": {
+      "bytes": 0,
+      "count": 2
+    },
+    "snap": {
+      "bytes": 0,
+      "count": 5
+    }
+  },
+  "total": 30
+}

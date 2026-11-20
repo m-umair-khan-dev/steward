@@ -211,6 +211,10 @@ def later_phases(app: App, home: Home) -> None:
     app.wait_idle()
     app.screenshot(OUT / "24-review-duplicates.png")
     app.action("win.clean-review", s(""))
+    app.action("win.tool-open", s("installed"))
+    wait_for(lambda: (i := app.state()["installed"]) and i["loaded"] and not i["looking"], "Installed", 60)
+    app.wait_idle()
+    app.screenshot(OUT / "25-installed.png")
 
 
 if __name__ == "__main__":

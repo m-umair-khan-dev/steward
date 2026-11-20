@@ -332,6 +332,21 @@ fn create() -> (gio::SimpleActionGroup, gio::SimpleActionGroup) {
     with_string(&win, "clean-peek", |path| {
         controller::with(|c| c.clean_peek(path))
     });
+    with_string(&win, "installed-filter", |id| {
+        controller::with(|c| c.installed_filter(id))
+    });
+    with_string(&win, "installed-tool", |id| {
+        controller::with(|c| c.installed_tool(id))
+    });
+    with_string(&win, "installed-copy", |what| {
+        controller::with(|c| c.installed_copy(what))
+    });
+    with_string(&win, "installed-save", |path| {
+        controller::with(|c| c.installed_save(path))
+    });
+    simple(&win, "installed-refresh", || {
+        controller::with(|c| c.installed_refresh())
+    });
     simple(&win, "workspace-new", || {
         controller::with(|c| c.ask_new_workspace())
     });

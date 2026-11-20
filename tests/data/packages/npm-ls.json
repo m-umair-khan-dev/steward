@@ -1,0 +1,9 @@
+{
+  "name": "lib",
+  "dependencies": {
+    "corepack": { "version": "0.34.0", "overridden": false },
+    "npm": { "version": "11.6.2", "overridden": false },
+    "prettier": { "version": "3.6.2", "overridden": false },
+    "typescript": { "version": "5.9.3", "overridden": false }
+  }
+}

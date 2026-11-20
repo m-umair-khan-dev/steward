@@ -1,0 +1,4 @@
+cargo-nextest v0.9.104:
+    cargo-nextest
+ripgrep v14.1.1:
+    rg

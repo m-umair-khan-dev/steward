@@ -1,0 +1,4 @@
+/home/example/go/bin/gopls: go1.25.3
+	path	golang.org/x/tools/gopls
+	mod	golang.org/x/tools/gopls	v0.20.0	h1:abc=
+	dep	golang.org/x/mod	v0.28.0	h1:def=
