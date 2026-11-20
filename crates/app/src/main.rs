@@ -10,6 +10,7 @@ mod file_manager;
 mod format;
 mod launch;
 mod paths;
+mod report;
 mod settings;
 mod sidebar;
 mod thumbnails;

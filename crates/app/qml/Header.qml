@@ -188,6 +188,7 @@ Rectangle {
                     { separator: true },
                     { text: p.t("Preferences"), action: "app.preferences", param: "" },
                     { text: p.t("Keyboard Shortcuts"), action: "win.show-help-overlay", param: "" },
+                    { text: p.t("Report a Bug"), action: "app.report-bug", param: "" },
                     { text: p.t("About Cairn"), action: "app.about", param: "" },
                     { separator: true },
                     { text: p.t("Quit"), action: "app.quit", param: "" }

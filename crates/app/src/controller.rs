@@ -188,6 +188,7 @@ pub struct Controller {
     path_editing: bool,
     preview_children: Option<(String, Vec<String>)>,
     last_toast: Option<String>,
+    last_report: Option<String>,
     ops: ops::Ops,
     index: index::IndexState,
     search: search::SearchState,
@@ -286,6 +287,7 @@ pub fn init(notifier: impl Fn() + 'static) {
         path_editing: false,
         preview_children: None,
         last_toast: None,
+        last_report: None,
         ops: ops::Ops::default(),
         index: index::IndexState::default(),
         search: search::SearchState::default(),
@@ -996,6 +998,11 @@ impl Controller {
 
     pub fn dialog_shown(&mut self, kind: &str) {
         self.dialog = kind.to_string();
+    }
+
+    /// The last "Report a Bug" address opened (tests read it).
+    pub fn reported(&mut self, url: String) {
+        self.last_report = Some(url);
     }
 
     pub fn dialog_data(&self) -> &Value {
@@ -1900,6 +1907,7 @@ impl Controller {
                 "children": preview["children"].as_array().cloned().unwrap_or_default(),
             },
             "last_toast": self.last_toast,
+            "last_report": self.last_report,
             "ops": self.ops_test_json(),
             "index": self.index_test_json(),
             "search": self.search_test_json(),

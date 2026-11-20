@@ -226,6 +226,10 @@ fn create() -> (gio::SimpleActionGroup, gio::SimpleActionGroup) {
     let s = settings::get();
     let app = gio::SimpleActionGroup::new();
     simple(&app, "quit", || controller::with(|c| c.quit()));
+    simple(&app, "report-bug", || {
+        let url = crate::report::open();
+        controller::with(|c| c.reported(url));
+    });
     simple(&app, "about", || {
         controller::with(|c| c.show_dialog("about"))
     });

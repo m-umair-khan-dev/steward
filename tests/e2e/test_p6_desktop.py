@@ -68,3 +68,17 @@ def test_E6_09_show_items_with_the_option_on(app, home):
                       GLib.Variant("(ass)", ([target.as_uri()], "")), None, Gio.DBusCallFlags.NONE, 5000, None)
     app.wait_for(lambda: app.folder()["path"] == str(target.parent)
                  and app.folder()["selection"] == [target.name], "the file, selected in its folder")
+
+
+def test_report_a_bug_fills_in_version_and_release(app):
+    """P6-T13: the address has the version and the Ubuntu release."""
+    from urllib.parse import parse_qs, urlparse
+
+    app.action("app.report-bug")
+    url = app.wait_for(lambda: app.state()["last_report"], "the issue tracker address")
+    body = parse_qs(urlparse(url).query)["body"][0]
+    assert url.split("?")[0].endswith("/issues/new")
+    assert f"**Cairn:** {app.state()['version']}" in body
+    release = next(line.split("=", 1)[1].strip().strip('"') for line in open("/etc/os-release")
+                   if line.startswith("PRETTY_NAME="))
+    assert release in body

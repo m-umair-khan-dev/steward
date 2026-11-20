@@ -990,6 +990,9 @@ msgstr "[Réplàçé ~~]"
 msgid "Replace puts the existing item in the Trash, so Undo can bring it back."
 msgstr "[Réplàçé püts thé éxîstîñg îtém îñ thé Tràsh, sö Üñdö çàñ brîñg ît bàçk. ~~~~~~~~~~~~~~~~~~~~~~~]"
 
+msgid "Report a Bug"
+msgstr "[Répört à Büg ~~~~]"
+
 msgid "Restore Sidebar"
 msgstr "[Réstöré Sîdébàr ~~~~~]"
 
