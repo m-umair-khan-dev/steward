@@ -4,9 +4,9 @@ Read this first in every session (AGENTS.md rule 2). Update it before stopping.
 
 ## Current phase
 
-**Phase 3: Index, folder sizes, search and Peek**, complete on 26.10 (gate
-green 2026-11-20), pending the HUMAN check on a large real home. Phase 4
-waits for the product owner's go-ahead.
+**Phase 4: Smart Downloads, Dual pane and Workspaces**, complete on 26.10
+(gate green 2026-11-20), pending the HUMAN checks below. Phase 5 waits for
+the product owner's go-ahead.
 
 ## Release targets
 
@@ -169,6 +169,45 @@ Bugs found while bringing it up:
 - The E3-10 timing test starved a file-monitor test when run in parallel;
   nextest now runs it alone (`.config/nextest.toml`).
 
+## Phase 4: Smart Downloads, Dual pane and Workspaces (complete on 26.10)
+
+Gate on Ubuntu 26.10, 2026-11-20: `make check` green. Lint ok; 82 Rust tests
+and 13 fixture tests pass; end-to-end E0-01 to E4-14 (64 scenarios) pass.
+
+| ID | Task | Status | Notes |
+|---|---|---|---|
+| P4-T01 | `core::plan`, fake clock `CAIRN_FAKE_NOW` | done | L1 |
+| P4-T02 | Tidy planner | done | L1 against the manifest |
+| P4-T03 | Tidy plan dialog and run; one Undo; Ctrl+Shift+O | done | E4-01 to E4-05 |
+| P4-T04 | `core::dupes` with a hash cache | done | L2 with planted duplicates |
+| P4-T05 | Downloads panel: space by kind, suggestions (`PackageDb`) | done | E4-06, E4-07 |
+| P4-T06 | Preference: which folder is Downloads | done | E4-08 |
+| P4-T07 | Dual pane | done | E4-09, E4-10 |
+| P4-T08 | Workspaces: model, sidebar, page, add by menu or drop | done | E4-11 |
+| P4-T09 | Workspace resilience: inode, Locate…, unplugged, Alt+1–9 | done | E4-12, E4-13 |
+| P4-T10 | Folder symbols and colours, attributes with a database fallback | done | E4-14 |
+
+Decisions and findings:
+- Index schema 2 (rebuilt by itself): a size index for duplicate candidates
+  and the filesystem and inode of each entry for re-finding workspace items.
+- Folder-symbol rules run in this order: chosen, special folders, projects
+  (.git or a build file), name words, majority kind. Name words come before
+  the majority kind because E4-14 wants "Invoices" (three PDFs) to show the
+  receipt symbol and a mostly-PDF folder the PDF symbol.
+- The fixture plants no Git repository; E4-14 creates `.git` in "School" so
+  the rule is shown to work on contents, not names.
+- E4-11's second volume is `/dev/shm`, a separate tmpfs in the container.
+- Test environment: the e2e container's `/tmp` now allows running programs
+  (Docker's tmpfs default is noexec), so tests can put stand-ins such as
+  `dpkg-query` on PATH as DESIGN.md §10.2 intends.
+
+Bugs found and fixed:
+- Return in the rename field also reached the folder view (Qt's TextInput
+  passes Return on after "accepted") and opened the item just renamed. Seen
+  as "No app could open notes.txt" in E2-01 since Phase 2; E2-01 now checks.
+- The workspace banner rendered dark grey: the colour helper did not accept
+  colour names.
+
 ## Blocked / waiting for a human
 
 - Enable CI once the repository is on its Git host (P0-T07).
@@ -183,10 +222,13 @@ Bugs found while bringing it up:
   copies; copy in one and paste in the other.
 - Phase 3: index a real, large home; watch CPU, disk activity and battery
   behaviour (the indexer runs at nice 19; the systemd unit adds idle I/O).
+- Phase 4: Tidy a copy of a real, messy Downloads folder and judge the
+  result. Check a workspace item on a real external drive after unplugging
+  and replugging (shown greyed with the drive's name while unplugged).
 - Docker Desktop on this machine needs the user in the `kvm` group (done on
   2026-11-19); without it Docker Desktop stops at start-up after a reboot.
 
 ## Next
 
-- Phase 4 (Smart Downloads, Dual pane, Workspaces) waits for the product
-  owner's go-ahead.
+- Phase 5 (Smart Clean, Installed, About This Computer) waits for the
+  product owner's go-ahead.
