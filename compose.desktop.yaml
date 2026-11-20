@@ -108,7 +108,7 @@ services:
     <<: *dev
     environment:
       <<: *dev-env
-      E2E_MARK: ${E2E_MARK:-not manual}
+      E2E_MARK: ${E2E_MARK:-not manual and not shots}
       E2E_K: ${E2E_K:-}
       CAIRN_COMPOSITOR: ${CAIRN_COMPOSITOR:-}
     tmpfs:
