@@ -1,0 +1,62 @@
+# Website and apt repository (DESIGN.md §9.5). The desktop app has its own
+# file (compose.desktop.yaml). Use through the Makefile: make site, make
+# publish-apt, make apt-e2e.
+name: cairn
+
+x-logging: &logging
+  driver: json-file
+  options: { max-size: "10m", max-file: "5" }
+
+services:
+  # The built site plus the apt repository, served by Caddy. Needs
+  # docker/web.Dockerfile, which comes with the website (P6-T10, on hold).
+  web:
+    image: ${REGISTRY:-cairn}/cairn-web:${TAG:-dev}
+    build:
+      context: .
+      dockerfile: docker/web.Dockerfile
+      target: prod
+      args: { NODE_IMAGE: "${NODE_IMAGE}", CADDY_IMAGE: "${CADDY_IMAGE}" }
+    read_only: true
+    cap_drop: ["ALL"]
+    security_opt: ["no-new-privileges:true"]
+    init: true
+    restart: unless-stopped
+    ports: ["127.0.0.1:8080:8080"]
+    volumes:
+      - aptrepo:/srv/apt:ro
+      - caddy-data:/data
+      - caddy-config:/config
+    tmpfs: ["/tmp"]
+    healthcheck:
+      test: ["CMD", "wget", "-q", "--spider", "http://127.0.0.1:8080/healthz"]
+      interval: 5s
+      timeout: 3s
+      retries: 10
+    logging: *logging
+
+  # One-shot publisher: docker compose run --rm aptrepo
+  aptrepo:
+    profiles: ["publish"]
+    build:
+      context: .
+      dockerfile: docker/aptrepo.Dockerfile
+      args: { UBUNTU_IMAGE: "${UBUNTU_IMAGE}" }
+    environment:
+      APT_SUITE: ${APT_SUITE:-dev}
+      APT_ORIGIN: ${APT_ORIGIN:-Cairn}
+    volumes:
+      - ${APT_IN:-./dist}:/in:ro
+      - aptrepo:/srv/apt
+      - aptly-db:/var/lib/aptly
+    secrets: [apt_signing_key]
+    restart: "no"
+
+volumes:
+  aptrepo:
+  aptly-db:
+  caddy-data:
+  caddy-config:
+
+secrets:
+  apt_signing_key: { file: "${SECRETS_DIR:-./secrets}/apt_signing_key.asc" }

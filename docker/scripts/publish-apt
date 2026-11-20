@@ -1,0 +1,50 @@
+#!/bin/bash
+# Publishes .deb files as a signed apt repository (DESIGN.md §9.5, P6-T09).
+#
+# Runs in the aptrepo image. Every .deb under /in/<ubuntu-release>/ goes into
+# the distribution "<APT_SUITE>-<ubuntu-release>" (for example stable-26.10),
+# component main. The signed static tree lands in /srv/apt, with the public
+# key as /srv/apt/cairn.asc.
+#
+#   APT_SUITE     dev | ci | staging | stable          (default dev)
+#   APT_ORIGIN    Origin and Label of the repository   (default Cairn)
+#   key           /run/secrets/apt_signing_key (ASCII-armoured private key)
+set -euo pipefail
+suite="${APT_SUITE:-dev}"
+origin="${APT_ORIGIN:-Cairn}"
+key_file="${APT_SIGNING_KEY:-/run/secrets/apt_signing_key}"
+
+export GNUPGHOME
+GNUPGHOME="$(mktemp -d)"
+gpg --batch --quiet --import "$key_file"
+key_id="$(gpg --batch --with-colons --list-secret-keys | awk -F: '/^sec/ {print $5; exit}')"
+[ -n "$key_id" ] || { echo "publish-apt: no secret key in $key_file" >&2; exit 1; }
+
+cat > /etc/aptly.conf <<CONF
+{ "rootDir": "/var/lib/aptly", "gpgProvider": "gpg2", "architectures": ["amd64"] }
+CONF
+
+shopt -s nullglob
+found=0
+for dir in /in/*/; do
+  release="$(basename "$dir")"
+  debs=("$dir"*.deb)
+  [ ${#debs[@]} -gt 0 ] || continue
+  found=1
+  dist="${suite}-${release}"
+  repo="cairn-${dist}"
+  aptly repo show "$repo" >/dev/null 2>&1 || aptly repo create -distribution="$dist" -component=main "$repo"
+  aptly repo add -force-replace "$repo" "${debs[@]}"
+  if aptly publish show "$dist" >/dev/null 2>&1; then
+    aptly publish update -gpg-key="$key_id" -batch "$dist"
+  else
+    aptly publish repo -gpg-key="$key_id" -batch -origin="$origin" -label="$origin" "$repo"
+  fi
+  echo "publish-apt: $dist ← $(printf '%s ' "${debs[@]##*/}")"
+done
+[ "$found" = 1 ] || { echo "publish-apt: no .deb files under /in/<release>/" >&2; exit 1; }
+
+mkdir -p /srv/apt
+cp -a /var/lib/aptly/public/. /srv/apt/
+gpg --batch --armor --export "$key_id" > /srv/apt/cairn.asc
+echo "publish-apt: published to /srv/apt (key $key_id)"

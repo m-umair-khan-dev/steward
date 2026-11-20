@@ -1,0 +1,21 @@
+# Local preview and self-hosting without TLS (DESIGN.md §9.5): the website at
+# /, the apt repository at /apt/, and a health check.
+{
+	admin off
+	auto_https off
+}
+
+:8080 {
+	handle /healthz {
+		respond "ok" 200
+	}
+	handle_path /apt/* {
+		root * /srv/apt
+		file_server browse
+	}
+	handle {
+		root * /srv/site
+		try_files {path} {path}/ {path}.html /404.html
+		file_server
+	}
+}

@@ -1,0 +1,9 @@
+#!/bin/bash
+# Re-labels a .deb with a higher version, for testing apt upgrades (E6-06):
+#   deb-bump IN.deb NEW_VERSION OUT.deb
+set -euo pipefail
+work="$(mktemp -d)"
+dpkg-deb -R "$1" "$work/pkg"
+sed -i "s/^Version: .*/Version: $2/" "$work/pkg/DEBIAN/control"
+dpkg-deb --root-owner-group -Zxz -b "$work/pkg" "$3" >/dev/null
+rm -rf "$work"

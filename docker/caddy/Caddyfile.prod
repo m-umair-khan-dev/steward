@@ -1,0 +1,22 @@
+# Self-hosting with TLS (compose.prod.yaml). Caddy gets and renews the
+# certificate for SITE_DOMAIN.
+{$SITE_DOMAIN} {
+	encode zstd gzip
+	header {
+		Strict-Transport-Security "max-age=31536000"
+		X-Content-Type-Options nosniff
+		Referrer-Policy no-referrer
+	}
+	handle /healthz {
+		respond "ok" 200
+	}
+	handle_path /apt/* {
+		root * /srv/apt
+		file_server browse
+	}
+	handle {
+		root * /srv/site
+		try_files {path} {path}/ {path}.html /404.html
+		file_server
+	}
+}

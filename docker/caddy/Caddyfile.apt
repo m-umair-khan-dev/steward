@@ -1,0 +1,16 @@
+# Serves only the apt repository (make apt-e2e), so the repository test does
+# not depend on the website.
+{
+	admin off
+	auto_https off
+}
+
+:8080 {
+	handle /healthz {
+		respond "ok" 200
+	}
+	handle_path /apt/* {
+		root * /srv/apt
+		file_server browse
+	}
+}

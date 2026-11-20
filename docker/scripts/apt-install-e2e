@@ -1,0 +1,32 @@
+#!/bin/bash
+# The real user journey (E6-06), in a clean Ubuntu container:
+#   apt-install-e2e install VERSION   add the key and source, apt-get install cairn
+#   apt-install-e2e upgrade VERSION   apt-get update and upgrade
+# Each phase checks the installed version. REPO_URL and APT_SUITE come from
+# the environment; the public key is mounted at /key.asc.
+set -euo pipefail
+phase="$1"
+want="$2"
+. /etc/os-release
+dist="${APT_SUITE:-dev}-${VERSION_ID}"
+export DEBIAN_FRONTEND=noninteractive
+if [ "$phase" = install ]; then
+  install -d -m 0755 /etc/apt/keyrings
+  cp /key.asc /etc/apt/keyrings/cairn.asc
+  cat > /etc/apt/sources.list.d/cairn.sources <<SOURCES
+Types: deb
+URIs: ${REPO_URL}
+Suites: ${dist}
+Components: main
+Signed-By: /etc/apt/keyrings/cairn.asc
+SOURCES
+  apt-get update -q
+  apt-get install -y -q cairn
+else
+  apt-get update -q
+  apt-get upgrade -y -q
+fi
+got="$(dpkg-query -W -f='${Version}' cairn)"
+echo "apt-install-e2e: $phase: cairn $got"
+[ "$got" = "$want" ] || { echo "apt-install-e2e: expected $want" >&2; exit 1; }
+test -x /usr/bin/cairn

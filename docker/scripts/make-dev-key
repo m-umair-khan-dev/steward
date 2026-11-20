@@ -1,0 +1,17 @@
+#!/bin/bash
+# Generates the throwaway development signing key for the apt repository
+# (DESIGN.md §9.6). Never used for real releases: the project key lives only
+# in the CI secret store (HUMAN). Writes secrets/apt_signing_key.asc (private)
+# and secrets/apt_signing_key.pub (public).
+#   make-dev-key SECRETS_DIR
+set -euo pipefail
+dir="${1:-secrets}"
+[ -s "$dir/apt_signing_key.asc" ] && { echo "make-dev-key: $dir/apt_signing_key.asc exists"; exit 0; }
+export GNUPGHOME
+GNUPGHOME="$(mktemp -d)"
+gpg --batch --quiet --passphrase '' --quick-gen-key "Cairn development key (not for releases) <dev@example.invalid>" ed25519 sign 1y
+mkdir -p "$dir"
+gpg --batch --armor --export-secret-keys > "$dir/apt_signing_key.asc"
+gpg --batch --armor --export > "$dir/apt_signing_key.pub"
+chmod 600 "$dir/apt_signing_key.asc"
+echo "make-dev-key: wrote $dir/apt_signing_key.asc and .pub"

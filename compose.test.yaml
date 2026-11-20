@@ -1,0 +1,37 @@
+# Checks for the site and the apt repository (DESIGN.md §9.5).
+services:
+  # Builds the site and checks every internal link and the search index.
+  site-check:
+    build:
+      context: .
+      dockerfile: docker/web.Dockerfile
+      target: build
+      args: { NODE_IMAGE: "${NODE_IMAGE}", CADDY_IMAGE: "${CADDY_IMAGE}" }
+    command: ["npm", "run", "check"]
+
+  # The apt repository alone, served by Caddy (E6-06).
+  apt-web:
+    image: ${CADDY_IMAGE}
+    read_only: true
+    cap_drop: ["ALL"]
+    security_opt: ["no-new-privileges:true"]
+    volumes:
+      - aptrepo:/srv/apt:ro
+      - ./docker/caddy/Caddyfile.apt:/etc/caddy/Caddyfile:ro
+    tmpfs: ["/tmp", "/data", "/config"]
+    healthcheck:
+      test: ["CMD", "wget", "-q", "--spider", "http://127.0.0.1:8080/healthz"]
+      interval: 2s
+      timeout: 3s
+      retries: 15
+
+  # A clean Ubuntu that adds the repository and installs with apt (E6-06).
+  # Kept running so the test can install, publish a newer version, then upgrade.
+  apt-client:
+    image: ${UBUNTU_IMAGE}
+    depends_on: { apt-web: { condition: service_healthy } }
+    environment: { REPO_URL: "http://apt-web:8080/apt", APT_SUITE: "${APT_SUITE:-dev}" }
+    volumes:
+      - ./docker/scripts:/scripts:ro
+      - ${SECRETS_DIR:-./secrets}/apt_signing_key.pub:/key.asc:ro
+    command: ["sleep", "infinity"]
