@@ -375,6 +375,10 @@ Decisions and findings:
 
 ## Next
 
+- FIRST: run `make check` on 26.10. The 24.04 work (ADR 0012) was committed
+  before the gate finished on 26.10 (the computer was shut down). Known: a
+  `cargo fmt` diff in crates/app/build.rs.
+
 - Phase 7 (Developer and content tools) waits for the product owner's
   go-ahead. The website (P6-T10) resumes when the product owner says so.
 - Known gaps to look at in Phase 6:
