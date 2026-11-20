@@ -1,0 +1,35 @@
+.TH CAIRN 1 "2026-11-20" "Cairn 1.0.0" "User Commands"
+.SH NAME
+cairn \- a file manager for Ubuntu that keeps folders tidy
+.SH SYNOPSIS
+.B cairn
+[\fB\-\-new\-window\fR | \fB\-\-new\-workspace\fR | \fB\-\-free\-up\-space\fR]
+[\fIFOLDER\-OR\-FILE\fR...]
+.SH DESCRIPTION
+Cairn browses your files and keeps folders tidy. It shows a plan before
+anything moves, and one Undo puts everything back.
+.PP
+Cairn runs once per session. Starting it again hands the request to the
+window that is already open.
+.SH OPTIONS
+.TP
+.I FOLDER\-OR\-FILE
+Open a folder; for a file, open its folder with the file selected.
+.TP
+.B \-\-new\-window
+Bring the window forward, showing the Home folder.
+.TP
+.B \-\-new\-workspace
+Ask for the name of a new workspace.
+.TP
+.B \-\-free\-up\-space
+Open Free Up Space.
+.SH FILES
+.TP
+.I ~/.local/share/cairn/app.db
+Workspaces, sidebar order and the undo journal.
+.TP
+.I ~/.cache/cairn/
+The search index and other caches; safe to delete.
+.SH SEE ALSO
+.BR nautilus (1)

@@ -8,7 +8,6 @@ from PIL import Image
 pytestmark = pytest.mark.p0
 
 
-@pytest.mark.smoke
 def test_E0_01_launch_headless(app):
     state = app.state()
     assert state["windows"] == 1

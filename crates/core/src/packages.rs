@@ -52,7 +52,6 @@ pub struct Package {
 #[derive(Debug, Clone)]
 pub struct Places {
     pub home: PathBuf,
-    pub dpkg_info: PathBuf,
     pub snaps: PathBuf,
     pub snap_desktop: PathBuf,
     /// `$CARGO_HOME` (else `~/.cargo`): installed binaries are in its `bin`.
@@ -64,7 +63,6 @@ pub struct Places {
 impl Places {
     pub fn system(home: PathBuf) -> Self {
         Self {
-            dpkg_info: "/var/lib/dpkg/info".into(),
             snaps: "/var/lib/snapd/snaps".into(),
             snap_desktop: "/var/lib/snapd/desktop/applications".into(),
             cargo_home: std::env::var_os("CARGO_HOME")
@@ -213,7 +211,7 @@ impl PackageSource for Apt {
     fn name(&self) -> &'static str {
         "apt"
     }
-    fn list(&self, run: &dyn Runner, places: &Places) -> Option<Vec<Package>> {
+    fn list(&self, run: &dyn Runner, _: &Places) -> Option<Vec<Package>> {
         let list = ask(run, "dpkg-query", &["-W", DPKG_FORMAT]).ok()??;
         let manual = ask(run, "apt-mark", &["showmanual"])
             .ok()
@@ -223,15 +221,8 @@ impl PackageSource for Apt {
             .ok()
             .flatten()
             .unwrap_or_default();
-        let mut packages = parse_dpkg(&list, &manual, &parse_dpkg_owners(&owners));
-        for p in &mut packages {
-            p.installed = std::fs::metadata(places.dpkg_info.join(format!("{}.list", p.name)))
-                .ok()
-                .and_then(|m| m.modified().ok())
-                .and_then(|t| t.duration_since(std::time::UNIX_EPOCH).ok())
-                .map(|d| d.as_secs() as i64);
-        }
-        Some(packages)
+        // Only dpkg's own tools are asked: its database is private to it.
+        Some(parse_dpkg(&list, &manual, &parse_dpkg_owners(&owners)))
     }
 }
 

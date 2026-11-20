@@ -30,12 +30,12 @@ APP_SERVICE := app
 endif
 
 export UBUNTU_VERSION UBUNTU_IMAGE HOST_UID HOST_GID
-export NEXTEST_VERSION NEXTEST_SHA256 WATCHEXEC_VERSION WATCHEXEC_SHA256
+export NEXTEST_VERSION NEXTEST_SHA256 WATCHEXEC_VERSION WATCHEXEC_SHA256 CARGO_DEB_VERSION CADDY_IMAGE NODE_IMAGE
 
 COMPOSE := docker compose -f compose.desktop.yaml
 RUN := $(COMPOSE) run --rm
 
-.PHONY: help init images fixture app shell test e2e lint lint-host check check-all lockfile down clean i18n
+.PHONY: help init images fixture app shell test e2e lint lint-host check check-all lockfile down clean i18n deb deb-test keys apt-e2e publish-apt perf shots
 
 help: ## Show this help
 	@grep -hE '^[a-z-]+:.*## ' $(MAKEFILE_LIST) | awk -F':.*## ' '{printf "  make %-11s %s\n", $$1, $$2}'
@@ -44,7 +44,7 @@ help: ## Show this help
 .env:
 	cp .env.example .env
 
-init: .env images fixture ## First-time setup: images and the fake home
+init: .env images fixture keys ## First-time setup: images, the fake home, the dev signing key
 
 images: ## Build the dev image for UBUNTU_VERSION
 	$(COMPOSE) --profile build build dev-image
@@ -68,6 +68,40 @@ test: images ## Unit and integration tests
 
 e2e: images ## End-to-end tests (make e2e k=E0_03 for one)
 	$(RUN) -e E2E_K="$(k)" e2e
+
+# Packaging (P6-T08). One .deb per Ubuntu release, built and tested in Docker.
+DEB_BUILD = docker build -f docker/desktop.Dockerfile \
+	--build-arg UBUNTU_IMAGE=$(UBUNTU_IMAGE) --build-arg CARGO_DEB_VERSION=$(CARGO_DEB_VERSION)
+
+deb: ## Build the .deb for UBUNTU_VERSION into dist/
+	$(DEB_BUILD) --target artifact --output type=local,dest=dist/$(UBUNTU_VERSION) .
+	@ls -l dist/$(UBUNTU_VERSION)
+
+deb-test: ## Install the .deb in a clean Ubuntu with apt; lintian and the smoke scenarios
+	$(DEB_BUILD) --target install-test -t cairn-install-test:$(UBUNTU_VERSION) .
+	docker run --rm --security-opt seccomp=unconfined --tmpfs /tmp:exec,mode=1777 \
+	  -v $(CURDIR)/artifacts:/workspace/artifacts cairn-install-test:$(UBUNTU_VERSION)
+
+keys: ## Throwaway development key for the apt repository (secrets/, git-ignored)
+	@test -s secrets/apt_signing_key.asc || docker build -q -f docker/aptrepo.Dockerfile \
+	  --build-arg UBUNTU_IMAGE=$(UBUNTU_IMAGE) -t cairn-aptrepo:dev . >/dev/null
+	@test -s secrets/apt_signing_key.asc || docker run --rm --entrypoint bash -u $(HOST_UID):$(HOST_GID) \
+	  -v $(CURDIR):/w -w /w cairn-aptrepo:dev docker/scripts/make-dev-key secrets
+
+publish-apt: keys ## Publish dist/*/ to the local repository (APT_SUITE=dev by default)
+	docker compose --profile publish run --rm aptrepo
+
+apt-e2e: keys ## E6-06: install with apt from the local repository, then upgrade
+	docker/scripts/apt-e2e
+
+shots: images ## Light and dark screenshots for the site and AppStream (artifacts/shots/)
+	$(RUN) -e E2E_MARK=shots e2e
+
+perf: images ## Performance pass (DESIGN.md §8.4): optimised build, timings in artifacts/perf/
+	$(RUN) e2e bash -c 'export CARGO_TARGET_DIR=$$CARGO_TARGET_DIR/perf && \
+	  cargo build --release --locked -p cairn -p cairn-indexer --features cairn/e2e,cairn-indexer/e2e && \
+	  cargo test --release --locked -p cairn-core --test index e3_10 -- --nocapture | grep E3-10 && \
+	  CAIRN_BIN=$$CARGO_TARGET_DIR/release/cairn python3 tests/tools/perf.py'
 
 i18n: images ## Extract messages to po/cairn.pot, merge into po/*.po, remake the pseudo-locale
 	$(RUN) shell bash -c 'docker/scripts/i18n extract && docker/scripts/i18n update && docker/scripts/i18n pseudo && docker/scripts/i18n check'

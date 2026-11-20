@@ -1,6 +1,6 @@
 [package]
 name = "cairn"
-description = "Cairn, a file manager for Ubuntu."
+description = "file manager for Ubuntu that keeps folders tidy"
 version.workspace = true
 edition.workspace = true
 rust-version.workspace = true
@@ -33,3 +33,41 @@ cxx-qt-build.workspace = true
 
 [lints]
 workspace = true
+
+# The .deb (P6-T08, DESIGN.md §8.8). Built by packaging/build-deb, which first
+# stages the translations and the changelog under target/package/.
+[package.metadata.deb]
+name = "cairn"
+maintainer = "Cairn contributors <maintainers@example.invalid>"   # HUMAN: real address
+copyright = "2026 Cairn contributors"
+section = "utils"
+priority = "optional"
+extended-description = """\
+Cairn is a file manager for Ubuntu that keeps folders tidy. It shows a plan
+before anything moves, and one Undo puts everything back. It adds folder
+sizes, search as you type, two panes, workspaces, Free Up Space, a list of
+everything installed, and About This Computer."""
+# Qt's QML modules and plugins are loaded at run time, so dpkg-shlibdeps
+# cannot see them: they are listed here.
+depends = """$auto, qml6-module-qtquick, qml6-module-qtquick-window, qml6-module-qtquick-controls, \
+qml6-module-qtquick-templates, qml6-module-qtquick-layouts, qml6-module-qtquick-effects, \
+qml6-module-qtquick-shapes, qml6-module-qtqml-workerscript, qml6-module-qtquick-dialogs, \
+qml6-module-qtquick-pdf, qml6-module-qtmultimedia, qml6-module-qtcore, qt6-wayland, qt6-svg-plugins, \
+shared-mime-info, dbus-user-session | dbus-x11"""
+recommends = "gvfs, xdg-user-dirs"
+suggests = "nautilus"
+changelog = "../../target/package/changelog"
+assets = [
+    ["target/release/cairn", "usr/bin/", "755"],
+    ["target/release/cairn-indexer", "usr/libexec/", "755"],
+    ["../../data/dev.cairn.Files.desktop", "usr/share/applications/", "644"],
+    ["../../data/dev.cairn.Files.metainfo.xml", "usr/share/metainfo/", "644"],
+    ["../../data/dev.cairn.Files.gschema.xml", "usr/share/glib-2.0/schemas/", "644"],
+    ["../../data/icons/hicolor/scalable/apps/dev.cairn.Files.svg", "usr/share/icons/hicolor/scalable/apps/", "644"],
+    ["../../data/icons/hicolor/symbolic/apps/dev.cairn.Files-symbolic.svg", "usr/share/icons/hicolor/symbolic/apps/", "644"],
+    ["../../data/cairn-indexer.service", "usr/lib/systemd/user/", "644"],
+    ["../../data/dev.cairn.Indexer.service", "usr/share/dbus-1/services/", "644"],
+    ["../../target/package/locale/**/*.mo", "usr/share/locale/", "644"],
+    ["../../target/package/cairn.1.gz", "usr/share/man/man1/", "644"],
+    ["../../packaging/debian/copyright", "usr/share/doc/cairn/", "644"],
+]

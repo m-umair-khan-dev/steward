@@ -1,0 +1,30 @@
+#!/bin/bash
+# Builds the .deb for the Ubuntu release of this image (P6-T08):
+#   packaging/build-deb OUT_DIR
+# Stages the compiled translations, the man page and the Debian changelog
+# (from site/src/content/changelog/*.md, the release notes) under
+# target/package/, builds release binaries and runs cargo-deb.
+set -euo pipefail
+cd "$(dirname "$0")/.."
+out="${1:-dist}"
+mkdir -p "$out"
+. /etc/os-release
+release="${VERSION_ID}"
+version="$(sed -n 's/^version = "\(.*\)"/\1/p' Cargo.toml | head -1)"
+
+stage=target/package
+rm -rf "$stage"
+mkdir -p "$stage/locale"
+while read -r lang; do
+  [ -n "$lang" ] || continue
+  mkdir -p "$stage/locale/$lang/LC_MESSAGES"
+  msgfmt --check -o "$stage/locale/$lang/LC_MESSAGES/cairn.mo" "po/$lang.po"
+done < po/LINGUAS
+gzip -9n -c packaging/debian/cairn.1 > "$stage/cairn.1.gz"
+python3 -I packaging/make-changelog "$release" > "$stage/changelog"
+
+# cargo-deb resolves "target/release/…" against CARGO_TARGET_DIR.
+cargo build --release --locked -p cairn -p cairn-indexer
+cargo deb --no-build -p cairn --deb-version "${version}-1~ubuntu${release}" \
+  --output "$out/cairn_${version}-1~ubuntu${release}_amd64.deb"
+ls -l "$out"

@@ -1,7 +1,8 @@
 # syntax=docker/dockerfile:1.7
 # Build, run and test image for the Cairn desktop app (DESIGN.md §9.3).
-# Stages: base -> dev (interactive work, tests) -> build (release binaries).
-# Packaging stages (.deb, install test) are added in Phase 6.
+# Stages: base -> dev (interactive work, tests) -> build (release binaries)
+#         base -> package (.deb) -> artifact (just the .deb, for --output)
+#         clean Ubuntu -> install-test (installs the .deb with apt, smoke tests).
 
 ARG UBUNTU_IMAGE=ubuntu:24.04
 FROM ${UBUNTU_IMAGE} AS base
@@ -114,3 +115,57 @@ RUN --mount=type=cache,target=/usr/local/cargo/registry \
     mkdir -p /out && \
     cp "${CARGO_TARGET_DIR}/release/cairn" "${CARGO_TARGET_DIR}/release/cairn-indexer" \
        "${CARGO_TARGET_DIR}/release/cairn-cli" /out/
+
+# ---- package: the .deb for this Ubuntu release (P6-T08) ----------------------
+FROM base AS package
+SHELL ["/bin/bash", "-o", "pipefail", "-c"]
+ARG CARGO_DEB_VERSION
+RUN --mount=type=cache,target=/var/cache/apt,sharing=locked \
+    --mount=type=cache,target=/var/lib/apt,sharing=locked \
+    apt-get update && apt-get install -y --no-install-recommends lintian
+RUN --mount=type=cache,target=/usr/local/cargo/registry \
+    cargo install cargo-deb --version "${CARGO_DEB_VERSION}" --locked && cargo deb --version
+COPY . .
+# E6-07: lintian on the package, with the accepted tags (each with its reason).
+RUN --mount=type=cache,target=/usr/local/cargo/registry \
+    --mount=type=cache,target=/var/cache/cargo-target \
+    packaging/build-deb /out && \
+    lintian --fail-on error,warning --suppress-tags-from-file docker/scripts/lintian-accepted /out/*.deb
+
+# ---- artifact: only the .deb (docker build --output) --------------------------
+FROM scratch AS artifact
+COPY --from=package /out/ /
+
+# ---- install-test: a clean Ubuntu installs the .deb with apt (E6-05) ---------
+ARG UBUNTU_IMAGE=ubuntu:24.04
+FROM ${UBUNTU_IMAGE} AS install-test
+SHELL ["/bin/bash", "-o", "pipefail", "-c"]
+ENV DEBIAN_FRONTEND=noninteractive \
+    LANG=C.UTF-8
+# Only what the smoke tests need; the app's own dependencies come
+# from the package.
+RUN --mount=type=cache,target=/var/cache/apt,sharing=locked \
+    --mount=type=cache,target=/var/lib/apt,sharing=locked \
+    rm -f /etc/apt/apt.conf.d/docker-clean && \
+    apt-get update && \
+    apt-get install -y --no-install-recommends \
+      dbus dbus-daemon mutter libgl1-mesa-dri libegl-mesa0 at-spi2-core \
+      python3 python3-gi gir1.2-atspi-2.0 python3-pytest python3-pil \
+      xdg-user-dirs locales && \
+    locale-gen de_DE.UTF-8
+COPY --from=package /out/ /tmp/deb/
+# Docker's Ubuntu image skips translations and man pages to stay small; a
+# desktop installs them, and the test checks they arrive.
+RUN rm -f /etc/dpkg/dpkg.cfg.d/excludes
+RUN --mount=type=cache,target=/var/cache/apt,sharing=locked \
+    --mount=type=cache,target=/var/lib/apt,sharing=locked \
+    apt-get update && apt-get install -y /tmp/deb/*.deb
+RUN (userdel -r ubuntu 2>/dev/null || true) && useradd -m -u 1000 -s /bin/bash tester
+WORKDIR /workspace
+COPY tests/ tests/
+COPY docker/scripts/ docker/scripts/
+RUN chown -R tester /workspace
+USER tester
+ENV CAIRN_BIN=/usr/bin/cairn \
+    CAIRN_INSTALLED=1
+CMD ["docker/scripts/run-install-test"]

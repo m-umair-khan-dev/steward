@@ -22,7 +22,6 @@ def s(text: str) -> GLib.Variant:
     return GLib.Variant("s", text)
 
 
-@pytest.mark.smoke
 def test_E1_01_open_downloads(app, home):
     folder = app.open_folder(home / "Downloads")
     facts = home.manifest["folders"]["Downloads"]

@@ -1,0 +1,17 @@
+#!/bin/bash
+# `make deb-test` (E6-05, E6-07): inside the install-test image, where the .deb
+# was installed with apt into a clean Ubuntu (lintian already ran in the
+# package stage). Checks the installed files, then runs the smoke scenarios
+# against /usr/bin/cairn.
+set -euo pipefail
+cd /workspace
+echo "== installed files"
+for f in /usr/bin/cairn /usr/libexec/cairn-indexer /usr/share/applications/dev.cairn.Files.desktop \
+         /usr/share/metainfo/dev.cairn.Files.metainfo.xml /usr/share/glib-2.0/schemas/gschemas.compiled \
+         /usr/share/locale/de/LC_MESSAGES/cairn.mo /usr/share/dbus-1/services/dev.cairn.Indexer.service \
+         /usr/lib/systemd/user/cairn-indexer.service; do
+  test -e "$f" || { echo "missing: $f"; exit 1; }
+done
+echo "== smoke tests against the installed app"
+mkdir -p /tmp/artifacts
+exec python3 -m pytest -c tests/e2e/pytest.ini tests/e2e -m smoke -p no:cacheprovider -q

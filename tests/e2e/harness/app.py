@@ -113,9 +113,23 @@ class App:
             Gio.DBusCallFlags.NONE, 2000, None)
         return reply.unpack()[0]
 
+    @property
+    def installed(self) -> bool:
+        """Testing the installed package: a release build without Test1, so
+        only public interfaces (D-Bus actions, accessibility) are used."""
+        return os.environ.get("CAIRN_INSTALLED") == "1"
+
     def _window_ready(self) -> bool:
+        if self.installed:
+            return "Cairn" in self.a11y_names()
         window = self.state().get("active_window")
         return bool(window and window["width"] > 0)
+
+    def dismiss_welcome(self) -> None:
+        """Release builds show the welcome on a first run: skip it."""
+        if "Welcome to Cairn" in self.a11y_names():
+            self.a11y_click("Skip", role="button", within="Welcome to Cairn")
+            wait_for(lambda: "Welcome to Cairn" not in self.a11y_names(), "the welcome to close", 10)
 
     def action(self, name: str, parameter: GLib.Variant | None = None) -> None:
         """Activates a GAction the way a menu item or shortcut would.

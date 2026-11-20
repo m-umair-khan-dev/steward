@@ -1,0 +1,4 @@
+# Lintian tags accepted for the .deb (lintian --suppress-tags-from-file).
+# One tag per line, with the reason in a comment above it.
+# The project has no host yet (HUMAN), so the maintainer address is a placeholder.
+bogus-mail-host

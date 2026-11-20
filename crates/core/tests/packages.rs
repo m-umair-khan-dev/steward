@@ -64,7 +64,6 @@ fn places(snap_desktop: PathBuf) -> Places {
     let (cargo_home, pipx_home) = homes(&snap_desktop.to_string_lossy().replace('/', "-"));
     Places {
         home: "/nonexistent/home".into(),
-        dpkg_info: "/nonexistent/dpkg".into(),
         snaps: "/nonexistent/snaps".into(),
         snap_desktop,
         cargo_home,
