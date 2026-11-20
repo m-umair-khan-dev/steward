@@ -1451,7 +1451,7 @@ impl Controller {
             _ if data.is_dir => gettext("Folder"),
             _ => format!(
                 "{} · {}",
-                gio::content_type_get_description(&data.content_type),
+                format::type_description(&data.content_type),
                 format::size(data.size)
             ),
         };
@@ -1610,6 +1610,10 @@ impl Controller {
 
     /// List rows, with a section label when grouping.
     pub fn items_json(&self) -> Value {
+        // Only the list view shows these rows: the grid has its own (P6-T14).
+        if self.view != ViewMode::List {
+            return Value::Array(Vec::new());
+        }
         let now = app_data::now();
         Value::Array(
             self.visible

@@ -8,6 +8,23 @@ pub fn size(bytes: u64) -> String {
     glib::format_size(bytes).to_string()
 }
 
+thread_local! {
+    static TYPE_NAMES: std::cell::RefCell<std::collections::HashMap<String, String>> =
+        std::cell::RefCell::new(std::collections::HashMap::new());
+}
+
+/// "PDF document" for a content type, looked up once per type (the MIME
+/// database lookup is slow enough to matter for 10,000 cards, P6-T14).
+pub fn type_description(content_type: &str) -> String {
+    TYPE_NAMES.with(|names| {
+        names
+            .borrow_mut()
+            .entry(content_type.to_string())
+            .or_insert_with(|| gio::content_type_get_description(content_type).to_string())
+            .clone()
+    })
+}
+
 pub fn kind(kind: Kind) -> String {
     gettext(kind.label())
 }
