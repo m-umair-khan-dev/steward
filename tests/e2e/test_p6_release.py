@@ -75,7 +75,7 @@ def test_E6_preferences_pages(app):
     app.wait_for(lambda: any(n.startswith("Find anything") for n in app.a11y_names(showing_only=False)), "Shortcuts")
     listed = {n for n in app.a11y_names(showing_only=False) if ": " in n}
     for action, keys in app.state()["accels"].items():
-        assert any(n.endswith(": " + keys[0]) for n in listed), f"{action} ({keys[0]}) is not listed"
+        assert any(keys[0] in n for n in listed), f"{action} ({keys[0]}) is not listed"
 
 
 # --- E6-03: translations ----------------------------------------------------------------

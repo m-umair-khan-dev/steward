@@ -192,6 +192,7 @@ FocusScope {
         ScrollView {
             TextArea {
                 readOnly: true
+                Accessible.name: p.t("Contents of ") + (root.model.name || "")
                 text: root.model.text || ""
                 font.family: "monospace"
                 font.pixelSize: 13

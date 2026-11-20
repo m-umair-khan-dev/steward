@@ -16,6 +16,10 @@ msgstr ""
 msgid " of "
 msgstr ""
 
+#: crates/app/qml/PreferencesDialog.qml:127 crates/app/qml/ShortcutsDialog.qml:23
+msgid " or "
+msgstr ""
+
 #: crates/app/qml/InstalledPage.qml:79
 msgid " packages, "
 msgstr ""
@@ -246,6 +250,10 @@ msgstr ""
 
 #: crates/app/src/controller/about.rs:220
 msgid "Condition"
+msgstr ""
+
+#: crates/app/qml/PeekOverlay.qml:195
+msgid "Contents of "
 msgstr ""
 
 #: crates/app/qml/WhatsNewDialog.qml:35
@@ -1184,7 +1192,7 @@ msgstr ""
 msgid "Paste"
 msgstr ""
 
-#: crates/app/qml/PeekOverlay.qml:227
+#: crates/app/qml/PeekOverlay.qml:228
 msgid "Pause"
 msgstr ""
 
@@ -1208,7 +1216,7 @@ msgstr ""
 msgid "Peek: "
 msgstr ""
 
-#: crates/app/qml/PeekOverlay.qml:227
+#: crates/app/qml/PeekOverlay.qml:228
 msgid "Play"
 msgstr ""
 

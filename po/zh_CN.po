@@ -22,6 +22,11 @@ msgstr "    ← → 切换 · 空格或 Esc 关闭"
 msgid " of "
 msgstr " / "
 
+#: crates/app/qml/PreferencesDialog.qml:127
+#: crates/app/qml/ShortcutsDialog.qml:23
+msgid " or "
+msgstr " 或 "
+
 #: crates/app/qml/InstalledPage.qml:79
 msgid " packages, "
 msgstr " 个软件包， "
@@ -271,6 +276,10 @@ msgstr "电脑名称"
 #: crates/app/src/controller/about.rs:220
 msgid "Condition"
 msgstr "状况"
+
+#: crates/app/qml/PeekOverlay.qml:195
+msgid "Contents of "
+msgstr "内容： "
 
 #: crates/app/qml/WhatsNewDialog.qml:35
 msgid "Continue"
@@ -1256,7 +1265,7 @@ msgstr "窗格"
 msgid "Paste"
 msgstr "粘贴"
 
-#: crates/app/qml/PeekOverlay.qml:227
+#: crates/app/qml/PeekOverlay.qml:228
 msgid "Pause"
 msgstr "暂停"
 
@@ -1282,7 +1291,7 @@ msgstr "预览文件"
 msgid "Peek: "
 msgstr "预览： "
 
-#: crates/app/qml/PeekOverlay.qml:227
+#: crates/app/qml/PeekOverlay.qml:228
 msgid "Play"
 msgstr "播放"
 

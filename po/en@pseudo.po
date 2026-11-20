@@ -12,6 +12,9 @@ msgstr "[    ← → tö mövé · Spàçé ör Ésç tö çlösé ~~~~~~~~~~~~~
 msgid " of "
 msgstr "[ öf  ~~]"
 
+msgid " or "
+msgstr "[ ör  ~~]"
+
 msgid " packages, "
 msgstr "[ pàçkàgés,  ~~~]"
 
@@ -185,6 +188,9 @@ msgstr "[Çömpütér ñàmé ~~~~]"
 
 msgid "Condition"
 msgstr "[Çöñdîtîöñ ~~~]"
+
+msgid "Contents of "
+msgstr "[Çöñtéñts öf  ~~~~]"
 
 msgid "Continue"
 msgstr "[Çöñtîñüé ~~]"

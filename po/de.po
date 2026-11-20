@@ -22,6 +22,11 @@ msgstr "    ← → zum Wechseln · Leertaste oder Esc zum Schließen"
 msgid " of "
 msgstr " von "
 
+#: crates/app/qml/PreferencesDialog.qml:127
+#: crates/app/qml/ShortcutsDialog.qml:23
+msgid " or "
+msgstr " oder "
+
 #: crates/app/qml/InstalledPage.qml:79
 msgid " packages, "
 msgstr " Pakete, "
@@ -275,6 +280,10 @@ msgstr "Computername"
 #: crates/app/src/controller/about.rs:220
 msgid "Condition"
 msgstr "Zustand"
+
+#: crates/app/qml/PeekOverlay.qml:195
+msgid "Contents of "
+msgstr "Inhalt von "
 
 #: crates/app/qml/WhatsNewDialog.qml:35
 msgid "Continue"
@@ -1270,7 +1279,7 @@ msgstr "Bereich"
 msgid "Paste"
 msgstr "Einfügen"
 
-#: crates/app/qml/PeekOverlay.qml:227
+#: crates/app/qml/PeekOverlay.qml:228
 msgid "Pause"
 msgstr "Pause"
 
@@ -1296,7 +1305,7 @@ msgstr "Datei in der Vorschau ansehen"
 msgid "Peek: "
 msgstr "Vorschau: "
 
-#: crates/app/qml/PeekOverlay.qml:227
+#: crates/app/qml/PeekOverlay.qml:228
 msgid "Play"
 msgstr "Abspielen"
 

@@ -124,7 +124,7 @@ Sheet {
                 width: shortcuts.width
                 height: 34
                 Accessible.role: Accessible.StaticText
-                Accessible.name: modelData.description + ": " + modelData.keys[0]
+                Accessible.name: modelData.description + ": " + modelData.keys.join(p.t(" or "))
                 Text { anchors.verticalCenter: parent.verticalCenter; text: parent.modelData.description
                        color: Theme.ink; font.pixelSize: 13; width: parent.width - keys.width - 12; elide: Text.ElideRight }
                 Row {
@@ -133,7 +133,7 @@ Sheet {
                     anchors.verticalCenter: parent.verticalCenter
                     spacing: 4
                     Repeater {
-                        model: parent.parent.modelData.keys[0].split("+").filter(k => k !== "")
+                        model: parent.parent.modelData.keys[0].split(/\+(?!$)/).filter(k => k !== "")
                         delegate: Rectangle {
                             required property string modelData
                             width: Math.max(26, key.implicitWidth + 14); height: 24; radius: 6
