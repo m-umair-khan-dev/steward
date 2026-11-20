@@ -134,7 +134,12 @@ fn every_card_matches_the_manifest() {
         ]
     );
     for card in &cards {
-        assert_eq!(rows(card, &root), expected(&manifest, card.id), "{}", card.id);
+        assert_eq!(
+            rows(card, &root),
+            expected(&manifest, card.id),
+            "{}",
+            card.id
+        );
         assert_eq!(
             card.total(),
             manifest["clean"]["totals"][card.id].as_u64().unwrap(),
@@ -223,7 +228,12 @@ fn the_parallel_scan_reports_every_card_once() {
     cards.sort_by_key(|c| order.iter().position(|id| *id == c.id));
     clean::exclusive(&mut cards);
     for card in &cards {
-        assert_eq!(rows(card, &root), expected(&manifest, card.id), "{}", card.id);
+        assert_eq!(
+            rows(card, &root),
+            expected(&manifest, card.id),
+            "{}",
+            card.id
+        );
     }
     let _ = std::fs::remove_dir_all(&root);
 }

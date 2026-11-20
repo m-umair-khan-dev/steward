@@ -166,7 +166,11 @@ impl Controller {
         };
         let all: Vec<&Package> = tools.iter().flat_map(|t| &t.packages).collect();
         let total_bytes: u64 = tools.iter().map(Tool::bytes).sum();
-        let count = |why: Option<Why>| all.iter().filter(|p| why.is_none_or(|w| p.why == w)).count();
+        let count = |why: Option<Why>| {
+            all.iter()
+                .filter(|p| why.is_none_or(|w| p.why == w))
+                .count()
+        };
         let filter = if self.installed.filter.is_empty() {
             "all"
         } else {

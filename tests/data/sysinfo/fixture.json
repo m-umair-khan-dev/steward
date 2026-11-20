@@ -1,0 +1,54 @@
+{
+  "host_name": "studio-desk",
+  "user_name": "sam",
+  "model": "ThinkPad X1 Carbon Gen 13",
+  "vendor": "Lenovo",
+  "laptop": true,
+  "cpu": "Intel(R) Core(TM) Ultra 7 268V",
+  "cores": 8,
+  "threads": 8,
+  "architecture": "x86_64",
+  "os": "Ubuntu 26.10",
+  "kernel": "7.3.0-10-generic",
+  "uptime": 572400,
+  "shell": "bash",
+  "time_zone": "Europe/Lisbon",
+  "language": "en_GB",
+  "in_use_since": 1740830400,
+  "battery": {
+    "charge": 82,
+    "state": "charging",
+    "full_wh": 55.2,
+    "design_wh": 57.0,
+    "cycles": 110,
+    "plugged_in": true,
+    "power_w": 30.5
+  },
+  "memory": {
+    "total": 34359738368,
+    "available": 17179869184,
+    "swap_total": 8589934592,
+    "swap_free": 8589934592,
+    "pressure": 0.0
+  },
+  "temperature": 48.0,
+  "disk": {
+    "size": 1000204886016,
+    "free": 412316860416,
+    "filesystem": "ext4",
+    "drive": "Example NVMe 1TB",
+    "encrypted": true
+  },
+  "displays": [
+    { "name": "Built-in display", "width": 2880, "height": 1800, "refresh": 120.0, "scale": 2.0, "builtin": true },
+    { "name": "Example 27 Monitor", "width": 3840, "height": 2160, "refresh": 60.0, "scale": 1.5, "builtin": false }
+  ],
+  "security": {
+    "disk_encryption": true,
+    "firewall": false,
+    "secure_boot": true,
+    "apparmor": true,
+    "auto_updates": true
+  },
+  "packages": { "apt": 1850, "snap": 12, "flatpak": 4 }
+}

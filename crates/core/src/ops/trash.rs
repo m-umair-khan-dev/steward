@@ -57,6 +57,11 @@ impl Trash {
         Ok((root, Some(top)))
     }
 
+    /// The home Trash's `files/` folder (it may not exist yet).
+    pub fn files_dir(&self) -> PathBuf {
+        self.home.join("files")
+    }
+
     /// Creates the home Trash folders if they are missing (the Trash view
     /// lists `files/`).
     pub fn ensure(&self) -> io::Result<PathBuf> {

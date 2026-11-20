@@ -34,6 +34,10 @@ impl Ran {
 
 pub trait Runner: Send + Sync {
     fn run(&self, program: &str, args: &[&str]) -> Ran;
+    /// True if the program is installed, without running it.
+    fn has(&self, program: &str) -> bool {
+        on_path(program)
+    }
 }
 
 /// Runs programs found on `PATH`, with `LC_ALL=C` so output parses the same
@@ -47,6 +51,10 @@ impl Runner for System {
             .args(args)
             .env("LC_ALL", "C.UTF-8")
             .env("NO_COLOR", "1")
+            // Asking must not update anything (Homebrew updates itself on
+            // some commands).
+            .env("HOMEBREW_NO_AUTO_UPDATE", "1")
+            .env("HOMEBREW_NO_ANALYTICS", "1")
             .stdin(Stdio::null())
             .stderr(Stdio::piped())
             .output();
@@ -59,6 +67,17 @@ impl Runner for System {
             Ok(out) => Ran::Output(String::from_utf8_lossy(&out.stdout).into_owned()),
         }
     }
+}
+
+/// True if `program` is an executable file in one of `$PATH`'s folders.
+pub fn on_path(program: &str) -> bool {
+    use std::os::unix::fs::PermissionsExt;
+    std::env::var_os("PATH").is_some_and(|path| {
+        std::env::split_paths(&path).any(|dir| {
+            std::fs::metadata(dir.join(program))
+                .is_ok_and(|m| m.is_file() && m.permissions().mode() & 0o111 != 0)
+        })
+    })
 }
 
 /// Parses sizes as tools print them: "1.2G", "1.2 GB", "283.6 MB", "512kB",
@@ -104,7 +123,13 @@ mod tests {
     #[test]
     fn a_missing_program_is_missing() {
         assert!(System.run("cairn-no-such-program", &[]).is_missing());
-        assert_eq!(System.run("sh", &["-c", "echo hi"]), Ran::Output("hi\n".into()));
-        assert!(matches!(System.run("sh", &["-c", "exit 3"]), Ran::Failed(_)));
+        assert_eq!(
+            System.run("sh", &["-c", "echo hi"]),
+            Ran::Output("hi\n".into())
+        );
+        assert!(matches!(
+            System.run("sh", &["-c", "exit 3"]),
+            Ran::Failed(_)
+        ));
     }
 }

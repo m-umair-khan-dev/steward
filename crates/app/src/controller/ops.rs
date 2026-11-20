@@ -85,8 +85,9 @@ fn reason(reason: FailReason) -> String {
 
 /// Starts the engine; called once from `controller::init`.
 pub fn start(c: &mut Controller) {
+    // The Trash folders are made when something is first trashed, or when
+    // the Trash is opened: starting the app changes nothing (E5-11).
     let trash = Trash::new(Trash::default_home());
-    let _ = trash.ensure();
     // Test hook (e2e builds): slow every step down so a test can interrupt
     // a batch midway (E2-11).
     let delay = if cfg!(feature = "e2e") {

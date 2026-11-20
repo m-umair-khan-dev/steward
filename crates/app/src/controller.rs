@@ -426,6 +426,14 @@ impl Controller {
 
     pub fn navigate(&mut self, folder: &gio::File, record: bool) {
         self.close_tool();
+        // Opening the Trash before anything was ever trashed: make it, so
+        // the view shows an empty Trash rather than a missing folder.
+        let trash = cairn_core::ops::Trash::new(cairn_core::ops::Trash::default_home());
+        if folder.path().as_deref() == Some(trash.files_dir().as_path())
+            && !folder.query_exists(gio::Cancellable::NONE)
+        {
+            let _ = trash.ensure();
+        }
         if let Some(current) = self.current() {
             if current.equal(folder) {
                 self.model.reload();
@@ -1865,6 +1873,7 @@ impl Controller {
             "tools": { "page": self.tools.page },
             "clean": self.clean_test_json(),
             "installed": self.installed_test_json(),
+            "about": self.about_test_json(),
             // Folder numbers as the cards show them, by name.
             "folder_stats": self.visible.iter().filter(|e| e.is_dir()).filter_map(|e| {
                 let (items, bytes) = self.folder_numbers(&e.data().file.path()?)?;

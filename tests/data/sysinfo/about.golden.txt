@@ -1,0 +1,49 @@
+ThinkPad X1 Carbon Gen 13
+Ubuntu 26.10 · Intel(R) Core(TM) Ultra 7 268V · 34.4 GB memory · 1.0 TB storage
+Up 6 days, 15 hours · In use 1 year, 8 months · Battery Normal
+
+Battery health
+  Condition: Normal
+  Maximum capacity: 97%
+  Cycles: 110
+  Full charge: 55.2 Wh of 57.0 Wh designed
+  Power: 30.5 W · Power adapter
+
+Startup disk
+  Free: 412.3 GB
+  Used: 59%
+  File system: ext4
+  Encrypted: Yes (LUKS)
+  Drive: Example NVMe 1TB
+
+Memory
+  In use: 17.2 GB
+  Pressure: Low
+  Swap: 0 bytes used of 8.6 GB
+  Thermal state: Normal (48 °C)
+
+Displays
+  Built-in display: 2880 × 1800 · 120 Hz · 200%
+  Example 27 Monitor: 3840 × 2160 · 60 Hz · 150%
+
+Security
+  Disk encryption: On
+  Firewall: Off
+  Secure Boot: On
+  AppArmor: On
+  Automatic security updates: On
+
+Computer
+  Computer name: studio-desk
+  User: sam
+  Processor: Intel(R) Core(TM) Ultra 7 268V
+  Cores: 8
+  Architecture: x86_64
+
+Software
+  System: Ubuntu 26.10
+  Kernel: 7.3.0-10-generic
+  Shell: bash
+  Region: Europe/Lisbon · en_GB
+  Packages: 1850 apt · 12 Snap · 4 Flatpak
+  In use since: 1 Mar 2025 (estimate)

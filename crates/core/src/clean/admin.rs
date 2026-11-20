@@ -67,7 +67,7 @@ pub fn parse_old_kernels(text: &str, running: &str) -> Vec<(String, u64)> {
             })
         })
         .collect();
-    installed.sort_by(|a, b| natural_version(&a.1).cmp(&natural_version(&b.1)));
+    installed.sort_by_key(|a| natural_version(&a.1));
     let newest = installed.last().map(|k| k.0.clone());
     installed
         .into_iter()
@@ -160,7 +160,10 @@ pub fn rows(runner: &dyn Runner) -> Vec<AdminRow> {
         }),
     }
 
-    let running = rustix::system::uname().release().to_string_lossy().into_owned();
+    let running = rustix::system::uname()
+        .release()
+        .to_string_lossy()
+        .into_owned();
     if let Some(text) = runner
         .run(
             "dpkg-query",
@@ -211,7 +214,10 @@ mod tests {
                     painter   2.2       15     latest/stable  example     -\n";
         assert_eq!(
             parse_disabled_snaps(text),
-            vec![("core22".into(), "1748".into()), ("painter".into(), "13".into())]
+            vec![
+                ("core22".into(), "1748".into()),
+                ("painter".into(), "13".into())
+            ]
         );
     }
 
@@ -231,7 +237,10 @@ mod tests {
                     linux-image-7.3.0-10-generic\t7.3.0-10.10\t16100\tinstalled\n\
                     linux-image-6.8.0-1-generic\t6.8.0-1.1\t14000\tconfig-files\n";
         let old = parse_old_kernels(text, "7.3.0-9-generic");
-        assert_eq!(old, vec![("linux-image-7.0.0-38-generic".into(), 15000 * 1024)]);
+        assert_eq!(
+            old,
+            vec![("linux-image-7.0.0-38-generic".into(), 15000 * 1024)]
+        );
     }
 
     #[test]

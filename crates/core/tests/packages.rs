@@ -26,8 +26,9 @@ impl Runner for Recorded {
             ("flatpak", ["list", "--app", ..]) => "flatpak-apps.txt",
             ("flatpak", ["list", "--runtime", ..]) => "flatpak-runtimes.txt",
             ("npm", ["ls", ..]) => "npm-ls.json",
-            ("npm", ["root", "-g"]) => return Ran::Output("/nonexistent/lib/node_modules\n".into()),
-            ("pipx", ["list", "--json"]) => "pipx-list.json",
+            ("npm", ["root", "-g", ..]) => {
+                return Ran::Output("/nonexistent/lib/node_modules\n".into());
+            }
             ("pip", ["list", "--user", "--not-required", ..]) => "pip-list-not-required.json",
             ("pip", ["list", "--user", ..]) => "pip-list.json",
             ("cargo", ["install", "--list"]) => "cargo-install-list.txt",
@@ -36,22 +37,48 @@ impl Runner for Recorded {
         };
         Ran::Output(data(file))
     }
+    fn has(&self, program: &str) -> bool {
+        program == "pipx"
+    }
+}
+
+/// A Cargo home with install records, and a pipx home with the recorded
+/// venvs' metadata (what `pipx list --json` prints for each).
+fn homes(name: &str) -> (PathBuf, PathBuf) {
+    let root = std::env::temp_dir().join(format!("cairn-packages-{name}-{}", std::process::id()));
+    let _ = std::fs::remove_dir_all(&root);
+    let cargo = root.join("cargo");
+    std::fs::create_dir_all(&cargo).unwrap();
+    std::fs::write(cargo.join(".crates.toml"), "[v1]\n").unwrap();
+    let pipx = root.join("pipx");
+    let list: serde_json::Value = serde_json::from_str(&data("pipx-list.json")).unwrap();
+    for (venv, info) in list["venvs"].as_object().unwrap() {
+        let dir = pipx.join("venvs").join(venv);
+        std::fs::create_dir_all(&dir).unwrap();
+        std::fs::write(dir.join("pipx_metadata.json"), info["metadata"].to_string()).unwrap();
+    }
+    (cargo, pipx)
 }
 
 fn places(snap_desktop: PathBuf) -> Places {
+    let (cargo_home, pipx_home) = homes(&snap_desktop.to_string_lossy().replace('/', "-"));
     Places {
         home: "/nonexistent/home".into(),
         dpkg_info: "/nonexistent/dpkg".into(),
         snaps: "/nonexistent/snaps".into(),
         snap_desktop,
-        cargo_home: "/nonexistent/cargo".into(),
+        cargo_home,
+        pipx_home,
     }
 }
 
 #[test]
 fn the_whole_list_equals_the_golden_file() {
     let tools = packages::list_all(&Recorded, &places("/nonexistent/desktop".into()));
-    assert_eq!(packages::saved_list(&tools), data("installed-list.golden.txt"));
+    assert_eq!(
+        packages::saved_list(&tools),
+        data("installed-list.golden.txt")
+    );
 }
 
 #[test]
@@ -61,8 +88,18 @@ fn tools_that_are_missing_are_not_shown() {
     assert!(!ids.contains(&"go") && !ids.contains(&"brew"));
     let expected: serde_json::Value = serde_json::from_str(&data("expected.json")).unwrap();
     for tool in &tools {
-        assert_eq!(tool.packages.len() as u64, expected["tools"][tool.id]["count"].as_u64().unwrap(), "{}", tool.id);
-        assert_eq!(tool.bytes(), expected["tools"][tool.id]["bytes"].as_u64().unwrap(), "{}", tool.id);
+        assert_eq!(
+            tool.packages.len() as u64,
+            expected["tools"][tool.id]["count"].as_u64().unwrap(),
+            "{}",
+            tool.id
+        );
+        assert_eq!(
+            tool.bytes(),
+            expected["tools"][tool.id]["bytes"].as_u64().unwrap(),
+            "{}",
+            tool.id
+        );
     }
 }
 
@@ -70,14 +107,27 @@ fn tools_that_are_missing_are_not_shown() {
 fn dpkg_reads_why_from_apt_mark_and_launchers() {
     let apps = packages::parse_dpkg_owners(&data("dpkg-query-owners.txt"));
     assert_eq!(apps, ["gimp", "vlc", "desktop-file-utils"]);
-    let list = packages::parse_dpkg(&data("dpkg-query-list.txt"), &data("apt-mark-showmanual.txt"), &apps);
+    let list = packages::parse_dpkg(
+        &data("dpkg-query-list.txt"),
+        &data("apt-mark-showmanual.txt"),
+        &apps,
+    );
     let why = |name: &str| list.iter().find(|p| p.name == name).unwrap().why;
     assert_eq!(why("gimp"), Why::App);
     assert_eq!(why("curl"), Why::You);
     assert_eq!(why("libc6"), Why::CameWith);
-    assert!(list.iter().all(|p| p.name != "old-tool"), "only installed packages");
-    assert_eq!(list.iter().find(|p| p.name == "git").unwrap().remove, "sudo apt remove git");
-    assert_eq!(packages::parse_dpkg_owners("libfoo:amd64, bar: /usr/share/applications\n"), ["libfoo", "bar"]);
+    assert!(
+        list.iter().all(|p| p.name != "old-tool"),
+        "only installed packages"
+    );
+    assert_eq!(
+        list.iter().find(|p| p.name == "git").unwrap().remove,
+        "sudo apt remove git"
+    );
+    assert_eq!(
+        packages::parse_dpkg_owners("libfoo:amd64, bar: /usr/share/applications\n"),
+        ["libfoo", "bar"]
+    );
 }
 
 #[test]
@@ -106,10 +156,16 @@ fn language_tools() {
     assert_eq!(packages::parse_npm(&data("npm-ls.json")).len(), 4);
     let pipx = packages::parse_pipx(&data("pipx-list.json"));
     assert_eq!(pipx[0].0, "black");
-    assert_eq!(pipx[0].2.as_deref(), Some(Path::new("/nonexistent/pipx/venvs/black")));
+    assert_eq!(
+        pipx[0].2.as_deref(),
+        Some(Path::new("/nonexistent/pipx/venvs/black"))
+    );
     assert_eq!(packages::parse_pip(&data("pip-list.json")).len(), 3);
     let cargo = packages::parse_cargo(&data("cargo-install-list.txt"));
-    assert_eq!(cargo[1], ("ripgrep".into(), "14.1.1".into(), vec!["rg".to_string()]));
+    assert_eq!(
+        cargo[1],
+        ("ripgrep".into(), "14.1.1".into(), vec!["rg".to_string()])
+    );
     let gems = packages::parse_gem(&data("gem-list.txt"));
     assert_eq!(gems[0], ("bundler".into(), "2.6.9".into(), false));
     assert_eq!(gems[1], ("json".into(), "2.10.2".into(), true));
@@ -121,5 +177,8 @@ fn language_tools() {
         packages::parse_go_version(&data("go-version-m.txt")),
         Some(("golang.org/x/tools/gopls".into(), "v0.20.0".into()))
     );
-    assert_eq!(packages::parse_snap_list("No snaps are installed yet.\n"), vec![]);
+    assert_eq!(
+        packages::parse_snap_list("No snaps are installed yet.\n"),
+        vec![]
+    );
 }

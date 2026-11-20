@@ -20,6 +20,7 @@ APP_OWNED = (
     ".cache/thumbnails",
     ".cache/mesa_shader_cache",
     ".cache/mesa_shader_cache_db",
+    ".cache/qtshadercache",
     ".local/share/recently-used.xbel",
 )
 

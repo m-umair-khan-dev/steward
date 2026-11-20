@@ -37,7 +37,9 @@ def main() -> None:
         session = Session(root / "session", home.path)
         session.start()
         app = App(session, home, extra_env={"CAIRN_MOTION": "1",
-                                            "CAIRN_FAKE_NOW": home.manifest["now"]})
+                                            "CAIRN_FAKE_NOW": home.manifest["now"],
+                                            # About shows the fixture machine (a laptop).
+                                            "CAIRN_SYSINFO_FIXTURE": str(REPO / "tests/data/sysinfo/fixture.json")})
         try:
             app.launch()
             if "--from" in sys.argv and int(sys.argv[sys.argv.index("--from") + 1]) >= 5:
@@ -215,6 +217,10 @@ def later_phases(app: App, home: Home) -> None:
     wait_for(lambda: (i := app.state()["installed"]) and i["loaded"] and not i["looking"], "Installed", 60)
     app.wait_idle()
     app.screenshot(OUT / "25-installed.png")
+    app.action("win.tool-open", s("about"))
+    wait_for(lambda: app.state()["about"]["loaded"], "About", 20)
+    app.wait_idle()
+    app.screenshot(OUT / "26-about.png")
 
 
 if __name__ == "__main__":

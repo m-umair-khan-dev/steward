@@ -57,6 +57,8 @@ pub struct Places {
     pub snap_desktop: PathBuf,
     /// `$CARGO_HOME` (else `~/.cargo`): installed binaries are in its `bin`.
     pub cargo_home: PathBuf,
+    /// `$PIPX_HOME` (else `~/.local/share/pipx`, or the older `~/.local/pipx`).
+    pub pipx_home: PathBuf,
 }
 
 impl Places {
@@ -68,6 +70,16 @@ impl Places {
             cargo_home: std::env::var_os("CARGO_HOME")
                 .map(PathBuf::from)
                 .unwrap_or_else(|| home.join(".cargo")),
+            pipx_home: std::env::var_os("PIPX_HOME")
+                .map(PathBuf::from)
+                .unwrap_or_else(|| {
+                    let old = home.join(".local/pipx");
+                    if old.join("venvs").is_dir() {
+                        old
+                    } else {
+                        home.join(".local/share/pipx")
+                    }
+                }),
             home,
         }
     }
@@ -378,8 +390,15 @@ impl PackageSource for Npm {
         "npm"
     }
     fn list(&self, run: &dyn Runner, _: &Places) -> Option<Vec<Package>> {
-        let text = ask(run, "npm", &["ls", "-g", "--depth=0", "--json"]).ok()?;
-        let root = ask(run, "npm", &["root", "-g"])
+        // npm writes a log of every run and checks for updates unless told not to.
+        let quiet = ["--logs-max=0", "--no-update-notifier"];
+        let text = ask(
+            run,
+            "npm",
+            &["ls", "-g", "--depth=0", "--json", quiet[0], quiet[1]],
+        )
+        .ok()?;
+        let root = ask(run, "npm", &["root", "-g", quiet[0], quiet[1]])
             .ok()
             .flatten()
             .map(|r| PathBuf::from(r.trim()));
@@ -448,10 +467,30 @@ impl PackageSource for Pipx {
     fn name(&self) -> &'static str {
         "pipx"
     }
-    fn list(&self, run: &dyn Runner, _: &Places) -> Option<Vec<Package>> {
-        let text = ask(run, "pipx", &["list", "--json"]).ok()?;
+    /// Read from each venv's `pipx_metadata.json` (what `pipx list --json`
+    /// prints for it): running pipx would write a log of the run.
+    fn list(&self, run: &dyn Runner, places: &Places) -> Option<Vec<Package>> {
+        if !run.has("pipx") {
+            return None;
+        }
+        let mut venvs = serde_json::Map::new();
+        for entry in std::fs::read_dir(places.pipx_home.join("venvs"))
+            .ok()?
+            .flatten()
+        {
+            let Ok(text) = std::fs::read_to_string(entry.path().join("pipx_metadata.json")) else {
+                continue;
+            };
+            if let Ok(metadata) = serde_json::from_str::<Value>(&text) {
+                venvs.insert(
+                    entry.file_name().to_string_lossy().into_owned(),
+                    serde_json::json!({ "metadata": metadata }),
+                );
+            }
+        }
+        let text = serde_json::json!({ "venvs": venvs }).to_string();
         Some(
-            parse_pipx(&text.unwrap_or_default())
+            parse_pipx(&text)
                 .into_iter()
                 .map(|(name, version, folder)| Package {
                     tool: "pipx",
@@ -497,11 +536,27 @@ impl PackageSource for Pip {
         "pip"
     }
     fn list(&self, run: &dyn Runner, _: &Places) -> Option<Vec<Package>> {
-        let all = ask(run, "pip", &["list", "--user", "--format=json"]).ok()?;
+        let all = ask(
+            run,
+            "pip",
+            &[
+                "list",
+                "--user",
+                "--format=json",
+                "--disable-pip-version-check",
+            ],
+        )
+        .ok()?;
         let top: Vec<String> = ask(
             run,
             "pip",
-            &["list", "--user", "--not-required", "--format=json"],
+            &[
+                "list",
+                "--user",
+                "--not-required",
+                "--format=json",
+                "--disable-pip-version-check",
+            ],
         )
         .ok()
         .flatten()
@@ -564,6 +619,11 @@ impl PackageSource for Cargo {
         "Cargo"
     }
     fn list(&self, run: &dyn Runner, places: &Places) -> Option<Vec<Package>> {
+        // `cargo install --list` creates its records when there are none:
+        // only ask when something was installed.
+        if !places.cargo_home.join(".crates.toml").is_file() {
+            return None;
+        }
         let text = ask(run, "cargo", &["install", "--list"]).ok()?;
         let bin = places.cargo_home.join("bin");
         Some(
@@ -598,7 +658,11 @@ impl PackageSource for Cargo {
 pub fn parse_go_version(text: &str) -> Option<(String, String)> {
     let mut path = None;
     for line in text.lines() {
-        let f: Vec<&str> = line.split('\t').map(str::trim).filter(|s| !s.is_empty()).collect();
+        let f: Vec<&str> = line
+            .split('\t')
+            .map(str::trim)
+            .filter(|s| !s.is_empty())
+            .collect();
         match f.as_slice() {
             ["path", p, ..] => path = Some(p.to_string()),
             ["mod", _, version, ..] => return Some((path?, version.to_string())),
@@ -697,7 +761,11 @@ impl PackageSource for Gem {
                     tool: "gem",
                     bytes: None,
                     // Default gems come with Ruby itself.
-                    why: if default_only { Why::CameWith } else { Why::You },
+                    why: if default_only {
+                        Why::CameWith
+                    } else {
+                        Why::You
+                    },
                     remove: format!("gem uninstall {name}"),
                     summary: String::new(),
                     installed: None,

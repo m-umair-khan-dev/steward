@@ -32,11 +32,24 @@ def record_every_tool(fakes: FakeTools) -> None:
     fakes.answer("flatpak", ["list", "--runtime"], recorded("flatpak-runtimes.txt"))
     fakes.answer("npm", ["ls"], recorded("npm-ls.json"))
     fakes.answer("npm", ["root", "-g"], "/nonexistent/lib/node_modules\n")
-    fakes.answer("pipx", ["list", "--json"], recorded("pipx-list.json"))
+    fakes.tool("pipx")
     fakes.answer("pip", ["list", "--user", "--not-required"], recorded("pip-list-not-required.json"))
     fakes.answer("pip", ["list", "--user"], recorded("pip-list.json"))
     fakes.answer("cargo", ["install", "--list"], recorded("cargo-install-list.txt"))
     fakes.answer("gem", ["list", "--local"], recorded("gem-list.txt"))
+
+
+def tool_homes(tmp_path: Path) -> dict:
+    """A Cargo home with install records and a pipx home with the recorded
+    venvs, as the environment the app sees."""
+    cargo = tmp_path / "cargo-home"
+    cargo.mkdir()
+    (cargo / ".crates.toml").write_text("[v1]\n")
+    pipx = tmp_path / "pipx-home"
+    for venv, info in json.loads(recorded("pipx-list.json"))["venvs"].items():
+        (pipx / "venvs" / venv).mkdir(parents=True)
+        (pipx / "venvs" / venv / "pipx_metadata.json").write_text(json.dumps(info["metadata"]))
+    return {"CARGO_HOME": str(cargo), "PIPX_HOME": str(pipx)}
 
 
 def installed(app) -> dict:
@@ -52,8 +65,7 @@ def open_installed(app) -> dict:
 def test_E5_08_installed_from_recorded_output(session, home, app_factory, tmp_path):
     fakes = FakeTools(tmp_path / "fake-bin")
     record_every_tool(fakes)
-    app = app_factory(extra_env={"PATH": fakes.path(session.base_env()["PATH"]),
-                                 "CARGO_HOME": str(tmp_path / "no-cargo-home")})
+    app = app_factory(extra_env={"PATH": fakes.path(session.base_env()["PATH"]), **tool_homes(tmp_path)})
     state = open_installed(app)
     expected = json.loads(recorded("expected.json"))
     assert state["tools"] == expected["tools"], "per-tool counts and sizes"
@@ -86,7 +98,7 @@ def test_E5_09_tools_that_are_not_installed_are_not_shown(session, home, app_fac
     for tool in ("dpkg-query", "apt-mark", "npm", "pipx", "pip", "cargo", "gem"):
         fakes.remove(tool)
     # Only the stand-ins are on PATH: the container's own dpkg and cargo are not.
-    app = app_factory(extra_env={"PATH": str(fakes.folder)})
+    app = app_factory(extra_env={"PATH": str(fakes.folder), **tool_homes(tmp_path)})
     state = open_installed(app)
     assert set(state["tools"]) == {"snap", "flatpak"}
     toast = app.state()["last_toast"] or ""

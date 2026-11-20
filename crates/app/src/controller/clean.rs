@@ -59,43 +59,63 @@ fn card_text(id: &str) -> (String, String, &'static str, &'static str) {
     match id {
         "dev_caches" => (
             gettext("Developer caches"),
-            gettext("Only places their tools rebuild by themselves. You lose nothing but time: the next build or install is slower."),
-            "code", "archives",
+            gettext(
+                "Only places their tools rebuild by themselves. You lose nothing but time: the next build or install is slower.",
+            ),
+            "code",
+            "archives",
         ),
         "duplicates" => (
             gettext("Duplicates"),
-            gettext("The same contents in more than one place. One copy is always kept, a filed one first. Only copies that look spare are ticked: in Downloads or on the Desktop, or named like a copy."),
-            "copy", "audio",
+            gettext(
+                "The same contents in more than one place. One copy is always kept, a filed one first. Only copies that look spare are ticked: in Downloads or on the Desktop, or named like a copy.",
+            ),
+            "copy",
+            "audio",
         ),
         "installers" => (
             gettext("Installers"),
-            gettext("Installer packages for apps that are already installed. Ticked only when they are in Downloads or on the Desktop, more than a week old, and not newer than what is installed."),
-            "package", "folders",
+            gettext(
+                "Installer packages for apps that are already installed. Ticked only when they are in Downloads or on the Desktop, more than a week old, and not newer than what is installed.",
+            ),
+            "package",
+            "folders",
         ),
         "stale_builds" => (
             gettext("Old build output"),
-            gettext("node_modules, target, .venv and build folders in projects nobody has touched for six months. The project rebuilds them when you work on it again."),
-            "box", "code",
+            gettext(
+                "node_modules, target, .venv and build folders in projects nobody has touched for six months. The project rebuilds them when you work on it again.",
+            ),
+            "box",
+            "code",
         ),
         "leftovers" => (
             gettext("App leftovers"),
-            gettext("Data that Flatpak and Snap apps left behind after they were removed, untouched for three months."),
-            "trash", "installers",
+            gettext(
+                "Data that Flatpak and Snap apps left behind after they were removed, untouched for three months.",
+            ),
+            "trash",
+            "installers",
         ),
         "big_files" => (
             gettext("Big files"),
-            gettext("The largest files in your home folder, disk images included. Only you know whether you still need them."),
-            "drive", "documents",
+            gettext(
+                "The largest files in your home folder, disk images included. Only you know whether you still need them.",
+            ),
+            "drive",
+            "documents",
         ),
         "screencasts" => (
             gettext("Old screen recordings"),
             gettext("Screen recordings older than 90 days."),
-            "videos", "videos",
+            "videos",
+            "videos",
         ),
         _ => (
             gettext("Old downloads"),
             gettext("Downloads nobody has opened, changed or added for 90 days."),
-            "downloads", "images",
+            "downloads",
+            "images",
         ),
     }
 }
@@ -278,12 +298,7 @@ impl Controller {
     }
 
     fn ticked(&self, item: &Item) -> bool {
-        !item.keep
-            && *self
-                .clean
-                .overrides
-                .get(&item.path)
-                .unwrap_or(&item.ticked)
+        !item.keep && *self.clean.overrides.get(&item.path).unwrap_or(&item.ticked)
     }
 
     pub fn clean_review(&mut self, id: &str) {
@@ -457,7 +472,12 @@ impl Controller {
             ("home", gettext("Your files"), disk.home, "folders"),
             ("apps", gettext("Apps"), disk.apps.unwrap_or(0), "documents"),
             ("trash", gettext("In the Trash"), disk.trash, "pdfs"),
-            ("other", gettext("System and other"), disk.other(), "installers"),
+            (
+                "other",
+                gettext("System and other"),
+                disk.other(),
+                "installers",
+            ),
         ];
         parts.retain(|p| p.0 != "apps" || disk.apps.is_some());
         // Apparent sizes of sparse files can add up to more than is used:
@@ -491,7 +511,11 @@ impl Controller {
                 ),
                 "snap-revisions" => (
                     gettext("Old Snap revisions"),
-                    format!("{} {}", row.count, gettext("disabled revisions kept for rollback")),
+                    format!(
+                        "{} {}",
+                        row.count,
+                        gettext("disabled revisions kept for rollback")
+                    ),
                 ),
                 "journal" => (
                     gettext("System journal"),
@@ -499,7 +523,11 @@ impl Controller {
                 ),
                 "old-kernels" => (
                     gettext("Old kernels"),
-                    format!("{} {}", row.count, gettext("not running and not the newest")),
+                    format!(
+                        "{} {}",
+                        row.count,
+                        gettext("not running and not the newest")
+                    ),
                 ),
                 _ => (
                     gettext("Unused Docker images"),

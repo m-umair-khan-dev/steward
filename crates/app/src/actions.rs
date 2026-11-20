@@ -347,6 +347,10 @@ fn create() -> (gio::SimpleActionGroup, gio::SimpleActionGroup) {
     simple(&win, "installed-refresh", || {
         controller::with(|c| c.installed_refresh())
     });
+    with_string(&win, "about-hide-names", |hide| {
+        controller::with(|c| c.about_hide_names(hide == "true"))
+    });
+    simple(&win, "about-copy", || controller::with(|c| c.about_copy()));
     simple(&win, "workspace-new", || {
         controller::with(|c| c.ask_new_workspace())
     });

@@ -161,7 +161,7 @@ Rectangle {
         anchors.right: parent.right; anchors.rightMargin: 12
         height: 58
         radius: 10
-        color: computerHover.hovered ? Theme.hover : "transparent"
+        color: root.model.page === "about" ? Theme.alpha(Theme.accent, 0.16) : (computerHover.hovered ? Theme.hover : "transparent")
         Accessible.role: Accessible.Button
         Accessible.name: "Computer"
         Accessible.description: "About This Computer"

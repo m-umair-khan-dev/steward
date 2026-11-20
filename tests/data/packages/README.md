@@ -13,7 +13,7 @@ ordinary names and the versions are made up.
 | `snap-list.txt` | `snap list` |
 | `flatpak-apps.txt`, `flatpak-runtimes.txt` | `flatpak list --app/--runtime --columns=application,version,size,installation` |
 | `npm-ls.json` | `npm ls -g --depth=0 --json` |
-| `pipx-list.json` | `pipx list --json` |
+| `pipx-list.json` | `pipx list --json`; Cairn reads the same metadata from each venv's `pipx_metadata.json` instead of running pipx, which would log the run |
 | `pip-list.json`, `pip-list-not-required.json` | `pip list --user [--not-required] --format=json` |
 | `cargo-install-list.txt` | `cargo install --list` |
 | `gem-list.txt` | `gem list --local` |

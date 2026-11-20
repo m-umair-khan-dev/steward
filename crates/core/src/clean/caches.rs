@@ -81,7 +81,11 @@ mod tests {
     #[test]
     fn the_built_in_allow_list_parses() {
         let caches = dev_caches();
-        assert!(caches.iter().any(|c| c.path == PathBuf::from(".npm/_cacache")));
+        assert!(
+            caches
+                .iter()
+                .any(|c| c.path.as_path() == std::path::Path::new(".npm/_cacache"))
+        );
         assert!(caches.iter().all(|c| c.path.is_relative()));
         let mut ids: Vec<_> = caches.iter().map(|c| c.id.clone()).collect();
         ids.dedup();

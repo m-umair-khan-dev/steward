@@ -4,9 +4,7 @@
 use std::os::unix::fs::MetadataExt;
 use std::path::{Path, PathBuf};
 
-use super::{
-    Context, DAY, Group, Item, Reason, Suggester, tree_bytes, tree_latest, visible_files,
-};
+use super::{Context, DAY, Group, Item, Reason, Suggester, tree_bytes, tree_latest, visible_files};
 use crate::dupes::{self, HashCache};
 
 /// Files at least this big are "big files".
@@ -195,8 +193,7 @@ impl Suggester for Installers {
             };
             let not_newer = ctx.packages.at_least(&installed, &version);
             let loose = path.starts_with(&ctx.downloads) || path.starts_with(&ctx.desktop);
-            let ticked =
-                loose && not_newer && age_days(ctx, meta.mtime()) > INSTALLER_TICK_DAYS;
+            let ticked = loose && not_newer && age_days(ctx, meta.mtime()) > INSTALLER_TICK_DAYS;
             out.push(item(
                 path,
                 meta.len(),
@@ -296,7 +293,12 @@ impl Suggester for StaleBuilds {
 
 /// Lists installed apps of a tool: Some(ids) (empty when the tool itself is
 /// not installed), or None when the tool could not be asked.
-fn installed_ids(ctx: &Context, program: &str, args: &[&str], column: usize) -> Option<Vec<String>> {
+fn installed_ids(
+    ctx: &Context,
+    program: &str,
+    args: &[&str],
+    column: usize,
+) -> Option<Vec<String>> {
     match ctx.runner.run(program, args) {
         crate::tools::Ran::Missing => Some(Vec::new()),
         crate::tools::Ran::Failed(_) => None,
@@ -450,8 +452,14 @@ impl Suggester for OldDownloads {
                     meta.mtime()
                 };
                 let days = age_days(ctx, last);
-                (days >= OLD_DAYS)
-                    .then(|| item(path, meta.len(), Reason::OldDownload { days, opened }, false))
+                (days >= OLD_DAYS).then(|| {
+                    item(
+                        path,
+                        meta.len(),
+                        Reason::OldDownload { days, opened },
+                        false,
+                    )
+                })
             })
             .collect();
         out.sort_by(|a, b| a.path.cmp(&b.path));
@@ -466,11 +474,23 @@ mod tests {
 
     #[test]
     fn copy_names_are_recognised() {
-        for name in ["a (1).pdf", "Invoice-0923 (12).pdf", "photo copy.jpg", "photo copy 2.jpg",
-                     "Copy of notes.txt", "README (3)"] {
+        for name in [
+            "a (1).pdf",
+            "Invoice-0923 (12).pdf",
+            "photo copy.jpg",
+            "photo copy 2.jpg",
+            "Copy of notes.txt",
+            "README (3)",
+        ] {
             assert!(copy_like(Path::new(name)), "{name}");
         }
-        for name in ["logo-final.png", "copy.txt", "(1).pdf", "a (x).pdf", "photocopy.jpg"] {
+        for name in [
+            "logo-final.png",
+            "copy.txt",
+            "(1).pdf",
+            "a (x).pdf",
+            "photocopy.jpg",
+        ] {
             assert!(!copy_like(Path::new(name)), "{name}");
         }
     }

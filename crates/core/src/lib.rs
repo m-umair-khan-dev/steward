@@ -20,6 +20,7 @@ pub mod plan;
 pub mod sort;
 pub mod store;
 pub mod suggest;
+pub mod sysinfo;
 pub mod tools;
 pub mod workspace;
 

@@ -355,6 +355,13 @@ Window {
                 model: win.tools.installed || ({ looking: true, tools: [], filters: [], packages: [] })
             }
 
+            AboutPage {
+                z: 21
+                anchors.fill: parent
+                visible: win.tools.page === "about"
+                model: win.tools.about || ({ looking: true, sections: [] })
+            }
+
             RightPane {
                 visible: !!win.pane.open
                 x: content.width

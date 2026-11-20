@@ -4,9 +4,9 @@ Read this first in every session (AGENTS.md rule 2). Update it before stopping.
 
 ## Current phase
 
-**Phase 4: Smart Downloads, Dual pane and Workspaces**, complete on 26.10
-(gate green 2026-11-20), pending the HUMAN checks below. Phase 5 waits for
-the product owner's go-ahead.
+**Phase 5: Smart Clean, Installed and About This Computer**, complete on
+26.10 (gate green 2026-11-20), pending the HUMAN checks below. Phase 6 waits
+for the product owner's go-ahead.
 
 ## Release targets
 
@@ -208,6 +208,75 @@ Bugs found and fixed:
 - The workspace banner rendered dark grey: the colour helper did not accept
   colour names.
 
+## Phase 5: Smart Clean, Installed and About This Computer (complete on 26.10)
+
+Gate on Ubuntu 26.10, 2026-11-20: `make check` green. Lint ok; 107 Rust tests
+and 13 fixture tests pass; end-to-end E0-01 to E5-11 (75 scenarios) pass.
+
+| ID | Task | Status | Notes |
+|---|---|---|---|
+| P5-S1 | Spike: last-launched date; system sizes without root | done | ADR 0011: no trustworthy date, "Unused apps" dropped |
+| P5-T01 | `Suggester` trait, registry, scan that reports each card | done | L2 `crates/core/tests/clean.rs` |
+| P5-T02 | Disk overview: free space, parts, the ring | done | E5-01 |
+| P5-T03 | Eight suggesters; allow-list in `data/clean/dev-caches.toml` | done | L2 per card against the manifest; E5-01 to E5-04 |
+| P5-T04 | Overview: two groups with totals, Looking…, Look Again, headline | done | E5-01 |
+| P5-T05 | Review page: reasons, ticks, Tick all, Keep, Peek, Show in folder, sticky bar | done | E5-04 |
+| P5-T06 | Move to Trash as one batch, sized toast, Undo; Trash and Empty Trash on the page | done | E5-05, E5-06 |
+| P5-T07 | "Needs administrator": sizes and commands to copy, nothing run | done | E5-07 |
+| P5-T08 | `core::packages`: ten sources, parsers on recorded output | done | L1 `crates/core/tests/packages.rs` |
+| P5-T09 | Installed view: tool chips, filters, why, sizes, Save List, remove command | done | E5-08, E5-09 |
+| P5-T10 | `core::sysinfo`: `SysProbe` with real and fixture probes | done | L1 with `tests/data/sysinfo/fixture.json` |
+| P5-T11 | About This Computer: Hide Names, Copy as Text, from the computer row | done | E5-10; E5-11 read-only proof |
+
+Decisions and findings:
+- Smart Clean has eight cards (ADR 0011). Each path belongs to the first card
+  that finds it (cards are in the overview's order), so no size is counted
+  twice. Big files are files of 256 MB or more outside hidden folders.
+- The disk bar shows "Your files", "Apps" (dpkg's installed sizes, Snap
+  images, system Flatpaks; only when /usr is on the home disk), "In the
+  Trash" and "System and other". DESIGN.md §4.3 lists System and Other
+  separately; telling them apart needs root, so they are one part.
+- Battery facts come from `/sys/class/power_supply` (readable by everyone)
+  rather than UPower; the numbers are the same, and the cycle count is only
+  there anyway.
+- Installed asks each tool read-only, and makes sure asking writes nothing:
+  - Cargo runs only when its install records exist, because
+    `cargo install --list` creates them otherwise.
+  - npm runs with logs and the update check off.
+  - pip runs without its version check.
+  - Homebrew is told not to update itself.
+  - pipx is read from each venv's `pipx_metadata.json`, because running pipx
+    logs the run.
+- Hashing for duplicates opens files with `O_NOATIME`: reading a file to
+  compare it is not opening it, and "not opened for 90 days" must stay true.
+- The Trash folders are made when something is first trashed or the Trash is
+  opened, no longer at start-up: starting the app and only reading must
+  change nothing (E5-11).
+- Tool pages (Free Up Space, Installed, About) cover the folder like a
+  workspace page. The header shows the tool's name, the folder controls and
+  path bar hide, and Back returns to the folder.
+- Fixture recipe 2 adds the following, plus every card's expected items in
+  the manifest:
+  - folders called `cache` that are not on the allow-list (E5-03);
+  - a symlink to Documents inside the npm cache (E5-06);
+  - Snap and Flatpak leftovers, one of them still installed;
+  - two more duplicate sets.
+
+Test harness fixes:
+- Each test's home is a `cp -a` copy of the fixture. Copying reads every
+  file, which moves the source's access times to now, and `cp -a` carries
+  those over. So the planted "not opened for 200 days" never reached a test.
+  The harness now records the planted times when the fixture is built and
+  puts them back on every copy.
+- `tests/e2e/harness/fakes.py`: stand-ins for system tools that log every
+  call and answer with recorded output (longest matching arguments win).
+  E5-07 checks from that log that nothing was run as administrator.
+- E2-08's docstring named an ADR 0011 about the clipboard that was never
+  written. The reference is removed; the test still skips when the
+  compositor offers no clipboard to other clients.
+- Qt's shader cache (`~/.cache/qtshadercache-*`) counts as the app's own
+  data in read-only checks.
+
 ## Blocked / waiting for a human
 
 - Enable CI once the repository is on its Git host (P0-T07).
@@ -225,10 +294,18 @@ Bugs found and fixed:
 - Phase 4: Tidy a copy of a real, messy Downloads folder and judge the
   result. Check a workspace item on a real external drive after unplugging
   and replugging (shown greyed with the drive's name while unplugged).
+- Phase 5: on a real Ubuntu install, compare Smart Clean's sizes with `du`,
+  compare About with Settings › System › About, and read every suggestion's
+  reason for clarity. Check the sidebar's Installed count against
+  `apt list --installed`, `snap list` and `flatpak list`.
 - Docker Desktop on this machine needs the user in the `kvm` group (done on
   2026-11-19); without it Docker Desktop stops at start-up after a reboot.
 
 ## Next
 
-- Phase 5 (Smart Clean, Installed, About This Computer) waits for the
-  product owner's go-ahead.
+- Phase 6 (Release 1.0) waits for the product owner's go-ahead.
+- Known gaps to look at in Phase 6:
+  - The collapsed sidebar rail does not list the tool pages yet.
+  - Smart Clean walks the home folder instead of using the index (fine on
+    the fixture; to measure in the performance pass, P6-T14).
+  - Page strings in QML are not yet translatable (P6-T04).

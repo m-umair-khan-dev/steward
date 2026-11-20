@@ -40,10 +40,7 @@ impl Disk {
 /// (size, free) of the filesystem holding `path`.
 pub fn space(path: &Path) -> Option<(u64, u64)> {
     let stat = rustix::fs::statvfs(path).ok()?;
-    Some((
-        stat.f_blocks * stat.f_frsize,
-        stat.f_bavail * stat.f_frsize,
-    ))
+    Some((stat.f_blocks * stat.f_frsize, stat.f_bavail * stat.f_frsize))
 }
 
 /// Bytes of installed software: dpkg's `Installed-Size` for every package,

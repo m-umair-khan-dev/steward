@@ -53,7 +53,11 @@ pub enum Reason {
     /// Build output of a project not touched for `days`.
     StaleBuild { project: PathBuf, days: i64 },
     /// Data of an app that is no longer installed ("flatpak" or "snap").
-    Leftover { app: String, tool: &'static str, days: i64 },
+    Leftover {
+        app: String,
+        tool: &'static str,
+        days: i64,
+    },
     /// One of the largest files in the home folder.
     Big,
     /// A screen recording older than `days`.
