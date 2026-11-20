@@ -150,6 +150,45 @@ def main() -> None:
             app.wait_idle()
             app.screenshot(OUT / "17-folder-names.png")
             app.press("escape")
+
+            # Phase 4: Downloads panel, Tidy plan, dual pane, workspace, symbols.
+            app.open_folder(home / "Downloads")
+            wait_for(lambda: (d := app.state()["downloads"]) and d["installers"] is not None
+                     and not d["computing"], "suggestions", 20)
+            app.wait_idle()
+            app.screenshot(OUT / "18-downloads-panel.png")
+            app.press("ctrl+shift+o")
+            wait_for(lambda: app.state()["active_window"]["dialog"], "the Tidy plan", 5)
+            app.wait_idle()
+            app.screenshot(OUT / "19-tidy-plan.png")
+            app.action("win.tidy-cancel")
+
+            app.press("f3")
+            wait_for(lambda: app.state()["pane"]["open"], "two panes", 5)
+            app.action("win.pane-go", GLib.Variant("s", str(home / "Documents" / "Invoices")))
+            app.select("Statement-0923.pdf", "notes.txt")
+            wait_for(lambda: app.state()["pane"]["items"], "the right pane", 5)
+            app.wait_idle()
+            app.screenshot(OUT / "20-dual-pane.png")
+            app.press("f3")
+
+            app.action("win.workspace-create", GLib.Variant("s", "Taxes 2026"))
+            wait_for(lambda: app.state()["workspace"]["open"], "a workspace", 5)
+            wid = app.state()["workspace"]["id"]
+            for rel in ("Documents/Invoices", "Documents/Clients", "Documents/Taxes 2026", "Downloads/beach-sunset.jpg"):
+                app.action("win.workspace-add", GLib.Variant("s", f"{wid}:{home / rel}"))
+            app.action("win.workspace-open", GLib.Variant("s", str(wid)))
+            wait_for(lambda: len(app.state()["workspace"]["items"] or []) == 4, "the items", 5)
+            app.wait_idle()
+            app.screenshot(OUT / "21-workspace.png")
+
+            app.open_folder(home / "Documents")
+            app.select("Taxes 2026")
+            app.action("win.folder-style-ask")
+            wait_for(lambda: app.state()["active_window"]["dialog"], "the chooser", 5)
+            app.wait_idle()
+            app.screenshot(OUT / "22-symbol-chooser.png")
+            app.press("escape")
         finally:
             app.stop()
             session.stop()

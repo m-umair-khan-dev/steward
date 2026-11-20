@@ -17,6 +17,8 @@ Rectangle {
     Row {
         x: 48
         anchors.verticalCenter: parent.verticalCenter
+        width: parent.width - x - summaryText.implicitWidth - 34
+        clip: true
         spacing: 4
         Repeater {
             model: root.crumbs
@@ -36,6 +38,7 @@ Rectangle {
         }
     }
     Text {
+        id: summaryText
         anchors.right: parent.right; anchors.rightMargin: 18
         anchors.verticalCenter: parent.verticalCenter
         text: root.summary

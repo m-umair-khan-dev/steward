@@ -341,7 +341,7 @@ impl Controller {
         let crumbs = |path: Option<PathBuf>| -> Value {
             let Some(path) = path else { return json!([]) };
             let segments = paths::segments(&path, &gettext("Computer"));
-            let skip = segments.len().saturating_sub(3);
+            let skip = segments.len().saturating_sub(2);
             Value::Array(
                 segments
                     .into_iter()

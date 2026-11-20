@@ -24,7 +24,8 @@ QtObject {
     readonly property color accentText: systemAccent ? systemAccentColor : (dark ? "#a897f3" : "#5a45cc")
     readonly property color toastBg: dark ? "#2e2b45" : "#26233a"
 
-    function alpha(c, a) { return Qt.rgba(c.r, c.g, c.b, a) }
+    // Accepts a colour or a colour name ("#6bbe91"): names have no r, g, b.
+    function alpha(c, a) { const k = Qt.lighter(c, 1.0); return Qt.rgba(k.r, k.g, k.b, a) }
 
     // Kind tints: [deep, light].
     readonly property var tints: ({
