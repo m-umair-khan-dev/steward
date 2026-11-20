@@ -467,7 +467,7 @@ Window {
     AboutDialog { visible: p.dialog === "about"; version: p.version }
     WelcomeDialog { visible: p.dialog === "welcome"; info: win.dialogData; prefs: win.prefs; cardWidth: 640 }
     WhatsNewDialog { visible: p.dialog === "whats-new"; info: win.dialogData }
-    PreferencesDialog { visible: p.dialog === "preferences"; prefs: win.prefs }
+    PreferencesDialog { visible: p.dialog === "preferences"; prefs: win.prefs; accels: win.accels }
     ShortcutsDialog { visible: p.dialog === "shortcuts"; accels: win.accels }
     OpenWithDialog { visible: p.dialog === "open-with"; info: win.dialogData }
     ClashDialog { visible: p.dialog === "clash"; info: win.dialogData }

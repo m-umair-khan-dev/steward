@@ -1,12 +1,17 @@
 import QtQuick
 import QtQuick.Controls.Basic
 
-// Preferences (DESIGN.md §3.3): view, size, style, accent, hidden files.
+// Preferences (P6-T03): General, Appearance, Shortcuts (the list of every
+// key, from the same table that binds them) and Search and index.
 Sheet {
     id: root
     property var prefs: ({})
+    property var accels: []
+    property string page: "general"
     title: "Preferences"
-    cardWidth: 480
+    cardWidth: 560
+    cardHeight: 600
+    onVisibleChanged: if (visible) page = "general"
 
     component Choice: Item {
         id: choice
@@ -27,17 +32,37 @@ Sheet {
         }
     }
 
+    Segmented {
+        id: tabs
+        name: "Preferences pages"
+        options: [{ id: "general", label: "General" }, { id: "appearance", label: "Appearance" },
+                  { id: "shortcuts", label: "Shortcuts" }, { id: "search", label: "Search and Index" }]
+        current: root.page
+        onPicked: id => root.page = id
+    }
+
+    Flickable {
+        anchors.top: tabs.bottom; anchors.topMargin: 14
+        width: parent.width
+        height: parent.height - tabs.height - 14
+        contentHeight: pages.implicitHeight
+        clip: true
+        boundsBehavior: Flickable.StopAtBounds
+        ScrollBar.vertical: ScrollBar { policy: ScrollBar.AsNeeded }
+
+        Item {
+            id: pages
+            width: parent.width
+            implicitHeight: (general.visible ? general.implicitHeight : 0) + (appearance.visible ? appearance.implicitHeight : 0)
+                            + (shortcuts.visible ? shortcuts.implicitHeight : 0) + (search.visible ? search.implicitHeight : 0)
+
     Column {
+        id: general
+        visible: root.page === "general"
         width: parent.width
         spacing: 2
         Choice { label: "Default view"; key: "default-view"
                  options: [{ id: "grid", label: "Grid" }, { id: "list", label: "List" }] }
-        Choice { label: "Card size"; key: "row-size"
-                 options: [{ id: "small", label: "Small" }, { id: "medium", label: "Medium" }, { id: "large", label: "Large" }] }
-        Choice { label: "Style"; key: "color-scheme"
-                 options: [{ id: "system", label: "System" }, { id: "light", label: "Light" }, { id: "dark", label: "Dark" }] }
-        Choice { label: "Accent"; key: "accent"
-                 options: [{ id: "cairn", label: "Cairn" }, { id: "system", label: "System" }] }
         Item {
             width: parent.width; height: 48
             Text { anchors.verticalCenter: parent.verticalCenter; text: "Show hidden files"; color: Theme.ink; font.pixelSize: 14 }
@@ -67,9 +92,66 @@ Sheet {
             }
         }
 
+    }
+
+    Column {
+        id: appearance
+        visible: root.page === "appearance"
+        width: parent.width
+        spacing: 2
+        Choice { label: "Style"; key: "color-scheme"
+                 options: [{ id: "system", label: "System" }, { id: "light", label: "Light" }, { id: "dark", label: "Dark" }] }
+        Choice { label: "Accent"; key: "accent"
+                 options: [{ id: "cairn", label: "Cairn" }, { id: "system", label: "System" }] }
+        Choice { label: "Card size"; key: "row-size"
+                 options: [{ id: "small", label: "Small" }, { id: "medium", label: "Medium" }, { id: "large", label: "Large" }] }
+        Text {
+            width: parent.width; wrapMode: Text.WordWrap; color: Theme.muted; font.pixelSize: 13; topPadding: 10
+            text: "Animations follow the system: Settings › Accessibility › Seeing › Reduce Animation."
+        }
+    }
+
+    Column {
+        id: shortcuts
+        visible: root.page === "shortcuts"
+        width: parent.width
+        Accessible.role: Accessible.List
+        Accessible.name: "Keyboard shortcuts"
+        Repeater {
+            model: root.accels
+            delegate: Item {
+                required property var modelData
+                width: shortcuts.width
+                height: 34
+                Accessible.role: Accessible.StaticText
+                Accessible.name: modelData.description + ": " + modelData.keys[0]
+                Text { anchors.verticalCenter: parent.verticalCenter; text: parent.modelData.description
+                       color: Theme.ink; font.pixelSize: 13; width: parent.width - keys.width - 12; elide: Text.ElideRight }
+                Row {
+                    id: keys
+                    anchors.right: parent.right; anchors.rightMargin: 8
+                    anchors.verticalCenter: parent.verticalCenter
+                    spacing: 4
+                    Repeater {
+                        model: parent.parent.modelData.keys[0].split("+").filter(k => k !== "")
+                        delegate: Rectangle {
+                            required property string modelData
+                            width: Math.max(26, key.implicitWidth + 14); height: 24; radius: 6
+                            color: Theme.track; border.color: Theme.line
+                            Text { id: key; anchors.centerIn: parent; text: parent.modelData; color: Theme.ink; font.pixelSize: 12 }
+                        }
+                    }
+                }
+            }
+        }
+    }
+
+    Column {
+        id: search
+        visible: root.page === "search"
+        width: parent.width
+        spacing: 2
         // Search and index (P3-T12).
-        Text { text: "SEARCH AND INDEX"; color: Theme.faint; font.pixelSize: 12; font.weight: Font.DemiBold
-               font.letterSpacing: 0.6; topPadding: 14; bottomPadding: 4 }
         Text {
             width: parent.width
             wrapMode: Text.WordWrap
@@ -134,6 +216,8 @@ Sheet {
             PillButton { id: add; text: "Leave Out"
                          onClicked: { if (exclude.text.trim() !== "") p.activate("win.index-exclude", "+" + exclude.text); exclude.text = "" } }
             PillButton { id: rebuild; text: "Rebuild"; onClicked: p.activate("win.index-rebuild", "") }
+        }
+        }
         }
     }
 }

@@ -243,6 +243,9 @@ def test_E3_11_pause_and_resume_in_preferences(app, home):
     app.wait_index_idle()
     app.action("app.preferences")
     app.wait_for(lambda: app.state()["active_window"]["dialog"], "Preferences")
+    # Since P6-T03 the index settings have their own page.
+    app.a11y_click("Search and Index", within="Preferences")
+    app.wait_for(lambda: "Pause indexing" in app.a11y_names(), "the Search and Index page")
     app.a11y_click("Pause indexing", within="Preferences")
     app.wait_for(lambda: app.index_status()["paused"], "the indexer to pause")
     app.a11y_click("Pause indexing", within="Preferences")
