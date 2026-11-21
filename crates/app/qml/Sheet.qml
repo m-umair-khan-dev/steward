@@ -16,6 +16,8 @@ FocusScope {
     visible: false
     onVisibleChanged: if (visible) card.forceActiveFocus()
     function close() { p.shown("") }
+    // Gives the keyboard back to the card (Escape closes from there).
+    function refocus() { card.forceActiveFocus() }
 
     Rectangle {
         anchors.fill: parent

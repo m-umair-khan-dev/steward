@@ -346,13 +346,23 @@ Decisions and findings:
 | P7-T08 | Bookmarks | done | E7-07. `ureq` (rustls) fetches title and picture, bounded in time and size; the Preferences switch turns it off. Four views; paste, drop, Add Link (Ctrl+Shift+L) |
 | P7-T09 | Content search | done | E7-08, E7-09. The indexer reads text in `bwrap` (ADR 0005 profile) by running itself as `cairn-indexer extract FILE`; 20 s limit; Home only, plus the `content-folders` setting (no Preferences UI for it yet). `poppler-utils` added to the image and to Recommends; `bubblewrap` added to Depends |
 | P7-T10 | `cairn` command-line tool | done | E7-10. Commands live in `cairn_core::cli`; `cairn` forwards them to the running window (or runs them at start-up); `cairn-cli` does the same without Qt and starts `cairn` when none runs (not packaged). Desktop action "Add Link". Man page updated |
-| P7-T11 | Customisable shortcuts | to do | E7-11 |
+| P7-T11 | Customisable shortcuts | done | E7-11. Changes are kept in the `shortcuts` setting (a{sas}) over the built-in table; Preferences › Shortcuts records a key (app shortcuts pause meanwhile), clears one, restores defaults, and refuses a key already in use with a message. A filter field finds a shortcut |
 
 Notes:
 - Scenario change (rule 7), E7-06: the check that "a remote image causes no
   request" looks at image syntax in the preview text, because a reference
   definition line (`[r]: http://…`) stays in the text as a link target and
   loads nothing; the test server's request log is the real proof.
+- Scenario change (rule 7), E1-18: the scenario now takes up to four frames
+  during the flight and needs one that differs from both the start and the
+  end, instead of a single frame. One screenshot takes about a fifth of the
+  0.7 s flight, so on a loaded machine the single frame sometimes landed at
+  take-off (differences 0.56 to 0.97 against the 1.0 threshold). What it
+  checks is unchanged: motion over several frames, not a jump.
+- Fix found by the gate: when the index changed while search was open, the
+  query ran again and the selection jumped back to the first result, so
+  Enter could open a different file than the one chosen (E3-04 failed under
+  load). A re-run now keeps the chosen result.
 - 2026-11-21: the product owner deleted all Docker images and volumes to free
   disk space; the dev image and fixture were rebuilt.
 

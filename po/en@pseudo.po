@@ -213,8 +213,17 @@ msgstr "[Çàrgö döwñlöàds çràtés àgàîñ ~~~~~~~~~]"
 msgid "Cargo registry cache"
 msgstr "[Çàrgö régîstrý çàçhé ~~~~~~]"
 
+msgid "Change shortcut for "
+msgstr "[Çhàñgé shörtçüt för  ~~~~~~]"
+
+msgid "Choose Change, then press the keys you want."
+msgstr "[Çhöösé Çhàñgé, théñ préss thé kéýs ýöü wàñt. ~~~~~~~~~~~~~~]"
+
 msgid "Choose how “"
 msgstr "[Çhöösé höw “ ~~~~]"
+
+msgid "Clear shortcut for "
+msgstr "[Çléàr shörtçüt för  ~~~~~~]"
 
 msgid "Close"
 msgstr "[Çlösé ~~]"
@@ -482,6 +491,9 @@ msgstr "[Fîltér thîs földér ~~~~~~]"
 
 msgid "Filters"
 msgstr "[Fîltérs ~~]"
+
+msgid "Find a shortcut"
+msgstr "[Fîñd à shörtçüt ~~~~~]"
 
 msgid "Find anything"
 msgstr "[Fîñd àñýthîñg ~~~~]"
@@ -1122,6 +1134,12 @@ msgstr "[Préféréñçés ~~~]"
 msgid "Preferences pages"
 msgstr "[Préféréñçés pàgés ~~~~~]"
 
+msgid "Press keys…"
+msgstr "[Préss kéýs… ~~~]"
+
+msgid "Press the new shortcut for “"
+msgstr "[Préss thé ñéw shörtçüt för “ ~~~~~~~~~]"
+
 msgid "Pressure"
 msgstr "[Préssüré ~~]"
 
@@ -1184,6 +1202,9 @@ msgstr "[Réplàçé püts thé éxîstîñg îtém îñ thé Tràsh, sö Üñd�
 
 msgid "Report a Bug"
 msgstr "[Répört à Büg ~~~~]"
+
+msgid "Restore Defaults"
+msgstr "[Réstöré Défàülts ~~~~~]"
 
 msgid "Restore Sidebar"
 msgstr "[Réstöré Sîdébàr ~~~~~]"
@@ -1412,6 +1433,9 @@ msgstr "[Thé sàmé çöñtéñts îñ möré thàñ öñé plàçé. Öñé ç
 
 msgid "The search index is not running."
 msgstr "[Thé séàrçh îñdéx îs ñöt rüññîñg. ~~~~~~~~~~]"
+
+msgid "The shortcut"
+msgstr "[Thé shörtçüt ~~~~]"
 
 msgid "The system’s Downloads"
 msgstr "[Thé sýstém’s Döwñlöàds ~~~~~~~]"
@@ -1704,6 +1728,9 @@ msgstr "[îñstàllérs ~~~]"
 msgid "into"
 msgstr "[îñtö ~~]"
 
+msgid "is already used by"
+msgstr "[îs àlréàdý üséd bý ~~~~~~]"
+
 msgid "is installed"
 msgstr "[îs îñstàlléd ~~~~]"
 
@@ -1748,6 +1775,9 @@ msgstr "[möñths ~~]"
 
 msgid "new folder"
 msgstr "[ñéw földér ~~~]"
+
+msgid "no shortcut"
+msgstr "[ñö shörtçüt ~~~]"
 
 msgid "node_modules, target, .venv and build folders in projects nobody has touched for six months. The project rebuilds them when you work on it again."
 msgstr "[ñödé_mödülés, tàrgét, .véñv àñd büîld földérs îñ pröjéçts ñöbödý hàs töüçhéd för sîx möñths. Thé pröjéçt rébüîlds thém whéñ ýöü wörk öñ ît àgàîñ. ~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~]"
@@ -1907,6 +1937,9 @@ msgstr "[” îs àlréàdý îñ “ ~~~~~]"
 
 msgid "” looks. It keeps this look when renamed or moved."
 msgstr "[” lööks. Ît kééps thîs löök whéñ réñàméd ör mövéd. ~~~~~~~~~~~~~~~~]"
+
+msgid "”. Esc cancels."
+msgstr "[”. Ésç çàñçéls. ~~~~~]"
 
 msgid "‹ All suggestions"
 msgstr "[‹ Àll süggéstîöñs ~~~~~]"

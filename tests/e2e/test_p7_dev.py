@@ -529,3 +529,54 @@ def test_E7_10_the_cairn_command(app, home):
     assert wrong.returncode == 2 and "add-link needs a link" in wrong.stderr
     assert "open-workspace NAME" in cairn(app, "--help").stdout
     assert app.running()
+
+
+# --- Customisable shortcuts (E7-11) -----------------------------------------------------
+
+def accels(app) -> dict:
+    return app.state()["accels"]
+
+
+def open_shortcuts(app, find: str) -> None:
+    """Preferences › Shortcuts, filtered to the entries matching `find`."""
+    app.action("app.preferences")
+    app.wait_for(lambda: (d := app.state()["active_window"]["dialog"]) and d["type"] == "preferences",
+                 "Preferences")
+    app.a11y_click("Shortcuts", within="Preferences")
+    app.a11y_focus("Find a shortcut")
+    app.press("ctrl+a")
+    app.type_text(find)
+
+
+def test_E7_11_customisable_shortcuts(app, home):
+    assert accels(app)["win.tidy"] == ["Ctrl+Shift+O"]
+    open_shortcuts(app, "tidy")
+
+    # Rebind Tidy by pressing the new keys.
+    app.a11y_click("Change shortcut for Tidy this folder")
+    app.press("ctrl+alt+y")
+    app.wait_for(lambda: accels(app)["win.tidy"] == ["Ctrl+Alt+Y"], "the new key in the table")
+
+    # A key already in use is refused, and the conflict is reported.
+    app.a11y_click("Change shortcut for Tidy this folder")
+    app.press("ctrl+l")
+    app.wait_for(lambda: "is already used by" in (app.state()["last_toast"] or ""), "the conflict")
+    assert "Type a path or a folder name" in app.state()["last_toast"]
+    assert accels(app)["win.tidy"] == ["Ctrl+Alt+Y"] and accels(app)["win.location"] == ["Ctrl+L"]
+
+    # The new key works in the window.
+    app.press("escape")
+    app.wait_for(lambda: app.state()["active_window"]["dialog"] is None, "Preferences to close")
+    app.open_folder(home / "Downloads")
+    app.press("ctrl+alt+y")
+    app.wait_for(lambda: (d := app.state()["active_window"]["dialog"]) and d["type"] == "tidy", "Tidy, by the new key")
+    app.action("win.tidy-cancel")
+    app.wait_for(lambda: app.state()["active_window"]["dialog"] is None, "the plan to close")
+
+    # Clear one, then restore every default.
+    open_shortcuts(app, "reload")
+    app.a11y_click("Clear shortcut for Reload")
+    app.wait_for(lambda: accels(app)["win.reload"] == [], "Reload without a key")
+    app.a11y_click("Restore Defaults", role="button")
+    app.wait_for(lambda: accels(app)["win.tidy"] == ["Ctrl+Shift+O"] and accels(app)["win.reload"] == ["Ctrl+R"],
+                 "the defaults back")

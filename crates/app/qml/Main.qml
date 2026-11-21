@@ -124,7 +124,8 @@ Window {
             required property var modelData
             sequences: modelData.keys
             context: Qt.ApplicationShortcut
-            enabled: !(modelData.typing && win.typing)
+            // Paused while Preferences records a new shortcut (P7-T11).
+            enabled: !(modelData.typing && win.typing) && prefsDialog.recording === ""
             onActivated: p.activate(modelData.action, modelData.param)
         }
     }
@@ -529,7 +530,7 @@ Window {
     AddLinkDialog { visible: p.dialog === "bookmark-add"; info: win.dialogData }
     BookmarkDialog { visible: p.dialog === "bookmark-edit"; info: win.dialogData }
     CollectionDialog { visible: p.dialog === "collection-new"; info: win.dialogData }
-    PreferencesDialog { visible: p.dialog === "preferences"; prefs: win.prefs; accels: win.accels }
+    PreferencesDialog { id: prefsDialog; visible: p.dialog === "preferences"; prefs: win.prefs; accels: win.accels }
     ShortcutsDialog { visible: p.dialog === "shortcuts"; accels: win.accels }
     OpenWithDialog { visible: p.dialog === "open-with"; info: win.dialogData }
     ClashDialog { visible: p.dialog === "clash"; info: win.dialogData }

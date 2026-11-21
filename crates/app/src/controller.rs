@@ -421,6 +421,11 @@ impl Controller {
         self.dirty |= flags;
     }
 
+    /// A short message at the bottom of the window.
+    pub fn toast(&mut self, text: &str) {
+        self.emit(Event::Toast(text.to_string(), false));
+    }
+
     fn emit(&mut self, event: Event) {
         if let Event::Toast(text, _) = &event {
             self.last_toast = Some(text.clone());
@@ -704,6 +709,7 @@ impl Controller {
                 actions::set_state("toggle-sidebar", &settings.boolean(key).to_variant())
             }
             "bookmark-view" | "bookmark-fetch" => self.mark(dirty::TOOLS),
+            "shortcuts" => {} // PREFS, below, republishes the shortcuts too
             "downloads-folder" => {
                 self.reload_sidebar();
                 self.refresh_suggestions();

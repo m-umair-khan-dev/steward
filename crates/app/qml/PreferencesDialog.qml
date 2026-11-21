@@ -7,11 +7,43 @@ Sheet {
     id: root
     property var prefs: ({})
     property var accels: []
+
+    // Shortcuts (P7-T11): change, clear, restore defaults. While a new key is
+    // being recorded, every app shortcut is paused (Main.qml).
+    property string recording: ""
+    property string recordingName: ""
+
+    // Qt key-sequence text for a key press, e.g. "Ctrl+Shift+O".
+    function sequence(event) {
+        const named = {
+            [Qt.Key_Left]: "Left", [Qt.Key_Right]: "Right", [Qt.Key_Up]: "Up", [Qt.Key_Down]: "Down",
+            [Qt.Key_Home]: "Home", [Qt.Key_End]: "End", [Qt.Key_PageUp]: "PgUp", [Qt.Key_PageDown]: "PgDown",
+            [Qt.Key_Delete]: "Del", [Qt.Key_Insert]: "Ins", [Qt.Key_Space]: "Space", [Qt.Key_Return]: "Return",
+            [Qt.Key_Enter]: "Enter", [Qt.Key_Tab]: "Tab", [Qt.Key_Backspace]: "Backspace",
+            [Qt.Key_Comma]: ",", [Qt.Key_Period]: ".", [Qt.Key_Slash]: "/", [Qt.Key_Minus]: "-",
+            [Qt.Key_Equal]: "=", [Qt.Key_Plus]: "+", [Qt.Key_Semicolon]: ";", [Qt.Key_Apostrophe]: "'",
+            [Qt.Key_BracketLeft]: "[", [Qt.Key_BracketRight]: "]", [Qt.Key_Backslash]: "\\",
+            [Qt.Key_QuoteLeft]: "`", [Qt.Key_Question]: "?", [Qt.Key_Menu]: "Menu"
+        }
+        let key = named[event.key]
+        if (!key && event.key >= Qt.Key_A && event.key <= Qt.Key_Z) key = String.fromCharCode(event.key)
+        if (!key && event.key >= Qt.Key_0 && event.key <= Qt.Key_9) key = String.fromCharCode(event.key)
+        if (!key && event.key >= Qt.Key_F1 && event.key <= Qt.Key_F35) key = "F" + (event.key - Qt.Key_F1 + 1)
+        if (!key) return ""       // a modifier on its own, or a key we cannot name
+        let parts = []
+        if (event.modifiers & Qt.ControlModifier) parts.push("Ctrl")
+        if (event.modifiers & Qt.AltModifier) parts.push("Alt")
+        if (event.modifiers & Qt.ShiftModifier) parts.push("Shift")
+        if (event.modifiers & Qt.MetaModifier) parts.push("Meta")
+        parts.push(key)
+        return parts.join("+")
+    }
+
     property string page: "general"
     title: p.t("Preferences")
     cardWidth: 560
     cardHeight: 600
-    onVisibleChanged: if (visible) page = "general"
+    onVisibleChanged: { if (visible) page = "general"; else recording = "" }
 
     // A terminal or editor chooser: the apps found, the system's default
     // (terminals), and "Your own command" with {} for the folder.
@@ -220,30 +252,98 @@ Sheet {
         id: shortcuts
         visible: root.page === "shortcuts"
         width: parent.width
-        Accessible.role: Accessible.List
-        Accessible.name: p.t("Keyboard shortcuts")
-        Repeater {
-            model: root.accels
-            delegate: Item {
-                required property var modelData
-                width: shortcuts.width
-                height: 34
-                Accessible.role: Accessible.StaticText
-                Accessible.name: modelData.description + ": " + modelData.keys.join(p.t(" or "))
-                Text { anchors.verticalCenter: parent.verticalCenter; text: parent.modelData.description
-                       color: Theme.ink; font.pixelSize: 13; width: parent.width - keys.width - 12; elide: Text.ElideRight }
-                Row {
-                    id: keys
-                    anchors.right: parent.right; anchors.rightMargin: 8
-                    anchors.verticalCenter: parent.verticalCenter
-                    spacing: 4
-                    Repeater {
-                        model: parent.parent.modelData.keys[0].split(/\+(?!$)/).filter(k => k !== "")
-                        delegate: Rectangle {
-                            required property string modelData
-                            width: Math.max(26, key.implicitWidth + 14); height: 24; radius: 6
-                            color: Theme.track; border.color: Theme.line
-                            Text { id: key; anchors.centerIn: parent; text: parent.modelData; color: Theme.ink; font.pixelSize: 12 }
+        spacing: 2
+        Item {
+            width: parent.width; height: 44
+            Text { anchors.verticalCenter: parent.verticalCenter; width: parent.width - reset.width - 12
+                   wrapMode: Text.WordWrap; color: Theme.muted; font.pixelSize: 12
+                   text: root.recording ? p.t("Press the new shortcut for “") + root.recordingName + p.t("”. Esc cancels.")
+                                        : p.t("Choose Change, then press the keys you want.") }
+            PillButton { id: reset; anchors.right: parent.right; anchors.verticalCenter: parent.verticalCenter
+                         implicitHeight: 32; text: p.t("Restore Defaults")
+                         onClicked: { root.recording = ""; p.activate("win.shortcuts-reset", "") } }
+        }
+        TextField {
+            id: shortcutFilter
+            width: parent.width
+            placeholderText: p.t("Find a shortcut")
+            Accessible.name: p.t("Find a shortcut")
+            color: Theme.ink
+            background: Rectangle { radius: 9; color: Theme.pane; border.color: shortcutFilter.activeFocus ? Theme.accent : Theme.line }
+        }
+        Item { width: 1; height: 6 }
+        // Takes the key press while recording.
+        Item {
+            id: recorder
+            width: 1; height: 1
+            Keys.onPressed: event => {
+                if (root.recording === "") { event.accepted = false; return }
+                event.accepted = true
+                if (event.key === Qt.Key_Escape) { root.recording = ""; root.refocus(); return }
+                const keys = root.sequence(event)
+                if (keys === "") return
+                p.activate("win.shortcut-set", root.recording + "|" + keys)
+                root.recording = ""
+                root.refocus()
+            }
+        }
+        Item {
+            width: parent.width
+            height: list.implicitHeight
+            Accessible.role: Accessible.List
+            Accessible.name: p.t("Keyboard shortcuts")
+            Column {
+                id: list
+                width: parent.width
+                Repeater {
+                    model: {
+                        const q = shortcutFilter.text.trim().toLowerCase()
+                        return q === "" ? root.accels
+                            : root.accels.filter(a => a.description.toLowerCase().indexOf(q) >= 0
+                                                 || a.keys.join(" ").toLowerCase().indexOf(q) >= 0)
+                    }
+                    delegate: Rectangle {
+                        id: entry
+                        required property var modelData
+                        readonly property bool on: root.recording === modelData.id
+                        width: shortcuts.width
+                        height: 36
+                        radius: 8
+                        color: on ? Theme.alpha(Theme.accent, 0.12) : "transparent"
+                        Accessible.role: Accessible.StaticText
+                        Accessible.name: modelData.description + ": "
+                                         + (modelData.keys.length ? modelData.keys.join(p.t(" or ")) : p.t("no shortcut"))
+                        Text { x: 6; anchors.verticalCenter: parent.verticalCenter; text: entry.modelData.description
+                               color: Theme.ink; font.pixelSize: 13; width: parent.width - right.width - 18; elide: Text.ElideRight
+                               font.weight: entry.modelData.custom ? Font.DemiBold : Font.Normal }
+                        Row {
+                            id: right
+                            anchors.right: parent.right; anchors.rightMargin: 4
+                            anchors.verticalCenter: parent.verticalCenter
+                            spacing: 4
+                            Text { visible: entry.on; text: p.t("Press keys…"); color: Theme.accentText; font.pixelSize: 12
+                                   anchors.verticalCenter: parent.verticalCenter }
+                            Text { visible: !entry.on && entry.modelData.keys.length === 0; text: p.t("None")
+                                   color: Theme.faint; font.pixelSize: 12; anchors.verticalCenter: parent.verticalCenter }
+                            Repeater {
+                                model: entry.on || entry.modelData.keys.length === 0 ? []
+                                       : entry.modelData.keys[0].split(/\+(?!$)/).filter(k => k !== "")
+                                delegate: Rectangle {
+                                    required property string modelData
+                                    anchors.verticalCenter: parent.verticalCenter
+                                    width: Math.max(26, key.implicitWidth + 14); height: 24; radius: 6
+                                    color: Theme.track; border.color: Theme.line
+                                    Text { id: key; anchors.centerIn: parent; text: parent.modelData; color: Theme.ink; font.pixelSize: 12 }
+                                }
+                            }
+                            IconButton { width: 26; height: 26; iconSize: 13; flat: true; icon: "pencil"
+                                         label: p.t("Change shortcut for ") + entry.modelData.description
+                                         onClicked: { root.recording = entry.modelData.id; root.recordingName = entry.modelData.description
+                                                      recorder.forceActiveFocus() } }
+                            IconButton { width: 26; height: 26; iconSize: 13; flat: true; icon: "close"
+                                         enabled: entry.modelData.keys.length > 0
+                                         label: p.t("Clear shortcut for ") + entry.modelData.description
+                                         onClicked: p.activate("win.shortcut-clear", entry.modelData.id) }
                         }
                     }
                 }

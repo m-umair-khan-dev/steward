@@ -91,9 +91,8 @@ fn register_test_interface(connection: &gio::DBusConnection) {
                 let mut value = serde_json::json!({
                     "version": env!("CARGO_PKG_VERSION"),
                     "windows": 1,
-                    "accels": actions::ACCELS.iter().fold(serde_json::Map::new(), |mut map, (action, param, keys, _)| {
-                        let name = if param.is_empty() { action.to_string() } else { format!("{action}('{param}')") };
-                        map.insert(name, serde_json::json!(keys));
+                    "accels": actions::effective().into_iter().fold(serde_json::Map::new(), |mut map, entry| {
+                        map.insert(entry.id, serde_json::json!(entry.keys));
                         map
                     }),
                 });

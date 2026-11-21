@@ -126,6 +126,11 @@
       <default>''</default>
       <summary>Your own editor command; {} is the folder</summary>
     </key>
+    <key name="shortcuts" type="a{sas}">
+      <default>{}</default>
+      <summary>Shortcuts changed by the user</summary>
+      <description>Action (with its parameter, e.g. win.view-mode('list')) to keys; an empty list means no shortcut. Others keep their built-in keys.</description>
+    </key>
     <key name="search-contents" type="b">
       <default>false</default>
       <summary>Search also finds words inside files</summary>

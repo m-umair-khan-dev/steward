@@ -229,7 +229,12 @@ impl qobject::Presenter {
                 dirty::PANE => this.set_pane(value),
                 dirty::WORKSPACE => this.set_workspace(value),
                 dirty::TOOLS => this.set_tools(value),
-                _ => this.set_prefs(value),
+                _ => {
+                    this.set_prefs(value);
+                    // Shortcuts are a preference too (P7-T11).
+                    self.as_mut()
+                        .set_accels(q(&actions::accels_json().to_string()));
+                }
             }
         }
         for event in events {

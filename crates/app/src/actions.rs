@@ -138,14 +138,131 @@ pub fn groups() -> (gio::SimpleActionGroup, gio::SimpleActionGroup) {
     GROUPS.with(|cell| cell.borrow_mut().get_or_insert_with(create).clone())
 }
 
+// --- customisable shortcuts (P7-T11) -------------------------------------------------------
+
+/// An entry's id in the `shortcuts` setting: "win.tidy", or
+/// "win.view-mode('list')" for an entry with a parameter.
+pub fn accel_id(action: &str, param: &str) -> String {
+    if param.is_empty() {
+        action.to_string()
+    } else {
+        format!("{action}('{param}')")
+    }
+}
+
+/// The user's changes: entry id → keys (empty: no shortcut).
+fn overrides() -> HashMap<String, Vec<String>> {
+    settings::get()
+        .value("shortcuts")
+        .get::<HashMap<String, Vec<String>>>()
+        .unwrap_or_default()
+}
+
+fn set_overrides(map: &HashMap<String, Vec<String>>) {
+    let _ = settings::get().set_value("shortcuts", &map.to_variant());
+}
+
+/// Every entry with the keys in effect: (id, action, param, keys, defaults, description).
+/// One shortcut entry with the keys in effect.
+pub struct Accel {
+    /// "win.tidy", or "win.view-mode('list')".
+    pub id: String,
+    pub action: &'static str,
+    pub param: &'static str,
+    pub keys: Vec<String>,
+    pub defaults: Vec<String>,
+    pub description: &'static str,
+}
+
+pub fn effective() -> Vec<Accel> {
+    let changes = overrides();
+    ACCELS
+        .iter()
+        .map(|(action, param, keys, description)| {
+            let id = accel_id(action, param);
+            let defaults: Vec<String> = keys.iter().map(|k| k.to_string()).collect();
+            let keys = changes
+                .get(&id)
+                .cloned()
+                .unwrap_or_else(|| defaults.clone());
+            Accel {
+                id,
+                action,
+                param,
+                keys,
+                defaults,
+                description,
+            }
+        })
+        .collect()
+}
+
+/// Comparable form of a key sequence ("ctrl+shift+o" for "Shift+Ctrl+O").
+fn normal(key: &str) -> String {
+    let lower = key.trim().to_lowercase();
+    let mut parts: Vec<&str> = lower.split('+').collect();
+    // "Ctrl++" ends in an empty part: the key is "+".
+    let last = if lower.ends_with("++") {
+        "+"
+    } else {
+        parts.pop().unwrap_or("")
+    };
+    parts.retain(|p| !p.is_empty() && *p != last);
+    parts.sort_unstable();
+    parts.push(last);
+    parts.join("+")
+}
+
+/// Gives an entry a new key. Refused, with the reason, when another entry
+/// already uses that key.
+pub fn set_shortcut(id: &str, key: &str) -> Result<(), String> {
+    let all = effective();
+    let Some(entry) = all.iter().find(|e| e.id == id) else {
+        return Err(String::new());
+    };
+    let wanted = normal(key);
+    if let Some(other) = all
+        .iter()
+        .find(|e| e.id != id && e.keys.iter().any(|k| normal(k) == wanted))
+    {
+        return Err(format!(
+            "{} {key} {} “{}”",
+            gettextrs::gettext("The shortcut"),
+            gettextrs::gettext("is already used by"),
+            gettextrs::gettext(other.description)
+        ));
+    }
+    let mut changes = overrides();
+    if entry.defaults == [key.to_string()] {
+        changes.remove(id);
+    } else {
+        changes.insert(id.to_string(), vec![key.to_string()]);
+    }
+    set_overrides(&changes);
+    Ok(())
+}
+
+/// Takes an entry's shortcut away.
+pub fn clear_shortcut(id: &str) {
+    let mut changes = overrides();
+    changes.insert(id.to_string(), Vec::new());
+    set_overrides(&changes);
+}
+
+/// Every shortcut back to the built-in one.
+pub fn reset_shortcuts() {
+    settings::get().reset("shortcuts");
+}
+
 pub fn accels_json() -> Value {
     Value::Array(
-        ACCELS
-            .iter()
-            .map(|(action, param, keys, description)| {
-                json!({ "action": action, "param": param, "keys": keys,
-                        "description": gettextrs::gettext(*description),
-                        "typing": TEXT_KEYS.contains(action) })
+        effective()
+            .into_iter()
+            .map(|a| {
+                json!({ "id": a.id, "action": a.action, "param": a.param,
+                        "custom": a.keys != a.defaults, "keys": a.keys,
+                        "description": gettextrs::gettext(a.description),
+                        "typing": TEXT_KEYS.contains(&a.action) })
             })
             .collect(),
     )
@@ -381,6 +498,19 @@ fn create() -> (gio::SimpleActionGroup, gio::SimpleActionGroup) {
     simple(&win, "agents-refresh", || {
         controller::with(|c| c.agents_refresh())
     });
+    // Customisable shortcuts (P7-T11): "id|key", id, and all.
+    with_string(&win, "shortcut-set", |value| {
+        let Some((id, key)) = value.rsplit_once('|') else {
+            return;
+        };
+        if let Err(reason) = set_shortcut(id, key)
+            && !reason.is_empty()
+        {
+            controller::with(|c| c.toast(&reason));
+        }
+    });
+    with_string(&win, "shortcut-clear", clear_shortcut);
+    simple(&win, "shortcuts-reset", reset_shortcuts);
     with_string(&win, "md-mode", |mode| {
         controller::with(|c| c.md_mode(mode))
     });

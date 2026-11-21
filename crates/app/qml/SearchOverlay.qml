@@ -170,7 +170,7 @@ FocusScope {
                 }
 
                 Text {
-                    visible: root.model.running && (root.model.ran || "") !== "" && (root.model.count || 0) === 0
+                    visible: !!root.model.running && (root.model.ran || "") !== "" && (root.model.count || 0) === 0
                     text: root.model.contents ? p.t("Nothing has that in its name or text.") : p.t("Nothing is called that.")
                     color: Theme.muted; font.pixelSize: 15
                 }
