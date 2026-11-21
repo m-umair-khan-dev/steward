@@ -25,6 +25,7 @@ mod git;
 pub use downloads::downloads_folder;
 mod index;
 mod installed;
+mod openin;
 mod ops;
 mod pane;
 mod peek;
@@ -205,6 +206,7 @@ pub struct Controller {
     about: about::AboutState,
     welcome: welcome::WelcomeState,
     git: git::GitState,
+    openin: openin::OpenInState,
     /// Path bar: folders whose name matches what is typed, and the one chosen.
     path_matches: Vec<PathBuf>,
     path_match: Option<usize>,
@@ -305,6 +307,7 @@ pub fn init(notifier: impl Fn() + 'static) {
         about: about::AboutState::default(),
         welcome: welcome::WelcomeState::default(),
         git: git::GitState::default(),
+        openin: openin::OpenInState::default(),
         path_matches: Vec::new(),
         path_match: None,
         dialog: String::new(),
@@ -1100,6 +1103,11 @@ impl Controller {
             self.stop_path_edit();
             return;
         }
+        // "code .", "zed src", "terminal" (P7-T03).
+        if self.path_command(text) {
+            self.stop_path_edit();
+            return;
+        }
         if let Some(chosen) = self.path_match {
             self.path_match_go(chosen);
             return;
@@ -1430,6 +1438,11 @@ impl Controller {
             "nameFilter": self.name_filter,
             // The item the keyboard is on; the views keep it on screen.
             "anchor": self.anchor.map(|a| a as i64).unwrap_or(-1),
+            // The one selected folder, for "Open in Terminal" on an item.
+            "selectedFolder": match self.selected().as_slice() {
+                [one] if one.is_dir() => one.data().file.path().map(|p| p.display().to_string()),
+                _ => None,
+            },
             "metrics": { "folder": self.row_size.folder_width(), "file": self.row_size.file_width(), "gap": GAP },
         })
     }
@@ -1829,7 +1842,7 @@ impl Controller {
         })
     }
 
-    pub fn prefs_json(&self) -> Value {
+    pub fn prefs_json(&mut self) -> Value {
         let s = settings::get();
         json!({
             "colorScheme": s.string("color-scheme").to_string(),
@@ -1852,6 +1865,7 @@ impl Controller {
             "indexRunning": self.index.running,
             "home": paths::display_path(&glib::home_dir()),
             "defaultFileManager": s.boolean("default-file-manager"),
+            "openIn": self.openin_json(),
             // GNOME's dark mode, for Qt versions that cannot report it (24.04).
             "systemDark": self.interface.as_ref().is_some_and(|i| {
                 i.settings_schema()
@@ -1949,6 +1963,7 @@ impl Controller {
             "installed": self.installed_test_json(),
             "about": self.about_test_json(),
             "welcome": self.welcome_test_json(),
+            "openin": self.openin_test_json(),
             // Folder numbers as the cards show them, by name.
             "folder_stats": self.visible.iter().filter(|e| e.is_dir()).filter_map(|e| {
                 let (items, bytes) = self.folder_numbers(&e.data().file.path()?)?;

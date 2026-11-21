@@ -85,6 +85,8 @@ pub const ACCELS: &[(&str, &str, &[&str], &str)] = &[
     ("win.move-across", "", &["F6"], "Move to the other pane"),
     ("win.swap-panes", "", &["Ctrl+U"], "Swap the two panes"),
     ("win.tool-open", "clean", &["Ctrl+Shift+K"], "Free Up Space"),
+    ("win.open-terminal", "", &["F4"], "Open this folder in the terminal"),
+    ("win.open-editor", "", &["Shift+F4"], "Open this folder in the editor"),
     ("win.workspace-open", "#1", &["Alt+1"], "Open workspace 1"),
     ("win.workspace-open", "#2", &["Alt+2"], "Open workspace 2"),
     ("win.workspace-open", "#3", &["Alt+3"], "Open workspace 3"),
@@ -337,6 +339,13 @@ fn create() -> (gio::SimpleActionGroup, gio::SimpleActionGroup) {
     with_string(&win, "clean-peek", |path| {
         controller::with(|c| c.clean_peek(path))
     });
+    with_string(&win, "open-terminal", |path| {
+        controller::with(|c| c.open_in(cairn_core::openin::Role::Terminal, path))
+    });
+    with_string(&win, "open-editor", |path| {
+        controller::with(|c| c.open_in(cairn_core::openin::Role::Editor, path))
+    });
+    simple(&win, "openin-rescan", || controller::with(|c| c.openin_rescan()));
     with_string(&win, "installed-filter", |id| {
         controller::with(|c| c.installed_filter(id))
     });

@@ -270,6 +270,13 @@ Window {
                     } else if (event.key === Qt.Key_Return || event.key === Qt.Key_Enter) {
                         p.activate("win.open-selected", "")
                         event.accepted = true
+                    } else if (event.key === Qt.Key_Menu || (event.key === Qt.Key_F10 && (event.modifiers & Qt.ShiftModifier))) {
+                        // The menu key and Shift+F10: the selection's menu, else the folder's.
+                        // Opened from the keyboard: near the top of the folder, not at
+                        // the window's corner.
+                        if (win.selectedCount > 0) itemMenu.popup(content, 40, 60)
+                        else backgroundMenu.popup(content, 40, 60)
+                        event.accepted = true
                     } else if (event.key === Qt.Key_A && (event.modifiers & Qt.ControlModifier)) {
                         p.activate("win.select-all", "")
                         event.accepted = true
@@ -438,6 +445,11 @@ Window {
     }
 
     // --- context menus (P2-T10) ---------------------------------------------------
+    // The folder an item menu is about (one selected folder), else "".
+    function menuFolderPath() {
+        return win.folder.selectedFolder || ""
+    }
+
     function itemMenuAt(pos) {
         if (!win.selection[pos]) p.pick(pos, 0)
         content.forceActiveFocus()
@@ -455,6 +467,8 @@ Window {
             { text: p.t("Rename…"), action: "win.rename", param: "", enabled: win.selectedCount === 1 },
             { text: p.t("Duplicate"), action: "win.duplicate", param: "" },
             { text: p.t("Symbol and Colour…"), action: "win.folder-style-ask", param: "", enabled: win.selectedCount === 1 },
+            { text: p.t("Open in Terminal"), action: "win.open-terminal", param: win.menuFolderPath(), enabled: win.menuFolderPath() !== "" },
+            { text: p.t("Open in Editor"), action: "win.open-editor", param: win.menuFolderPath(), enabled: win.menuFolderPath() !== "" },
             { separator: true },
             { text: p.t("Copy"), action: "win.copy", param: "" },
             { text: p.t("Cut"), action: "win.cut", param: "" },
@@ -472,6 +486,8 @@ Window {
         ] : [
             { text: p.t("New Folder"), action: "win.new-folder", param: "" },
             { text: p.t("Paste"), action: "win.paste", param: "" },
+            { text: p.t("Open in Terminal"), action: "win.open-terminal", param: "" },
+            { text: p.t("Open in Editor"), action: "win.open-editor", param: "" },
             { separator: true },
             { text: p.t("Select All"), action: "win.select-all", param: "" },
             { text: p.t("Show Hidden Files"), action: "win.show-hidden", param: "", checked: !!win.prefs.showHidden }

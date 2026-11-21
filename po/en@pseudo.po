@@ -33,6 +33,9 @@ msgstr "[%-é %b %Y ~~~]"
 msgid "+ Add Folder"
 msgstr "[+ Àdd Földér ~~~~]"
 
+msgid ": your own command"
+msgstr "[: ýöür öwñ çömmàñd ~~~~~~]"
+
 msgid "A file manager for Ubuntu that keeps folders tidy."
 msgstr "[À fîlé màñàgér för Übüñtü thàt kééps földérs tîdý. ~~~~~~~~~~~~~~~~]"
 
@@ -252,6 +255,9 @@ msgstr "[Çöüld ñöt rédö ~~~~]"
 msgid "Could not save the list"
 msgstr "[Çöüld ñöt sàvé thé lîst ~~~~~~~]"
 
+msgid "Could not start"
+msgstr "[Çöüld ñöt stàrt ~~~~~]"
+
 msgid "Couldn't Open This Folder"
 msgstr "[Çöüldñ't Öpéñ Thîs Földér ~~~~~~~~]"
 
@@ -329,6 +335,9 @@ msgstr "[Düplîçàtés ~~~]"
 
 msgid "Edit Workspace"
 msgstr "[Édît Wörkspàçé ~~~~]"
+
+msgid "Editor (Shift+F4)"
+msgstr "[Édîtör (Shîft+F4) ~~~~~]"
 
 msgid "Eject "
 msgstr "[Éjéçt  ~~]"
@@ -732,6 +741,9 @@ msgstr "[Ñö Màtçhés ~~~]"
 msgid "No app could open"
 msgstr "[Ñö àpp çöüld öpéñ ~~~~~]"
 
+msgid "No editor found. Choose one in Preferences › General."
+msgstr "[Ñö édîtör föüñd. Çhöösé öñé îñ Préféréñçés › Géñéràl. ~~~~~~~~~~~~~~~~~]"
+
 msgid "No folder called"
 msgstr "[Ñö földér çàlléd ~~~~~]"
 
@@ -743,6 +755,9 @@ msgstr "[Ñö îtéms îñ thîs földér àré ~~~~~~~~~]"
 
 msgid "No names in this folder contain what you typed."
 msgstr "[Ñö ñàmés îñ thîs földér çöñtàîñ whàt ýöü týpéd. ~~~~~~~~~~~~~~~]"
+
+msgid "No terminal found. Choose one in Preferences › General."
+msgstr "[Ñö térmîñàl föüñd. Çhöösé öñé îñ Préféréñçés › Géñéràl. ~~~~~~~~~~~~~~~~~~]"
 
 msgid "None"
 msgstr "[Ñöñé ~~]"
@@ -843,8 +858,20 @@ msgstr "[Öpéñ Wîth ~~~]"
 msgid "Open With…"
 msgstr "[Öpéñ Wîth… ~~~]"
 
+msgid "Open in Editor"
+msgstr "[Öpéñ îñ Édîtör ~~~~]"
+
+msgid "Open in Terminal"
+msgstr "[Öpéñ îñ Térmîñàl ~~~~~]"
+
 msgid "Open it from the folder that contains it."
 msgstr "[Öpéñ ît fröm thé földér thàt çöñtàîñs ît. ~~~~~~~~~~~~~]"
+
+msgid "Open this folder in the editor"
+msgstr "[Öpéñ thîs földér îñ thé édîtör ~~~~~~~~~~]"
+
+msgid "Open this folder in the terminal"
+msgstr "[Öpéñ thîs földér îñ thé térmîñàl ~~~~~~~~~~]"
 
 msgid "Open workspace 1"
 msgstr "[Öpéñ wörkspàçé 1 ~~~~~]"
@@ -872,6 +899,9 @@ msgstr "[Öpéñ wörkspàçé 8 ~~~~~]"
 
 msgid "Open workspace 9"
 msgstr "[Öpéñ wörkspàçé 9 ~~~~~]"
+
+msgid "Opened in"
+msgstr "[Öpéñéd îñ ~~~]"
 
 msgid "Operations"
 msgstr "[Öpéràtîöñs ~~~]"
@@ -1158,6 +1188,9 @@ msgstr "[Sýstém jöürñàl ~~~~]"
 msgid "Tab switches pane · drag to move, Ctrl-drag to copy"
 msgstr "[Tàb swîtçhés pàñé · dràg tö mövé, Çtrl-dràg tö çöpý ~~~~~~~~~~~~~~~~~]"
 
+msgid "Terminal (F4)"
+msgstr "[Térmîñàl (F4) ~~~~]"
+
 msgid "That place does not exist"
 msgstr "[Thàt plàçé döés ñöt éxîst ~~~~~~~~]"
 
@@ -1190,6 +1223,9 @@ msgstr "[Thé séàrçh îñdéx îs ñöt rüññîñg. ~~~~~~~~~~]"
 
 msgid "The system’s Downloads"
 msgstr "[Thé sýstém’s Döwñlöàds ~~~~~~~]"
+
+msgid "The system’s terminal"
+msgstr "[Thé sýstém’s térmîñàl ~~~~~~~]"
 
 msgid "Thermal state"
 msgstr "[Thérmàl stàté ~~~~]"
@@ -1368,6 +1404,9 @@ msgstr "[Ýöür çàll ~~~]"
 msgid "Your files"
 msgstr "[Ýöür fîlés ~~~]"
 
+msgid "Your own command…"
+msgstr "[Ýöür öwñ çömmàñd… ~~~~~]"
+
 msgid "added less than 2 minutes ago"
 msgstr "[àddéd léss thàñ 2 mîñütés àgö ~~~~~~~~~]"
 
@@ -1403,6 +1442,12 @@ msgstr "[désîgñéd ~~]"
 
 msgid "disabled revisions kept for rollback"
 msgstr "[dîsàbléd révîsîöñs képt för röllbàçk ~~~~~~~~~~~~]"
+
+msgid "e.g. foot -D {}"
+msgstr "[é.g. fööt -D {} ~~~~~]"
+
+msgid "e.g. hx {}"
+msgstr "[é.g. hx {} ~~~]"
 
 msgid "estimate"
 msgstr "[éstîmàté ~~]"
@@ -1442,6 +1487,9 @@ msgstr "[îñtö ~~]"
 
 msgid "is installed"
 msgstr "[îs îñstàlléd ~~~~]"
+
+msgid "is not installed"
+msgstr "[îs ñöt îñstàlléd ~~~~~]"
 
 msgid "it is no longer there"
 msgstr "[ît îs ñö löñgér théré ~~~~~~~]"
@@ -1545,6 +1593,9 @@ msgstr "[thé dîsk îs réàd-öñlý ~~~~~~~]"
 msgid "the name is taken"
 msgstr "[thé ñàmé îs tàkéñ ~~~~~]"
 
+msgid "the terminal"
+msgstr "[thé térmîñàl ~~~~]"
+
 msgid "threads"
 msgstr "[thréàds ~~]"
 
@@ -1595,6 +1646,9 @@ msgstr "[ýöü dö ñöt hàvé pérmîssîöñ ~~~~~~~~]"
 
 msgid "you have twice"
 msgstr "[ýöü hàvé twîçé ~~~~]"
+
+msgid "your command"
+msgstr "[ýöür çömmàñd ~~~~]"
 
 msgid "{} file"
 msgid_plural "{} files"

@@ -19,12 +19,12 @@ import sys
 from pathlib import Path
 
 SCRIPT = """#!{python} -I
-import json, sys
+import json, os, sys
 from pathlib import Path
 here = Path(__file__).resolve().parent
 tool, args = Path(sys.argv[0]).name, sys.argv[1:]
 with open(here / "calls.jsonl", "a") as log:
-    log.write(json.dumps({{"tool": tool, "args": args}}) + "\\n")
+    log.write(json.dumps({{"tool": tool, "args": args, "cwd": os.getcwd()}}) + "\\n")
 answers = json.loads((here / "answers.json").read_text()).get(tool, [])
 for prefix, out, code in answers:
     if args[:len(prefix)] == prefix:

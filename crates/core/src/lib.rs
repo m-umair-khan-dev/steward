@@ -14,6 +14,7 @@ pub mod guard;
 pub mod index;
 pub mod kind;
 pub mod natural;
+pub mod openin;
 pub mod ops;
 pub mod packages;
 pub mod places;

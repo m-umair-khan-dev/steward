@@ -108,5 +108,23 @@
       <summary>Use Cairn as the default file manager</summary>
       <description>Open folders in Cairn and answer other apps' "Show in folder" (org.freedesktop.FileManager1) while Cairn runs (P6-T07).</description>
     </key>
+    <key name="open-in-terminal" type="s">
+      <default>''</default>
+      <summary>The terminal for Open in Terminal (F4)</summary>
+      <description>An Open In id ("gnome-terminal", "kitty"…), "custom" for open-in-terminal-command, or empty for the system's default (P7-T02).</description>
+    </key>
+    <key name="open-in-terminal-command" type="s">
+      <default>''</default>
+      <summary>Your own terminal command; {} is the folder</summary>
+    </key>
+    <key name="open-in-editor" type="s">
+      <default>''</default>
+      <summary>The editor for Open in Editor (Shift+F4)</summary>
+      <description>An Open In id ("vscode", "zed"…), "custom", or empty for the first editor found.</description>
+    </key>
+    <key name="open-in-editor-command" type="s">
+      <default>''</default>
+      <summary>Your own editor command; {} is the folder</summary>
+    </key>
   </schema>
 </schemalist>

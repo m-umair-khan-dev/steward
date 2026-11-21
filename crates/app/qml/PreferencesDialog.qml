@@ -13,6 +13,67 @@ Sheet {
     cardHeight: 600
     onVisibleChanged: if (visible) page = "general"
 
+    // A terminal or editor chooser: the apps found, the system's default
+    // (terminals), and "Your own command" with {} for the folder.
+    component OpenInChoice: Column {
+        id: openIn
+        property string role: "terminal"
+        property string label: ""
+        readonly property var info: root.prefs.openIn || ({})
+        readonly property var apps: (role === "terminal" ? info.terminals : info.editors) || []
+        readonly property string chosen: (role === "terminal" ? info.terminal : info.editor) || ""
+        readonly property var options: (role === "terminal" && info.systemTerminal
+                                         ? [{ id: "", label: p.t("The system’s terminal") }] : [])
+                                        .concat(apps)
+                                        .concat([{ id: "custom", label: p.t("Your own command…") }])
+        width: parent.width
+        spacing: 4
+        Item {
+            width: parent.width; height: 48
+            Text { anchors.verticalCenter: parent.verticalCenter; text: openIn.label; color: Theme.ink; font.pixelSize: 14 }
+            ComboBox {
+                id: combo
+                anchors.right: parent.right; anchors.verticalCenter: parent.verticalCenter
+                width: 240
+                model: openIn.options
+                textRole: "label"
+                currentIndex: Math.max(0, openIn.options.findIndex(o => o.id === openIn.chosen))
+                Accessible.name: openIn.label
+                onActivated: index => p.setpref("open-in-" + openIn.role, openIn.options[index].id)
+                // In the app's style: a white rounded box with a chevron.
+                implicitHeight: 34
+                background: Rectangle { radius: 10; color: Theme.pane; border.color: combo.activeFocus ? Theme.accent : Theme.line }
+                contentItem: Text {
+                    leftPadding: 12; rightPadding: 30
+                    verticalAlignment: Text.AlignVCenter
+                    text: combo.displayText; color: Theme.ink; font.pixelSize: 13; elide: Text.ElideRight
+                }
+                indicator: Icon { x: combo.width - width - 10; anchors.verticalCenter: parent.verticalCenter
+                                  name: "chevron"; size: 14; rotation: 90; color: Theme.muted }
+                popup.background: Rectangle { radius: 12; color: Theme.card; border.color: Theme.line }
+                delegate: ItemDelegate {
+                    required property var modelData
+                    required property int index
+                    width: combo.width
+                    highlighted: combo.highlightedIndex === index
+                    contentItem: Text { text: parent.modelData.label; color: Theme.ink; font.pixelSize: 13
+                                        verticalAlignment: Text.AlignVCenter }
+                    background: Rectangle { radius: 8; color: parent.highlighted ? Theme.hover : "transparent" }
+                }
+            }
+        }
+        TextField {
+            visible: openIn.chosen === "custom"
+            width: parent.width
+            placeholderText: openIn.role === "terminal" ? p.t("e.g. foot -D {}") : p.t("e.g. hx {}")
+            text: (openIn.role === "terminal" ? openIn.info.terminalCommand : openIn.info.editorCommand) || ""
+            Accessible.name: openIn.label + p.t(": your own command")
+            color: Theme.ink
+            background: Rectangle { radius: 9; color: Theme.pane; border.color: Theme.line }
+            onEditingFinished: p.setpref("open-in-" + openIn.role + "-command", text)
+        }
+    }
+
     component Choice: Item {
         id: choice
         property string label: ""
@@ -96,6 +157,10 @@ Sheet {
                 onCheckedChanged: if (checked !== !!root.prefs.defaultFileManager) p.setpref("default-file-manager", checked ? "true" : "false")
             }
         }
+
+        // Open In (P7-T02): which terminal (F4) and editor (Shift+F4).
+        OpenInChoice { role: "terminal"; label: p.t("Terminal (F4)") }
+        OpenInChoice { role: "editor"; label: p.t("Editor (Shift+F4)") }
 
         // Which folder is Downloads (P4-T06).
         Item {

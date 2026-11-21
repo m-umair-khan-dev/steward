@@ -20,7 +20,7 @@ KEYCODES.update({f"f{n}": 58 + n for n in range(1, 11)})
 KEYCODES.update({
     "0": 11, "minus": 12, "plus": 13, "equal": 13, "backspace": 14, "tab": 15, "return": 28,
     "enter": 28, "escape": 1, "esc": 1, "space": 57, "comma": 51, "period": 52, "slash": 53,
-    "f11": 87, "f12": 88, "home": 102, "up": 103, "pageup": 104, "left": 105, "right": 106,
+    "f10": 68, "f11": 87, "menu": 127, "f12": 88, "home": 102, "up": 103, "pageup": 104, "left": 105, "right": 106,
     "end": 107, "down": 108, "pagedown": 109, "insert": 110, "delete": 111,
     "ctrl": 29, "control": 29, "shift": 42, "alt": 56, "super": 125, "grave": 41,
     "semicolon": 39, "apostrophe": 40, "backslash": 43, "leftbracket": 26, "rightbracket": 27,
