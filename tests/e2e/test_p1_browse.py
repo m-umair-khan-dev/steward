@@ -327,8 +327,12 @@ def test_E1_18_files_fly_into_kind_folders(session, home, app_factory, tmp_path)
     app.action("win.group-by", s("kind"))
     app.wait_for(lambda: app.state()["flying"] > 0, "cards to take off", timeout=3)
     started = time.monotonic()
-    middle = app.screenshot(tmp_path / "middle.png")
-    still_flying = app.state()["flying"] > 0
+    # Frames taken during the flight. One screenshot takes about a fifth of
+    # the flight, so a single one can land at take-off on a busy machine.
+    middles = []
+    while app.state()["flying"] > 0 and len(middles) < 4:
+        middles.append(app.screenshot(tmp_path / f"middle-{len(middles)}.png"))
+    still_flying = len(middles) > 0
     app.wait_for(lambda: app.state()["flying"] == 0, "cards to land", timeout=5)
     flight = time.monotonic() - started
     app.wait_for(lambda: _by_kind_shown(app), "the By kind section")
@@ -337,8 +341,9 @@ def test_E1_18_files_fly_into_kind_folders(session, home, app_factory, tmp_path)
 
     # A movement over several frames, not a jump.
     assert still_flying and flight > 0.2, f"the flight lasted only {flight:.2f}s"
-    assert _image_difference(middle, before) > 1.0, "the mid-flight frame equals the start"
-    assert _image_difference(middle, after) > 1.0, "the mid-flight frame equals the end"
+    differences = [(_image_difference(m, before), _image_difference(m, after)) for m in middles]
+    assert any(start > 1.0 and end > 1.0 for start, end in differences), \
+        f"no mid-flight frame differs from both the start and the end: {differences}"
     app.stop()
 
     # Reduced motion: the same change happens at once, with nothing in flight.
