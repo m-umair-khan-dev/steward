@@ -244,7 +244,9 @@ class App:
             env=self.session.base_env(), capture_output=True, text=True, timeout=timeout)
 
     def a11y_tree(self) -> dict:
-        result = self._atspi("dump")
+        # Dumping a whole screen walks every accessible over D-Bus; on a busy
+        # machine (the full suite) that can take longer than one click.
+        result = self._atspi("dump", timeout=60.0)
         if result.returncode != 0:
             raise AssertionError(f"accessibility dump failed: {result.stderr.strip()}")
         return json.loads(result.stdout)
