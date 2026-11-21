@@ -5,6 +5,7 @@
 //! `cairn-indexer` is the only writer ([`Index::open`]); the app opens it
 //! read-only ([`Index::open_read_only`]).
 
+mod content;
 mod crawl;
 mod query;
 
@@ -12,11 +13,12 @@ use std::path::{Path, PathBuf};
 
 use rusqlite::{Connection, OpenFlags, OptionalExtension, params};
 
+pub use content::{ContentHit, Pending};
 pub use crawl::{Control, CrawlStats, Rules};
 pub use query::{Hit, rank};
 
 /// Bump when the schema changes: an index with another version is rebuilt.
-pub const SCHEMA_VERSION: i64 = 2;
+pub const SCHEMA_VERSION: i64 = 3;
 
 const SCHEMA: &str = "
 CREATE TABLE entry (
@@ -48,6 +50,18 @@ CREATE TRIGGER entry_ad AFTER DELETE ON entry BEGIN
     INSERT INTO name_fts (name_fts, rowid, name) VALUES ('delete', old.id, old.name);
 END;
 CREATE TABLE meta (key TEXT PRIMARY KEY, value INTEGER);
+-- Search inside files (P7-T09): extracted text, and which version of each
+-- file it came from (mtime) with how extraction went.
+CREATE VIRTUAL TABLE content_fts USING fts5 (body, tokenize='unicode61 remove_diacritics 2');
+CREATE TABLE content_state (
+    entry_id INTEGER PRIMARY KEY,
+    mtime INTEGER NOT NULL,
+    status TEXT NOT NULL CHECK (status IN ('ok', 'failed', 'timeout'))
+);
+CREATE TRIGGER entry_content_ad AFTER DELETE ON entry BEGIN
+    DELETE FROM content_fts WHERE rowid = old.id;
+    DELETE FROM content_state WHERE entry_id = old.id;
+END;
 ";
 
 /// A folder's numbers, as its card shows them.
@@ -106,7 +120,10 @@ impl Index {
         if version != SCHEMA_VERSION {
             conn.execute_batch(
                 "DROP TRIGGER IF EXISTS entry_ai; DROP TRIGGER IF EXISTS entry_ad;
-                 DROP TABLE IF EXISTS name_fts; DROP TABLE IF EXISTS entry; DROP TABLE IF EXISTS meta;",
+                 DROP TRIGGER IF EXISTS entry_content_ad;
+                 DROP TABLE IF EXISTS name_fts; DROP TABLE IF EXISTS content_fts;
+                 DROP TABLE IF EXISTS content_state;
+                 DROP TABLE IF EXISTS entry; DROP TABLE IF EXISTS meta;",
             )?;
             conn.execute_batch(SCHEMA)?;
             conn.pragma_update(None, "user_version", SCHEMA_VERSION)?;

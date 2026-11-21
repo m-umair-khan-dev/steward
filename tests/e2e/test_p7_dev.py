@@ -336,3 +336,150 @@ def test_E7_07_bookmarks(app, app_factory, home):
         assert len(site.requests) == 2, "a restart fetches nothing"
     finally:
         site.close()
+
+
+# --- Search inside files (E7-08, E7-09) -------------------------------------------------
+
+def tiny_pdf(text: str) -> bytes:
+    """A one-page PDF with `text` in Helvetica (uncompressed, for pdftotext)."""
+    stream = f"BT /F1 18 Tf 72 720 Td ({text}) Tj ET".encode()
+    objects = [
+        b"<< /Type /Catalog /Pages 2 0 R >>",
+        b"<< /Type /Pages /Kids [3 0 R] /Count 1 >>",
+        b"<< /Type /Page /Parent 2 0 R /MediaBox [0 0 612 792] "
+        b"/Resources << /Font << /F1 5 0 R >> >> /Contents 4 0 R >>",
+        b"<< /Length %d >>\nstream\n" % len(stream) + stream + b"\nendstream",
+        b"<< /Type /Font /Subtype /Type1 /BaseFont /Helvetica >>",
+    ]
+    out = b"%PDF-1.4\n"
+    offsets = []
+    for number, body in enumerate(objects, 1):
+        offsets.append(len(out))
+        out += b"%d 0 obj\n" % number + body + b"\nendobj\n"
+    xref = len(out)
+    out += b"xref\n0 %d\n0000000000 65535 f \n" % (len(objects) + 1)
+    out += b"".join(b"%010d 00000 n \n" % offset for offset in offsets)
+    out += b"trailer\n<< /Size %d /Root 1 0 R >>\nstartxref\n%d\n%%%%EOF\n" % (len(objects) + 1, xref)
+    return out
+
+
+def tiny_docx(paragraph: str) -> bytes:
+    import io
+    import zipfile
+    buffer = io.BytesIO()
+    with zipfile.ZipFile(buffer, "w", zipfile.ZIP_DEFLATED) as z:
+        z.writestr("[Content_Types].xml",
+                   '<?xml version="1.0"?><Types xmlns="http://schemas.openxmlformats.org/package/2006/content-types">'
+                   '<Override PartName="/word/document.xml" ContentType="application/vnd.openxmlformats-'
+                   'officedocument.wordprocessingml.document.main+xml"/></Types>')
+        z.writestr("word/document.xml",
+                   '<?xml version="1.0"?><w:document xmlns:w="http://schemas.openxmlformats.org/wordprocessingml/2006/main">'
+                   f"<w:body><w:p><w:r><w:t>Dear team,</w:t></w:r></w:p><w:p><w:r><w:t>{paragraph}</w:t></w:r></w:p>"
+                   "</w:body></w:document>")
+    return buffer.getvalue()
+
+
+def tiny_odt(paragraph: str) -> bytes:
+    import io
+    import zipfile
+    buffer = io.BytesIO()
+    with zipfile.ZipFile(buffer, "w") as z:
+        z.writestr("mimetype", "application/vnd.oasis.opendocument.text")
+        z.writestr("content.xml",
+                   '<?xml version="1.0"?><office:document-content xmlns:office="urn:oasis:names:tc:opendocument:xmlns:office:1.0" '
+                   'xmlns:text="urn:oasis:names:tc:opendocument:xmlns:text:1.0"><office:body><office:text>'
+                   f"<text:h>Minutes</text:h><text:p>{paragraph}</text:p></office:text></office:body></office:document-content>")
+    return buffer.getvalue()
+
+
+def search_results(app) -> list[dict]:
+    return app.state()["search"]["results"]
+
+
+def search_contents(app, word: str) -> dict:
+    """Opens search with Contents on and returns results by file name."""
+    app.press("ctrl+k")
+    app.wait_for(lambda: app.state()["search"]["open"], "search")
+    if not app.state()["search"]["contents"]:
+        app.a11y_click("Search inside files")
+        app.wait_for(lambda: app.state()["search"]["contents"], "Contents on")
+    app.type_text(word)
+    app.wait_for(lambda: app.state()["search"]["ran"] == word, "the query")
+    return {r["name"]: r for r in search_results(app)}
+
+
+def test_E7_08_search_inside_files(session, home, app_factory):
+    planted = home / "Documents" / "Planted"
+    planted.mkdir()
+    (planted / "shopping.txt").write_text("Milk and bread\nRemember the quillfeather order for Monday\n")
+    (planted / "report.pdf").write_bytes(tiny_pdf("Quarterly quillfeather figures"))
+    (planted / "letter.docx").write_bytes(tiny_docx("The quillfeather contract is signed."))
+    (planted / "minutes.odt").write_bytes(tiny_odt("We agreed on the quillfeather budget."))
+    app = app_factory()
+    status = app.wait_index_idle(timeout=90)
+    assert status["contents"]["ok"] >= 4, status
+
+    found = search_contents(app, "quillfeather")
+    lines = {
+        "shopping.txt": "Remember the quillfeather order for Monday",
+        "report.pdf": "Quarterly quillfeather figures",
+        "letter.docx": "The quillfeather contract is signed.",
+        "minutes.odt": "We agreed on the quillfeather budget.",
+    }
+    for name, line in lines.items():
+        assert name in found, (name, sorted(found))
+        assert found[name]["line"] == line, found[name]
+        assert found[name]["match"] == "quillfeather"
+    # The word is in bold in the line shown.
+    assert "Remember the <b>quillfeather</b> order for Monday" in app.state()["search"]["lines_markup"]
+
+    # Off again: only names match, and none of these is named so.
+    app.a11y_click("Search inside files")
+    app.wait_for(lambda: not app.state()["search"]["contents"], "Contents off")
+    app.wait_for(lambda: not any(r["name"] in lines for r in search_results(app)), "name results only")
+
+
+HANG = "#!/usr/bin/python3\nimport time\nwhile True:\n    time.sleep(1)\n"
+NET = """#!/usr/bin/python3
+import socket, sys
+try:
+    socket.create_connection(("127.0.0.1", {port}), timeout=3).close()
+    print("netprobe connected")
+except OSError as error:
+    print("netprobe blocked", type(error).__name__)
+"""
+
+
+def test_E7_09_extraction_is_contained(session, home, app_factory, tmp_path):
+    import time
+    watcher = Watcher()
+    try:
+        hang = tmp_path / "hang.py"
+        hang.write_text(HANG)
+        net = tmp_path / "net.py"
+        net.write_text(NET.format(port=watcher.port))
+        for helper in (hang, net):
+            helper.chmod(0o755)
+        planted = home / "Documents" / "Planted"
+        planted.mkdir()
+        (planted / "stuck.hang").write_text("anything")
+        (planted / "probe.net").write_text("anything")
+        app = app_factory(extra_env={
+            "CAIRN_TEST_EXTRACTORS": f"hang={hang},net={net}",
+            "CAIRN_EXTRACT_TIMEOUT_MS": "2000",
+        })
+        # While the stuck extractor runs, the app answers at once.
+        started = time.monotonic()
+        app.open_folder(planted)
+        app.select("stuck.hang")
+        assert time.monotonic() - started < 5, "the window stayed responsive"
+
+        status = app.wait_index_idle(timeout=60)
+        assert status["contents"]["timeout"] >= 1, status
+        found = search_contents(app, "netprobe")
+        assert "probe.net" in found, sorted(found)
+        assert found["probe.net"]["line"].startswith("netprobe blocked"), found["probe.net"]
+        assert watcher.requests == [], "nothing reached the server from inside the sandbox"
+        assert app.running()
+    finally:
+        watcher.close()

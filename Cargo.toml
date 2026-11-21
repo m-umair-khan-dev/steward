@@ -34,6 +34,8 @@ blake3 = "1"
 # Bookmarks (P7-T08): a link's title and picture, the app's only outbound
 # request, and only when Preferences allow it. rustls, no system OpenSSL.
 ureq = "3"
+# Search inside files (P7-T09): OpenDocument and Office files are zipped XML.
+zip = { version = "2", default-features = false, features = ["deflate"] }
 
 [workspace.lints.rust]
 # Denied, not forbidden: the cxx-qt bridge module needs `unsafe extern "C++"` (ADR 0009).

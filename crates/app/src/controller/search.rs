@@ -1,7 +1,9 @@
 //! Find anything (Ctrl+K, P3-T07 to P3-T09): the search overlay's state.
 //! Queries run against the index a moment after the last keystroke; an
-//! older query never overwrites a newer one.
+//! older query never overwrites a newer one. With Contents on (P7-T09),
+//! files whose text has the words are found too, each with its line.
 
+use std::collections::HashMap;
 use std::path::PathBuf;
 use std::time::Duration;
 
@@ -31,6 +33,10 @@ pub struct SearchState {
     /// Bumped per keystroke; a query that finds a newer number is dropped.
     ticket: u64,
     ran: String,
+    /// Also search inside files.
+    pub contents: bool,
+    /// For results found by their text: the line, and where the word is.
+    lines: HashMap<PathBuf, (String, std::ops::Range<usize>)>,
 }
 
 fn section_of(hit: &Hit) -> usize {
@@ -39,6 +45,21 @@ fn section_of(hit: &Hit) -> usize {
         "images" | "videos" => 1,
         _ => 2,
     }
+}
+
+/// A matched line for QML's styled text: escaped, the word in bold.
+fn line_markup(line: &str, at: &std::ops::Range<usize>) -> String {
+    let escape = |t: &str| {
+        t.replace('&', "&amp;")
+            .replace('<', "&lt;")
+            .replace('>', "&gt;")
+    };
+    format!(
+        "{}<b>{}</b>{}",
+        escape(&line[..at.start]),
+        escape(&line[at.clone()]),
+        escape(&line[at.end..])
+    )
 }
 
 /// The freedesktop thumbnail of a file, if one was made already.
@@ -56,6 +77,7 @@ fn cached_thumbnail(path: &std::path::Path) -> Option<String> {
 impl Controller {
     pub fn open_search(&mut self) {
         self.search.open = true;
+        self.search.contents = crate::settings::get().boolean("search-contents");
         if self.search.kind.is_empty() {
             self.search.kind = "all".into();
         }
@@ -94,16 +116,35 @@ impl Controller {
         }
     }
 
+    pub fn search_contents(&mut self, on: bool) {
+        self.search.contents = on;
+        self.search_again();
+        self.mark(dirty::SEARCH);
+    }
+
     fn run_search(&mut self) {
         let query = self.search.query.clone();
+        let mut lines = HashMap::new();
         let hits = if self.index.running {
             self.index
                 .reader()
-                .map(|r| r.search(&query, LIMIT))
+                .map(|r| {
+                    let mut hits = r.search(&query, LIMIT);
+                    if self.search.contents {
+                        for found in r.search_content(&query, LIMIT) {
+                            if !hits.iter().any(|h| h.path == found.hit.path) {
+                                hits.push(found.hit.clone());
+                            }
+                            lines.insert(found.hit.path, (found.line, found.at));
+                        }
+                    }
+                    hits
+                })
                 .unwrap_or_default()
         } else {
             Vec::new()
         };
+        self.search.lines = lines;
         self.search.hits = hits;
         self.search.ran = query;
         self.search.selected = 0;
@@ -255,6 +296,7 @@ impl Controller {
                         "badge": tint::badge(&h.name, kind),
                         "thumb": if section == 1 { cached_thumbnail(&h.path) } else { None },
                         "selected": i == self.search.selected,
+                        "line": self.search.lines.get(&h.path).map(|(line, at)| line_markup(line, at)),
                     })
                 })
                 .collect();
@@ -266,6 +308,7 @@ impl Controller {
             "open": self.search.open,
             "query": self.search.query,
             "ran": self.search.ran,
+            "contents": self.search.contents,
             "running": self.index.running,
             "status": self.index_status_text(),
             "chips": if self.search.hits.is_empty() { Vec::new() } else { chips },
@@ -287,9 +330,17 @@ impl Controller {
             "open": self.search.open,
             "query": self.search.query,
             "ran": self.search.ran,
-            "results": shown.iter().map(|h| json!({
-                "name": h.name, "path": h.path.display().to_string(), "dir": h.is_dir, "kind": h.kind,
-            })).collect::<Vec<_>>(),
+            "contents": self.search.contents,
+            "results": shown.iter().map(|h| {
+                let line = self.search.lines.get(&h.path);
+                json!({
+                    "name": h.name, "path": h.path.display().to_string(), "dir": h.is_dir, "kind": h.kind,
+                    "line": line.map(|(l, _)| l.clone()),
+                    "match": line.map(|(l, at)| l[at.clone()].to_string()),
+                })
+            }).collect::<Vec<_>>(),
+            "lines_markup": shown.iter().filter_map(|h| self.search.lines.get(&h.path))
+                .map(|(l, at)| line_markup(l, at)).collect::<Vec<_>>(),
             "chips": self.search_json()["chips"].clone(),
             "selected": self.search.selected,
             "running": self.index.running,

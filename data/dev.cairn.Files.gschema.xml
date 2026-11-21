@@ -126,6 +126,15 @@
       <default>''</default>
       <summary>Your own editor command; {} is the folder</summary>
     </key>
+    <key name="search-contents" type="b">
+      <default>false</default>
+      <summary>Search also finds words inside files</summary>
+    </key>
+    <key name="content-folders" type="as">
+      <default>[]</default>
+      <summary>Folders outside Home whose files' text is read for search</summary>
+      <description>Search inside files reads Home only, unless folders are added here.</description>
+    </key>
     <key name="bookmark-fetch" type="b">
       <default>true</default>
       <summary>Fetch a saved link's title and picture</summary>

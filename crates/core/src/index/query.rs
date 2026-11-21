@@ -45,10 +45,10 @@ fn rank_lower(name: &str, query: &str) -> Option<u8> {
     }
 }
 
-const COLUMNS: &str =
+pub(crate) const COLUMNS: &str =
     "e.path, e.name, e.is_dir, e.kind, e.size, e.mtime, e.child_count, e.tree_size";
 
-fn hit(r: &rusqlite::Row) -> rusqlite::Result<Hit> {
+pub(crate) fn hit(r: &rusqlite::Row) -> rusqlite::Result<Hit> {
     Ok(Hit {
         path: PathBuf::from(r.get::<_, String>(0)?),
         name: r.get(1)?,

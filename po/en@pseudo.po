@@ -90,9 +90,6 @@ msgstr "[Àdd Lîñk ~~]"
 msgid "Add a folder to “"
 msgstr "[Àdd à földér tö “ ~~~~~]"
 
-msgid "Add a link to Bookmarks"
-msgstr "[Àdd à lîñk tö Böökmàrks ~~~~~~~]"
-
 msgid "Add to “"
 msgstr "[Àdd tö “ ~~]"
 
@@ -251,6 +248,9 @@ msgstr "[Çömpütér ñàmé ~~~~]"
 
 msgid "Condition"
 msgstr "[Çöñdîtîöñ ~~~]"
+
+msgid "Contents"
+msgstr "[Çöñtéñts ~~]"
 
 msgid "Contents of "
 msgstr "[Çöñtéñts öf  ~~~~]"
@@ -933,6 +933,9 @@ msgstr "[Ñöt öpéñéd îñ 90 dàýs ~~~~~~~]"
 msgid "Nothing changed"
 msgstr "[Ñöthîñg çhàñgéd ~~~~~]"
 
+msgid "Nothing has that in its name or text."
+msgstr "[Ñöthîñg hàs thàt îñ îts ñàmé ör téxt. ~~~~~~~~~~~~]"
+
 msgid "Nothing is called that."
 msgstr "[Ñöthîñg îs çàlléd thàt. ~~~~~~~]"
 
@@ -1223,6 +1226,9 @@ msgstr "[Sçrééñ réçördîñgs öldér thàñ 90 dàýs. ~~~~~~~~~~~~]"
 
 msgid "Search and Index"
 msgstr "[Séàrçh àñd Îñdéx ~~~~~]"
+
+msgid "Search inside files"
+msgstr "[Séàrçh îñsîdé fîlés ~~~~~~]"
 
 msgid "Search results"
 msgstr "[Séàrçh résülts ~~~~]"

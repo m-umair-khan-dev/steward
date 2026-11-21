@@ -10,6 +10,7 @@ pub mod clean;
 pub mod clip;
 pub mod dupes;
 pub mod entry;
+pub mod extract;
 pub mod folder;
 pub mod git;
 pub mod guard;

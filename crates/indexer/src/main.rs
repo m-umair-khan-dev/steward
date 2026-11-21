@@ -6,6 +6,9 @@
 //! - D-Bus `dev.cairn.Indexer1` at `/dev/cairn/Indexer`: Status, Pause,
 //!   Resume, Rescan, WaitIdle, Notify (the app's own changes), and the
 //!   signal Changed(folders).
+//! - Reads the text of documents for search inside files (P7-T09), each in
+//!   a `bwrap` sandbox: this same program started as `cairn-indexer extract
+//!   FILE` inside it. Only under Home, plus folders the user adds.
 //! - Reads the same settings as the app (roots, exclusions, pause, pause on
 //!   battery). Started by the app in development; a systemd user service and
 //!   D-Bus activation once installed.
@@ -21,6 +24,7 @@ use std::time::{Duration, Instant};
 
 use gio::prelude::*;
 
+use cairn_core::extract::{self, Sandbox};
 use cairn_core::index::{Index, Rules};
 
 const BUS_NAME: &str = "dev.cairn.Indexer";
@@ -54,6 +58,8 @@ enum Work {
 struct Shared {
     state: Mutex<&'static str>,
     counts: Mutex<(u64, u64)>,
+    /// Files whose text was read: (ok, failed, timeout).
+    contents: Mutex<(u64, u64, u64)>,
     complete: AtomicBool,
     /// Paused by the user (setting) or by the battery.
     paused: AtomicBool,
@@ -126,6 +132,8 @@ fn worker(
     shared: Arc<Shared>,
     roots: Vec<PathBuf>,
     rules: Rules,
+    sandbox: Option<Sandbox>,
+    content: Vec<PathBuf>,
 ) {
     let set_state = |s: &'static str| {
         if let Ok(mut state) = shared.state.lock() {
@@ -171,6 +179,16 @@ fn worker(
                     folders,
                     vec![dir.to_string_lossy().into_owned()],
                 );
+            }
+        }
+        // Then the text of new and changed documents (P7-T09).
+        if let Some(sandbox) = &sandbox
+            && !shared.paused.load(Ordering::SeqCst)
+        {
+            set_state("reading");
+            read_contents(&mut index, sandbox, &content, &shared);
+            if let Ok(mut contents) = shared.contents.lock() {
+                *contents = index.content_counts();
             }
         }
         shared.busy.fetch_sub(1, Ordering::SeqCst);
@@ -315,6 +333,7 @@ impl Main {
     fn status(&self) -> String {
         let (entries, files) = self.shared.counts.lock().map(|c| *c).unwrap_or((0, 0));
         let state = self.shared.state.lock().map(|s| *s).unwrap_or("idle");
+        let (ok, failed, timeout) = self.shared.contents.lock().map(|c| *c).unwrap_or_default();
         serde_json::json!({
             "state": if self.shared.paused.load(Ordering::SeqCst) { "paused" } else { state },
             "paused": self.shared.paused.load(Ordering::SeqCst),
@@ -326,6 +345,7 @@ impl Main {
             "polling": self.polling,
             "onBattery": self.on_battery,
             "pid": std::process::id(),
+            "contents": { "ok": ok, "failed": failed, "timeout": timeout },
         })
         .to_string()
     }
@@ -431,7 +451,92 @@ fn watch_limit() -> usize {
         .clamp(256, 200_000)
 }
 
+/// Inside the sandbox: print one file's text. This mode opens nothing but
+/// the file it is given (the sandbox has no home), so the fixture guard
+/// below does not apply to it.
+fn extract_main(file: &Path) -> ExitCode {
+    use std::io::Write;
+    match extract::text_of(file) {
+        Ok(text) => {
+            let _ = std::io::stdout().write_all(text.as_bytes());
+            ExitCode::SUCCESS
+        }
+        Err(_) => ExitCode::FAILURE,
+    }
+}
+
+/// The sandbox for reading documents, or None without `bwrap`.
+fn sandbox() -> Option<Sandbox> {
+    let me = std::env::current_exe().ok()?;
+    let Some(mut sandbox) = Sandbox::new(me) else {
+        eprintln!("cairn-indexer: bwrap not found; search inside files is off");
+        return None;
+    };
+    // Tests plant extractors that hang or try the network (E7-09).
+    #[cfg(feature = "e2e")]
+    {
+        if let Ok(ms) = std::env::var("CAIRN_EXTRACT_TIMEOUT_MS")
+            && let Ok(ms) = ms.parse()
+        {
+            sandbox.timeout = Duration::from_millis(ms);
+        }
+        if let Ok(list) = std::env::var("CAIRN_TEST_EXTRACTORS") {
+            sandbox.test_helpers = list
+                .split(',')
+                .filter_map(|pair| pair.split_once('='))
+                .map(|(ext, program)| (ext.to_string(), PathBuf::from(program)))
+                .collect();
+        }
+    }
+    let _ = &mut sandbox;
+    Some(sandbox)
+}
+
+/// Folders whose files' text is read: Home, plus those the user adds.
+fn content_folders(settings: &gio::Settings) -> Vec<PathBuf> {
+    let mut folders = vec![glib::home_dir()];
+    folders.extend(
+        settings
+            .strv("content-folders")
+            .iter()
+            .map(|f| PathBuf::from(f.as_str())),
+    );
+    folders
+}
+
+/// Reads the text of files that are new or changed, a batch at a time,
+/// until none are left or the user pauses.
+fn read_contents(index: &mut Index, sandbox: &Sandbox, folders: &[PathBuf], shared: &Shared) {
+    let wanted = |p: &Path| sandbox.reads(p);
+    loop {
+        let batch = index.content_pending(folders, &wanted, 50);
+        if batch.is_empty() {
+            return;
+        }
+        for pending in &batch {
+            if shared.paused.load(Ordering::SeqCst) {
+                return;
+            }
+            let outcome = sandbox.extract(&pending.path);
+            if outcome == extract::Outcome::TimedOut {
+                eprintln!(
+                    "cairn-indexer: reading {} took too long; skipped",
+                    pending.path.display()
+                );
+            }
+            if let Err(error) = index.content_store(pending, &outcome) {
+                eprintln!("cairn-indexer: could not store text: {error}");
+                return;
+            }
+        }
+    }
+}
+
 fn main() -> ExitCode {
+    let args: Vec<std::ffi::OsString> = std::env::args_os().collect();
+    if args.len() == 3 && args[1] == "extract" {
+        return extract_main(Path::new(&args[2]));
+    }
     // Same rule as the app (AGENTS.md rule 4): development and test builds
     // only ever run against a fixture home.
     let guard_required =
@@ -475,9 +580,12 @@ fn main() -> ExitCode {
     };
     let settings = settings();
     let (roots, rules) = roots_and_rules(&settings);
+    let sandbox = sandbox();
+    let content = content_folders(&settings);
     let shared = Arc::new(Shared {
         state: Mutex::new("starting"),
         counts: Mutex::new(index.counts()),
+        contents: Mutex::new(index.content_counts()),
         complete: AtomicBool::new(index.is_complete()),
         paused: AtomicBool::new(false),
         busy: AtomicUsize::new(0),
@@ -488,7 +596,7 @@ fn main() -> ExitCode {
         let shared = shared.clone();
         std::thread::Builder::new()
             .name("cairn-index".into())
-            .spawn(move || worker(index, queue, shared, roots, rules))
+            .spawn(move || worker(index, queue, shared, roots, rules, sandbox, content))
             .expect("start the worker");
     }
 
@@ -517,7 +625,7 @@ fn main() -> ExitCode {
         }
         // New roots or exclusions: start again with them (the app, or
         // systemd, starts the indexer again when it is needed).
-        "index-roots" | "index-exclude" => {
+        "index-roots" | "index-exclude" | "content-folders" => {
             let _ = settings;
             eprintln!("cairn-indexer: roots or exclusions changed; restarting");
             std::process::exit(0);

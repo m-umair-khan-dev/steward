@@ -22,7 +22,7 @@ RUN --mount=type=cache,target=/var/cache/apt,sharing=locked \
       libgtk-4-dev libadwaita-1-dev libgtksourceview-5-dev libwebkitgtk-6.0-dev \
       libpoppler-glib-dev libgtk-4-media-gstreamer gstreamer1.0-plugins-good libgtk-4-bin \
       blueprint-compiler gettext desktop-file-utils appstream \
-      gvfs gvfs-backends dbus dbus-daemon bubblewrap xdg-user-dirs shared-mime-info \
+      gvfs gvfs-backends dbus dbus-daemon bubblewrap poppler-utils xdg-user-dirs shared-mime-info \
       mutter weston libgl1-mesa-dri libegl-mesa0 \
       at-spi2-core python3 python3-gi gir1.2-atspi-2.0 python3-pytest python3-pil \
       adwaita-icon-theme yaru-theme-gtk yaru-theme-icon fonts-ubuntu

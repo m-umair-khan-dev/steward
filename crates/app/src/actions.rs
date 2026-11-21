@@ -305,6 +305,16 @@ fn create() -> (gio::SimpleActionGroup, gio::SimpleActionGroup) {
     with_string(&win, "search-select", |i| {
         controller::with(|c| c.search_select(i.parse().unwrap_or(0)))
     });
+    // Search inside files (P7-T09).
+    toggle(
+        &win,
+        "search-contents",
+        s.boolean("search-contents"),
+        |on| {
+            let _ = settings::get().set_boolean("search-contents", on);
+            controller::with(|c| c.search_contents(on))
+        },
+    );
     with_string(&win, "search-kind", |kind| {
         controller::with(|c| c.search_kind(kind))
     });

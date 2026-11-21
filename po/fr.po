@@ -130,10 +130,6 @@ msgstr "Ajouter un lien"
 msgid "Add a folder to “"
 msgstr "Ajouter un dossier à “"
 
-#: crates/app/src/actions.rs:101
-msgid "Add a link to Bookmarks"
-msgstr "Ajouter un lien aux signets"
-
 #: crates/app/qml/Main.qml:501
 msgid "Add to “"
 msgstr "Ajouter à “"
@@ -143,12 +139,12 @@ msgid "Added"
 msgstr "Ajouté :"
 
 #: crates/app/src/controller.rs:1429 crates/app/src/controller/installed.rs:192
-#: crates/app/src/controller/search.rs:211
+#: crates/app/src/controller/search.rs:248
 msgid "All"
 msgstr "Tout"
 
-#: crates/app/src/controller/bookmarks.rs:273
-#: crates/app/src/controller/bookmarks.rs:287
+#: crates/app/src/controller/bookmarks.rs:316
+#: crates/app/src/controller/bookmarks.rs:330
 msgid "All Bookmarks"
 msgstr "Tous les signets"
 
@@ -156,7 +152,7 @@ msgstr "Tous les signets"
 msgid "All suggestions"
 msgstr "Toutes les suggestions"
 
-#: crates/app/src/controller/bookmarks.rs:109
+#: crates/app/src/controller/bookmarks.rs:124
 msgid "Already in Bookmarks"
 msgstr "Déjà dans les signets"
 
@@ -243,7 +239,7 @@ msgstr "État de la batterie"
 msgid "Big files"
 msgstr "Gros fichiers"
 
-#: crates/app/src/controller/bookmarks.rs:184
+#: crates/app/src/controller/bookmarks.rs:219
 msgid "Bookmark removed"
 msgstr "Signet supprimé"
 
@@ -360,6 +356,10 @@ msgstr "Nom de l’ordinateur"
 msgid "Condition"
 msgstr "État"
 
+#: crates/app/qml/SearchOverlay.qml:80
+msgid "Contents"
+msgstr "Contenu"
+
 #: crates/app/qml/PeekOverlay.qml:195
 msgid "Contents of "
 msgstr "Contenu de "
@@ -430,7 +430,7 @@ msgid "Could not do it for"
 msgstr "Impossible pour"
 
 #: crates/app/src/controller/agents.rs:149
-#: crates/app/src/controller/bookmarks.rs:156
+#: crates/app/src/controller/bookmarks.rs:181
 #: crates/app/src/controller/markdown.rs:149
 msgid "Could not open it"
 msgstr "Impossible de l’ouvrir"
@@ -447,7 +447,7 @@ msgstr "Impossible de rétablir :"
 msgid "Could not save"
 msgstr "Impossible d’enregistrer"
 
-#: crates/app/src/controller/bookmarks.rs:94
+#: crates/app/src/controller/bookmarks.rs:97
 msgid "Could not save the link"
 msgstr "Impossible d’enregistrer le lien"
 
@@ -543,7 +543,7 @@ msgstr "Faire de même pour chaque conflit"
 msgid "Documents"
 msgstr "Documents"
 
-#: crates/app/src/controller/search.rs:234
+#: crates/app/src/controller/search.rs:271
 msgid "Documents and files"
 msgstr "Documents et fichiers"
 
@@ -645,8 +645,8 @@ msgstr "Favoris"
 msgid "Favourite "
 msgstr "Ajouter aux favoris "
 
-#: crates/app/src/controller/bookmarks.rs:267
-#: crates/app/src/controller/bookmarks.rs:288
+#: crates/app/src/controller/bookmarks.rs:310
+#: crates/app/src/controller/bookmarks.rs:333
 msgid "Favourites"
 msgstr "Favoris"
 
@@ -710,7 +710,7 @@ msgid "Folder to leave out"
 msgstr "Dossier à exclure"
 
 #: crates/app/src/controller.rs:1549 crates/app/src/controller.rs:1626
-#: crates/app/src/controller/search.rs:232
+#: crates/app/src/controller/search.rs:269
 #: crates/app/src/controller/workspaces.rs:373
 msgid "Folders"
 msgstr "Dossiers"
@@ -855,7 +855,7 @@ msgstr "Chaud"
 msgid "Images"
 msgstr "Images"
 
-#: crates/app/src/controller/search.rs:233
+#: crates/app/src/controller/search.rs:270
 msgid "Images and videos"
 msgstr "Images et vidéos"
 
@@ -992,11 +992,11 @@ msgstr "Clair"
 msgid "Link address"
 msgstr "Adresse du lien"
 
-#: crates/app/src/controller/bookmarks.rs:163
+#: crates/app/src/controller/bookmarks.rs:192
 msgid "Link copied"
 msgstr "Lien copié"
 
-#: crates/app/src/controller/bookmarks.rs:109
+#: crates/app/src/controller/bookmarks.rs:122
 msgid "Link saved"
 msgstr "Lien enregistré"
 
@@ -1305,7 +1305,11 @@ msgstr "Pas ouvert depuis 90 jours"
 msgid "Nothing changed"
 msgstr "Rien n’a changé"
 
-#: crates/app/qml/SearchOverlay.qml:158
+#: crates/app/qml/SearchOverlay.qml:174
+msgid "Nothing has that in its name or text."
+msgstr "Aucun nom ni texte ne contient cela."
+
+#: crates/app/qml/SearchOverlay.qml:174
 msgid "Nothing is called that."
 msgstr "Rien ne s’appelle ainsi."
 
@@ -1329,7 +1333,7 @@ msgstr "Rien de ce type"
 msgid "Nothing of yours is listening on this computer."
 msgstr "Rien à vous n’écoute sur cet ordinateur."
 
-#: crates/app/src/controller/bookmarks.rs:137
+#: crates/app/src/controller/bookmarks.rs:157
 #: crates/app/src/controller/ops.rs:314
 msgid "Nothing to paste"
 msgstr "Rien à coller"
@@ -1420,39 +1424,39 @@ msgstr "Ouvrir dans le navigateur : port "
 msgid "Open it from the folder that contains it."
 msgstr "Ouvrez-le depuis le dossier qui le contient."
 
-#: crates/app/src/actions.rs:102
+#: crates/app/src/actions.rs:107
 msgid "Open workspace 1"
 msgstr "Ouvrir l’espace de travail 1"
 
-#: crates/app/src/actions.rs:103
+#: crates/app/src/actions.rs:108
 msgid "Open workspace 2"
 msgstr "Ouvrir l’espace de travail 2"
 
-#: crates/app/src/actions.rs:104
+#: crates/app/src/actions.rs:109
 msgid "Open workspace 3"
 msgstr "Ouvrir l’espace de travail 3"
 
-#: crates/app/src/actions.rs:105
+#: crates/app/src/actions.rs:110
 msgid "Open workspace 4"
 msgstr "Ouvrir l’espace de travail 4"
 
-#: crates/app/src/actions.rs:106
+#: crates/app/src/actions.rs:111
 msgid "Open workspace 5"
 msgstr "Ouvrir l’espace de travail 5"
 
-#: crates/app/src/actions.rs:107
+#: crates/app/src/actions.rs:112
 msgid "Open workspace 6"
 msgstr "Ouvrir l’espace de travail 6"
 
-#: crates/app/src/actions.rs:108
+#: crates/app/src/actions.rs:113
 msgid "Open workspace 7"
 msgstr "Ouvrir l’espace de travail 7"
 
-#: crates/app/src/actions.rs:109
+#: crates/app/src/actions.rs:114
 msgid "Open workspace 8"
 msgstr "Ouvrir l’espace de travail 8"
 
-#: crates/app/src/actions.rs:110
+#: crates/app/src/actions.rs:115
 msgid "Open workspace 9"
 msgstr "Ouvrir l’espace de travail 9"
 
@@ -1703,7 +1707,11 @@ msgstr "Enregistrements d’écran de plus de 90 jours."
 msgid "Search and Index"
 msgstr "Recherche et index"
 
-#: crates/app/qml/SearchOverlay.qml:96
+#: crates/app/qml/SearchOverlay.qml:85
+msgid "Search inside files"
+msgstr "Rechercher dans les fichiers"
+
+#: crates/app/qml/SearchOverlay.qml:112
 msgid "Search results"
 msgstr "Résultats de recherche"
 
@@ -1811,7 +1819,7 @@ msgstr "Scindé"
 msgid "Split into two panes"
 msgstr "Diviser en deux volets"
 
-#: crates/app/qml/SearchOverlay.qml:121
+#: crates/app/qml/SearchOverlay.qml:137
 msgid "Start Indexing"
 msgstr "Lancer l’indexation"
 
@@ -2301,7 +2309,7 @@ msgstr "p. ex. hx {}"
 msgid "estimate"
 msgstr "estimation"
 
-#: crates/app/src/controller/search.rs:278
+#: crates/app/src/controller/search.rs:317
 msgid "for"
 msgstr "pour"
 
@@ -2357,11 +2365,11 @@ msgstr "n’est pas installé"
 msgid "it is no longer there"
 msgstr "il n’est plus là"
 
-#: crates/app/src/controller/search.rs:277
+#: crates/app/src/controller/search.rs:316
 msgid "item"
 msgstr "élément"
 
-#: crates/app/src/controller/search.rs:277
+#: crates/app/src/controller/search.rs:316
 msgid "items"
 msgstr "éléments"
 
@@ -2369,11 +2377,11 @@ msgstr "éléments"
 msgid "likely duplicates"
 msgstr "doublons probables"
 
-#: crates/app/src/controller/bookmarks.rs:347
+#: crates/app/src/controller/bookmarks.rs:404
 msgid "link"
 msgstr "lien"
 
-#: crates/app/src/controller/bookmarks.rs:347
+#: crates/app/src/controller/bookmarks.rs:404
 msgid "links"
 msgstr "liens"
 
@@ -2460,11 +2468,11 @@ msgstr "Cache pip"
 msgid "pip downloads packages again"
 msgstr "pip retélécharge les paquets"
 
-#: crates/app/src/controller/search.rs:277
+#: crates/app/src/controller/search.rs:316
 msgid "result"
 msgstr "résultat"
 
-#: crates/app/src/controller/search.rs:277
+#: crates/app/src/controller/search.rs:316
 msgid "results"
 msgstr "résultats"
 
@@ -2628,9 +2636,12 @@ msgstr "”. Il garde cette apparence s’il est renommé ou déplacé."
 msgid "‹ All suggestions"
 msgstr "‹ Toutes les suggestions"
 
-#: crates/app/qml/SearchOverlay.qml:211
+#: crates/app/qml/SearchOverlay.qml:227
 msgid "↑↓ move   ↵ open   Space peek   Ctrl+↵ show in folder"
 msgstr "↑↓ se déplacer   ↵ ouvrir   Espace aperçu   Ctrl+↵ afficher dans le dossier"
+
+#~ msgid "Add a link to Bookmarks"
+#~ msgstr "Ajouter un lien aux signets"
 
 #~ msgid "Open this folder in the editor"
 #~ msgstr "Ouvrir ce dossier dans l’éditeur"

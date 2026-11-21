@@ -130,10 +130,6 @@ msgstr "リンクを追加"
 msgid "Add a folder to “"
 msgstr "フォルダーを追加: “"
 
-#: crates/app/src/actions.rs:101
-msgid "Add a link to Bookmarks"
-msgstr "ブックマークにリンクを追加"
-
 #: crates/app/qml/Main.qml:501
 msgid "Add to “"
 msgstr "追加先: “"
@@ -143,12 +139,12 @@ msgid "Added"
 msgstr "追加しました:"
 
 #: crates/app/src/controller.rs:1429 crates/app/src/controller/installed.rs:192
-#: crates/app/src/controller/search.rs:211
+#: crates/app/src/controller/search.rs:248
 msgid "All"
 msgstr "すべて"
 
-#: crates/app/src/controller/bookmarks.rs:273
-#: crates/app/src/controller/bookmarks.rs:287
+#: crates/app/src/controller/bookmarks.rs:316
+#: crates/app/src/controller/bookmarks.rs:330
 msgid "All Bookmarks"
 msgstr "すべてのブックマーク"
 
@@ -156,7 +152,7 @@ msgstr "すべてのブックマーク"
 msgid "All suggestions"
 msgstr "すべての提案"
 
-#: crates/app/src/controller/bookmarks.rs:109
+#: crates/app/src/controller/bookmarks.rs:124
 msgid "Already in Bookmarks"
 msgstr "すでにブックマークにあります"
 
@@ -243,7 +239,7 @@ msgstr "バッテリーの状態"
 msgid "Big files"
 msgstr "大きなファイル"
 
-#: crates/app/src/controller/bookmarks.rs:184
+#: crates/app/src/controller/bookmarks.rs:219
 msgid "Bookmark removed"
 msgstr "ブックマークを削除しました"
 
@@ -360,6 +356,10 @@ msgstr "コンピューター名"
 msgid "Condition"
 msgstr "状態"
 
+#: crates/app/qml/SearchOverlay.qml:80
+msgid "Contents"
+msgstr "内容"
+
 #: crates/app/qml/PeekOverlay.qml:195
 msgid "Contents of "
 msgstr "内容: "
@@ -430,7 +430,7 @@ msgid "Could not do it for"
 msgstr "実行できませんでした:"
 
 #: crates/app/src/controller/agents.rs:149
-#: crates/app/src/controller/bookmarks.rs:156
+#: crates/app/src/controller/bookmarks.rs:181
 #: crates/app/src/controller/markdown.rs:149
 msgid "Could not open it"
 msgstr "開けませんでした"
@@ -447,7 +447,7 @@ msgstr "やり直せませんでした:"
 msgid "Could not save"
 msgstr "保存できませんでした"
 
-#: crates/app/src/controller/bookmarks.rs:94
+#: crates/app/src/controller/bookmarks.rs:97
 msgid "Could not save the link"
 msgstr "リンクを保存できませんでした"
 
@@ -543,7 +543,7 @@ msgstr "すべての競合に同じ処理をする"
 msgid "Documents"
 msgstr "ドキュメント"
 
-#: crates/app/src/controller/search.rs:234
+#: crates/app/src/controller/search.rs:271
 msgid "Documents and files"
 msgstr "ドキュメントとファイル"
 
@@ -645,8 +645,8 @@ msgstr "お気に入り"
 msgid "Favourite "
 msgstr "お気に入りに追加 "
 
-#: crates/app/src/controller/bookmarks.rs:267
-#: crates/app/src/controller/bookmarks.rs:288
+#: crates/app/src/controller/bookmarks.rs:310
+#: crates/app/src/controller/bookmarks.rs:333
 msgid "Favourites"
 msgstr "お気に入り"
 
@@ -710,7 +710,7 @@ msgid "Folder to leave out"
 msgstr "除外するフォルダー"
 
 #: crates/app/src/controller.rs:1549 crates/app/src/controller.rs:1626
-#: crates/app/src/controller/search.rs:232
+#: crates/app/src/controller/search.rs:269
 #: crates/app/src/controller/workspaces.rs:373
 msgid "Folders"
 msgstr "フォルダー"
@@ -855,7 +855,7 @@ msgstr "高温"
 msgid "Images"
 msgstr "画像"
 
-#: crates/app/src/controller/search.rs:233
+#: crates/app/src/controller/search.rs:270
 msgid "Images and videos"
 msgstr "画像と動画"
 
@@ -992,11 +992,11 @@ msgstr "ライト"
 msgid "Link address"
 msgstr "リンクのアドレス"
 
-#: crates/app/src/controller/bookmarks.rs:163
+#: crates/app/src/controller/bookmarks.rs:192
 msgid "Link copied"
 msgstr "リンクをコピーしました"
 
-#: crates/app/src/controller/bookmarks.rs:109
+#: crates/app/src/controller/bookmarks.rs:122
 msgid "Link saved"
 msgstr "リンクを保存しました"
 
@@ -1305,7 +1305,11 @@ msgstr "90 日間開かれていない"
 msgid "Nothing changed"
 msgstr "変更はありません"
 
-#: crates/app/qml/SearchOverlay.qml:158
+#: crates/app/qml/SearchOverlay.qml:174
+msgid "Nothing has that in its name or text."
+msgstr "名前にも本文にも見つかりません。"
+
+#: crates/app/qml/SearchOverlay.qml:174
 msgid "Nothing is called that."
 msgstr "その名前のものはありません。"
 
@@ -1329,7 +1333,7 @@ msgstr "この種類はありません"
 msgid "Nothing of yours is listening on this computer."
 msgstr "このコンピューターで待ち受けているあなたのプロセスはありません。"
 
-#: crates/app/src/controller/bookmarks.rs:137
+#: crates/app/src/controller/bookmarks.rs:157
 #: crates/app/src/controller/ops.rs:314
 msgid "Nothing to paste"
 msgstr "貼り付けるものがありません"
@@ -1420,39 +1424,39 @@ msgstr "ブラウザーで開く: ポート "
 msgid "Open it from the folder that contains it."
 msgstr "それを含むフォルダーから開いてください。"
 
-#: crates/app/src/actions.rs:102
+#: crates/app/src/actions.rs:107
 msgid "Open workspace 1"
 msgstr "ワークスペース 1 を開く"
 
-#: crates/app/src/actions.rs:103
+#: crates/app/src/actions.rs:108
 msgid "Open workspace 2"
 msgstr "ワークスペース 2 を開く"
 
-#: crates/app/src/actions.rs:104
+#: crates/app/src/actions.rs:109
 msgid "Open workspace 3"
 msgstr "ワークスペース 3 を開く"
 
-#: crates/app/src/actions.rs:105
+#: crates/app/src/actions.rs:110
 msgid "Open workspace 4"
 msgstr "ワークスペース 4 を開く"
 
-#: crates/app/src/actions.rs:106
+#: crates/app/src/actions.rs:111
 msgid "Open workspace 5"
 msgstr "ワークスペース 5 を開く"
 
-#: crates/app/src/actions.rs:107
+#: crates/app/src/actions.rs:112
 msgid "Open workspace 6"
 msgstr "ワークスペース 6 を開く"
 
-#: crates/app/src/actions.rs:108
+#: crates/app/src/actions.rs:113
 msgid "Open workspace 7"
 msgstr "ワークスペース 7 を開く"
 
-#: crates/app/src/actions.rs:109
+#: crates/app/src/actions.rs:114
 msgid "Open workspace 8"
 msgstr "ワークスペース 8 を開く"
 
-#: crates/app/src/actions.rs:110
+#: crates/app/src/actions.rs:115
 msgid "Open workspace 9"
 msgstr "ワークスペース 9 を開く"
 
@@ -1703,7 +1707,11 @@ msgstr "90 日より前の画面録画。"
 msgid "Search and Index"
 msgstr "検索とインデックス"
 
-#: crates/app/qml/SearchOverlay.qml:96
+#: crates/app/qml/SearchOverlay.qml:85
+msgid "Search inside files"
+msgstr "ファイルの中身を検索"
+
+#: crates/app/qml/SearchOverlay.qml:112
 msgid "Search results"
 msgstr "検索結果"
 
@@ -1811,7 +1819,7 @@ msgstr "分割"
 msgid "Split into two panes"
 msgstr "2 つのペインに分割"
 
-#: crates/app/qml/SearchOverlay.qml:121
+#: crates/app/qml/SearchOverlay.qml:137
 msgid "Start Indexing"
 msgstr "インデックス作成を開始"
 
@@ -2301,7 +2309,7 @@ msgstr "例: hx {}"
 msgid "estimate"
 msgstr "推定"
 
-#: crates/app/src/controller/search.rs:278
+#: crates/app/src/controller/search.rs:317
 msgid "for"
 msgstr "対象:"
 
@@ -2357,11 +2365,11 @@ msgstr "はインストールされていません"
 msgid "it is no longer there"
 msgstr "もう存在しません"
 
-#: crates/app/src/controller/search.rs:277
+#: crates/app/src/controller/search.rs:316
 msgid "item"
 msgstr "項目"
 
-#: crates/app/src/controller/search.rs:277
+#: crates/app/src/controller/search.rs:316
 msgid "items"
 msgstr "項目"
 
@@ -2369,11 +2377,11 @@ msgstr "項目"
 msgid "likely duplicates"
 msgstr "重複の可能性"
 
-#: crates/app/src/controller/bookmarks.rs:347
+#: crates/app/src/controller/bookmarks.rs:404
 msgid "link"
 msgstr "件のリンク"
 
-#: crates/app/src/controller/bookmarks.rs:347
+#: crates/app/src/controller/bookmarks.rs:404
 msgid "links"
 msgstr "件のリンク"
 
@@ -2460,11 +2468,11 @@ msgstr "pip のキャッシュ"
 msgid "pip downloads packages again"
 msgstr "pip がパッケージを再ダウンロードします"
 
-#: crates/app/src/controller/search.rs:277
+#: crates/app/src/controller/search.rs:316
 msgid "result"
 msgstr "件"
 
-#: crates/app/src/controller/search.rs:277
+#: crates/app/src/controller/search.rs:316
 msgid "results"
 msgstr "件"
 
@@ -2625,9 +2633,12 @@ msgstr "”。名前を変えても移動しても、この見た目は保たれ
 msgid "‹ All suggestions"
 msgstr "‹ すべての提案"
 
-#: crates/app/qml/SearchOverlay.qml:211
+#: crates/app/qml/SearchOverlay.qml:227
 msgid "↑↓ move   ↵ open   Space peek   Ctrl+↵ show in folder"
 msgstr "↑↓ 移動   ↵ 開く   Space プレビュー   Ctrl+↵ フォルダーで表示"
+
+#~ msgid "Add a link to Bookmarks"
+#~ msgstr "ブックマークにリンクを追加"
 
 #~ msgid "Open this folder in the editor"
 #~ msgstr "このフォルダーをエディターで開く"

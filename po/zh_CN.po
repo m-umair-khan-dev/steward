@@ -130,10 +130,6 @@ msgstr "添加链接"
 msgid "Add a folder to “"
 msgstr "添加文件夹到“"
 
-#: crates/app/src/actions.rs:101
-msgid "Add a link to Bookmarks"
-msgstr "将链接添加到书签"
-
 #: crates/app/qml/Main.qml:501
 msgid "Add to “"
 msgstr "添加到“"
@@ -143,12 +139,12 @@ msgid "Added"
 msgstr "已添加"
 
 #: crates/app/src/controller.rs:1429 crates/app/src/controller/installed.rs:192
-#: crates/app/src/controller/search.rs:211
+#: crates/app/src/controller/search.rs:248
 msgid "All"
 msgstr "全部"
 
-#: crates/app/src/controller/bookmarks.rs:273
-#: crates/app/src/controller/bookmarks.rs:287
+#: crates/app/src/controller/bookmarks.rs:316
+#: crates/app/src/controller/bookmarks.rs:330
 msgid "All Bookmarks"
 msgstr "所有书签"
 
@@ -156,7 +152,7 @@ msgstr "所有书签"
 msgid "All suggestions"
 msgstr "全部建议"
 
-#: crates/app/src/controller/bookmarks.rs:109
+#: crates/app/src/controller/bookmarks.rs:124
 msgid "Already in Bookmarks"
 msgstr "已在书签中"
 
@@ -243,7 +239,7 @@ msgstr "电池健康"
 msgid "Big files"
 msgstr "大文件"
 
-#: crates/app/src/controller/bookmarks.rs:184
+#: crates/app/src/controller/bookmarks.rs:219
 msgid "Bookmark removed"
 msgstr "书签已移除"
 
@@ -360,6 +356,10 @@ msgstr "电脑名称"
 msgid "Condition"
 msgstr "状况"
 
+#: crates/app/qml/SearchOverlay.qml:80
+msgid "Contents"
+msgstr "内容"
+
 #: crates/app/qml/PeekOverlay.qml:195
 msgid "Contents of "
 msgstr "内容： "
@@ -430,7 +430,7 @@ msgid "Could not do it for"
 msgstr "无法完成："
 
 #: crates/app/src/controller/agents.rs:149
-#: crates/app/src/controller/bookmarks.rs:156
+#: crates/app/src/controller/bookmarks.rs:181
 #: crates/app/src/controller/markdown.rs:149
 msgid "Could not open it"
 msgstr "无法打开"
@@ -447,7 +447,7 @@ msgstr "无法重做："
 msgid "Could not save"
 msgstr "无法保存"
 
-#: crates/app/src/controller/bookmarks.rs:94
+#: crates/app/src/controller/bookmarks.rs:97
 msgid "Could not save the link"
 msgstr "无法保存链接"
 
@@ -543,7 +543,7 @@ msgstr "对所有冲突执行相同操作"
 msgid "Documents"
 msgstr "文档"
 
-#: crates/app/src/controller/search.rs:234
+#: crates/app/src/controller/search.rs:271
 msgid "Documents and files"
 msgstr "文档和文件"
 
@@ -645,8 +645,8 @@ msgstr "收藏"
 msgid "Favourite "
 msgstr "收藏 "
 
-#: crates/app/src/controller/bookmarks.rs:267
-#: crates/app/src/controller/bookmarks.rs:288
+#: crates/app/src/controller/bookmarks.rs:310
+#: crates/app/src/controller/bookmarks.rs:333
 msgid "Favourites"
 msgstr "收藏"
 
@@ -710,7 +710,7 @@ msgid "Folder to leave out"
 msgstr "要排除的文件夹"
 
 #: crates/app/src/controller.rs:1549 crates/app/src/controller.rs:1626
-#: crates/app/src/controller/search.rs:232
+#: crates/app/src/controller/search.rs:269
 #: crates/app/src/controller/workspaces.rs:373
 msgid "Folders"
 msgstr "文件夹"
@@ -855,7 +855,7 @@ msgstr "过热"
 msgid "Images"
 msgstr "图片"
 
-#: crates/app/src/controller/search.rs:233
+#: crates/app/src/controller/search.rs:270
 msgid "Images and videos"
 msgstr "图片和视频"
 
@@ -992,11 +992,11 @@ msgstr "浅色"
 msgid "Link address"
 msgstr "链接地址"
 
-#: crates/app/src/controller/bookmarks.rs:163
+#: crates/app/src/controller/bookmarks.rs:192
 msgid "Link copied"
 msgstr "链接已复制"
 
-#: crates/app/src/controller/bookmarks.rs:109
+#: crates/app/src/controller/bookmarks.rs:122
 msgid "Link saved"
 msgstr "链接已保存"
 
@@ -1305,7 +1305,11 @@ msgstr "90 天未打开"
 msgid "Nothing changed"
 msgstr "没有变化"
 
-#: crates/app/qml/SearchOverlay.qml:158
+#: crates/app/qml/SearchOverlay.qml:174
+msgid "Nothing has that in its name or text."
+msgstr "名称和内容中都没有找到。"
+
+#: crates/app/qml/SearchOverlay.qml:174
 msgid "Nothing is called that."
 msgstr "没有叫这个名字的项目。"
 
@@ -1329,7 +1333,7 @@ msgstr "没有这类项目"
 msgid "Nothing of yours is listening on this computer."
 msgstr "这台电脑上没有你的程序在监听。"
 
-#: crates/app/src/controller/bookmarks.rs:137
+#: crates/app/src/controller/bookmarks.rs:157
 #: crates/app/src/controller/ops.rs:314
 msgid "Nothing to paste"
 msgstr "没有可粘贴的内容"
@@ -1420,39 +1424,39 @@ msgstr "在浏览器中打开：端口 "
 msgid "Open it from the folder that contains it."
 msgstr "请从包含它的文件夹中打开。"
 
-#: crates/app/src/actions.rs:102
+#: crates/app/src/actions.rs:107
 msgid "Open workspace 1"
 msgstr "打开工作区 1"
 
-#: crates/app/src/actions.rs:103
+#: crates/app/src/actions.rs:108
 msgid "Open workspace 2"
 msgstr "打开工作区 2"
 
-#: crates/app/src/actions.rs:104
+#: crates/app/src/actions.rs:109
 msgid "Open workspace 3"
 msgstr "打开工作区 3"
 
-#: crates/app/src/actions.rs:105
+#: crates/app/src/actions.rs:110
 msgid "Open workspace 4"
 msgstr "打开工作区 4"
 
-#: crates/app/src/actions.rs:106
+#: crates/app/src/actions.rs:111
 msgid "Open workspace 5"
 msgstr "打开工作区 5"
 
-#: crates/app/src/actions.rs:107
+#: crates/app/src/actions.rs:112
 msgid "Open workspace 6"
 msgstr "打开工作区 6"
 
-#: crates/app/src/actions.rs:108
+#: crates/app/src/actions.rs:113
 msgid "Open workspace 7"
 msgstr "打开工作区 7"
 
-#: crates/app/src/actions.rs:109
+#: crates/app/src/actions.rs:114
 msgid "Open workspace 8"
 msgstr "打开工作区 8"
 
-#: crates/app/src/actions.rs:110
+#: crates/app/src/actions.rs:115
 msgid "Open workspace 9"
 msgstr "打开工作区 9"
 
@@ -1703,7 +1707,11 @@ msgstr "超过 90 天的屏幕录像。"
 msgid "Search and Index"
 msgstr "搜索与索引"
 
-#: crates/app/qml/SearchOverlay.qml:96
+#: crates/app/qml/SearchOverlay.qml:85
+msgid "Search inside files"
+msgstr "搜索文件内容"
+
+#: crates/app/qml/SearchOverlay.qml:112
 msgid "Search results"
 msgstr "搜索结果"
 
@@ -1811,7 +1819,7 @@ msgstr "分栏"
 msgid "Split into two panes"
 msgstr "拆分为两个窗格"
 
-#: crates/app/qml/SearchOverlay.qml:121
+#: crates/app/qml/SearchOverlay.qml:137
 msgid "Start Indexing"
 msgstr "开始索引"
 
@@ -2301,7 +2309,7 @@ msgstr "例如 hx {}"
 msgid "estimate"
 msgstr "估计"
 
-#: crates/app/src/controller/search.rs:278
+#: crates/app/src/controller/search.rs:317
 msgid "for"
 msgstr "用于"
 
@@ -2357,11 +2365,11 @@ msgstr "未安装"
 msgid "it is no longer there"
 msgstr "它已不存在"
 
-#: crates/app/src/controller/search.rs:277
+#: crates/app/src/controller/search.rs:316
 msgid "item"
 msgstr "项"
 
-#: crates/app/src/controller/search.rs:277
+#: crates/app/src/controller/search.rs:316
 msgid "items"
 msgstr "项"
 
@@ -2369,11 +2377,11 @@ msgstr "项"
 msgid "likely duplicates"
 msgstr "可能重复"
 
-#: crates/app/src/controller/bookmarks.rs:347
+#: crates/app/src/controller/bookmarks.rs:404
 msgid "link"
 msgstr "个链接"
 
-#: crates/app/src/controller/bookmarks.rs:347
+#: crates/app/src/controller/bookmarks.rs:404
 msgid "links"
 msgstr "个链接"
 
@@ -2460,11 +2468,11 @@ msgstr "pip 缓存"
 msgid "pip downloads packages again"
 msgstr "pip 会重新下载软件包"
 
-#: crates/app/src/controller/search.rs:277
+#: crates/app/src/controller/search.rs:316
 msgid "result"
 msgstr "个结果"
 
-#: crates/app/src/controller/search.rs:277
+#: crates/app/src/controller/search.rs:316
 msgid "results"
 msgstr "个结果"
 
@@ -2625,9 +2633,12 @@ msgstr "”中。重命名或移动后会保持这个外观。"
 msgid "‹ All suggestions"
 msgstr "‹ 全部建议"
 
-#: crates/app/qml/SearchOverlay.qml:211
+#: crates/app/qml/SearchOverlay.qml:227
 msgid "↑↓ move   ↵ open   Space peek   Ctrl+↵ show in folder"
 msgstr "↑↓ 移动   ↵ 打开   空格 预览   Ctrl+↵ 在文件夹中显示"
+
+#~ msgid "Add a link to Bookmarks"
+#~ msgstr "将链接添加到书签"
 
 #~ msgid "Open this folder in the editor"
 #~ msgstr "在编辑器中打开此文件夹"

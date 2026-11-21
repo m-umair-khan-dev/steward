@@ -120,10 +120,6 @@ msgstr ""
 msgid "Add a folder to “"
 msgstr ""
 
-#: crates/app/src/actions.rs:101
-msgid "Add a link to Bookmarks"
-msgstr ""
-
 #: crates/app/qml/Main.qml:501
 msgid "Add to “"
 msgstr ""
@@ -132,11 +128,11 @@ msgstr ""
 msgid "Added"
 msgstr ""
 
-#: crates/app/src/controller.rs:1429 crates/app/src/controller/installed.rs:192 crates/app/src/controller/search.rs:211
+#: crates/app/src/controller.rs:1429 crates/app/src/controller/installed.rs:192 crates/app/src/controller/search.rs:248
 msgid "All"
 msgstr ""
 
-#: crates/app/src/controller/bookmarks.rs:273 crates/app/src/controller/bookmarks.rs:287
+#: crates/app/src/controller/bookmarks.rs:316 crates/app/src/controller/bookmarks.rs:330
 msgid "All Bookmarks"
 msgstr ""
 
@@ -144,7 +140,7 @@ msgstr ""
 msgid "All suggestions"
 msgstr ""
 
-#: crates/app/src/controller/bookmarks.rs:109
+#: crates/app/src/controller/bookmarks.rs:124
 msgid "Already in Bookmarks"
 msgstr ""
 
@@ -228,7 +224,7 @@ msgstr ""
 msgid "Big files"
 msgstr ""
 
-#: crates/app/src/controller/bookmarks.rs:184
+#: crates/app/src/controller/bookmarks.rs:219
 msgid "Bookmark removed"
 msgstr ""
 
@@ -336,6 +332,10 @@ msgstr ""
 msgid "Condition"
 msgstr ""
 
+#: crates/app/qml/SearchOverlay.qml:80
+msgid "Contents"
+msgstr ""
+
 #: crates/app/qml/PeekOverlay.qml:195
 msgid "Contents of "
 msgstr ""
@@ -404,7 +404,7 @@ msgstr ""
 msgid "Could not do it for"
 msgstr ""
 
-#: crates/app/src/controller/agents.rs:149 crates/app/src/controller/bookmarks.rs:156 crates/app/src/controller/markdown.rs:149
+#: crates/app/src/controller/agents.rs:149 crates/app/src/controller/bookmarks.rs:181 crates/app/src/controller/markdown.rs:149
 msgid "Could not open it"
 msgstr ""
 
@@ -420,7 +420,7 @@ msgstr ""
 msgid "Could not save"
 msgstr ""
 
-#: crates/app/src/controller/bookmarks.rs:94
+#: crates/app/src/controller/bookmarks.rs:97
 msgid "Could not save the link"
 msgstr ""
 
@@ -512,7 +512,7 @@ msgstr ""
 msgid "Documents"
 msgstr ""
 
-#: crates/app/src/controller/search.rs:234
+#: crates/app/src/controller/search.rs:271
 msgid "Documents and files"
 msgstr ""
 
@@ -612,7 +612,7 @@ msgstr ""
 msgid "Favourite "
 msgstr ""
 
-#: crates/app/src/controller/bookmarks.rs:267 crates/app/src/controller/bookmarks.rs:288
+#: crates/app/src/controller/bookmarks.rs:310 crates/app/src/controller/bookmarks.rs:333
 msgid "Favourites"
 msgstr ""
 
@@ -672,7 +672,7 @@ msgstr ""
 msgid "Folder to leave out"
 msgstr ""
 
-#: crates/app/src/controller.rs:1549 crates/app/src/controller.rs:1626 crates/app/src/controller/search.rs:232 crates/app/src/controller/workspaces.rs:373
+#: crates/app/src/controller.rs:1549 crates/app/src/controller.rs:1626 crates/app/src/controller/search.rs:269 crates/app/src/controller/workspaces.rs:373
 msgid "Folders"
 msgstr ""
 
@@ -812,7 +812,7 @@ msgstr ""
 msgid "Images"
 msgstr ""
 
-#: crates/app/src/controller/search.rs:233
+#: crates/app/src/controller/search.rs:270
 msgid "Images and videos"
 msgstr ""
 
@@ -944,11 +944,11 @@ msgstr ""
 msgid "Link address"
 msgstr ""
 
-#: crates/app/src/controller/bookmarks.rs:163
+#: crates/app/src/controller/bookmarks.rs:192
 msgid "Link copied"
 msgstr ""
 
-#: crates/app/src/controller/bookmarks.rs:109
+#: crates/app/src/controller/bookmarks.rs:122
 msgid "Link saved"
 msgstr ""
 
@@ -1244,7 +1244,11 @@ msgstr ""
 msgid "Nothing changed"
 msgstr ""
 
-#: crates/app/qml/SearchOverlay.qml:158
+#: crates/app/qml/SearchOverlay.qml:174
+msgid "Nothing has that in its name or text."
+msgstr ""
+
+#: crates/app/qml/SearchOverlay.qml:174
 msgid "Nothing is called that."
 msgstr ""
 
@@ -1268,7 +1272,7 @@ msgstr ""
 msgid "Nothing of yours is listening on this computer."
 msgstr ""
 
-#: crates/app/src/controller/bookmarks.rs:137 crates/app/src/controller/ops.rs:314
+#: crates/app/src/controller/bookmarks.rs:157 crates/app/src/controller/ops.rs:314
 msgid "Nothing to paste"
 msgstr ""
 
@@ -1356,39 +1360,39 @@ msgstr ""
 msgid "Open it from the folder that contains it."
 msgstr ""
 
-#: crates/app/src/actions.rs:102
+#: crates/app/src/actions.rs:107
 msgid "Open workspace 1"
 msgstr ""
 
-#: crates/app/src/actions.rs:103
+#: crates/app/src/actions.rs:108
 msgid "Open workspace 2"
 msgstr ""
 
-#: crates/app/src/actions.rs:104
+#: crates/app/src/actions.rs:109
 msgid "Open workspace 3"
 msgstr ""
 
-#: crates/app/src/actions.rs:105
+#: crates/app/src/actions.rs:110
 msgid "Open workspace 4"
 msgstr ""
 
-#: crates/app/src/actions.rs:106
+#: crates/app/src/actions.rs:111
 msgid "Open workspace 5"
 msgstr ""
 
-#: crates/app/src/actions.rs:107
+#: crates/app/src/actions.rs:112
 msgid "Open workspace 6"
 msgstr ""
 
-#: crates/app/src/actions.rs:108
+#: crates/app/src/actions.rs:113
 msgid "Open workspace 7"
 msgstr ""
 
-#: crates/app/src/actions.rs:109
+#: crates/app/src/actions.rs:114
 msgid "Open workspace 8"
 msgstr ""
 
-#: crates/app/src/actions.rs:110
+#: crates/app/src/actions.rs:115
 msgid "Open workspace 9"
 msgstr ""
 
@@ -1632,7 +1636,11 @@ msgstr ""
 msgid "Search and Index"
 msgstr ""
 
-#: crates/app/qml/SearchOverlay.qml:96
+#: crates/app/qml/SearchOverlay.qml:85
+msgid "Search inside files"
+msgstr ""
+
+#: crates/app/qml/SearchOverlay.qml:112
 msgid "Search results"
 msgstr ""
 
@@ -1736,7 +1744,7 @@ msgstr ""
 msgid "Split into two panes"
 msgstr ""
 
-#: crates/app/qml/SearchOverlay.qml:121
+#: crates/app/qml/SearchOverlay.qml:137
 msgid "Start Indexing"
 msgstr ""
 
@@ -2216,7 +2224,7 @@ msgstr ""
 msgid "estimate"
 msgstr ""
 
-#: crates/app/src/controller/search.rs:278
+#: crates/app/src/controller/search.rs:317
 msgid "for"
 msgstr ""
 
@@ -2272,11 +2280,11 @@ msgstr ""
 msgid "it is no longer there"
 msgstr ""
 
-#: crates/app/src/controller/search.rs:277
+#: crates/app/src/controller/search.rs:316
 msgid "item"
 msgstr ""
 
-#: crates/app/src/controller/search.rs:277
+#: crates/app/src/controller/search.rs:316
 msgid "items"
 msgstr ""
 
@@ -2284,11 +2292,11 @@ msgstr ""
 msgid "likely duplicates"
 msgstr ""
 
-#: crates/app/src/controller/bookmarks.rs:347
+#: crates/app/src/controller/bookmarks.rs:404
 msgid "link"
 msgstr ""
 
-#: crates/app/src/controller/bookmarks.rs:347
+#: crates/app/src/controller/bookmarks.rs:404
 msgid "links"
 msgstr ""
 
@@ -2372,11 +2380,11 @@ msgstr ""
 msgid "pip downloads packages again"
 msgstr ""
 
-#: crates/app/src/controller/search.rs:277
+#: crates/app/src/controller/search.rs:316
 msgid "result"
 msgstr ""
 
-#: crates/app/src/controller/search.rs:277
+#: crates/app/src/controller/search.rs:316
 msgid "results"
 msgstr ""
 
@@ -2534,6 +2542,6 @@ msgstr ""
 msgid "‹ All suggestions"
 msgstr ""
 
-#: crates/app/qml/SearchOverlay.qml:211
+#: crates/app/qml/SearchOverlay.qml:227
 msgid "↑↓ move   ↵ open   Space peek   Ctrl+↵ show in folder"
 msgstr ""

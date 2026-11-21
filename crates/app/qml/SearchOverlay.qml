@@ -62,7 +62,7 @@ FocusScope {
             id: field
             anchors.fill: parent
             anchors.leftMargin: 26
-            anchors.rightMargin: 56
+            anchors.rightMargin: 56 + contentsSwitch.width + 12
             background: null
             color: Theme.ink
             font.pixelSize: 24
@@ -71,6 +71,22 @@ FocusScope {
             Accessible.name: p.t("Find anything")
             onTextChanged: p.searchquery(text)
             Keys.onPressed: event => root.keys(event, true)
+        }
+        // Contents (P7-T09): also find words inside files.
+        Row {
+            id: contentsSwitch
+            anchors.right: parent.right; anchors.rightMargin: 58; anchors.verticalCenter: parent.verticalCenter
+            spacing: 6
+            Text { text: p.t("Contents"); color: Theme.muted; font.pixelSize: 14; anchors.verticalCenter: parent.verticalCenter }
+            Switch {
+                anchors.verticalCenter: parent.verticalCenter
+                checked: !!root.model.contents
+                focusPolicy: Qt.NoFocus
+                Accessible.name: p.t("Search inside files")
+                // Any change (a click, or an accessibility Toggle); acts only when
+                // it differs from the state.
+                onCheckedChanged: if (checked !== !!root.model.contents) p.activate("win.search-contents", "")
+            }
         }
         Icon { anchors.right: parent.right; anchors.rightMargin: 24; anchors.verticalCenter: parent.verticalCenter
                name: "search"; size: 22; color: Theme.muted }
@@ -155,7 +171,7 @@ FocusScope {
 
                 Text {
                     visible: root.model.running && (root.model.ran || "") !== "" && (root.model.count || 0) === 0
-                    text: p.t("Nothing is called that.")
+                    text: root.model.contents ? p.t("Nothing has that in its name or text.") : p.t("Nothing is called that.")
                     color: Theme.muted; font.pixelSize: 15
                 }
 
@@ -217,7 +233,7 @@ FocusScope {
     component SearchRow: Rectangle {
         id: row
         property var item
-        height: 56
+        height: item.line ? 72 : 56
         radius: 10
         color: item.selected ? Theme.alpha(Theme.accent, 0.14) : (rowHover.hovered ? Theme.hover : "transparent")
         Accessible.role: Accessible.ListItem
@@ -237,6 +253,10 @@ FocusScope {
             width: parent.width - x - date.width - 20
             Text { width: parent.width; text: row.item.name; elide: Text.ElideMiddle; color: Theme.ink
                    font.pixelSize: 15; font.weight: Font.DemiBold }
+            // Found by its text: the line, with the word in bold.
+            Text { width: parent.width; visible: !!row.item.line; text: row.item.line || ""; textFormat: Text.StyledText
+                   elide: Text.ElideRight; color: Theme.ink; font.pixelSize: 13
+                   Accessible.role: Accessible.StaticText; Accessible.name: text.replace(/<\/?b>/g, "") }
             Text { width: parent.width; text: row.item.meta; elide: Text.ElideMiddle; color: Theme.muted; font.pixelSize: 13 }
         }
         Text { id: date; anchors.right: parent.right; anchors.rightMargin: 14; anchors.verticalCenter: parent.verticalCenter

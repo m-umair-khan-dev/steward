@@ -53,8 +53,8 @@ depends = """$auto, qml6-module-qtquick, qml6-module-qtquick-window, qml6-module
 qml6-module-qtquick-templates, qml6-module-qtquick-layouts, qml6-module-qtquick-effects, \
 qml6-module-qtquick-shapes, qml6-module-qtqml-workerscript, qml6-module-qtquick-dialogs, \
 qml6-module-qtquick-pdf, qml6-module-qtmultimedia, qml6-module-qtcore, qt6-wayland, qt6-svg-plugins, \
-shared-mime-info, dbus-user-session | dbus-x11"""
-recommends = "gvfs, xdg-user-dirs"
+shared-mime-info, bubblewrap, dbus-user-session | dbus-x11"""
+recommends = "gvfs, xdg-user-dirs, poppler-utils"
 suggests = "nautilus"
 changelog = "../../target/package/changelog"
 assets = [
@@ -81,4 +81,4 @@ depends = """$auto, qml6-module-qtquick, qml6-module-qtquick-window, qml6-module
 qml6-module-qtquick-templates, qml6-module-qtquick-layouts, \
 qml6-module-qtquick-shapes, qml6-module-qtqml-workerscript, qml6-module-qtquick-dialogs, \
 qml6-module-qtquick-pdf, qml6-module-qtmultimedia, qml6-module-qtcore, qt6-wayland, libqt6svg6, \
-shared-mime-info, dbus-user-session | dbus-x11"""
+shared-mime-info, bubblewrap, dbus-user-session | dbus-x11"""
