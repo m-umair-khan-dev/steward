@@ -224,7 +224,7 @@ Window {
             prefs: win.prefs
             ops: win.ops
             tool: ({ clean: p.t("Free Up Space"), installed: p.t("Installed"), about: p.t("About This Computer"),
-                     agents: p.t("AI Agents") })[win.tools.page] || ""
+                     agents: p.t("AI Agents"), markdown: (win.tools.markdown || {}).name || "" })[win.tools.page] || ""
         }
         PathBar {
             id: pathBar
@@ -387,6 +387,13 @@ Window {
                 anchors.fill: parent
                 visible: win.tools.page === "agents"
                 model: win.tools.agents || ({ looking: true, servers: [], projects: [] })
+            }
+
+            MarkdownPage {
+                z: 21
+                anchors.fill: parent
+                visible: win.tools.page === "markdown"
+                model: win.tools.markdown || ({ name: "" })
             }
 
             AboutPage {

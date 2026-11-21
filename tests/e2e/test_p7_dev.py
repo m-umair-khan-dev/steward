@@ -1,4 +1,4 @@
-"""Phase 7 end-to-end scenarios: developer tools (E7-01 to E7-03)."""
+"""Phase 7 end-to-end scenarios: developer and content tools (E7-01 onwards)."""
 
 import pytest
 
@@ -153,3 +153,100 @@ def test_E7_05_stop_a_local_server(session, home, app_factory):
     finally:
         if server.poll() is None:
             server.kill()
+
+
+# --- Markdown (E7-06) -------------------------------------------------------------------
+
+TINY_PNG = ("iVBORw0KGgoAAAANSUhEUgAAAAEAAAABCAYAAAAfFcSJAAAADUlEQVR42mNk+M9QDwADhgGAWjR9awAAAABJRU5ErkJggg==")
+
+
+class Watcher:
+    """A local web server that only counts the requests it gets."""
+
+    def __init__(self) -> None:
+        import http.server
+        import threading
+        self.requests: list[str] = []
+        watcher = self
+
+        class Handler(http.server.BaseHTTPRequestHandler):
+            def do_GET(self):  # noqa: N802
+                watcher.requests.append(self.path)
+                self.send_response(404)
+                self.end_headers()
+
+            def log_message(self, *args):
+                pass
+
+        self.server = http.server.ThreadingHTTPServer(("127.0.0.1", 0), Handler)
+        self.port = self.server.server_address[1]
+        threading.Thread(target=self.server.serve_forever, daemon=True).start()
+
+    def close(self) -> None:
+        self.server.shutdown()
+        self.server.server_close()
+
+
+def md(app) -> dict:
+    return app.state()["markdown"]
+
+
+def test_E7_06_markdown_view(app, home, tmp_path):
+    import base64
+    watcher = Watcher()
+    try:
+        notes = home / "Documents" / "Notes"
+        notes.mkdir(exist_ok=True)
+        (notes / "pic.png").write_bytes(base64.b64decode(TINY_PNG))
+        url = f"http://127.0.0.1:{watcher.port}"
+        doc = notes / "guide.md"
+        original = (f"# Guide\n\nRead this first.\n\n![tracker]({url}/pixel.png)\n\n"
+                    f"<img src=\"{url}/tag.png\">\n\n![ref][r]\n\n[r]: {url}/ref.png\n\n"
+                    "## Install\n\n```\n# not a heading\n```\n\n![local](pic.png)\n\n## Use\n\nDone.\n")
+        doc.write_text(original)
+
+        app.open_folder(notes)
+        app.select("guide.md")
+        app.press("return")
+        app.wait_for(lambda: app.state()["tools"]["page"] == "markdown", "the Markdown page")
+        state = md(app)
+        assert state["path"] == str(doc) and state["mode"] == "preview"
+        assert state["outline"] == ["Guide", "Install", "Use"]
+        import re
+        images = re.findall(r"!\[[^\]]*\]\([^)]*\)|<img[^>]*>", state["preview"], re.IGNORECASE)
+        assert images and not any(str(watcher.port) in i for i in images), \
+            f"remote images are removed before rendering: {images}"
+        assert f"file://{notes / 'pic.png'}" in state["preview"], "a local image beside the file stays"
+        names = app.a11y_names()
+        assert {"Outline", "Guide", "Install", "Use", "Preview"} <= names
+
+        # Edit: type a new section, save.
+        app.a11y_click("Edit", within="View")
+        app.wait_for(lambda: md(app)["mode"] == "edit", "Edit")
+        app.a11y_focus("Markdown text")
+        app.press("ctrl+end")
+        app.type_text("\n## Added\n")
+        app.wait_for(lambda: md(app)["modified"] and "Added" in md(app)["outline"], "the edit and the outline")
+        app.press("ctrl+s")
+        app.wait_for(lambda: not md(app)["modified"], "Save")
+        saved = doc.read_text()
+        assert saved == original + "\n## Added\n", "Save writes the text as typed"
+
+        # Revert: type again, then go back to the saved file.
+        app.type_text("more")
+        app.wait_for(lambda: md(app)["modified"], "the second edit")
+        app.a11y_click("Revert", role="button")
+        app.wait_for(lambda: not md(app)["modified"], "Revert")
+        assert md(app)["buffer"] == saved and doc.read_text() == saved
+
+        # Split shows both.
+        app.a11y_click("Split", within="View")
+        app.wait_for(lambda: md(app)["mode"] == "split", "Split")
+        assert {"Markdown text", "Preview"} <= app.a11y_names()
+
+        # Everything has been rendered: no request ever reached the server.
+        app.screenshot(tmp_path / "split.png")
+        app.wait_idle()
+        assert watcher.requests == [], f"the preview loaded {watcher.requests}"
+    finally:
+        watcher.close()

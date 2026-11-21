@@ -23,6 +23,7 @@ mod agents;
 mod clean;
 mod downloads;
 mod git;
+mod markdown;
 pub use downloads::downloads_folder;
 mod index;
 mod installed;
@@ -209,6 +210,7 @@ pub struct Controller {
     git: git::GitState,
     openin: openin::OpenInState,
     agents: agents::AgentsState,
+    md: markdown::MarkdownState,
     /// Path bar: folders whose name matches what is typed, and the one chosen.
     path_matches: Vec<PathBuf>,
     path_match: Option<usize>,
@@ -311,6 +313,7 @@ pub fn init(notifier: impl Fn() + 'static) {
         git: git::GitState::default(),
         openin: openin::OpenInState::default(),
         agents: agents::AgentsState::default(),
+        md: markdown::MarkdownState::default(),
         path_matches: Vec::new(),
         path_match: None,
         dialog: String::new(),
@@ -928,6 +931,15 @@ impl Controller {
     fn open_entry(&mut self, entry: &FileEntry) {
         if entry.is_dir() {
             self.navigate(&entry.data().file, true);
+            return;
+        }
+        if let Some(path) = entry
+            .data()
+            .file
+            .path()
+            .filter(|p| markdown::is_markdown(p))
+            && self.md_open(&path)
+        {
             return;
         }
         let uri = entry.data().uri();
@@ -1970,6 +1982,7 @@ impl Controller {
             "welcome": self.welcome_test_json(),
             "openin": self.openin_test_json(),
             "agents": self.agents_test_json(),
+            "markdown": self.markdown_test_json(),
             // Folder numbers as the cards show them, by name.
             "folder_stats": self.visible.iter().filter(|e| e.is_dir()).filter_map(|e| {
                 let (items, bytes) = self.folder_numbers(&e.data().file.path()?)?;

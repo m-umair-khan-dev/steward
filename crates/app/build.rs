@@ -57,6 +57,7 @@ const QML_FILES: &[&str] = &[
     "qml/InstalledPage.qml",
     "qml/AboutPage.qml",
     "qml/AgentsPage.qml",
+    "qml/MarkdownPage.qml",
     "qml/StopServerDialog.qml",
     "qml/WelcomeDialog.qml",
     "qml/WhatsNewDialog.qml",

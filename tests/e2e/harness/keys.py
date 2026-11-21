@@ -28,7 +28,8 @@ KEYCODES.update({
 
 # Characters for type_text(): the combination that types each one (US layout).
 _CHARS = {" ": "space", "/": "slash", ".": "period", ",": "comma", "-": "minus", "=": "equal",
-          "~": "shift+grave", "_": "shift+minus", "+": "shift+equal", ":": "shift+semicolon"}
+          "~": "shift+grave", "_": "shift+minus", "+": "shift+equal", ":": "shift+semicolon",
+          "\n": "return", "#": "shift+3"}
 
 
 def combo_for(char: str) -> str:

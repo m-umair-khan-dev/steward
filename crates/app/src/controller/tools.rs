@@ -8,15 +8,15 @@ use super::{Controller, dirty};
 
 #[derive(Default, Debug)]
 pub struct ToolsState {
-    /// "clean", "installed", "about", "agents", or "" when no tool page is open.
+    /// "clean", "installed", "about", "agents", "markdown", or "" when no tool page is open.
     pub page: String,
 }
 
-pub const PAGES: [&str; 4] = ["clean", "installed", "about", "agents"];
+pub const PAGES: [&str; 5] = ["clean", "installed", "about", "agents", "markdown"];
 
 impl Controller {
     pub fn open_tool(&mut self, page: &str) {
-        if !PAGES.contains(&page) {
+        if !PAGES.contains(&page) || (page == "markdown" && self.md_name().is_empty()) {
             return;
         }
         self.workspace.open = None;
@@ -28,6 +28,7 @@ impl Controller {
             "clean" => self.clean_opened(),
             "installed" => self.installed_opened(),
             "agents" => self.agents_opened(),
+            "markdown" => {}
             _ => self.about_opened(),
         }
     }
@@ -48,6 +49,7 @@ impl Controller {
             "installed": if page == "installed" { self.installed_json() } else { Value::Null },
             "about": if page == "about" { self.about_json() } else { Value::Null },
             "agents": if page == "agents" { self.agents_json() } else { Value::Null },
+            "markdown": if page == "markdown" { self.markdown_json() } else { Value::Null },
         })
     }
 }

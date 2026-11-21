@@ -276,6 +276,9 @@ msgstr "[Çöüld ñöt püt bàçk ~~~~~~]"
 msgid "Could not redo"
 msgstr "[Çöüld ñöt rédö ~~~~]"
 
+msgid "Could not save"
+msgstr "[Çöüld ñöt sàvé ~~~~]"
+
 msgid "Could not save the list"
 msgstr "[Çöüld ñöt sàvé thé lîst ~~~~~~~]"
 
@@ -359,6 +362,9 @@ msgstr "[Düplîçàtéd ~~~]"
 
 msgid "Duplicates"
 msgstr "[Düplîçàtés ~~~]"
+
+msgid "Edit"
+msgstr "[Édît ~~]"
 
 msgid "Edit Workspace"
 msgstr "[Édît Wörkspàçé ~~~~]"
@@ -687,6 +693,12 @@ msgstr "[Màîñ töölbàr ~~~~]"
 msgid "Make it yours"
 msgstr "[Màké ît ýöürs ~~~~]"
 
+msgid "Markdown"
+msgstr "[Màrkdöwñ ~~]"
+
+msgid "Markdown text"
+msgstr "[Màrkdöwñ téxt ~~~~]"
+
 msgid "Maximize"
 msgstr "[Màxîmîzé ~~]"
 
@@ -960,6 +972,9 @@ msgstr "[Öpéràtîöñs ~~~]"
 msgid "Other"
 msgstr "[Öthér ~~]"
 
+msgid "Outline"
+msgstr "[Öütlîñé ~~]"
+
 msgid "Overview"
 msgstr "[Övérvîéw ~~]"
 
@@ -1089,6 +1104,9 @@ msgstr "[Répört à Büg ~~~~]"
 msgid "Restore Sidebar"
 msgstr "[Réstöré Sîdébàr ~~~~~]"
 
+msgid "Revert"
+msgstr "[Révért ~~]"
+
 msgid "Right pane"
 msgstr "[Rîght pàñé ~~~]"
 
@@ -1109,6 +1127,12 @@ msgstr "[Sàvé Lîst… ~~~]"
 
 msgid "Save the List"
 msgstr "[Sàvé thé Lîst ~~~~]"
+
+msgid "Save the Markdown file"
+msgstr "[Sàvé thé Màrkdöwñ fîlé ~~~~~~~]"
+
+msgid "Saved"
+msgstr "[Sàvéd ~~]"
 
 msgid "Saved the list as"
 msgstr "[Sàvéd thé lîst às ~~~~~]"
@@ -1190,6 +1214,9 @@ msgstr "[Sört àñd sîzé ~~~~]"
 
 msgid "Sorted folder"
 msgstr "[Sörtéd földér ~~~~]"
+
+msgid "Split"
+msgstr "[Splît ~~]"
 
 msgid "Split into two panes"
 msgstr "[Splît îñtö twö pàñés ~~~~~~]"
@@ -1361,6 +1388,9 @@ msgstr "[Üñdöñé: ~~]"
 
 msgid "Unknown"
 msgstr "[Üñkñöwñ ~~]"
+
+msgid "Unsaved changes"
+msgstr "[Üñsàvéd çhàñgés ~~~~~]"
 
 msgid "Unused Docker images"
 msgstr "[Üñüséd Döçkér îmàgés ~~~~~~]"

@@ -85,8 +85,19 @@ pub const ACCELS: &[(&str, &str, &[&str], &str)] = &[
     ("win.move-across", "", &["F6"], "Move to the other pane"),
     ("win.swap-panes", "", &["Ctrl+U"], "Swap the two panes"),
     ("win.tool-open", "clean", &["Ctrl+Shift+K"], "Free Up Space"),
-    ("win.open-terminal", "", &["F4"], "Open this folder in the terminal"),
-    ("win.open-editor", "", &["Shift+F4"], "Open this folder in the editor"),
+    (
+        "win.open-terminal",
+        "",
+        &["F4"],
+        "Open this folder in the terminal",
+    ),
+    (
+        "win.open-editor",
+        "",
+        &["Shift+F4"],
+        "Open this folder in the editor",
+    ),
+    ("win.md-save", "", &["Ctrl+S"], "Save the Markdown file"),
     ("win.workspace-open", "#1", &["Alt+1"], "Open workspace 1"),
     ("win.workspace-open", "#2", &["Alt+2"], "Open workspace 2"),
     ("win.workspace-open", "#3", &["Alt+3"], "Open workspace 3"),
@@ -351,14 +362,29 @@ fn create() -> (gio::SimpleActionGroup, gio::SimpleActionGroup) {
     with_string(&win, "agents-open", |port| {
         controller::with(|c| c.agents_open(port))
     });
-    simple(&win, "agents-refresh", || controller::with(|c| c.agents_refresh()));
+    simple(&win, "agents-refresh", || {
+        controller::with(|c| c.agents_refresh())
+    });
+    with_string(&win, "md-mode", |mode| {
+        controller::with(|c| c.md_mode(mode))
+    });
+    with_string(&win, "md-edit", |text| {
+        controller::with(|c| c.md_edit(text))
+    });
+    with_string(&win, "md-link", |link| {
+        controller::with(|c| c.md_link(link))
+    });
+    simple(&win, "md-save", || controller::with(|c| c.md_save()));
+    simple(&win, "md-revert", || controller::with(|c| c.md_revert()));
     with_string(&win, "open-terminal", |path| {
         controller::with(|c| c.open_in(cairn_core::openin::Role::Terminal, path))
     });
     with_string(&win, "open-editor", |path| {
         controller::with(|c| c.open_in(cairn_core::openin::Role::Editor, path))
     });
-    simple(&win, "openin-rescan", || controller::with(|c| c.openin_rescan()));
+    simple(&win, "openin-rescan", || {
+        controller::with(|c| c.openin_rescan())
+    });
     with_string(&win, "installed-filter", |id| {
         controller::with(|c| c.installed_filter(id))
     });
