@@ -144,10 +144,15 @@ impl Controller {
         } else {
             Vec::new()
         };
+        // The same query run again (the index changed): the chosen result
+        // stays chosen if it is still there. A new query starts at the top.
+        let keep = (self.search.ran == query).then(|| self.chosen()).flatten();
         self.search.lines = lines;
         self.search.hits = hits;
         self.search.ran = query;
-        self.search.selected = 0;
+        self.search.selected = keep
+            .and_then(|path| self.shown().iter().position(|h| h.path == path))
+            .unwrap_or(0);
         self.mark(dirty::SEARCH);
     }
 
