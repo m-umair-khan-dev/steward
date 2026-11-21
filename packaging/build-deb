@@ -25,6 +25,8 @@ python3 -I packaging/make-changelog "$release" > "$stage/changelog"
 
 # cargo-deb resolves "target/release/…" against CARGO_TARGET_DIR.
 cargo build --release --locked -p cairn -p cairn-indexer
-cargo deb --no-build -p cairn --deb-version "${version}-1~ubuntu${release}" \
+variant=()
+[ "$release" = "24.04" ] && variant=(--variant ubuntu2404)
+cargo deb --no-build -p cairn "${variant[@]}" --deb-version "${version}-1~ubuntu${release}" \
   --output "$out/cairn_${version}-1~ubuntu${release}_amd64.deb"
 ls -l "$out"
