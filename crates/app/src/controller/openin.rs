@@ -61,7 +61,12 @@ impl Controller {
             let words = openin::custom_command(&s.string(command_key), folder)?;
             return Some((words, gettext("your command")));
         }
-        let found: Vec<Found> = self.openin_found().iter().filter(|f| f.known.role == role).cloned().collect();
+        let found: Vec<Found> = self
+            .openin_found()
+            .iter()
+            .filter(|f| f.known.role == role)
+            .cloned()
+            .collect();
         if let Some(f) = found.iter().find(|f| f.known.id == chosen) {
             return Some((openin::command(f, folder), f.label.clone()));
         }
@@ -85,7 +90,10 @@ impl Controller {
         match launcher.spawn(&args) {
             Ok(_) => {
                 self.openin.last = Some((argv, folder.display().to_string()));
-                self.emit(Event::Toast(format!("{} {label}", gettext("Opened in")), false));
+                self.emit(Event::Toast(
+                    format!("{} {label}", gettext("Opened in")),
+                    false,
+                ));
             }
             Err(error) => self.emit(Event::Toast(
                 format!("{} {label}: {error}", gettext("Could not start")),
@@ -104,13 +112,19 @@ impl Controller {
 
     /// F4 / Shift+F4 and the menus: `path` empty means the current folder.
     pub fn open_in(&mut self, role: Role, path: &str) {
-        let Some(folder) = self.openin_target(path) else { return };
+        let Some(folder) = self.openin_target(path) else {
+            return;
+        };
         match self.openin_command(role, &folder) {
             Some((argv, label)) => self.launch(argv, &folder, &label),
             None => self.emit(Event::Toast(
                 match role {
-                    Role::Terminal => gettext("No terminal found. Choose one in Preferences › General."),
-                    Role::Editor => gettext("No editor found. Choose one in Preferences › General."),
+                    Role::Terminal => {
+                        gettext("No terminal found. Choose one in Preferences › General.")
+                    }
+                    Role::Editor => {
+                        gettext("No editor found. Choose one in Preferences › General.")
+                    }
                 },
                 false,
             )),
@@ -128,7 +142,11 @@ impl Controller {
                 true
             }
             Some(PathCommand::App(known, folder)) => {
-                let found = self.openin_found().iter().find(|f| f.known.id == known.id).cloned();
+                let found = self
+                    .openin_found()
+                    .iter()
+                    .find(|f| f.known.id == known.id)
+                    .cloned();
                 match found {
                     Some(f) => self.launch(openin::command(&f, &folder), &folder, &f.label),
                     None => self.emit(Event::Toast(

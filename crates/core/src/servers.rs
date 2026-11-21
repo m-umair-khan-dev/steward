@@ -77,9 +77,13 @@ pub fn listening(proc: &Path) -> Vec<Server> {
     let boot = boot_time().unwrap_or(0);
     let ticks = 100; // USER_HZ on Linux
     let mut out: Vec<Server> = Vec::new();
-    let Ok(entries) = std::fs::read_dir(proc) else { return out };
+    let Ok(entries) = std::fs::read_dir(proc) else {
+        return out;
+    };
     for entry in entries.flatten() {
-        let Ok(pid) = entry.file_name().to_string_lossy().parse::<u32>() else { continue };
+        let Ok(pid) = entry.file_name().to_string_lossy().parse::<u32>() else {
+            continue;
+        };
         let dir = entry.path();
         // Only the user's own processes.
         let owned = std::os::unix::fs::MetadataExt::uid(&match dir.metadata() {
@@ -89,13 +93,19 @@ pub fn listening(proc: &Path) -> Vec<Server> {
         if !owned {
             continue;
         }
-        let Ok(fds) = std::fs::read_dir(dir.join("fd")) else { continue };
+        let Ok(fds) = std::fs::read_dir(dir.join("fd")) else {
+            continue;
+        };
         let mut ports: Vec<u16> = fds
             .flatten()
             .filter_map(|fd| std::fs::read_link(fd.path()).ok())
             .filter_map(|target| {
                 let t = target.to_string_lossy().into_owned();
-                let inode: u64 = t.strip_prefix("socket:[")?.strip_suffix(']')?.parse().ok()?;
+                let inode: u64 = t
+                    .strip_prefix("socket:[")?
+                    .strip_suffix(']')?
+                    .parse()
+                    .ok()?;
                 sockets.get(&inode).copied()
             })
             .collect();
@@ -151,13 +161,17 @@ mod tests {
            1: 00000000:1F40 00000000:0000 0A 00000000:00000000 00:00000000 00000000  1000        0 41235 1 0\n\
            2: 0100007F:0BB8 0100007F:D431 01 00000000:00000000 00:00000000 00000000  1000        0 41236 1 0\n\
            3: C0A80002:0016 00000000:0000 0A 00000000:00000000 00:00000000 00000000     0        0 41237 1 0\n";
-        assert_eq!(parse_net_tcp(text), vec![(3000, 41234), (8000, 41235)],
-                   "listening on loopback or any address; not connections, not a LAN address only");
+        assert_eq!(
+            parse_net_tcp(text),
+            vec![(3000, 41234), (8000, 41235)],
+            "listening on loopback or any address; not connections, not a LAN address only"
+        );
     }
 
     #[test]
     fn start_time_from_stat() {
-        let stat = "4242 (my server) S 1 4242 4242 0 -1 4194560 1 0 0 0 5 2 0 0 20 0 1 0 12345 1000 100";
+        let stat =
+            "4242 (my server) S 1 4242 4242 0 -1 4194560 1 0 0 0 5 2 0 0 20 0 1 0 12345 1000 100";
         assert_eq!(start_time(stat, 1_000_000, 100), Some(1_000_000 + 123));
     }
 
@@ -166,7 +180,10 @@ mod tests {
         let listener = std::net::TcpListener::bind("127.0.0.1:0").unwrap();
         let port = listener.local_addr().unwrap().port();
         let found = listening(Path::new("/proc"));
-        let me = found.iter().find(|s| s.port == port).expect("our own listener");
+        let me = found
+            .iter()
+            .find(|s| s.port == port)
+            .expect("our own listener");
         assert_eq!(me.pid, std::process::id());
     }
 }

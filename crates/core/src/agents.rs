@@ -12,11 +12,19 @@ use serde_json::Value;
 
 /// Agent files by tool: (tool id, display name, file or folder names).
 pub const AGENT_FILES: &[(&str, &str, &[&str])] = &[
-    ("claude", "Claude Code", &["CLAUDE.md", ".claude", ".mcp.json"]),
+    (
+        "claude",
+        "Claude Code",
+        &["CLAUDE.md", ".claude", ".mcp.json"],
+    ),
     ("codex", "Codex", &["AGENTS.md"]),
     ("gemini", "Gemini CLI", &["GEMINI.md"]),
     ("cursor", "Cursor", &[".cursor/rules", ".cursorrules"]),
-    ("copilot", "GitHub Copilot", &[".github/copilot-instructions.md"]),
+    (
+        "copilot",
+        "GitHub Copilot",
+        &[".github/copilot-instructions.md"],
+    ),
     ("windsurf", "Windsurf", &[".windsurfrules"]),
 ];
 
@@ -159,7 +167,12 @@ pub fn parse_claude_json(text: &str) -> (Vec<McpServer>, BTreeMap<PathBuf, Vec<M
         .as_object()
         .map(|p| {
             p.iter()
-                .map(|(path, project)| (PathBuf::from(path), servers(&project["mcpServers"], "local")))
+                .map(|(path, project)| {
+                    (
+                        PathBuf::from(path),
+                        servers(&project["mcpServers"], "local"),
+                    )
+                })
                 .collect()
         })
         .unwrap_or_default();
@@ -219,7 +232,9 @@ fn find_projects(home: &Path, depth: usize) -> Vec<PathBuf> {
         if level >= depth {
             continue;
         }
-        let Ok(entries) = std::fs::read_dir(&dir) else { continue };
+        let Ok(entries) = std::fs::read_dir(&dir) else {
+            continue;
+        };
         for entry in entries.flatten() {
             let name = entry.file_name().to_string_lossy().into_owned();
             if name.starts_with('.') || skip.contains(&name.as_str()) {
@@ -248,14 +263,20 @@ pub fn scan(home: &Path) -> Agents {
     let mut per_project: BTreeMap<PathBuf, (Tokens, usize, Option<i64>)> = BTreeMap::new();
     if let Ok(folders) = std::fs::read_dir(home.join(".claude/projects")) {
         for folder in folders.flatten() {
-            let Ok(logs) = std::fs::read_dir(folder.path()) else { continue };
+            let Ok(logs) = std::fs::read_dir(folder.path()) else {
+                continue;
+            };
             for log in logs.flatten() {
                 if log.path().extension().is_none_or(|e| e != "jsonl") {
                     continue;
                 }
-                let Ok(text) = std::fs::read_to_string(log.path()) else { continue };
+                let Ok(text) = std::fs::read_to_string(log.path()) else {
+                    continue;
+                };
                 let session = parse_session(&text);
-                let Some(cwd) = session.cwd.as_deref().map(|c| resolve(c, home)) else { continue };
+                let Some(cwd) = session.cwd.as_deref().map(|c| resolve(c, home)) else {
+                    continue;
+                };
                 let entry = per_project.entry(cwd).or_default();
                 for (day, tokens) in &session.days {
                     entry.0.add(tokens);
@@ -273,13 +294,23 @@ pub fn scan(home: &Path) -> Agents {
         .map(|t| parse_claude_json(&t))
         .unwrap_or_default();
     agents.user_servers = user_servers;
-    let local: BTreeMap<PathBuf, Vec<McpServer>> =
-        local.into_iter().map(|(p, s)| (resolve(&p, home), s)).collect();
+    let local: BTreeMap<PathBuf, Vec<McpServer>> = local
+        .into_iter()
+        .map(|(p, s)| (resolve(&p, home), s))
+        .collect();
 
     let mut paths: HashSet<PathBuf> = per_project.keys().cloned().collect();
-    paths.extend(local.iter().filter(|(_, s)| !s.is_empty()).map(|(p, _)| p.clone()));
+    paths.extend(
+        local
+            .iter()
+            .filter(|(_, s)| !s.is_empty())
+            .map(|(p, _)| p.clone()),
+    );
     paths.extend(find_projects(home, 5));
-    let mut paths: Vec<PathBuf> = paths.into_iter().filter(|p| p.is_dir() && p != home).collect();
+    let mut paths: Vec<PathBuf> = paths
+        .into_iter()
+        .filter(|p| p.is_dir() && p != home)
+        .collect();
     paths.sort();
 
     for path in paths {
@@ -295,7 +326,15 @@ pub fn scan(home: &Path) -> Agents {
         }
         tools.sort_by_key(|t| AGENT_FILES.iter().position(|(id, _, _)| id == t));
         tools.dedup();
-        agents.projects.push(Project { path, tools, files, servers, tokens, sessions, last });
+        agents.projects.push(Project {
+            path,
+            tools,
+            files,
+            servers,
+            tokens,
+            sessions,
+            last,
+        });
     }
     agents
 }

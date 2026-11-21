@@ -10,7 +10,15 @@ fn fixture(name: &str) -> (PathBuf, serde_json::Value) {
     let _ = std::fs::remove_dir_all(&root);
     let script =
         Path::new(env!("CARGO_MANIFEST_DIR")).join("../../docker/scripts/make-fixture-home");
-    assert!(Command::new("python3").arg("-I").arg(script).arg(&root).status().unwrap().success());
+    assert!(
+        Command::new("python3")
+            .arg("-I")
+            .arg(script)
+            .arg(&root)
+            .status()
+            .unwrap()
+            .success()
+    );
     let manifest = std::fs::read_to_string(root.join(".cairn-fixture")).unwrap();
     (root, serde_json::from_str(&manifest).unwrap())
 }
@@ -25,7 +33,11 @@ fn snapshot(dir: &Path) -> Vec<(PathBuf, Vec<u8>, std::time::SystemTime)> {
             if meta.is_dir() {
                 stack.push(entry.path());
             } else {
-                out.push((entry.path(), std::fs::read(entry.path()).unwrap(), meta.modified().unwrap()));
+                out.push((
+                    entry.path(),
+                    std::fs::read(entry.path()).unwrap(),
+                    meta.modified().unwrap(),
+                ));
             }
         }
     }
@@ -44,14 +56,22 @@ fn e7_01_branch_and_changes_and_nothing_written() {
     assert_eq!(info.root, project);
     assert_eq!(info.branch, expected["branch"].as_str().unwrap());
     assert_eq!(info.changes as u64, expected["changes"].as_u64().unwrap());
-    assert_eq!(snapshot(&project), before, "the repository is byte-for-byte unchanged");
+    assert_eq!(
+        snapshot(&project),
+        before,
+        "the repository is byte-for-byte unchanged"
+    );
     let _ = std::fs::remove_dir_all(&root);
 }
 
 #[test]
 fn e7_02_no_repository_and_a_corrupt_one() {
     let (root, _) = fixture("none");
-    assert_eq!(git::info(&root.join("Documents/Invoices")), None, "not a repository");
+    assert_eq!(
+        git::info(&root.join("Documents/Invoices")),
+        None,
+        "not a repository"
+    );
     let broken = root.join("Documents/School");
     std::fs::create_dir_all(broken.join(".git")).unwrap();
     std::fs::write(broken.join(".git/HEAD"), "not a ref at all\n").unwrap();

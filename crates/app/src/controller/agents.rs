@@ -6,7 +6,6 @@
 use std::path::Path;
 
 use gettextrs::gettext;
-use gio::prelude::*;
 use serde_json::{Value, json};
 
 use cairn_core::agents::{self, AGENT_FILES, Agents};
@@ -29,7 +28,11 @@ pub struct AgentsState {
 }
 
 fn tool_name(id: &str) -> &'static str {
-    AGENT_FILES.iter().find(|(t, _, _)| *t == id).map(|(_, n, _)| *n).unwrap_or("")
+    AGENT_FILES
+        .iter()
+        .find(|(t, _, _)| *t == id)
+        .map(|(_, n, _)| *n)
+        .unwrap_or("")
 }
 
 /// "1.2M", "38.6K", "950".
@@ -107,7 +110,9 @@ impl Controller {
     /// Stop: asks first.
     pub fn agents_stop_ask(&mut self, pid: &str) {
         let Ok(pid) = pid.parse::<u32>() else { return };
-        let Some(server) = self.agents.servers.iter().find(|s| s.pid == pid) else { return };
+        let Some(server) = self.agents.servers.iter().find(|s| s.pid == pid) else {
+            return;
+        };
         self.agents.asking = Some(pid);
         self.dialog_data = json!({
             "pid": pid, "port": server.port, "program": server.program,
@@ -121,10 +126,15 @@ impl Controller {
         if self.dialog == "stop-server" {
             self.close_dialog();
         }
-        let (true, Some(pid)) = (confirmed, asked) else { return };
+        let (true, Some(pid)) = (confirmed, asked) else {
+            return;
+        };
         match servers::stop(pid) {
             Ok(()) => self.emit(Event::Toast(gettext("Asked the server to stop"), false)),
-            Err(error) => self.emit(Event::Toast(format!("{}: {error}", gettext("Could not stop it")), false)),
+            Err(error) => self.emit(Event::Toast(
+                format!("{}: {error}", gettext("Could not stop it")),
+                false,
+            )),
         }
         self.agents_servers();
     }
@@ -132,13 +142,22 @@ impl Controller {
     /// Opens http://localhost:<port>/ in the browser.
     pub fn agents_open(&mut self, port: &str) {
         let url = format!("http://localhost:{port}/");
-        if let Err(error) = gio::AppInfo::launch_default_for_uri(&url, None::<&gio::AppLaunchContext>) {
-            self.emit(Event::Toast(format!("{}: {error}", gettext("Could not open it")), false));
+        if let Err(error) =
+            gio::AppInfo::launch_default_for_uri(&url, None::<&gio::AppLaunchContext>)
+        {
+            self.emit(Event::Toast(
+                format!("{}: {error}", gettext("Could not open it")),
+                false,
+            ));
         }
     }
 
     fn agents_usage(&self, found: &Agents) -> Value {
-        let period = if self.agents.period.is_empty() { "week" } else { self.agents.period.as_str() };
+        let period = if self.agents.period.is_empty() {
+            "week"
+        } else {
+            self.agents.period.as_str()
+        };
         let days = match period {
             "today" => 1,
             "month" => 30,
@@ -188,7 +207,11 @@ impl Controller {
             .servers
             .iter()
             .map(|s| {
-                let project = s.cwd.as_ref().and_then(|c| c.file_name()).map(|n| n.to_string_lossy().into_owned());
+                let project = s
+                    .cwd
+                    .as_ref()
+                    .and_then(|c| c.file_name())
+                    .map(|n| n.to_string_lossy().into_owned());
                 json!({
                     "port": s.port, "pid": s.pid, "program": s.program, "command": s.command,
                     "project": project.unwrap_or_default(),
