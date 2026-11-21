@@ -1,6 +1,6 @@
 [package]
 name = "cairn-cli"
-description = "Command-line tool for Cairn (built in Phase 7)."
+description = "The cairn commands without loading Qt: open, open-workspace, new-workspace, add-link, free-up-space."
 version.workspace = true
 edition.workspace = true
 rust-version.workspace = true
@@ -10,6 +10,10 @@ authors.workspace = true
 
 [dependencies]
 cairn-core.workspace = true
+
+[features]
+# Built with the e2e scenarios (docker/scripts/run-e2e); no test hooks of its own.
+e2e = []
 
 [lints]
 workspace = true

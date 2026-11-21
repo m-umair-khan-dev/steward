@@ -345,7 +345,7 @@ Decisions and findings:
 | P7-T07 | Markdown view | done | E7-06. Remote images (inline, reference and `<img>`) are removed before QML renders; local images only from the document's folder |
 | P7-T08 | Bookmarks | done | E7-07. `ureq` (rustls) fetches title and picture, bounded in time and size; the Preferences switch turns it off. Four views; paste, drop, Add Link (Ctrl+Shift+L) |
 | P7-T09 | Content search | done | E7-08, E7-09. The indexer reads text in `bwrap` (ADR 0005 profile) by running itself as `cairn-indexer extract FILE`; 20 s limit; Home only, plus the `content-folders` setting (no Preferences UI for it yet). `poppler-utils` added to the image and to Recommends; `bubblewrap` added to Depends |
-| P7-T10 | `cairn` command-line tool | to do | E7-10 |
+| P7-T10 | `cairn` command-line tool | done | E7-10. Commands live in `cairn_core::cli`; `cairn` forwards them to the running window (or runs them at start-up); `cairn-cli` does the same without Qt and starts `cairn` when none runs (not packaged). Desktop action "Add Link". Man page updated |
 | P7-T11 | Customisable shortcuts | to do | E7-11 |
 
 Notes:
@@ -401,7 +401,7 @@ Notes:
 
 ## Next
 
-- P7-T10 and P7-T11, then the Phase 7 gate
+- P7-T11, then the Phase 7 gate
   and report. The website (P6-T10) resumes when the product owner says so.
 - Known gaps to look at in Phase 6:
   - The collapsed sidebar rail does not list the tool pages yet.

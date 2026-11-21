@@ -5,6 +5,10 @@ cairn \- a file manager for Ubuntu that keeps folders tidy
 .B cairn
 [\fB\-\-new\-window\fR | \fB\-\-new\-workspace\fR | \fB\-\-free\-up\-space\fR]
 [\fIFOLDER\-OR\-FILE\fR...]
+.br
+.B cairn
+.I COMMAND
+[\fIARGUMENT\fR]
 .SH DESCRIPTION
 Cairn browses your files and keeps folders tidy. It shows a plan before
 anything moves, and one Undo puts everything back.
@@ -24,10 +28,31 @@ Ask for the name of a new workspace.
 .TP
 .B \-\-free\-up\-space
 Open Free Up Space.
+.TP
+.BR \-\-help ", " \-\-version
+Print the commands, or the version, and exit.
+.SH COMMANDS
+.TP
+.BI open " PATH" ...
+Open a folder, or a file's folder with the file selected.
+.TP
+.BI open\-workspace " NAME"
+Open a workspace by its name, or by its place in the sidebar (#1 to #9).
+Quote a name that has spaces.
+.TP
+.BR new\-workspace " [\fINAME\fR]"
+Make a workspace with that name; without a name, ask for one.
+.TP
+.BI add\-link " URL"
+Save a link to Bookmarks. Its title and picture are fetched from the
+link's site unless that is turned off in Preferences.
+.TP
+.B free\-up\-space
+Open Free Up Space.
 .SH FILES
 .TP
 .I ~/.local/share/cairn/app.db
-Workspaces, sidebar order and the undo journal.
+Workspaces, bookmarks, sidebar order and the undo journal.
 .TP
 .I ~/.cache/cairn/
 The search index and other caches; safe to delete.

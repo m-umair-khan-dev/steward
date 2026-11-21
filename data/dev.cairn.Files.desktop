@@ -11,7 +11,7 @@ StartupNotify=true
 StartupWMClass=dev.cairn.Files
 Categories=Utility;Core;System;FileTools;FileManager;Qt;
 MimeType=inode/directory;
-Actions=new-window;new-workspace;free-up-space;
+Actions=new-window;new-workspace;add-link;free-up-space;
 X-GNOME-UsesNotifications=false
 
 [Desktop Action new-window]
@@ -21,6 +21,10 @@ Exec=cairn --new-window
 [Desktop Action new-workspace]
 Name=New Workspace
 Exec=cairn --new-workspace
+
+[Desktop Action add-link]
+Name=Add Link
+Exec=cairn --add-link
 
 [Desktop Action free-up-space]
 Name=Free Up Space

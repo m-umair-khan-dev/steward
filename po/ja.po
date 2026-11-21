@@ -134,12 +134,12 @@ msgstr "フォルダーを追加: “"
 msgid "Add to “"
 msgstr "追加先: “"
 
-#: crates/app/src/controller/workspaces.rs:177
+#: crates/app/src/controller/workspaces.rs:189
 msgid "Added"
 msgstr "追加しました:"
 
 #: crates/app/src/controller.rs:1429 crates/app/src/controller/installed.rs:192
-#: crates/app/src/controller/search.rs:248
+#: crates/app/src/controller/search.rs:252
 msgid "All"
 msgstr "すべて"
 
@@ -539,11 +539,11 @@ msgid "Do this for every clash"
 msgstr "すべての競合に同じ処理をする"
 
 #: crates/app/qml/WelcomeDialog.qml:27
-#: crates/app/src/controller/workspaces.rs:375 crates/core/src/kind.rs
+#: crates/app/src/controller/workspaces.rs:387 crates/core/src/kind.rs
 msgid "Documents"
 msgstr "ドキュメント"
 
-#: crates/app/src/controller/search.rs:271
+#: crates/app/src/controller/search.rs:275
 msgid "Documents and files"
 msgstr "ドキュメントとファイル"
 
@@ -710,8 +710,8 @@ msgid "Folder to leave out"
 msgstr "除外するフォルダー"
 
 #: crates/app/src/controller.rs:1549 crates/app/src/controller.rs:1626
-#: crates/app/src/controller/search.rs:269
-#: crates/app/src/controller/workspaces.rs:373
+#: crates/app/src/controller/search.rs:273
+#: crates/app/src/controller/workspaces.rs:385
 msgid "Folders"
 msgstr "フォルダー"
 
@@ -851,11 +851,11 @@ msgid "Hot"
 msgstr "高温"
 
 #: crates/app/qml/WelcomeDialog.qml:26
-#: crates/app/src/controller/workspaces.rs:374 crates/core/src/kind.rs
+#: crates/app/src/controller/workspaces.rs:386 crates/core/src/kind.rs
 msgid "Images"
 msgstr "画像"
 
-#: crates/app/src/controller/search.rs:270
+#: crates/app/src/controller/search.rs:274
 msgid "Images and videos"
 msgstr "画像と動画"
 
@@ -1285,7 +1285,7 @@ msgstr "変更なしの期間:"
 msgid "Not changed in 90 days"
 msgstr "90 日間変更なし"
 
-#: crates/app/src/controller/workspaces.rs:300
+#: crates/app/src/controller/workspaces.rs:312
 msgid "Not found"
 msgstr "見つかりません"
 
@@ -1383,7 +1383,7 @@ msgid "Older than 90 days"
 msgstr "90 日より前"
 
 #: crates/app/src/controller/about.rs:68
-#: crates/app/src/controller/workspaces.rs:298
+#: crates/app/src/controller/workspaces.rs:310
 msgid "On"
 msgstr "オン"
 
@@ -1476,7 +1476,7 @@ msgstr "その他"
 msgid "Outline"
 msgstr "アウトライン"
 
-#: crates/app/src/controller/workspaces.rs:372
+#: crates/app/src/controller/workspaces.rs:384
 msgid "Overview"
 msgstr "概要"
 
@@ -1923,7 +1923,7 @@ msgstr "端末 (F4)"
 msgid "That is not a web link"
 msgstr "Web リンクではありません"
 
-#: crates/app/src/controller/workspaces.rs:222
+#: crates/app/src/controller/workspaces.rs:234
 msgid "That place does not exist"
 msgstr "その場所はありません"
 
@@ -1970,6 +1970,10 @@ msgstr "システムのダウンロードフォルダー"
 #: crates/app/qml/PreferencesDialog.qml:26
 msgid "The system’s terminal"
 msgstr "システムの端末"
+
+#: crates/app/src/controller/workspaces.rs:128
+msgid "There is no workspace called"
+msgstr "次の名前のワークスペースはありません:"
 
 #: crates/app/src/controller/about.rs:279
 msgid "Thermal state"
@@ -2309,7 +2313,7 @@ msgstr "例: hx {}"
 msgid "estimate"
 msgstr "推定"
 
-#: crates/app/src/controller/search.rs:317
+#: crates/app/src/controller/search.rs:321
 msgid "for"
 msgstr "対象:"
 
@@ -2365,11 +2369,11 @@ msgstr "はインストールされていません"
 msgid "it is no longer there"
 msgstr "もう存在しません"
 
-#: crates/app/src/controller/search.rs:316
+#: crates/app/src/controller/search.rs:320
 msgid "item"
 msgstr "項目"
 
-#: crates/app/src/controller/search.rs:316
+#: crates/app/src/controller/search.rs:320
 msgid "items"
 msgstr "項目"
 
@@ -2468,11 +2472,11 @@ msgstr "pip のキャッシュ"
 msgid "pip downloads packages again"
 msgstr "pip がパッケージを再ダウンロードします"
 
-#: crates/app/src/controller/search.rs:316
+#: crates/app/src/controller/search.rs:320
 msgid "result"
 msgstr "件"
 
-#: crates/app/src/controller/search.rs:316
+#: crates/app/src/controller/search.rs:320
 msgid "results"
 msgstr "件"
 

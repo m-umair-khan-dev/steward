@@ -134,12 +134,12 @@ msgstr "Ajouter un dossier à “"
 msgid "Add to “"
 msgstr "Ajouter à “"
 
-#: crates/app/src/controller/workspaces.rs:177
+#: crates/app/src/controller/workspaces.rs:189
 msgid "Added"
 msgstr "Ajouté :"
 
 #: crates/app/src/controller.rs:1429 crates/app/src/controller/installed.rs:192
-#: crates/app/src/controller/search.rs:248
+#: crates/app/src/controller/search.rs:252
 msgid "All"
 msgstr "Tout"
 
@@ -539,11 +539,11 @@ msgid "Do this for every clash"
 msgstr "Faire de même pour chaque conflit"
 
 #: crates/app/qml/WelcomeDialog.qml:27
-#: crates/app/src/controller/workspaces.rs:375 crates/core/src/kind.rs
+#: crates/app/src/controller/workspaces.rs:387 crates/core/src/kind.rs
 msgid "Documents"
 msgstr "Documents"
 
-#: crates/app/src/controller/search.rs:271
+#: crates/app/src/controller/search.rs:275
 msgid "Documents and files"
 msgstr "Documents et fichiers"
 
@@ -710,8 +710,8 @@ msgid "Folder to leave out"
 msgstr "Dossier à exclure"
 
 #: crates/app/src/controller.rs:1549 crates/app/src/controller.rs:1626
-#: crates/app/src/controller/search.rs:269
-#: crates/app/src/controller/workspaces.rs:373
+#: crates/app/src/controller/search.rs:273
+#: crates/app/src/controller/workspaces.rs:385
 msgid "Folders"
 msgstr "Dossiers"
 
@@ -851,11 +851,11 @@ msgid "Hot"
 msgstr "Chaud"
 
 #: crates/app/qml/WelcomeDialog.qml:26
-#: crates/app/src/controller/workspaces.rs:374 crates/core/src/kind.rs
+#: crates/app/src/controller/workspaces.rs:386 crates/core/src/kind.rs
 msgid "Images"
 msgstr "Images"
 
-#: crates/app/src/controller/search.rs:270
+#: crates/app/src/controller/search.rs:274
 msgid "Images and videos"
 msgstr "Images et vidéos"
 
@@ -1285,7 +1285,7 @@ msgstr "Pas modifié depuis"
 msgid "Not changed in 90 days"
 msgstr "Pas modifié depuis 90 jours"
 
-#: crates/app/src/controller/workspaces.rs:300
+#: crates/app/src/controller/workspaces.rs:312
 msgid "Not found"
 msgstr "Introuvable"
 
@@ -1383,7 +1383,7 @@ msgid "Older than 90 days"
 msgstr "Plus de 90 jours"
 
 #: crates/app/src/controller/about.rs:68
-#: crates/app/src/controller/workspaces.rs:298
+#: crates/app/src/controller/workspaces.rs:310
 msgid "On"
 msgstr "Activé"
 
@@ -1476,7 +1476,7 @@ msgstr "Autres"
 msgid "Outline"
 msgstr "Plan"
 
-#: crates/app/src/controller/workspaces.rs:372
+#: crates/app/src/controller/workspaces.rs:384
 msgid "Overview"
 msgstr "Vue d’ensemble"
 
@@ -1923,7 +1923,7 @@ msgstr "Terminal (F4)"
 msgid "That is not a web link"
 msgstr "Ce n’est pas un lien web"
 
-#: crates/app/src/controller/workspaces.rs:222
+#: crates/app/src/controller/workspaces.rs:234
 msgid "That place does not exist"
 msgstr "Cet emplacement n’existe pas"
 
@@ -1970,6 +1970,10 @@ msgstr "Téléchargements du système"
 #: crates/app/qml/PreferencesDialog.qml:26
 msgid "The system’s terminal"
 msgstr "Le terminal du système"
+
+#: crates/app/src/controller/workspaces.rs:128
+msgid "There is no workspace called"
+msgstr "Aucun espace de travail ne s’appelle"
 
 #: crates/app/src/controller/about.rs:279
 msgid "Thermal state"
@@ -2309,7 +2313,7 @@ msgstr "p. ex. hx {}"
 msgid "estimate"
 msgstr "estimation"
 
-#: crates/app/src/controller/search.rs:317
+#: crates/app/src/controller/search.rs:321
 msgid "for"
 msgstr "pour"
 
@@ -2365,11 +2369,11 @@ msgstr "n’est pas installé"
 msgid "it is no longer there"
 msgstr "il n’est plus là"
 
-#: crates/app/src/controller/search.rs:316
+#: crates/app/src/controller/search.rs:320
 msgid "item"
 msgstr "élément"
 
-#: crates/app/src/controller/search.rs:316
+#: crates/app/src/controller/search.rs:320
 msgid "items"
 msgstr "éléments"
 
@@ -2468,11 +2472,11 @@ msgstr "Cache pip"
 msgid "pip downloads packages again"
 msgstr "pip retélécharge les paquets"
 
-#: crates/app/src/controller/search.rs:316
+#: crates/app/src/controller/search.rs:320
 msgid "result"
 msgstr "résultat"
 
-#: crates/app/src/controller/search.rs:316
+#: crates/app/src/controller/search.rs:320
 msgid "results"
 msgstr "résultats"
 

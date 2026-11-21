@@ -7,6 +7,7 @@
 pub mod agents;
 pub mod bookmarks;
 pub mod clean;
+pub mod cli;
 pub mod clip;
 pub mod dupes;
 pub mod entry;

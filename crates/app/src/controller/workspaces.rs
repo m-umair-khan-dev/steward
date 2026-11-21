@@ -111,11 +111,23 @@ impl Controller {
                 .workspaces()
                 .ok()
                 .and_then(|w| w.get(n.saturating_sub(1)).map(|w| w.id))
+        } else if let Ok(id) = arg.parse() {
+            Some(id)
         } else {
-            arg.parse().ok()
+            // By name (`cairn open-workspace NAME`), ignoring case.
+            let wanted = arg.trim().to_lowercase();
+            app_data::store().borrow().workspaces().ok().and_then(|w| {
+                w.into_iter()
+                    .find(|w| w.name.to_lowercase() == wanted)
+                    .map(|w| w.id)
+            })
         };
-        if let Some(id) = id {
-            self.open_workspace(id);
+        match id {
+            Some(id) => self.open_workspace(id),
+            None => self.emit(Event::Toast(
+                format!("{} “{arg}”", gettext("There is no workspace called")),
+                false,
+            )),
         }
     }
 

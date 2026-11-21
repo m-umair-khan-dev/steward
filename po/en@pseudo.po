@@ -1419,6 +1419,9 @@ msgstr "[Thé sýstém’s Döwñlöàds ~~~~~~~]"
 msgid "The system’s terminal"
 msgstr "[Thé sýstém’s térmîñàl ~~~~~~~]"
 
+msgid "There is no workspace called"
+msgstr "[Théré îs ñö wörkspàçé çàlléd ~~~~~~~~~]"
+
 msgid "Thermal state"
 msgstr "[Thérmàl stàté ~~~~]"
 

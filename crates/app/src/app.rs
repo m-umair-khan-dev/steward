@@ -9,10 +9,26 @@ const GETTEXT_DOMAIN: &str = "cairn";
 
 pub fn run() -> ExitCode {
     init_gettext();
-    // A second launch hands its request to the running Cairn (P6-T06).
+    // A second launch hands its request to the running Cairn (P6-T06);
+    // `cairn add-link URL` and the other commands work the same (P7-T10).
+    use cairn_core::cli::{self, Parsed};
     let args: Vec<String> = std::env::args().skip(1).collect();
-    let requests = crate::launch::parse(&args);
-    if crate::launch::forward(&requests) {
+    let requests = match cli::parse(&args, &cli::absolute) {
+        Parsed::Run(requests) => requests,
+        Parsed::Help => {
+            println!("{}", cli::USAGE);
+            return ExitCode::SUCCESS;
+        }
+        Parsed::Version => {
+            println!("cairn {}", env!("CARGO_PKG_VERSION"));
+            return ExitCode::SUCCESS;
+        }
+        Parsed::Wrong(message) => {
+            eprintln!("cairn: {message}\n\n{}", cli::USAGE);
+            return ExitCode::from(2);
+        }
+    };
+    if cli::forward(&requests, "cairn") {
         return ExitCode::SUCCESS;
     }
     crate::launch::set_startup(requests);

@@ -134,12 +134,12 @@ msgstr "添加文件夹到“"
 msgid "Add to “"
 msgstr "添加到“"
 
-#: crates/app/src/controller/workspaces.rs:177
+#: crates/app/src/controller/workspaces.rs:189
 msgid "Added"
 msgstr "已添加"
 
 #: crates/app/src/controller.rs:1429 crates/app/src/controller/installed.rs:192
-#: crates/app/src/controller/search.rs:248
+#: crates/app/src/controller/search.rs:252
 msgid "All"
 msgstr "全部"
 
@@ -539,11 +539,11 @@ msgid "Do this for every clash"
 msgstr "对所有冲突执行相同操作"
 
 #: crates/app/qml/WelcomeDialog.qml:27
-#: crates/app/src/controller/workspaces.rs:375 crates/core/src/kind.rs
+#: crates/app/src/controller/workspaces.rs:387 crates/core/src/kind.rs
 msgid "Documents"
 msgstr "文档"
 
-#: crates/app/src/controller/search.rs:271
+#: crates/app/src/controller/search.rs:275
 msgid "Documents and files"
 msgstr "文档和文件"
 
@@ -710,8 +710,8 @@ msgid "Folder to leave out"
 msgstr "要排除的文件夹"
 
 #: crates/app/src/controller.rs:1549 crates/app/src/controller.rs:1626
-#: crates/app/src/controller/search.rs:269
-#: crates/app/src/controller/workspaces.rs:373
+#: crates/app/src/controller/search.rs:273
+#: crates/app/src/controller/workspaces.rs:385
 msgid "Folders"
 msgstr "文件夹"
 
@@ -851,11 +851,11 @@ msgid "Hot"
 msgstr "过热"
 
 #: crates/app/qml/WelcomeDialog.qml:26
-#: crates/app/src/controller/workspaces.rs:374 crates/core/src/kind.rs
+#: crates/app/src/controller/workspaces.rs:386 crates/core/src/kind.rs
 msgid "Images"
 msgstr "图片"
 
-#: crates/app/src/controller/search.rs:270
+#: crates/app/src/controller/search.rs:274
 msgid "Images and videos"
 msgstr "图片和视频"
 
@@ -1285,7 +1285,7 @@ msgstr "未修改已"
 msgid "Not changed in 90 days"
 msgstr "90 天未修改"
 
-#: crates/app/src/controller/workspaces.rs:300
+#: crates/app/src/controller/workspaces.rs:312
 msgid "Not found"
 msgstr "未找到"
 
@@ -1383,7 +1383,7 @@ msgid "Older than 90 days"
 msgstr "超过 90 天"
 
 #: crates/app/src/controller/about.rs:68
-#: crates/app/src/controller/workspaces.rs:298
+#: crates/app/src/controller/workspaces.rs:310
 msgid "On"
 msgstr "开"
 
@@ -1476,7 +1476,7 @@ msgstr "其他"
 msgid "Outline"
 msgstr "大纲"
 
-#: crates/app/src/controller/workspaces.rs:372
+#: crates/app/src/controller/workspaces.rs:384
 msgid "Overview"
 msgstr "概览"
 
@@ -1923,7 +1923,7 @@ msgstr "终端 (F4)"
 msgid "That is not a web link"
 msgstr "这不是网页链接"
 
-#: crates/app/src/controller/workspaces.rs:222
+#: crates/app/src/controller/workspaces.rs:234
 msgid "That place does not exist"
 msgstr "该位置不存在"
 
@@ -1970,6 +1970,10 @@ msgstr "系统的下载文件夹"
 #: crates/app/qml/PreferencesDialog.qml:26
 msgid "The system’s terminal"
 msgstr "系统终端"
+
+#: crates/app/src/controller/workspaces.rs:128
+msgid "There is no workspace called"
+msgstr "没有名为以下名称的工作区："
 
 #: crates/app/src/controller/about.rs:279
 msgid "Thermal state"
@@ -2309,7 +2313,7 @@ msgstr "例如 hx {}"
 msgid "estimate"
 msgstr "估计"
 
-#: crates/app/src/controller/search.rs:317
+#: crates/app/src/controller/search.rs:321
 msgid "for"
 msgstr "用于"
 
@@ -2365,11 +2369,11 @@ msgstr "未安装"
 msgid "it is no longer there"
 msgstr "它已不存在"
 
-#: crates/app/src/controller/search.rs:316
+#: crates/app/src/controller/search.rs:320
 msgid "item"
 msgstr "项"
 
-#: crates/app/src/controller/search.rs:316
+#: crates/app/src/controller/search.rs:320
 msgid "items"
 msgstr "项"
 
@@ -2468,11 +2472,11 @@ msgstr "pip 缓存"
 msgid "pip downloads packages again"
 msgstr "pip 会重新下载软件包"
 
-#: crates/app/src/controller/search.rs:316
+#: crates/app/src/controller/search.rs:320
 msgid "result"
 msgstr "个结果"
 
-#: crates/app/src/controller/search.rs:316
+#: crates/app/src/controller/search.rs:320
 msgid "results"
 msgstr "个结果"
 
