@@ -4,8 +4,10 @@ Read this first in every session (AGENTS.md rule 2). Update it before stopping.
 
 ## Current phase
 
-**Phase 7: Developer and content tools**, in progress (started 2026-11-20).
-Phase 6 is complete on 26.10 except the website (P6-T10), which is on hold.
+**Phase 7: Developer and content tools**, complete on 26.10 (gate green
+2026-11-22: lint, 133 unit and integration tests, 111 end-to-end scenarios).
+Phase 6 is complete except the website (P6-T10), which is on hold. HUMAN
+checks below. Phase 8 waits for the product owner's go-ahead.
 
 ## Release targets
 
@@ -331,7 +333,7 @@ Decisions and findings:
 - Scenario change (rule 7): E3-11 opens the Search and Index page before
   clicking Pause indexing, because P6-T03 moved the index settings there.
 
-## Phase 7: Developer and content tools (in progress)
+## Phase 7: Developer and content tools (complete on 26.10)
 
 | ID | Task | Status | Notes |
 |---|---|---|---|
@@ -411,8 +413,13 @@ Notes:
 
 ## Next
 
-- P7-T11, then the Phase 7 gate
-  and report. The website (P6-T10) resumes when the product owner says so.
+- Phase 8 waits for the product owner's go-ahead. The website (P6-T10)
+  resumes when the product owner says so.
+- The .deb files in dist/ are from before Phase 7; rebuild with `make deb`
+  (and UBUNTU_VERSION=24.04) when a new test build is wanted.
+- Small follow-ups seen in Phase 7: Preferences has no control yet for the
+  `content-folders` setting (folders outside Home to read for search); the
+  bookmark-fetch setting is the only one with a privacy note.
 - Known gaps to look at in Phase 6:
   - The collapsed sidebar rail does not list the tool pages yet.
   - Smart Clean walks the home folder instead of using the index (fine on
