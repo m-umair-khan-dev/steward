@@ -4,6 +4,9 @@
     <file alias="shield.svg">icons/shield.svg</file>
     <file alias="terminal.svg">icons/terminal.svg</file>
     <file alias="branch.svg">icons/branch.svg</file>
+    <file alias="agent.svg">icons/agent.svg</file>
+    <file alias="globe.svg">icons/globe.svg</file>
+    <file alias="chart.svg">icons/chart.svg</file>
     <file alias="back.svg">icons/back.svg</file>
     <file alias="box.svg">icons/box.svg</file>
     <file alias="briefcase.svg">icons/briefcase.svg</file>

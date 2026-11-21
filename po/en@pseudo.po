@@ -9,8 +9,14 @@ msgstr ""
 msgid "    ← → to move · Space or Esc to close"
 msgstr "[    ← → tö mövé · Spàçé ör Ésç tö çlösé ~~~~~~~~~~~~~]"
 
+msgid " MCP servers"
+msgstr "[ MÇP sérvérs ~~~~]"
+
 msgid " of "
 msgstr "[ öf  ~~]"
+
+msgid " on port "
+msgstr "[ öñ pört  ~~~]"
 
 msgid " or "
 msgstr "[ ör  ~~]"
@@ -18,8 +24,17 @@ msgstr "[ ör  ~~]"
 msgid " packages, "
 msgstr "[ pàçkàgés,  ~~~]"
 
+msgid " server"
+msgstr "[ sérvér ~~]"
+
+msgid " servers"
+msgstr "[ sérvérs ~~]"
+
 msgid " uncommitted changes"
 msgstr "[ üñçömmîttéd çhàñgés ~~~~~~]"
+
+msgid " will be asked to stop. Unsaved work in it may be lost."
+msgstr "[ wîll bé àskéd tö stöp. Üñsàvéd wörk îñ ît màý bé löst. ~~~~~~~~~~~~~~~~~~]"
 
 msgid " will be deleted for good. This cannot be undone."
 msgstr "[ wîll bé délétéd för gööd. Thîs çàññöt bé üñdöñé. ~~~~~~~~~~~~~~~~]"
@@ -44,6 +59,9 @@ msgstr "[À földér tö léàvé öüt, é.g. ~/Vîdéös/Ràw ~~~~~~~~~~~~~]"
 
 msgid "A messy folder, sorted"
 msgstr "[À méssý földér, sörtéd ~~~~~~~]"
+
+msgid "AI Agents"
+msgstr "[ÀÎ Àgéñts ~~~]"
 
 msgid "About"
 msgstr "[Àböüt ~~]"
@@ -110,6 +128,9 @@ msgstr "[Àrçhîtéçtüré ~~~~]"
 
 msgid "Archives"
 msgstr "[Àrçhîvés ~~]"
+
+msgid "Asked the server to stop"
+msgstr "[Àskéd thé sérvér tö stöp ~~~~~~~~]"
 
 msgid "Asking apt, Snap, Flatpak and the other tools…"
 msgstr "[Àskîñg àpt, Sñàp, Flàtpàk àñd thé öthér tööls… ~~~~~~~~~~~~~~~]"
@@ -246,6 +267,9 @@ msgstr "[Çöüld ñöt çhàñgé thé földér: ~~~~~~~~~]"
 msgid "Could not do it for"
 msgstr "[Çöüld ñöt dö ît för ~~~~~~]"
 
+msgid "Could not open it"
+msgstr "[Çöüld ñöt öpéñ ît ~~~~~]"
+
 msgid "Could not put back"
 msgstr "[Çöüld ñöt püt bàçk ~~~~~~]"
 
@@ -257,6 +281,9 @@ msgstr "[Çöüld ñöt sàvé thé lîst ~~~~~~~]"
 
 msgid "Could not start"
 msgstr "[Çöüld ñöt stàrt ~~~~~]"
+
+msgid "Could not stop it"
+msgstr "[Çöüld ñöt stöp ît ~~~~~]"
 
 msgid "Couldn't Open This Folder"
 msgstr "[Çöüldñ't Öpéñ Thîs Földér ~~~~~~~~]"
@@ -335,6 +362,9 @@ msgstr "[Düplîçàtés ~~~]"
 
 msgid "Edit Workspace"
 msgstr "[Édît Wörkspàçé ~~~~]"
+
+msgid "Editor"
+msgstr "[Édîtör ~~]"
 
 msgid "Editor (Shift+F4)"
 msgstr "[Édîtör (Shîft+F4) ~~~~~]"
@@ -612,6 +642,9 @@ msgstr "[Lîght ~~]"
 msgid "List"
 msgstr "[Lîst ~~]"
 
+msgid "Local servers"
+msgstr "[Löçàl sérvérs ~~~~]"
+
 msgid "Locate"
 msgstr "[Löçàté ~~]"
 
@@ -641,6 +674,9 @@ msgstr "[Löökîñg… ~~]"
 
 msgid "Low"
 msgstr "[Löw ~~]"
+
+msgid "MCP: "
+msgstr "[MÇP:  ~~]"
 
 msgid "Main menu"
 msgstr "[Màîñ méñü ~~~]"
@@ -674,6 +710,9 @@ msgstr "[Mîñîmîzé ~~]"
 
 msgid "Modified"
 msgstr "[Mödîfîéd ~~]"
+
+msgid "Month"
+msgstr "[Möñth ~~]"
 
 msgid "More for "
 msgstr "[Möré för  ~~~]"
@@ -756,6 +795,9 @@ msgstr "[Ñö îtéms îñ thîs földér àré ~~~~~~~~~]"
 msgid "No names in this folder contain what you typed."
 msgstr "[Ñö ñàmés îñ thîs földér çöñtàîñ whàt ýöü týpéd. ~~~~~~~~~~~~~~~]"
 
+msgid "No projects are set up for coding agents yet."
+msgstr "[Ñö pröjéçts àré sét üp för çödîñg àgéñts ýét. ~~~~~~~~~~~~~~~]"
+
 msgid "No terminal found. Choose one in Preferences › General."
 msgstr "[Ñö térmîñàl föüñd. Çhöösé öñé îñ Préféréñçés › Géñéràl. ~~~~~~~~~~~~~~~~~~]"
 
@@ -807,6 +849,9 @@ msgstr "[Ñöthîñg îs rüññîñg. ~~~~~~]"
 msgid "Nothing of This Kind"
 msgstr "[Ñöthîñg öf Thîs Kîñd ~~~~~~]"
 
+msgid "Nothing of yours is listening on this computer."
+msgstr "[Ñöthîñg öf ýöürs îs lîstéñîñg öñ thîs çömpütér. ~~~~~~~~~~~~~~~]"
+
 msgid "Nothing to paste"
 msgstr "[Ñöthîñg tö pàsté ~~~~~]"
 
@@ -846,6 +891,9 @@ msgstr "[Öldér thàñ 90 dàýs ~~~~~~]"
 msgid "On"
 msgstr "[Öñ ~~]"
 
+msgid "On localhost"
+msgstr "[Öñ löçàlhöst ~~~~]"
+
 msgid "Only places their tools rebuild by themselves. You lose nothing but time: the next build or install is slower."
 msgstr "[Öñlý plàçés théîr tööls rébüîld bý thémsélvés. Ýöü lösé ñöthîñg büt tîmé: thé ñéxt büîld ör îñstàll îs slöwér. ~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~]"
 
@@ -863,6 +911,9 @@ msgstr "[Öpéñ îñ Édîtör ~~~~]"
 
 msgid "Open in Terminal"
 msgstr "[Öpéñ îñ Térmîñàl ~~~~~]"
+
+msgid "Open in the browser: port "
+msgstr "[Öpéñ îñ thé bröwsér: pört  ~~~~~~~~]"
 
 msgid "Open it from the folder that contains it."
 msgstr "[Öpéñ ît fröm thé földér thàt çöñtàîñs ît. ~~~~~~~~~~~~~]"
@@ -954,6 +1005,9 @@ msgstr "[Péék àt à fîlé ~~~~]"
 msgid "Peek: "
 msgstr "[Péék:  ~~]"
 
+msgid "Period"
+msgstr "[Pérîöd ~~]"
+
 msgid "Play"
 msgstr "[Plàý ~~]"
 
@@ -980,6 +1034,9 @@ msgstr "[Prévîéw pàñé ~~~~]"
 
 msgid "Processor"
 msgstr "[Pröçéssör ~~~]"
+
+msgid "Projects"
+msgstr "[Pröjéçts ~~]"
 
 msgid "Put Back"
 msgstr "[Püt Bàçk ~~]"
@@ -1149,8 +1206,17 @@ msgstr "[Stàrtüp dîsk ~~~~]"
 msgid "Step "
 msgstr "[Stép  ~~]"
 
+msgid "Stop"
+msgstr "[Stöp ~~]"
+
 msgid "Stop leaving out "
 msgstr "[Stöp léàvîñg öüt  ~~~~~]"
+
+msgid "Stop the Server?"
+msgstr "[Stöp thé Sérvér? ~~~~~]"
+
+msgid "Stop the server on port "
+msgstr "[Stöp thé sérvér öñ pört  ~~~~~~~~]"
 
 msgid "Style"
 msgstr "[Stýlé ~~]"
@@ -1187,6 +1253,9 @@ msgstr "[Sýstém jöürñàl ~~~~]"
 
 msgid "Tab switches pane · drag to move, Ctrl-drag to copy"
 msgstr "[Tàb swîtçhés pàñé · dràg tö mövé, Çtrl-dràg tö çöpý ~~~~~~~~~~~~~~~~~]"
+
+msgid "Terminal"
+msgstr "[Térmîñàl ~~]"
 
 msgid "Terminal (F4)"
 msgstr "[Térmîñàl (F4) ~~~~]"
@@ -1263,6 +1332,9 @@ msgstr "[Tîdý thîs földér ~~~~~]"
 msgid "Tidy “"
 msgstr "[Tîdý “ ~~]"
 
+msgid "Today"
+msgstr "[Tödàý ~~]"
+
 msgid "Today, %H:%M"
 msgstr "[Tödàý, %H:%M ~~~~]"
 
@@ -1299,6 +1371,12 @@ msgstr "[Üp ~~]"
 msgid "Up to the parent folder"
 msgstr "[Üp tö thé pàréñt földér ~~~~~~~]"
 
+msgid "Usage"
+msgstr "[Üsàgé ~~]"
+
+msgid "Usage is read from Claude Code's logs; other tools keep no local usage Cairn can read yet."
+msgstr "[Üsàgé îs réàd fröm Çlàüdé Çödé's lögs; öthér tööls kéép ñö löçàl üsàgé Çàîrñ çàñ réàd ýét. ~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~]"
+
 msgid "Use as default file manager"
 msgstr "[Üsé às défàült fîlé màñàgér ~~~~~~~~~]"
 
@@ -1328,6 +1406,9 @@ msgstr "[Wàîtîñg ~~]"
 
 msgid "Warm"
 msgstr "[Wàrm ~~]"
+
+msgid "Week"
+msgstr "[Wéék ~~]"
 
 msgid "Welcome to Cairn"
 msgstr "[Wélçömé tö Çàîrñ ~~~~~]"
@@ -1610,6 +1691,18 @@ msgstr "[tö Tràsh ~~]"
 
 msgid "to the Trash"
 msgstr "[tö thé Tràsh ~~~~]"
+
+msgid "tokens"
+msgstr "[tökéñs ~~]"
+
+msgid "tokens in the last 30 days"
+msgstr "[tökéñs îñ thé làst 30 dàýs ~~~~~~~~]"
+
+msgid "tokens this week"
+msgstr "[tökéñs thîs wéék ~~~~~]"
+
+msgid "tokens today"
+msgstr "[tökéñs tödàý ~~~~]"
 
 msgid "tool"
 msgstr "[tööl ~~]"

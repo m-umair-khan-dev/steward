@@ -223,7 +223,8 @@ Window {
             nav: win.nav
             prefs: win.prefs
             ops: win.ops
-            tool: ({ clean: p.t("Free Up Space"), installed: p.t("Installed"), about: p.t("About This Computer") })[win.tools.page] || ""
+            tool: ({ clean: p.t("Free Up Space"), installed: p.t("Installed"), about: p.t("About This Computer"),
+                     agents: p.t("AI Agents") })[win.tools.page] || ""
         }
         PathBar {
             id: pathBar
@@ -381,6 +382,13 @@ Window {
                 model: win.tools.installed || ({ looking: true, tools: [], filters: [], packages: [] })
             }
 
+            AgentsPage {
+                z: 21
+                anchors.fill: parent
+                visible: win.tools.page === "agents"
+                model: win.tools.agents || ({ looking: true, servers: [], projects: [] })
+            }
+
             AboutPage {
                 z: 21
                 anchors.fill: parent
@@ -502,6 +510,7 @@ Window {
     AboutDialog { visible: p.dialog === "about"; version: p.version }
     WelcomeDialog { visible: p.dialog === "welcome"; info: win.dialogData; prefs: win.prefs; cardWidth: 640 }
     WhatsNewDialog { visible: p.dialog === "whats-new"; info: win.dialogData }
+    StopServerDialog { visible: p.dialog === "stop-server"; info: win.dialogData }
     PreferencesDialog { visible: p.dialog === "preferences"; prefs: win.prefs; accels: win.accels }
     ShortcutsDialog { visible: p.dialog === "shortcuts"; accels: win.accels }
     OpenWithDialog { visible: p.dialog === "open-with"; info: win.dialogData }

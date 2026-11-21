@@ -80,3 +80,76 @@ def test_the_item_menu_opens_from_the_keyboard(app, home):
     app.select("web-app")
     app.press("shift+f10")
     app.wait_for(lambda: {"Open in Terminal", "Open in Editor"} <= app.a11y_names(), "the item menu")
+
+
+# --- AI Agents (E7-04, E7-05) ----------------------------------------------------------
+
+from gi.repository import GLib  # noqa: E402
+
+
+def s(text: str) -> GLib.Variant:
+    return GLib.Variant("s", text)
+
+
+def agents(app) -> dict:
+    return app.state()["agents"]
+
+
+def open_agents(app) -> dict:
+    app.action("win.tool-open", s("agents"))
+    return app.wait_for(lambda: (a := agents(app)) and a["loaded"] and a, "AI Agents", timeout=20)
+
+
+def test_E7_04_ai_agents_match_the_manifest(session, home, app_factory):
+    app = app_factory(extra_env={"CAIRN_FAKE_NOW": home.manifest["now"]})
+    expected = home.manifest["agents"]
+    state = open_agents(app)
+    projects = {str(__import__("pathlib").Path(p["path"]).relative_to(home.path)): p for p in state["projects"]}
+    assert set(projects) == set(expected["projects"])
+    names = {"claude": "Claude Code", "codex": "Codex", "cursor": "Cursor"}
+    for rel, facts in expected["projects"].items():
+        got = projects[rel]
+        assert got["tools"] == [names[t] for t in facts["tools"]], rel
+        assert got["files"] == facts["files"], rel
+        assert sorted(s["name"] for s in got["servers"]) == sorted(facts["servers"]), rel
+        assert got["tokens"] == facts["tokens"], rel
+    assert state["user_servers"] == len(expected["user_servers"])
+    assert state["usage_total"] == expected["tokens_total"], "this week's tokens"
+    assert "web-app" in app.a11y_names(showing_only=False)
+
+
+def free_port() -> int:
+    import socket
+    with socket.socket() as probe:
+        probe.bind(("127.0.0.1", 0))
+        return probe.getsockname()[1]
+
+
+def test_E7_05_stop_a_local_server(session, home, app_factory):
+    import subprocess
+    import sys
+    port = free_port()
+    server = subprocess.Popen([sys.executable, "-m", "http.server", str(port), "--bind", "127.0.0.1"],
+                              cwd=home / WEB_APP, env=session.base_env(),
+                              stdout=subprocess.DEVNULL, stderr=subprocess.DEVNULL)
+    try:
+        app = app_factory()
+        open_agents(app)
+        listed = app.wait_for(lambda: next((x for x in agents(app)["servers"] if x["port"] == port), None),
+                              "the server to be listed", timeout=15)
+        assert listed["project"] == "web-app" and listed["pid"] == server.pid
+
+        app.a11y_click(f"Stop the server on port {port}")
+        app.wait_for(lambda: (d := app.state()["active_window"]["dialog"]) and d["type"] == "stop-server", "the question")
+        app.a11y_click("Cancel", within="Stop the Server?")
+        app.wait_for(lambda: app.state()["active_window"]["dialog"] is None, "the question to close")
+        assert server.poll() is None, "cancel leaves it running"
+
+        app.a11y_click(f"Stop the server on port {port}")
+        app.wait_for(lambda: (d := app.state()["active_window"]["dialog"]) and d["type"] == "stop-server", "the question")
+        app.a11y_click("Stop", role="button", within="Stop the Server?")
+        app.wait_for(lambda: server.poll() is not None, "the server to end", timeout=10)
+        app.wait_for(lambda: all(x["port"] != port for x in agents(app)["servers"]), "the list to update", timeout=10)
+    finally:
+        if server.poll() is None:
+            server.kill()

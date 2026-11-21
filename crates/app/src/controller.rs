@@ -19,6 +19,7 @@ use cairn_core::sort::{self, GroupBy, SortKey};
 use cairn_core::{FileEntry, FolderModel, Kind, LoadState};
 
 mod about;
+mod agents;
 mod clean;
 mod downloads;
 mod git;
@@ -207,6 +208,7 @@ pub struct Controller {
     welcome: welcome::WelcomeState,
     git: git::GitState,
     openin: openin::OpenInState,
+    agents: agents::AgentsState,
     /// Path bar: folders whose name matches what is typed, and the one chosen.
     path_matches: Vec<PathBuf>,
     path_match: Option<usize>,
@@ -308,6 +310,7 @@ pub fn init(notifier: impl Fn() + 'static) {
         welcome: welcome::WelcomeState::default(),
         git: git::GitState::default(),
         openin: openin::OpenInState::default(),
+        agents: agents::AgentsState::default(),
         path_matches: Vec::new(),
         path_match: None,
         dialog: String::new(),
@@ -1705,6 +1708,8 @@ impl Controller {
                   "selected": self.tools.page == "clean" },
                 { "id": "installed", "label": gettext("Installed"), "icon": "package",
                   "selected": self.tools.page == "installed", "count": self.installed_count() },
+                { "id": "agents", "label": gettext("AI Agents"), "icon": "agent",
+                  "selected": self.tools.page == "agents" },
             ],
             "page": self.tools.page,
             "hidden": self.hidden,
@@ -1964,6 +1969,7 @@ impl Controller {
             "about": self.about_test_json(),
             "welcome": self.welcome_test_json(),
             "openin": self.openin_test_json(),
+            "agents": self.agents_test_json(),
             // Folder numbers as the cards show them, by name.
             "folder_stats": self.visible.iter().filter(|e| e.is_dir()).filter_map(|e| {
                 let (items, bytes) = self.folder_numbers(&e.data().file.path()?)?;

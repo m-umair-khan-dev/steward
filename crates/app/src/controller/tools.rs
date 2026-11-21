@@ -8,11 +8,11 @@ use super::{Controller, dirty};
 
 #[derive(Default, Debug)]
 pub struct ToolsState {
-    /// "clean", "installed", "about", or "" when no tool page is open.
+    /// "clean", "installed", "about", "agents", or "" when no tool page is open.
     pub page: String,
 }
 
-pub const PAGES: [&str; 3] = ["clean", "installed", "about"];
+pub const PAGES: [&str; 4] = ["clean", "installed", "about", "agents"];
 
 impl Controller {
     pub fn open_tool(&mut self, page: &str) {
@@ -27,6 +27,7 @@ impl Controller {
         match page {
             "clean" => self.clean_opened(),
             "installed" => self.installed_opened(),
+            "agents" => self.agents_opened(),
             _ => self.about_opened(),
         }
     }
@@ -46,6 +47,7 @@ impl Controller {
             "clean": if page == "clean" { self.clean_json() } else { Value::Null },
             "installed": if page == "installed" { self.installed_json() } else { Value::Null },
             "about": if page == "about" { self.about_json() } else { Value::Null },
+            "agents": if page == "agents" { self.agents_json() } else { Value::Null },
         })
     }
 }

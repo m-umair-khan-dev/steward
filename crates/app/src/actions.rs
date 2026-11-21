@@ -339,6 +339,19 @@ fn create() -> (gio::SimpleActionGroup, gio::SimpleActionGroup) {
     with_string(&win, "clean-peek", |path| {
         controller::with(|c| c.clean_peek(path))
     });
+    with_string(&win, "agents-period", |period| {
+        controller::with(|c| c.agents_period(period))
+    });
+    with_string(&win, "agents-stop-ask", |pid| {
+        controller::with(|c| c.agents_stop_ask(pid))
+    });
+    with_string(&win, "agents-stop", |answer| {
+        controller::with(|c| c.agents_stop(answer == "yes"))
+    });
+    with_string(&win, "agents-open", |port| {
+        controller::with(|c| c.agents_open(port))
+    });
+    simple(&win, "agents-refresh", || controller::with(|c| c.agents_refresh()));
     with_string(&win, "open-terminal", |path| {
         controller::with(|c| c.open_in(cairn_core::openin::Role::Terminal, path))
     });
