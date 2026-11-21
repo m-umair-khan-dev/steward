@@ -20,6 +20,7 @@ use cairn_core::{FileEntry, FolderModel, Kind, LoadState};
 
 mod about;
 mod agents;
+mod bookmarks;
 mod clean;
 mod downloads;
 mod git;
@@ -211,6 +212,7 @@ pub struct Controller {
     openin: openin::OpenInState,
     agents: agents::AgentsState,
     md: markdown::MarkdownState,
+    bookmarks: bookmarks::BookmarksState,
     /// Path bar: folders whose name matches what is typed, and the one chosen.
     path_matches: Vec<PathBuf>,
     path_match: Option<usize>,
@@ -314,6 +316,7 @@ pub fn init(notifier: impl Fn() + 'static) {
         openin: openin::OpenInState::default(),
         agents: agents::AgentsState::default(),
         md: markdown::MarkdownState::default(),
+        bookmarks: bookmarks::BookmarksState::default(),
         path_matches: Vec::new(),
         path_match: None,
         dialog: String::new(),
@@ -373,6 +376,7 @@ pub fn init(notifier: impl Fn() + 'static) {
         ops::start(c);
         index::start(c);
         c.reload_sidebar();
+        c.bookmarks_load();
         c.refresh_home_space();
         // Dual pane comes back with both its folders (E4-10).
         let s = settings::get();
@@ -699,6 +703,7 @@ impl Controller {
             "sidebar-visible" => {
                 actions::set_state("toggle-sidebar", &settings.boolean(key).to_variant())
             }
+            "bookmark-view" | "bookmark-fetch" => self.mark(dirty::TOOLS),
             "downloads-folder" => {
                 self.reload_sidebar();
                 self.refresh_suggestions();
@@ -1715,6 +1720,7 @@ impl Controller {
                 "path": e.file.path().map(|p| p.display().to_string()).unwrap_or_else(|| e.file.uri().to_string()),
             })).collect::<Vec<_>>(),
             "workspaces": self.workspaces_json(),
+            "bookmarks": self.bookmarks_sidebar_json(),
             "tools": [
                 { "id": "clean", "label": gettext("Free Up Space"), "icon": "gauge",
                   "selected": self.tools.page == "clean" },
@@ -1882,6 +1888,7 @@ impl Controller {
             "indexRunning": self.index.running,
             "home": paths::display_path(&glib::home_dir()),
             "defaultFileManager": s.boolean("default-file-manager"),
+            "bookmarkFetch": s.boolean("bookmark-fetch"),
             "openIn": self.openin_json(),
             // GNOME's dark mode, for Qt versions that cannot report it (24.04).
             "systemDark": self.interface.as_ref().is_some_and(|i| {
@@ -1983,6 +1990,7 @@ impl Controller {
             "openin": self.openin_test_json(),
             "agents": self.agents_test_json(),
             "markdown": self.markdown_test_json(),
+            "bookmarks": self.bookmarks_test_json(),
             // Folder numbers as the cards show them, by name.
             "folder_stats": self.visible.iter().filter(|e| e.is_dir()).filter_map(|e| {
                 let (items, bytes) = self.folder_numbers(&e.data().file.path()?)?;

@@ -158,6 +158,24 @@ Sheet {
             }
         }
 
+        // Bookmarks (P7-T08): the app's only outbound request, disclosed here.
+        Item {
+            width: parent.width; height: 70
+            Column {
+                anchors.verticalCenter: parent.verticalCenter
+                width: parent.width - 70
+                Text { text: p.t("Fetch link titles and pictures"); color: Theme.ink; font.pixelSize: 14 }
+                Text { width: parent.width; wrapMode: Text.WordWrap; color: Theme.muted; font.pixelSize: 12
+                       text: p.t("When you save a bookmark, Cairn contacts that link’s site for its title and picture. It is the only request Cairn makes.") }
+            }
+            Switch {
+                anchors.right: parent.right; anchors.verticalCenter: parent.verticalCenter
+                checked: !!root.prefs.bookmarkFetch
+                Accessible.name: p.t("Fetch link titles and pictures")
+                onCheckedChanged: if (checked !== !!root.prefs.bookmarkFetch) p.setpref("bookmark-fetch", checked ? "true" : "false")
+            }
+        }
+
         // Open In (P7-T02): which terminal (F4) and editor (Shift+F4).
         OpenInChoice { role: "terminal"; label: p.t("Terminal (F4)") }
         OpenInChoice { role: "editor"; label: p.t("Editor (Shift+F4)") }

@@ -5,6 +5,7 @@
 //! It uses GLib and GIO for files, mounts and models.
 
 pub mod agents;
+pub mod bookmarks;
 pub mod clean;
 pub mod clip;
 pub mod dupes;

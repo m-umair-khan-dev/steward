@@ -126,5 +126,14 @@
       <default>''</default>
       <summary>Your own editor command; {} is the folder</summary>
     </key>
+    <key name="bookmark-fetch" type="b">
+      <default>true</default>
+      <summary>Fetch a saved link's title and picture</summary>
+      <description>Contacts the link's own site when a bookmark is added. It is the only request the app makes.</description>
+    </key>
+    <key name="bookmark-view" type="s">
+      <default>'grid'</default>
+      <summary>How bookmarks are shown: grid, list, headlines or masonry</summary>
+    </key>
   </schema>
 </schemalist>

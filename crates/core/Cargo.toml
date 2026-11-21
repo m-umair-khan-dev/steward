@@ -16,6 +16,7 @@ rustix.workspace = true
 blake3.workspace = true
 serde_json.workspace = true
 gix.workspace = true
+ureq.workspace = true
 
 [dev-dependencies]
 

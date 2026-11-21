@@ -91,6 +91,29 @@ Rectangle {
                     Repeater { model: root.model.workspaces || []; delegate: WorkspaceRow {} }
                 }
             }
+            // Bookmarks (P7-T08): all, favourites, then collections; "+" makes one.
+            Item {
+                width: parent.width; height: bmHeading.implicitHeight
+                Heading { id: bmHeading; text: p.t("Bookmarks") }
+                IconButton {
+                    anchors.right: parent.right; anchors.rightMargin: 14
+                    y: bmHeading.topPadding - 4
+                    width: 24; height: 24; iconSize: 13; flat: true; icon: "plus"; label: p.t("New collection")
+                    onClicked: p.activate("win.collection-new", "")
+                }
+            }
+            Item {
+                width: parent.width
+                height: bmList.implicitHeight
+                Accessible.role: Accessible.List
+                Accessible.name: p.t("Bookmarks")
+                Column {
+                    id: bmList
+                    width: parent.width
+                    spacing: 2
+                    Repeater { model: root.model.bookmarks || []; delegate: ToolRow {} }
+                }
+            }
             Heading { text: p.t("Favorites") }
             Item {
                 width: parent.width
@@ -272,7 +295,9 @@ Rectangle {
         color: modelData.selected ? Theme.alpha(Theme.accent, 0.16) : (toolHover.hovered ? Theme.hover : "transparent")
         Accessible.role: Accessible.Button
         Accessible.name: modelData.label
-        Accessible.onPressAction: p.activate("win.tool-open", modelData.id)
+        Accessible.onPressAction: tool.go()
+        // Tools open a page; Bookmarks rows pass their own action (P7-T08).
+        function go() { p.activate(modelData.action || "win.tool-open", modelData.param !== undefined ? modelData.param : modelData.id) }
         Icon { x: 10; anchors.verticalCenter: parent.verticalCenter; name: tool.modelData.icon; size: 20; color: Theme.accentText }
         Text {
             x: 42; anchors.verticalCenter: parent.verticalCenter
@@ -290,7 +315,7 @@ Rectangle {
             font.pixelSize: 14
         }
         HoverHandler { id: toolHover }
-        TapHandler { onTapped: p.activate("win.tool-open", tool.modelData.id) }
+        TapHandler { onTapped: tool.go() }
     }
 
     component WorkspaceRow: Rectangle {

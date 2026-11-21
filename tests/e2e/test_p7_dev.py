@@ -250,3 +250,89 @@ def test_E7_06_markdown_view(app, home, tmp_path):
         assert watcher.requests == [], f"the preview loaded {watcher.requests}"
     finally:
         watcher.close()
+
+
+# --- Bookmarks (E7-07) ------------------------------------------------------------------
+
+class Site(Watcher):
+    """A local web site: a page with a title and a picture, and a second page."""
+
+    def __init__(self) -> None:
+        import base64
+        import http.server
+        import threading
+        self.requests: list[str] = []
+        site = self
+        png = base64.b64decode(TINY_PNG)
+        pages = {
+            "/calm.html": ("text/html; charset=utf-8",
+                           b"<html><head><title>Fallback</title>"
+                           b"<meta property='og:title' content='Designing calm interfaces'>"
+                           b"<meta property='og:image' content='/card.png'></head><body>Hi</body></html>"),
+            "/card.png": ("image/png", png),
+            "/second.html": ("text/html", b"<title>Second page</title>"),
+        }
+
+        class Handler(http.server.BaseHTTPRequestHandler):
+            def do_GET(self):  # noqa: N802
+                site.requests.append(self.path)
+                kind, body = pages.get(self.path, ("text/plain", b""))
+                self.send_response(200 if self.path in pages else 404)
+                self.send_header("Content-Type", kind)
+                self.send_header("Content-Length", str(len(body)))
+                self.end_headers()
+                self.wfile.write(body)
+
+            def log_message(self, *args):
+                pass
+
+        self.server = http.server.ThreadingHTTPServer(("127.0.0.1", 0), Handler)
+        self.port = self.server.server_address[1]
+        threading.Thread(target=self.server.serve_forever, daemon=True).start()
+
+
+def links(app) -> list[dict]:
+    return app.state()["bookmarks"]["all"]
+
+
+def test_E7_07_bookmarks(app, app_factory, home):
+    site = Site()
+    try:
+        first = f"http://127.0.0.1:{site.port}/calm.html"
+        second = f"http://127.0.0.1:{site.port}/second.html"
+        app.action("win.bookmarks-show", s("all"))
+        app.wait_for(lambda: app.state()["tools"]["page"] == "bookmarks", "Bookmarks")
+
+        # With fetching on: the card gets the page's title and picture.
+        app.action("win.bookmark-add", s(first))
+        got = app.wait_for(lambda: (b := links(app)) and b[0]["fetched"] and b[0], "the fetch", timeout=15)
+        assert got["url"] == first and got["title"] == "Designing calm interfaces"
+        assert got["image_exists"], "the picture was saved"
+        assert sorted(site.requests) == ["/calm.html", "/card.png"]
+        app.wait_for(lambda: "Designing calm interfaces" in app.a11y_names(), "the card")
+
+        # Fetching off (Preferences): no request at all; the card shows the address.
+        app.action("app.preferences")
+        app.wait_for(lambda: app.state()["active_window"]["dialog"], "Preferences")
+        app.a11y_click("Fetch link titles and pictures", within="Preferences")
+        app.wait_for(lambda: not app.state()["bookmarks"]["fetch"], "fetching off")
+        app.press("escape")
+        app.wait_for(lambda: not app.state()["active_window"]["dialog"], "Preferences to close")
+        app.action("win.bookmark-add", s(second))
+        app.wait_for(lambda: len(links(app)) == 2, "the second link")
+        app.wait_idle()
+        plain = next(b for b in links(app) if b["url"] == second)
+        assert plain["title"] is None and not plain["fetched"] and plain["image"] is None
+        assert app.state()["bookmarks"]["fetching"] == 0
+        assert "/second.html" not in site.requests and len(site.requests) == 2, site.requests
+        app.wait_for(lambda: second in app.a11y_names(), "the card shows the address")
+
+        # Both survive a restart.
+        app.stop()
+        again = app_factory()
+        saved = {b["url"]: b for b in links(again)}
+        assert set(saved) == {first, second}
+        assert saved[first]["title"] == "Designing calm interfaces" and saved[first]["image_exists"]
+        assert len(site.requests) == 2, "a restart fetches nothing"
+    finally:
+        site.close()

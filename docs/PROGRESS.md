@@ -4,9 +4,8 @@ Read this first in every session (AGENTS.md rule 2). Update it before stopping.
 
 ## Current phase
 
-**Phase 6: Release 1.0**, complete on 26.10 (gate green 2026-11-20) except
-the website (P6-T10), which is on hold. HUMAN checks below. Phase 7 waits
-for the product owner's go-ahead.
+**Phase 7: Developer and content tools**, in progress (started 2026-11-20).
+Phase 6 is complete on 26.10 except the website (P6-T10), which is on hold.
 
 ## Release targets
 
@@ -332,6 +331,31 @@ Decisions and findings:
 - Scenario change (rule 7): E3-11 opens the Search and Index page before
   clicking Pause indexing, because P6-T03 moved the index settings there.
 
+## Phase 7: Developer and content tools (in progress)
+
+| ID | Task | Status | Notes |
+|---|---|---|---|
+| P7-S1 | Spike: Git library | done | gix 0.90, read-only (status, sha1) |
+| P7-T01 | Git chip | done | E7-01, E7-02 |
+| P7-T02 | Open In | done | E7-03 |
+| P7-T03 | Path-bar commands | done | E7-03 |
+| P7-T04 | core::agents | done | ADR 0013; E7-04 |
+| P7-T05 | Local servers with Stop | done | E7-05 |
+| P7-T06 | AI Agents view | done | E7-04, E7-05 |
+| P7-T07 | Markdown view | done | E7-06. Remote images (inline, reference and `<img>`) are removed before QML renders; local images only from the document's folder |
+| P7-T08 | Bookmarks | done | E7-07. `ureq` (rustls) fetches title and picture, bounded in time and size; the Preferences switch turns it off. Four views; paste, drop, Add Link (Ctrl+Shift+L) |
+| P7-T09 | Content search | to do | E7-08, E7-09 |
+| P7-T10 | `cairn` command-line tool | to do | E7-10 |
+| P7-T11 | Customisable shortcuts | to do | E7-11 |
+
+Notes:
+- Scenario change (rule 7), E7-06: the check that "a remote image causes no
+  request" looks at image syntax in the preview text, because a reference
+  definition line (`[r]: http://…`) stays in the text as a link target and
+  loads nothing; the test server's request log is the real proof.
+- 2026-11-21: the product owner deleted all Docker images and volumes to free
+  disk space; the dev image and fixture were rebuilt.
+
 ## Blocked / waiting for a human
 
 - Enable CI once the repository is on its Git host (P0-T07).
@@ -353,6 +377,8 @@ Decisions and findings:
   compare About with Settings › System › About, and read every suggestion's
   reason for clarity. Check the sidebar's Installed count against
   `apt list --installed`, `snap list` and `flatpak list`.
+- Phase 7: try Open In with the terminals and editors actually installed;
+  check the AI Agents numbers against a real machine's usage.
 - Phase 6 (from DESIGN.md's HUMAN list):
   - final name and icon (the icon is a placeholder);
   - review the five translations, or mark them beta;
@@ -375,12 +401,8 @@ Decisions and findings:
 
 ## Next
 
-- FIRST: run `make check` on 26.10. The 24.04 work (ADR 0012) was committed
-  before the gate finished on 26.10 (the computer was shut down). Known: a
-  `cargo fmt` diff in crates/app/build.rs.
-
-- Phase 7 (Developer and content tools) waits for the product owner's
-  go-ahead. The website (P6-T10) resumes when the product owner says so.
+- Finish P7-T08 (Bookmarks), then P7-T09 to P7-T11, then the Phase 7 gate
+  and report. The website (P6-T10) resumes when the product owner says so.
 - Known gaps to look at in Phase 6:
   - The collapsed sidebar rail does not list the tool pages yet.
   - Smart Clean walks the home folder instead of using the index (fine on

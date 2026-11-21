@@ -75,6 +75,30 @@ const MIGRATIONS: &[&str] = &[
         color TEXT,
         PRIMARY KEY (dev, inode)
      );",
+    // 5: bookmarks (P7-T08), with collections and tags.
+    "CREATE TABLE collection (
+        id INTEGER PRIMARY KEY,
+        name TEXT NOT NULL UNIQUE,
+        position INTEGER NOT NULL
+     );
+     CREATE TABLE bookmark (
+        id INTEGER PRIMARY KEY,
+        url TEXT NOT NULL UNIQUE,
+        title TEXT,
+        site TEXT,
+        kind TEXT NOT NULL DEFAULT 'other'
+            CHECK (kind IN ('article','video','image','file','other')),
+        image_path TEXT,
+        favourite INTEGER NOT NULL DEFAULT 0,
+        collection_id INTEGER REFERENCES collection(id) ON DELETE SET NULL,
+        created_at INTEGER NOT NULL,
+        fetched INTEGER NOT NULL DEFAULT 0
+     );
+     CREATE TABLE bookmark_tag (
+        bookmark_id INTEGER NOT NULL REFERENCES bookmark(id) ON DELETE CASCADE,
+        tag TEXT NOT NULL,
+        PRIMARY KEY (bookmark_id, tag)
+     );",
 ];
 
 /// How one folder was last shown. `None` fields fall back to the defaults.
@@ -126,6 +150,10 @@ impl Store {
 
     pub(crate) fn conn(&self) -> &Connection {
         &self.conn
+    }
+
+    pub(crate) fn conn_mut(&mut self) -> &mut Connection {
+        &mut self.conn
     }
 
     pub fn schema_version(&self) -> rusqlite::Result<i64> {

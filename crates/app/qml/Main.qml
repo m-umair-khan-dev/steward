@@ -224,7 +224,8 @@ Window {
             prefs: win.prefs
             ops: win.ops
             tool: ({ clean: p.t("Free Up Space"), installed: p.t("Installed"), about: p.t("About This Computer"),
-                     agents: p.t("AI Agents"), markdown: (win.tools.markdown || {}).name || "" })[win.tools.page] || ""
+                     agents: p.t("AI Agents"), markdown: (win.tools.markdown || {}).name || "",
+                     bookmarks: p.t("Bookmarks") })[win.tools.page] || ""
         }
         PathBar {
             id: pathBar
@@ -389,6 +390,13 @@ Window {
                 model: win.tools.agents || ({ looking: true, servers: [], projects: [] })
             }
 
+            BookmarksPage {
+                z: 21
+                anchors.fill: parent
+                visible: win.tools.page === "bookmarks"
+                model: win.tools.bookmarks || ({ cards: [], tags: [] })
+            }
+
             MarkdownPage {
                 z: 21
                 anchors.fill: parent
@@ -518,6 +526,9 @@ Window {
     WelcomeDialog { visible: p.dialog === "welcome"; info: win.dialogData; prefs: win.prefs; cardWidth: 640 }
     WhatsNewDialog { visible: p.dialog === "whats-new"; info: win.dialogData }
     StopServerDialog { visible: p.dialog === "stop-server"; info: win.dialogData }
+    AddLinkDialog { visible: p.dialog === "bookmark-add"; info: win.dialogData }
+    BookmarkDialog { visible: p.dialog === "bookmark-edit"; info: win.dialogData }
+    CollectionDialog { visible: p.dialog === "collection-new"; info: win.dialogData }
     PreferencesDialog { visible: p.dialog === "preferences"; prefs: win.prefs; accels: win.accels }
     ShortcutsDialog { visible: p.dialog === "shortcuts"; accels: win.accels }
     OpenWithDialog { visible: p.dialog === "open-with"; info: win.dialogData }

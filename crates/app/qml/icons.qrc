@@ -5,6 +5,10 @@
     <file alias="terminal.svg">icons/terminal.svg</file>
     <file alias="branch.svg">icons/branch.svg</file>
     <file alias="agent.svg">icons/agent.svg</file>
+    <file alias="bookmark.svg">icons/bookmark.svg</file>
+    <file alias="link.svg">icons/link.svg</file>
+    <file alias="headlines.svg">icons/headlines.svg</file>
+    <file alias="masonry.svg">icons/masonry.svg</file>
     <file alias="globe.svg">icons/globe.svg</file>
     <file alias="chart.svg">icons/chart.svg</file>
     <file alias="back.svg">icons/back.svg</file>

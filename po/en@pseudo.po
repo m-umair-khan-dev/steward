@@ -81,8 +81,17 @@ msgstr "[Àççéñt ~~]"
 msgid "Active pane"
 msgstr "[Àçtîvé pàñé ~~~]"
 
+msgid "Add"
+msgstr "[Àdd ~~]"
+
+msgid "Add Link"
+msgstr "[Àdd Lîñk ~~]"
+
 msgid "Add a folder to “"
 msgstr "[Àdd à földér tö “ ~~~~~]"
+
+msgid "Add a link to Bookmarks"
+msgstr "[Àdd à lîñk tö Böökmàrks ~~~~~~~]"
 
 msgid "Add to “"
 msgstr "[Àdd tö “ ~~]"
@@ -93,8 +102,14 @@ msgstr "[Àddéd ~~]"
 msgid "All"
 msgstr "[Àll ~~]"
 
+msgid "All Bookmarks"
+msgstr "[Àll Böökmàrks ~~~~]"
+
 msgid "All suggestions"
 msgstr "[Àll süggéstîöñs ~~~~~]"
+
+msgid "Already in Bookmarks"
+msgstr "[Àlréàdý îñ Böökmàrks ~~~~~~]"
 
 msgid "An operation was interrupted:"
 msgstr "[Àñ öpéràtîöñ wàs îñtérrüptéd: ~~~~~~~~~]"
@@ -156,6 +171,12 @@ msgstr "[Bàttérý héàlth ~~~~]"
 msgid "Big files"
 msgstr "[Bîg fîlés ~~~]"
 
+msgid "Bookmark removed"
+msgstr "[Böökmàrk rémövéd ~~~~~]"
+
+msgid "Bookmarks"
+msgstr "[Böökmàrks ~~~]"
+
 msgid "By kind"
 msgstr "[Bý kîñd ~~]"
 
@@ -207,6 +228,18 @@ msgstr "[Çödé ~~]"
 msgid "Collapse sidebar"
 msgstr "[Çöllàpsé sîdébàr ~~~~~]"
 
+msgid "Collection"
+msgstr "[Çölléçtîöñ ~~~]"
+
+msgid "Collection "
+msgstr "[Çölléçtîöñ  ~~~]"
+
+msgid "Collection (a new name makes one)"
+msgstr "[Çölléçtîöñ (à ñéw ñàmé màkés öñé) ~~~~~~~~~~~]"
+
+msgid "Collection name"
+msgstr "[Çölléçtîöñ ñàmé ~~~~~]"
+
 msgid "Colour "
 msgstr "[Çölöür  ~~]"
 
@@ -243,6 +276,9 @@ msgstr "[Çöpý ~~]"
 msgid "Copy as Text"
 msgstr "[Çöpý às Téxt ~~~~]"
 
+msgid "Copy link "
+msgstr "[Çöpý lîñk  ~~~]"
+
 msgid "Copy or move across with F5 and F6."
 msgstr "[Çöpý ör mövé àçröss wîth F5 àñd F6. ~~~~~~~~~~~]"
 
@@ -278,6 +314,9 @@ msgstr "[Çöüld ñöt rédö ~~~~]"
 
 msgid "Could not save"
 msgstr "[Çöüld ñöt sàvé ~~~~]"
+
+msgid "Could not save the link"
+msgstr "[Çöüld ñöt sàvé thé lîñk ~~~~~~~]"
 
 msgid "Could not save the list"
 msgstr "[Çöüld ñöt sàvé thé lîst ~~~~~~~]"
@@ -320,6 +359,9 @@ msgstr "[Défàült vîéw ~~~~]"
 
 msgid "Delete"
 msgstr "[Délété ~~]"
+
+msgid "Delete Collection"
+msgstr "[Délété Çölléçtîöñ ~~~~~]"
 
 msgid "Descending"
 msgstr "[Désçéñdîñg ~~~]"
@@ -366,6 +408,12 @@ msgstr "[Düplîçàtés ~~~]"
 msgid "Edit"
 msgstr "[Édît ~~]"
 
+msgid "Edit "
+msgstr "[Édît  ~~]"
+
+msgid "Edit Bookmark"
+msgstr "[Édît Böökmàrk ~~~~]"
+
 msgid "Edit Workspace"
 msgstr "[Édît Wörkspàçé ~~~~]"
 
@@ -407,6 +455,15 @@ msgstr "[Éxpàñd sîdébàr ~~~~]"
 
 msgid "Favorites"
 msgstr "[Fàvörîtés ~~~]"
+
+msgid "Favourite "
+msgstr "[Fàvöürîté  ~~~]"
+
+msgid "Favourites"
+msgstr "[Fàvöürîtés ~~~]"
+
+msgid "Fetch link titles and pictures"
+msgstr "[Fétçh lîñk tîtlés àñd pîçtürés ~~~~~~~~~~]"
 
 msgid "File operations are not available"
 msgstr "[Fîlé öpéràtîöñs àré ñöt àvàîlàblé ~~~~~~~~~~~]"
@@ -518,6 +575,9 @@ msgstr "[Grîd ~~]"
 
 msgid "Group by"
 msgstr "[Gröüp bý ~~]"
+
+msgid "Headlines"
+msgstr "[Héàdlîñés ~~~]"
 
 msgid "Hide"
 msgstr "[Hîdé ~~]"
@@ -645,6 +705,18 @@ msgstr "[Léft öüt ~~]"
 msgid "Light"
 msgstr "[Lîght ~~]"
 
+msgid "Link address"
+msgstr "[Lîñk àddréss ~~~~]"
+
+msgid "Link copied"
+msgstr "[Lîñk çöpîéd ~~~]"
+
+msgid "Link saved"
+msgstr "[Lîñk sàvéd ~~~]"
+
+msgid "Links"
+msgstr "[Lîñks ~~]"
+
 msgid "List"
 msgstr "[Lîst ~~]"
 
@@ -698,6 +770,9 @@ msgstr "[Màrkdöwñ ~~]"
 
 msgid "Markdown text"
 msgstr "[Màrkdöwñ téxt ~~~~]"
+
+msgid "Masonry"
+msgstr "[Màsöñrý ~~]"
 
 msgid "Maximize"
 msgstr "[Màxîmîzé ~~]"
@@ -759,17 +834,26 @@ msgstr "[Mövéd ~~]"
 msgid "Name"
 msgstr "[Ñàmé ~~]"
 
+msgid "Name, e.g. Reading"
+msgstr "[Ñàmé, é.g. Réàdîñg ~~~~~~]"
+
 msgid "Name, e.g. Taxes 2026"
 msgstr "[Ñàmé, é.g. Tàxés 2026 ~~~~~~~]"
 
 msgid "Needs administrator"
 msgstr "[Ñééds àdmîñîstràtör ~~~~~~]"
 
+msgid "New Collection"
+msgstr "[Ñéw Çölléçtîöñ ~~~~]"
+
 msgid "New Folder"
 msgstr "[Ñéw Földér ~~~]"
 
 msgid "New Workspace"
 msgstr "[Ñéw Wörkspàçé ~~~~]"
+
+msgid "New collection"
+msgstr "[Ñéw çölléçtîöñ ~~~~]"
 
 msgid "New folder"
 msgstr "[Ñéw földér ~~~]"
@@ -803,6 +887,9 @@ msgstr "[Ñö îñstàlléd àpp çàñ öpéñ thîs kîñd öf fîlé ~~~~~~~~
 
 msgid "No items in this folder are"
 msgstr "[Ñö îtéms îñ thîs földér àré ~~~~~~~~~]"
+
+msgid "No links here yet. Paste a link with Ctrl+V, drop one onto this page, or choose Add Link."
+msgstr "[Ñö lîñks héré ýét. Pàsté à lîñk wîth Ctrl+V, dröp öñé öñtö thîs pàgé, ör çhöösé Àdd Lîñk. ~~~~~~~~~~~~~~~~~~~~~~~~~~~~~]"
 
 msgid "No names in this folder contain what you typed."
 msgstr "[Ñö ñàmés îñ thîs földér çöñtàîñ whàt ýöü týpéd. ~~~~~~~~~~~~~~~]"
@@ -929,12 +1016,6 @@ msgstr "[Öpéñ îñ thé bröwsér: pört  ~~~~~~~~]"
 
 msgid "Open it from the folder that contains it."
 msgstr "[Öpéñ ît fröm thé földér thàt çöñtàîñs ît. ~~~~~~~~~~~~~]"
-
-msgid "Open this folder in the editor"
-msgstr "[Öpéñ thîs földér îñ thé édîtör ~~~~~~~~~~]"
-
-msgid "Open this folder in the terminal"
-msgstr "[Öpéñ thîs földér îñ thé térmîñàl ~~~~~~~~~~]"
 
 msgid "Open workspace 1"
 msgstr "[Öpéñ wörkspàçé 1 ~~~~~]"
@@ -1281,11 +1362,20 @@ msgstr "[Sýstém jöürñàl ~~~~]"
 msgid "Tab switches pane · drag to move, Ctrl-drag to copy"
 msgstr "[Tàb swîtçhés pàñé · dràg tö mövé, Çtrl-dràg tö çöpý ~~~~~~~~~~~~~~~~~]"
 
+msgid "Tags"
+msgstr "[Tàgs ~~]"
+
+msgid "Tags, separated by commas"
+msgstr "[Tàgs, sépàràtéd bý çömmàs ~~~~~~~~]"
+
 msgid "Terminal"
 msgstr "[Térmîñàl ~~]"
 
 msgid "Terminal (F4)"
 msgstr "[Térmîñàl (F4) ~~~~]"
+
+msgid "That is not a web link"
+msgstr "[Thàt îs ñöt à wéb lîñk ~~~~~~~]"
 
 msgid "That place does not exist"
 msgstr "[Thàt plàçé döés ñöt éxîst ~~~~~~~~]"
@@ -1359,6 +1449,9 @@ msgstr "[Tîdý thîs földér ~~~~~]"
 msgid "Tidy “"
 msgstr "[Tîdý “ ~~]"
 
+msgid "Title"
+msgstr "[Tîtlé ~~]"
+
 msgid "Today"
 msgstr "[Tödàý ~~]"
 
@@ -1385,6 +1478,9 @@ msgstr "[Üñdö  ~~]"
 
 msgid "Undone:"
 msgstr "[Üñdöñé: ~~]"
+
+msgid "Unfavourite "
+msgstr "[Üñfàvöürîté  ~~~~]"
 
 msgid "Unknown"
 msgstr "[Üñkñöwñ ~~]"
@@ -1451,6 +1547,9 @@ msgstr "[Whàt ît îs för ~~~~]"
 
 msgid "What’s New in Cairn "
 msgstr "[Whàt’s Ñéw îñ Çàîrñ  ~~~~~~]"
+
+msgid "When you save a bookmark, Cairn contacts that link’s site for its title and picture. It is the only request Cairn makes."
+msgstr "[Whéñ ýöü sàvé à böökmàrk, Çàîrñ çöñtàçts thàt lîñk’s sîté för îts tîtlé àñd pîçtüré. Ît îs thé öñlý réqüést Çàîrñ màkés. ~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~]"
 
 msgid "Where"
 msgstr "[Whéré ~~]"
@@ -1613,6 +1712,12 @@ msgstr "[îtéms ~~]"
 
 msgid "likely duplicates"
 msgstr "[lîkélý düplîçàtés ~~~~~]"
+
+msgid "link"
+msgstr "[lîñk ~~]"
+
+msgid "links"
+msgstr "[lîñks ~~]"
 
 msgid "looking"
 msgstr "[löökîñg ~~]"

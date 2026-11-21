@@ -98,6 +98,12 @@ pub const ACCELS: &[(&str, &str, &[&str], &str)] = &[
         "Open this folder in the editor",
     ),
     ("win.md-save", "", &["Ctrl+S"], "Save the Markdown file"),
+    (
+        "win.bookmark-add-ask",
+        "",
+        &["Ctrl+Shift+L"],
+        "Add a link to Bookmarks",
+    ),
     ("win.workspace-open", "#1", &["Alt+1"], "Open workspace 1"),
     ("win.workspace-open", "#2", &["Alt+2"], "Open workspace 2"),
     ("win.workspace-open", "#3", &["Alt+3"], "Open workspace 3"),
@@ -375,6 +381,48 @@ fn create() -> (gio::SimpleActionGroup, gio::SimpleActionGroup) {
         controller::with(|c| c.md_link(link))
     });
     simple(&win, "md-save", || controller::with(|c| c.md_save()));
+    with_string(&win, "bookmarks-show", |f| {
+        controller::with(|c| c.bookmarks_show(f))
+    });
+    with_string(&win, "bookmarks-tag", |t| {
+        controller::with(|c| c.bookmarks_tag(t))
+    });
+    with_string(&win, "bookmarks-view", |v| {
+        controller::with(|c| c.bookmarks_view(v))
+    });
+    with_string(&win, "bookmark-add", |url| {
+        controller::with(|c| c.bookmark_add(url))
+    });
+    simple(&win, "bookmark-add-ask", || {
+        controller::with(|c| c.bookmark_add_ask())
+    });
+    with_string(&win, "bookmark-open", |id| {
+        controller::with(|c| c.bookmark_open(id))
+    });
+    with_string(&win, "bookmark-copy", |id| {
+        controller::with(|c| c.bookmark_copy(id))
+    });
+    with_string(&win, "bookmark-favourite", |id| {
+        controller::with(|c| c.bookmark_favourite(id))
+    });
+    with_string(&win, "bookmark-delete", |id| {
+        controller::with(|c| c.bookmark_delete(id))
+    });
+    with_string(&win, "bookmark-edit-ask", |id| {
+        controller::with(|c| c.bookmark_edit_ask(id))
+    });
+    with_string(&win, "bookmark-edit", |v| {
+        controller::with(|c| c.bookmark_edit(v))
+    });
+    simple(&win, "collection-new", || {
+        controller::with(|c| c.collection_new_ask())
+    });
+    with_string(&win, "collection-create", |n| {
+        controller::with(|c| c.collection_create(n))
+    });
+    with_string(&win, "collection-delete", |id| {
+        controller::with(|c| c.collection_delete(id))
+    });
     simple(&win, "md-revert", || controller::with(|c| c.md_revert()));
     with_string(&win, "open-terminal", |path| {
         controller::with(|c| c.open_in(cairn_core::openin::Role::Terminal, path))

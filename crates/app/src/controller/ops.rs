@@ -299,6 +299,11 @@ impl Controller {
     }
 
     pub fn paste(&mut self) {
+        // On the Bookmarks page, Ctrl+V pastes a link (P7-T08).
+        if self.tools.page == "bookmarks" {
+            self.bookmarks_paste();
+            return;
+        }
         let Some(dest) = self.current_path() else {
             return;
         };
