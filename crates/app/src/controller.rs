@@ -21,6 +21,7 @@ use cairn_core::{FileEntry, FolderModel, Kind, LoadState};
 mod about;
 mod clean;
 mod downloads;
+mod git;
 pub use downloads::downloads_folder;
 mod index;
 mod installed;
@@ -203,6 +204,7 @@ pub struct Controller {
     installed: installed::InstalledState,
     about: about::AboutState,
     welcome: welcome::WelcomeState,
+    git: git::GitState,
     /// Path bar: folders whose name matches what is typed, and the one chosen.
     path_matches: Vec<PathBuf>,
     path_match: Option<usize>,
@@ -302,6 +304,7 @@ pub fn init(notifier: impl Fn() + 'static) {
         installed: installed::InstalledState::default(),
         about: about::AboutState::default(),
         welcome: welcome::WelcomeState::default(),
+        git: git::GitState::default(),
         path_matches: Vec::new(),
         path_match: None,
         dialog: String::new(),
@@ -471,6 +474,7 @@ impl Controller {
         self.model.load(folder);
         self.visible.clear();
         self.refresh_free_space(folder);
+        self.refresh_git();
         actions::set_state("filter-kind", &"all".to_variant());
         actions::set_enabled("back", !self.back.is_empty());
         actions::set_enabled("forward", !self.forward.is_empty());
@@ -1806,6 +1810,7 @@ impl Controller {
                 .map(|(label, p)| json!({ "label": label, "path": p.display().to_string() }))
                 .collect::<Vec<_>>(),
             "editing": self.path_editing,
+            "git": self.git_json(),
             "text": self.path_text.clone().unwrap_or_else(|| paths::display_path(&path)),
             "matches": self.path_matches.iter().enumerate().map(|(i, p)| json!({
                 "index": i,
@@ -1916,6 +1921,7 @@ impl Controller {
                 "editing": self.path_editing,
                 "text": path["text"],
                 "segments": path["segments"].as_array().map(|s| s.iter().map(|x| x["label"].clone()).collect::<Vec<_>>()),
+                "git": path["git"],
             },
             "sidebar": {
                 "entries": sidebar["entries"], "hidden": sidebar["hidden"], "selected": sidebar["selected"],

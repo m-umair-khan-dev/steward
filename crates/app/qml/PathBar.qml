@@ -70,7 +70,40 @@ Rectangle {
         onActiveFocusChanged: if (!activeFocus && visible) p.cancelpath()
     }
 
+    // The Git chip (P7-T01): the repository's branch and its uncommitted changes.
+    Rectangle {
+        id: gitChip
+        visible: !root.model.editing && !!root.model.git
+        anchors.right: hint.left; anchors.rightMargin: 14
+        anchors.verticalCenter: parent.verticalCenter
+        height: 26; radius: 13
+        width: chipRow.implicitWidth + 20
+        color: Theme.alpha(Theme.accent, 0.12)
+        border.color: Theme.alpha(Theme.accent, 0.35)
+        Accessible.role: Accessible.StaticText
+        Accessible.name: root.model.git
+                         ? p.t("Git branch ") + root.model.git.branch + ", " + root.model.git.changes + p.t(" uncommitted changes")
+                         : ""
+        Row {
+            id: chipRow
+            anchors.centerIn: parent
+            spacing: 6
+            Icon { name: "branch"; size: 14; color: Theme.accentText; anchors.verticalCenter: parent.verticalCenter }
+            Text { text: root.model.git ? root.model.git.branch : ""; color: Theme.accentText
+                   font.pixelSize: 12; font.weight: Font.DemiBold; anchors.verticalCenter: parent.verticalCenter }
+            Rectangle {
+                visible: !!root.model.git && root.model.git.changes > 0
+                width: Math.max(18, changesText.implicitWidth + 10); height: 18; radius: 9
+                color: Theme.accent
+                anchors.verticalCenter: parent.verticalCenter
+                Text { id: changesText; anchors.centerIn: parent; text: root.model.git ? root.model.git.changes : ""
+                       color: "white"; font.pixelSize: 11; font.weight: Font.Bold }
+            }
+        }
+    }
+
     Text {
+        id: hint
         anchors.right: parent.right; anchors.rightMargin: 18
         anchors.verticalCenter: parent.verticalCenter
         visible: !root.model.editing

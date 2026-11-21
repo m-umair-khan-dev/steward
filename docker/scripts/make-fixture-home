@@ -34,7 +34,7 @@ import zlib
 from datetime import datetime, timezone
 from pathlib import Path
 
-RECIPE_VERSION = 2
+RECIPE_VERSION = 3
 MARKER = ".cairn-fixture"
 NOW = int(datetime(2026, 11, 1, 12, 0, 0, tzinfo=timezone.utc).timestamp())
 DAY = 86_400
@@ -234,6 +234,59 @@ def text(*lines: str) -> bytes:
     return ("\n".join(lines) + "\n").encode()
 
 
+def git_repo(b: "Builder", rel: str, committed: dict[str, bytes], branch: str, age_days: float) -> None:
+    """Writes a Git repository for `rel` with one commit of `committed`.
+
+    Written by hand, not with git, so the tree is byte-identical on every
+    build: objects are zlib "stored" (level 0, the same on every zlib), and
+    the index has no timestamps, inodes or devices (Git then compares
+    contents, which is what a fresh clone does too)."""
+    git = f"{rel}/.git"
+    when = NOW - int(age_days * DAY)
+
+    def obj(kind: str, data: bytes) -> bytes:
+        raw = f"{kind} {len(data)}".encode() + b"\0" + data
+        sha = hashlib.sha1(raw).digest()
+        hex_ = sha.hex()
+        b.file(f"{git}/objects/{hex_[:2]}/{hex_[2:]}", zlib.compress(raw, 0), age_days, mode=0o444)
+        return sha
+
+    blobs = {path: obj("blob", data) for path, data in committed.items()}
+
+    def tree(prefix: str) -> bytes:
+        names: dict[str, bytes | None] = {}
+        for path in blobs:
+            if path.startswith(prefix):
+                head, _, rest = path[len(prefix):].partition("/")
+                names[head] = None if rest else blobs[path]
+        entries = []
+        for name in names:
+            if names[name] is None:
+                entries.append((name + "/", b"40000 " + name.encode() + b"\0" + tree(prefix + name + "/")))
+            else:
+                entries.append((name, b"100644 " + name.encode() + b"\0" + names[name]))
+        return obj("tree", b"".join(e for _, e in sorted(entries)))
+
+    root = tree("")
+    person = f"Fixture <fixture@example.invalid> {when} +0000"
+    commit = obj("commit", f"tree {root.hex()}\nauthor {person}\ncommitter {person}\n\nFirst version\n".encode())
+
+    index = bytearray(b"DIRC" + struct.pack(">II", 2, len(blobs)))
+    for path in sorted(blobs, key=lambda p: p.encode()):
+        name = path.encode()
+        entry = struct.pack(">10I", 0, 0, 0, 0, 0, 0, 0o100644, 0, 0, len(committed[path]))
+        entry += blobs[path] + struct.pack(">H", min(len(name), 0xFFF)) + name
+        entry += b"\0" * (8 - (len(entry) % 8))
+        index += entry
+    index += hashlib.sha1(bytes(index)).digest()
+
+    b.file(f"{git}/HEAD", f"ref: refs/heads/{branch}\n".encode(), age_days)
+    b.file(f"{git}/refs/heads/{branch}", (commit.hex() + "\n").encode(), age_days)
+    b.file(f"{git}/index", bytes(index), age_days)
+    b.file(f"{git}/config", text("[core]", "\trepositoryformatversion = 0", "\tfilemode = true",
+                                 "\tbare = false", "\tlogallrefupdates = false"), age_days)
+
+
 # ----------------------------------------------------------------- builder ---
 
 
@@ -374,9 +427,19 @@ def build(root: Path) -> dict:
     for n in range(4):
         b.file(f"{doc}/Manuals/manual-{n + 1}.pdf", pdf(f"Manual {n + 1}"), 300)
     b.file(f"{doc}/Manuals/readme.txt", text("Device manuals"), 300)
-    b.file(f"{doc}/Projects/web-app/package.json", text('{ "name": "web-app" }'), 6)
-    b.file(f"{doc}/Projects/web-app/src/index.js", text("console.log('hello');"), 6)
-    b.file(f"{doc}/Projects/web-app/README.md", text("# web-app"), 6)
+    # A Git project (E7-01): committed on branch feature/search, then two files
+    # changed and one added, so `git status` shows three changes.
+    web = f"{doc}/Projects/web-app"
+    committed = {
+        "package.json": text('{ "name": "web-app" }'),
+        "src/index.js": text("console.log('hello');"),
+        "README.md": text("# web-app"),
+    }
+    b.file(f"{web}/package.json", text('{ "name": "web-app", "private": true }'), 6)
+    b.file(f"{web}/src/index.js", text("console.log('hello, search');"), 6)
+    b.file(f"{web}/README.md", committed["README.md"], 6)
+    b.file(f"{web}/TODO.md", text("- search results page"), 6)
+    git_repo(b, web, committed, branch="feature/search", age_days=7)
     b.file(f"{doc}/Projects/old-site/package.json", text('{ "name": "old-site" }'), 250)
     b.file(f"{doc}/Projects/old-site/node_modules/left-pad/index.js", text("module.exports = 1;"), 250)
     b.file(f"{doc}/Projects/old-site/node_modules/left-pad/package.json", text('{ "name": "left-pad" }'), 250)
@@ -486,6 +549,8 @@ def describe(b: Builder) -> dict:
         "installers": {"Downloads/photo-tool_3.2.0_amd64.deb": {"package": "photo-tool",
                                                                  "version": "3.2.0"}},
         "clean": clean_cards(b, duplicates),
+        "git": {"Documents/Projects/web-app": {"branch": "feature/search", "changes": 3,
+                                                "changed": ["TODO.md", "package.json", "src/index.js"]}},
     }
 
 

@@ -9,6 +9,7 @@ pub mod clip;
 pub mod dupes;
 pub mod entry;
 pub mod folder;
+pub mod git;
 pub mod guard;
 pub mod index;
 pub mod kind;

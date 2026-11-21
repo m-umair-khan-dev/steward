@@ -22,7 +22,7 @@ msgstr "    ← → で移動 · Space または Esc で閉じる"
 msgid " of "
 msgstr " / "
 
-#: crates/app/qml/PreferencesDialog.qml:145
+#: crates/app/qml/PreferencesDialog.qml:149
 #: crates/app/qml/ShortcutsDialog.qml:23
 msgid " or "
 msgstr " または "
@@ -31,15 +31,19 @@ msgstr " または "
 msgid " packages, "
 msgstr " 個のパッケージ、 "
 
+#: crates/app/qml/PathBar.qml:85
+msgid " uncommitted changes"
+msgstr " 件の未コミットの変更"
+
 #: crates/app/qml/EmptyTrashDialog.qml:15
 msgid " will be deleted for good. This cannot be undone."
 msgstr " は完全に削除されます。元に戻せません。"
 
-#: crates/app/src/format.rs:36
+#: crates/app/src/format.rs:53
 msgid "%-e %b"
 msgstr "%-m月%-e日"
 
-#: crates/app/src/format.rs:37
+#: crates/app/src/format.rs:54
 msgid "%-e %b %Y"
 msgstr "%Y年%-m月%-e日"
 
@@ -51,7 +55,7 @@ msgstr "+ フォルダーを追加"
 msgid "A file manager for Ubuntu that keeps folders tidy."
 msgstr "フォルダーを整理された状態に保つ Ubuntu 用ファイルマネージャー。"
 
-#: crates/app/qml/PreferencesDialog.qml:228
+#: crates/app/qml/PreferencesDialog.qml:236
 msgid "A folder to leave out, e.g. ~/Videos/Raw"
 msgstr "除外するフォルダー（例: ~/Videos/Raw）"
 
@@ -63,7 +67,7 @@ msgstr "散らかったフォルダーを整理"
 msgid "About"
 msgstr "情報"
 
-#: crates/app/qml/GlassFolder.qml:137
+#: crates/app/qml/GlassFolder.qml:132
 msgid "About "
 msgstr "詳細: "
 
@@ -71,12 +75,12 @@ msgstr "詳細: "
 msgid "About Cairn"
 msgstr "Cairn について"
 
-#: crates/app/qml/AboutPage.qml:12 crates/app/qml/Main.qml:207
+#: crates/app/qml/AboutPage.qml:12 crates/app/qml/Main.qml:226
 #: crates/app/qml/Sidebar.qml:167
 msgid "About This Computer"
 msgstr "このコンピューターについて"
 
-#: crates/app/qml/PreferencesDialog.qml:122
+#: crates/app/qml/PreferencesDialog.qml:126
 #: crates/app/qml/WelcomeDialog.qml:176 crates/app/qml/WelcomeDialog.qml:179
 msgid "Accent"
 msgstr "アクセントカラー"
@@ -89,7 +93,7 @@ msgstr "アクティブなペイン"
 msgid "Add a folder to “"
 msgstr "フォルダーを追加: “"
 
-#: crates/app/qml/Main.qml:445
+#: crates/app/qml/Main.qml:464
 msgid "Add to “"
 msgstr "追加先: “"
 
@@ -97,7 +101,7 @@ msgstr "追加先: “"
 msgid "Added"
 msgstr "追加しました:"
 
-#: crates/app/src/controller.rs:1388 crates/app/src/controller/installed.rs:192
+#: crates/app/src/controller.rs:1401 crates/app/src/controller/installed.rs:192
 #: crates/app/src/controller/search.rs:211
 msgid "All"
 msgstr "すべて"
@@ -110,7 +114,7 @@ msgstr "すべての提案"
 msgid "An operation was interrupted:"
 msgstr "操作が中断されました:"
 
-#: crates/app/qml/PreferencesDialog.qml:128
+#: crates/app/qml/PreferencesDialog.qml:132
 msgid "Animations follow the system: Settings › Accessibility › Seeing › Reduce Animation."
 msgstr "アニメーションはシステムの設定に従います: 設定 › アクセシビリティ › 視覚 › アニメーションを減らす。"
 
@@ -185,7 +189,7 @@ msgstr "バッテリーの状態"
 msgid "Big files"
 msgstr "大きなファイル"
 
-#: crates/app/src/controller.rs:1521
+#: crates/app/src/controller.rs:1534
 msgid "By kind"
 msgstr "種類別"
 
@@ -194,11 +198,11 @@ msgid "CONTENTS"
 msgstr "内容"
 
 #: crates/app/qml/AboutDialog.qml:21 crates/app/qml/Main.qml:16
-#: crates/app/qml/PreferencesDialog.qml:123 crates/app/qml/Sidebar.qml:41
+#: crates/app/qml/PreferencesDialog.qml:127 crates/app/qml/Sidebar.qml:41
 msgid "Cairn"
 msgstr "Cairn"
 
-#: crates/app/src/controller.rs:694
+#: crates/app/src/controller.rs:702
 msgid "Cairn answers other apps now; folders open in it once Cairn is installed"
 msgstr "Cairn が他のアプリに応答するようになりました。Cairn をインストールするとフォルダーが Cairn で開きます"
 
@@ -221,7 +225,7 @@ msgstr "キャンセル"
 msgid "Cancel "
 msgstr "キャンセル: "
 
-#: crates/app/src/controller/ops.rs:608
+#: crates/app/src/controller/ops.rs:609
 msgid "Cancelled"
 msgstr "キャンセルしました"
 
@@ -229,7 +233,7 @@ msgstr "キャンセルしました"
 msgid "Cannot tidy this folder:"
 msgstr "このフォルダーは整理できません:"
 
-#: crates/app/qml/PreferencesDialog.qml:124
+#: crates/app/qml/PreferencesDialog.qml:128
 #: crates/app/qml/WelcomeDialog.qml:187 crates/app/qml/WelcomeDialog.qml:190
 msgid "Card size"
 msgstr "カードの大きさ"
@@ -265,7 +269,7 @@ msgid "Colour "
 msgstr "色: "
 
 #: crates/app/qml/Rail.qml:57 crates/app/qml/Sidebar.qml:166
-#: crates/app/qml/Sidebar.qml:175 crates/app/src/controller.rs:1282
+#: crates/app/qml/Sidebar.qml:175 crates/app/src/controller.rs:1295
 msgid "Computer"
 msgstr "コンピューター"
 
@@ -285,7 +289,7 @@ msgstr "内容: "
 msgid "Continue"
 msgstr "続ける"
 
-#: crates/app/src/controller/ops.rs:278 crates/app/src/controller/ops.rs:616
+#: crates/app/src/controller/ops.rs:278 crates/app/src/controller/ops.rs:617
 msgid "Copied"
 msgstr "コピーしました:"
 
@@ -301,7 +305,7 @@ msgstr "コマンドをコピーしました。端末に貼り付けて実行し
 msgid "Copied the remove command. Paste it into a terminal to run it."
 msgstr "削除コマンドをコピーしました。端末に貼り付けて実行してください。"
 
-#: crates/app/qml/CleanPage.qml:210 crates/app/qml/Main.qml:440
+#: crates/app/qml/CleanPage.qml:210 crates/app/qml/Main.qml:459
 #: crates/app/src/actions.rs:69 crates/app/src/controller/ops.rs:332
 msgid "Copy"
 msgstr "コピー"
@@ -326,7 +330,7 @@ msgstr "削除するコマンドをコピー: "
 msgid "Copy to the other pane"
 msgstr "もう一方のペインにコピー"
 
-#: crates/app/qml/Main.qml:397
+#: crates/app/qml/Main.qml:416
 msgid "Copy to “"
 msgstr "コピー先: “"
 
@@ -338,15 +342,15 @@ msgstr "コア"
 msgid "Could not change the folder:"
 msgstr "フォルダーを変更できませんでした:"
 
-#: crates/app/src/controller/ops.rs:605
+#: crates/app/src/controller/ops.rs:606
 msgid "Could not do it for"
 msgstr "実行できませんでした:"
 
-#: crates/app/src/controller/ops.rs:599
+#: crates/app/src/controller/ops.rs:600
 msgid "Could not put back"
 msgstr "元に戻せませんでした:"
 
-#: crates/app/src/controller/ops.rs:601
+#: crates/app/src/controller/ops.rs:602
 msgid "Could not redo"
 msgstr "やり直せませんでした:"
 
@@ -354,7 +358,7 @@ msgstr "やり直せませんでした:"
 msgid "Could not save the list"
 msgstr "一覧を保存できませんでした"
 
-#: crates/app/src/controller.rs:1313
+#: crates/app/src/controller.rs:1326
 msgid "Couldn't Open This Folder"
 msgstr "このフォルダーを開けませんでした"
 
@@ -362,15 +366,15 @@ msgstr "このフォルダーを開けませんでした"
 msgid "Create"
 msgstr "作成"
 
-#: crates/app/qml/Header.qml:92 crates/app/src/controller.rs:1703
+#: crates/app/qml/Header.qml:92 crates/app/src/controller.rs:1720
 msgid "Created"
 msgstr "作成日時"
 
-#: crates/app/qml/PathBar.qml:77
+#: crates/app/qml/PathBar.qml:110
 msgid "Ctrl+L to type a path"
 msgstr "Ctrl+L でパスを入力"
 
-#: crates/app/qml/Main.qml:441 crates/app/src/actions.rs:70
+#: crates/app/qml/Main.qml:460 crates/app/src/actions.rs:70
 #: crates/app/src/controller/ops.rs:276
 msgid "Cut"
 msgstr "切り取り"
@@ -379,7 +383,7 @@ msgstr "切り取り"
 msgid "Cycles"
 msgstr "サイクル数"
 
-#: crates/app/qml/Header.qml:187 crates/app/qml/PreferencesDialog.qml:121
+#: crates/app/qml/Header.qml:187 crates/app/qml/PreferencesDialog.qml:125
 #: crates/app/qml/WelcomeDialog.qml:169
 msgid "Dark"
 msgstr "ダーク"
@@ -434,8 +438,8 @@ msgstr "ドキュメント"
 msgid "Documents and files"
 msgstr "ドキュメントとファイル"
 
-#: crates/app/qml/PreferencesDialog.qml:106
-#: crates/app/qml/PreferencesDialog.qml:99
+#: crates/app/qml/PreferencesDialog.qml:103
+#: crates/app/qml/PreferencesDialog.qml:110
 msgid "Downloads folder"
 msgstr "ダウンロードフォルダー"
 
@@ -447,11 +451,11 @@ msgstr "90 日間、開かれも変更も追加もされていないダウンロ
 msgid "Drive"
 msgstr "ドライブ"
 
-#: crates/app/qml/Main.qml:437 crates/app/src/controller/ops.rs:260
+#: crates/app/qml/Main.qml:456 crates/app/src/controller/ops.rs:260
 msgid "Duplicate"
 msgstr "複製"
 
-#: crates/app/src/controller/ops.rs:618
+#: crates/app/src/controller/ops.rs:619
 msgid "Duplicated"
 msgstr "複製しました:"
 
@@ -467,11 +471,11 @@ msgstr "ワークスペースを編集"
 msgid "Eject "
 msgstr "取り出す: "
 
-#: crates/app/src/controller/ops.rs:629
+#: crates/app/src/controller/ops.rs:630
 msgid "Emptied the Trash"
 msgstr "ゴミ箱を空にしました"
 
-#: crates/app/src/controller.rs:1362
+#: crates/app/src/controller.rs:1375
 msgid "Empty"
 msgstr "空"
 
@@ -479,7 +483,7 @@ msgstr "空"
 msgid "Empty Trash"
 msgstr "ゴミ箱を空にする"
 
-#: crates/app/qml/CleanPage.qml:230 crates/app/qml/Main.qml:451
+#: crates/app/qml/CleanPage.qml:230 crates/app/qml/Main.qml:470
 #: crates/app/qml/TrashBar.qml:25
 msgid "Empty Trash…"
 msgstr "ゴミ箱を空にする…"
@@ -516,7 +520,7 @@ msgstr "ファイル操作は利用できません"
 msgid "File system"
 msgstr "ファイルシステム"
 
-#: crates/app/src/controller.rs:1588
+#: crates/app/src/controller.rs:1601
 msgid "Files"
 msgstr "ファイル"
 
@@ -545,12 +549,12 @@ msgstr "フォルダーとファイルを検索"
 msgid "Firewall"
 msgstr "ファイアウォール"
 
-#: crates/app/src/controller.rs:1451 crates/app/src/controller.rs:1627
-#: crates/app/src/controller.rs:1694
+#: crates/app/src/controller.rs:1464 crates/app/src/controller.rs:1644
+#: crates/app/src/controller.rs:1711
 msgid "Folder"
 msgstr "フォルダー"
 
-#: crates/app/src/controller.rs:1335
+#: crates/app/src/controller.rs:1348
 msgid "Folder Is Empty"
 msgstr "フォルダーは空です"
 
@@ -558,11 +562,11 @@ msgstr "フォルダーは空です"
 msgid "Folder contents"
 msgstr "フォルダーの内容"
 
-#: crates/app/qml/PreferencesDialog.qml:229
+#: crates/app/qml/PreferencesDialog.qml:237
 msgid "Folder to leave out"
 msgstr "除外するフォルダー"
 
-#: crates/app/src/controller.rs:1503 crates/app/src/controller.rs:1580
+#: crates/app/src/controller.rs:1516 crates/app/src/controller.rs:1593
 #: crates/app/src/controller/search.rs:232
 #: crates/app/src/controller/workspaces.rs:373
 msgid "Folders"
@@ -572,11 +576,11 @@ msgstr "フォルダー"
 msgid "Folders and files by name, as you type."
 msgstr "入力しながら名前でフォルダーとファイルを探します。"
 
-#: crates/app/qml/PreferencesDialog.qml:86
+#: crates/app/qml/PreferencesDialog.qml:88
 msgid "Folders open in Cairn, and other apps' “Show in folder” comes here."
 msgstr "フォルダーが Cairn で開き、他のアプリの「フォルダーで表示」もここに来ます。"
 
-#: crates/app/qml/PathBar.qml:95
+#: crates/app/qml/PathBar.qml:128
 msgid "Folders with that name"
 msgstr "その名前のフォルダー"
 
@@ -601,7 +605,7 @@ msgid "Free"
 msgstr "空き"
 
 #: crates/app/qml/AboutPage.qml:177 crates/app/qml/CleanPage.qml:13
-#: crates/app/qml/CleanPage.qml:37 crates/app/qml/Main.qml:207
+#: crates/app/qml/CleanPage.qml:37 crates/app/qml/Main.qml:226
 msgid "Free Up Space"
 msgstr "空き領域を増やす"
 
@@ -613,7 +617,7 @@ msgstr "空き領域を増やす…"
 msgid "Free up space"
 msgstr "空き領域を増やす"
 
-#: crates/app/src/controller.rs:1448
+#: crates/app/src/controller.rs:1461
 msgid "From"
 msgstr "提供元"
 
@@ -632,6 +636,10 @@ msgstr "GPL-3.0-or-later"
 #: crates/app/qml/PreferencesDialog.qml:38
 msgid "General"
 msgstr "一般"
+
+#: crates/app/qml/PathBar.qml:85
+msgid "Git branch "
+msgstr "Git ブランチ "
 
 #: data/clean/dev-caches.toml
 msgid "Go build cache"
@@ -670,7 +678,7 @@ msgstr "名前を隠す"
 msgid "High"
 msgstr "高い"
 
-#: crates/app/qml/PreferencesDialog.qml:204 crates/app/src/controller.rs:1281
+#: crates/app/qml/PreferencesDialog.qml:212 crates/app/src/controller.rs:1294
 #: crates/app/src/sidebar.rs:44
 msgid "Home"
 msgstr "ホーム"
@@ -729,11 +737,11 @@ msgstr "使用中"
 msgid "In use since"
 msgstr "使用開始"
 
-#: crates/app/qml/PreferencesDialog.qml:204
+#: crates/app/qml/PreferencesDialog.qml:212
 msgid "Indexed: "
 msgstr "インデックス対象: "
 
-#: crates/app/qml/PreferencesDialog.qml:178
+#: crates/app/qml/PreferencesDialog.qml:182
 msgid "Indexing is paused."
 msgstr "インデックス作成は一時停止中です。"
 
@@ -741,8 +749,8 @@ msgstr "インデックス作成は一時停止中です。"
 msgid "Info"
 msgstr "情報"
 
-#: crates/app/qml/InstalledPage.qml:13 crates/app/qml/Main.qml:207
-#: crates/app/src/controller.rs:1676
+#: crates/app/qml/InstalledPage.qml:13 crates/app/qml/Main.qml:226
+#: crates/app/src/controller.rs:1693
 msgid "Installed"
 msgstr "インストール済み"
 
@@ -754,7 +762,7 @@ msgstr "すでにインストールされているアプリのインストーラ
 msgid "Installers"
 msgstr "インストーラー"
 
-#: crates/app/src/controller.rs:1305
+#: crates/app/src/controller.rs:1318
 msgid "It was moved or deleted, or its drive is no longer connected."
 msgstr "移動または削除されたか、ドライブが接続されていません。"
 
@@ -798,12 +806,12 @@ msgstr "カーネル"
 msgid "Keyboard Shortcuts"
 msgstr "キーボードショートカット"
 
-#: crates/app/qml/PreferencesDialog.qml:137
+#: crates/app/qml/PreferencesDialog.qml:141
 msgid "Keyboard shortcuts"
 msgstr "キーボードショートカット"
 
 #: crates/app/qml/FolderList.qml:33 crates/app/qml/Header.qml:71
-#: crates/app/qml/Header.qml:93 crates/app/src/controller.rs:1698
+#: crates/app/qml/Header.qml:93 crates/app/src/controller.rs:1715
 msgid "Kind"
 msgstr "種類"
 
@@ -811,7 +819,7 @@ msgstr "種類"
 msgid "LEFT WHERE THEY ARE"
 msgstr "そのまま残るもの"
 
-#: crates/app/qml/PreferencesDialog.qml:125
+#: crates/app/qml/PreferencesDialog.qml:129
 #: crates/app/qml/WelcomeDialog.qml:191
 msgid "Large"
 msgstr "大"
@@ -820,15 +828,15 @@ msgstr "大"
 msgid "Larger"
 msgstr "大きく"
 
-#: crates/app/qml/PreferencesDialog.qml:234
+#: crates/app/qml/PreferencesDialog.qml:242
 msgid "Leave Out"
 msgstr "除外"
 
-#: crates/app/qml/PreferencesDialog.qml:207
+#: crates/app/qml/PreferencesDialog.qml:215
 msgid "Left out"
 msgstr "除外中"
 
-#: crates/app/qml/Header.qml:186 crates/app/qml/PreferencesDialog.qml:121
+#: crates/app/qml/Header.qml:186 crates/app/qml/PreferencesDialog.qml:125
 #: crates/app/qml/WelcomeDialog.qml:169
 msgid "Light"
 msgstr "ライト"
@@ -884,7 +892,7 @@ msgstr "低い"
 msgid "Main menu"
 msgstr "メインメニュー"
 
-#: crates/app/qml/Header.qml:20
+#: crates/app/qml/Header.qml:19
 msgid "Main toolbar"
 msgstr "メインツールバー"
 
@@ -900,7 +908,7 @@ msgstr "最大化"
 msgid "Maximum capacity"
 msgstr "最大容量"
 
-#: crates/app/qml/PreferencesDialog.qml:125
+#: crates/app/qml/PreferencesDialog.qml:129
 #: crates/app/qml/WelcomeDialog.qml:191
 msgid "Medium"
 msgstr "中"
@@ -922,11 +930,11 @@ msgid "Minimize"
 msgstr "最小化"
 
 #: crates/app/qml/FolderList.qml:33 crates/app/qml/Header.qml:91
-#: crates/app/qml/RightPane.qml:31 crates/app/src/controller.rs:1702
+#: crates/app/qml/RightPane.qml:31 crates/app/src/controller.rs:1719
 msgid "Modified"
 msgstr "更新日時"
 
-#: crates/app/qml/FileCard.qml:125
+#: crates/app/qml/FileCard.qml:124
 msgid "More for "
 msgstr "その他: "
 
@@ -937,7 +945,7 @@ msgstr "その他: "
 msgid "Move"
 msgstr "移動"
 
-#: crates/app/qml/Main.qml:399
+#: crates/app/qml/Main.qml:418
 msgid "Move   F6"
 msgstr "移動   F6"
 
@@ -953,7 +961,7 @@ msgstr "上へ移動"
 msgid "Move ticked items to the Trash"
 msgstr "チェックした項目をゴミ箱へ移動"
 
-#: crates/app/qml/CleanPage.qml:364 crates/app/qml/Main.qml:443
+#: crates/app/qml/CleanPage.qml:364 crates/app/qml/Main.qml:462
 #: crates/app/qml/PreviewPane.qml:116
 msgid "Move to Trash"
 msgstr "ゴミ箱へ移動"
@@ -966,8 +974,8 @@ msgstr "ゴミ箱へ移動"
 msgid "Move to the other pane"
 msgstr "もう一方のペインへ移動"
 
-#: crates/app/src/controller/clean.rs:384 crates/app/src/controller/ops.rs:615
-#: crates/app/src/controller/ops.rs:617
+#: crates/app/src/controller/clean.rs:384 crates/app/src/controller/ops.rs:616
+#: crates/app/src/controller/ops.rs:618
 msgid "Moved"
 msgstr "移動しました:"
 
@@ -985,7 +993,7 @@ msgstr "名前（例: 税金 2026）"
 msgid "Needs administrator"
 msgstr "管理者が必要"
 
-#: crates/app/qml/Header.qml:177 crates/app/qml/Main.qml:454
+#: crates/app/qml/Header.qml:177 crates/app/qml/Main.qml:473
 msgid "New Folder"
 msgstr "新しいフォルダー"
 
@@ -1013,27 +1021,27 @@ msgstr "次へ"
 msgid "No"
 msgstr "いいえ"
 
-#: crates/app/src/controller.rs:1319
+#: crates/app/src/controller.rs:1332
 msgid "No Matches"
 msgstr "一致なし"
 
-#: crates/app/src/controller.rs:923
+#: crates/app/src/controller.rs:936
 msgid "No app could open"
 msgstr "開けるアプリがありません:"
 
-#: crates/app/src/controller.rs:1110 crates/app/src/controller/downloads.rs:132
+#: crates/app/src/controller.rs:1123 crates/app/src/controller/downloads.rs:132
 msgid "No folder called"
 msgstr "次の名前のフォルダーはありません:"
 
-#: crates/app/src/controller.rs:952
+#: crates/app/src/controller.rs:965
 msgid "No installed app can open this kind of file"
 msgstr "この種類のファイルを開けるアプリがインストールされていません"
 
-#: crates/app/src/controller.rs:1328
+#: crates/app/src/controller.rs:1341
 msgid "No items in this folder are"
 msgstr "このフォルダーに該当する項目はありません:"
 
-#: crates/app/src/controller.rs:1320
+#: crates/app/src/controller.rs:1333
 msgid "No names in this folder contain what you typed."
 msgstr "入力した文字を含む名前はこのフォルダーにありません。"
 
@@ -1078,11 +1086,11 @@ msgstr "90 日間開かれていない"
 msgid "Not opened in 90 days"
 msgstr "90 日間開かれていない"
 
-#: crates/app/src/controller/ops.rs:611
+#: crates/app/src/controller/ops.rs:612
 msgid "Nothing changed"
 msgstr "変更はありません"
 
-#: crates/app/qml/SearchOverlay.qml:157
+#: crates/app/qml/SearchOverlay.qml:158
 msgid "Nothing is called that."
 msgstr "その名前のものはありません。"
 
@@ -1090,7 +1098,7 @@ msgstr "その名前のものはありません。"
 msgid "Nothing is deleted, and Undo puts everything back."
 msgstr "何も削除されず、元に戻すですべて戻ります。"
 
-#: crates/app/src/controller.rs:1336
+#: crates/app/src/controller.rs:1349
 msgid "Nothing is in this folder yet."
 msgstr "このフォルダーにはまだ何もありません。"
 
@@ -1098,7 +1106,7 @@ msgstr "このフォルダーにはまだ何もありません。"
 msgid "Nothing is running."
 msgstr "実行中の操作はありません。"
 
-#: crates/app/src/controller.rs:1325
+#: crates/app/src/controller.rs:1338
 msgid "Nothing of This Kind"
 msgstr "この種類はありません"
 
@@ -1110,7 +1118,7 @@ msgstr "貼り付けるものがありません"
 msgid "Nothing to preview"
 msgstr "プレビューするものがありません"
 
-#: crates/app/src/controller/ops.rs:596
+#: crates/app/src/controller/ops.rs:597
 msgid "Nothing to redo"
 msgstr "やり直すものがありません"
 
@@ -1118,7 +1126,7 @@ msgstr "やり直すものがありません"
 msgid "Nothing to tidy: every loose file is already in place."
 msgstr "整理するものはありません。ばらばらのファイルはすべて整理済みです。"
 
-#: crates/app/src/controller/ops.rs:594
+#: crates/app/src/controller/ops.rs:595
 msgid "Nothing to undo"
 msgstr "元に戻すものがありません"
 
@@ -1159,7 +1167,7 @@ msgstr "オン"
 msgid "Only places their tools rebuild by themselves. You lose nothing but time: the next build or install is slower."
 msgstr "ツール自身が再作成する場所だけです。失うのは時間だけで、次のビルドやインストールが遅くなります。"
 
-#: crates/app/qml/Main.qml:433 crates/app/qml/PeekOverlay.qml:71
+#: crates/app/qml/Main.qml:452 crates/app/qml/PeekOverlay.qml:71
 msgid "Open"
 msgstr "開く"
 
@@ -1167,11 +1175,11 @@ msgstr "開く"
 msgid "Open With"
 msgstr "アプリで開く"
 
-#: crates/app/qml/Main.qml:434
+#: crates/app/qml/Main.qml:453
 msgid "Open With…"
 msgstr "アプリで開く…"
 
-#: crates/app/src/controller.rs:1310
+#: crates/app/src/controller.rs:1323
 msgid "Open it from the folder that contains it."
 msgstr "それを含むフォルダーから開いてください。"
 
@@ -1251,7 +1259,7 @@ msgstr "ページ"
 msgid "Pane"
 msgstr "ペイン"
 
-#: crates/app/qml/Header.qml:178 crates/app/qml/Main.qml:455
+#: crates/app/qml/Header.qml:178 crates/app/qml/Main.qml:474
 #: crates/app/src/actions.rs:71
 msgid "Paste"
 msgstr "貼り付け"
@@ -1260,13 +1268,13 @@ msgstr "貼り付け"
 msgid "Pause"
 msgstr "一時停止"
 
-#: crates/app/qml/PreferencesDialog.qml:184
 #: crates/app/qml/PreferencesDialog.qml:188
+#: crates/app/qml/PreferencesDialog.qml:192
 msgid "Pause indexing"
 msgstr "インデックス作成を一時停止"
 
-#: crates/app/qml/PreferencesDialog.qml:194
-#: crates/app/qml/PreferencesDialog.qml:198
+#: crates/app/qml/PreferencesDialog.qml:200
+#: crates/app/qml/PreferencesDialog.qml:204
 msgid "Pause on battery"
 msgstr "バッテリー駆動中は一時停止"
 
@@ -1319,11 +1327,11 @@ msgstr "プレビューペイン"
 msgid "Processor"
 msgstr "プロセッサー"
 
-#: crates/app/qml/Main.qml:431 crates/app/qml/TrashBar.qml:24
+#: crates/app/qml/Main.qml:450 crates/app/qml/TrashBar.qml:24
 msgid "Put Back"
 msgstr "元に戻す（復元）"
 
-#: crates/app/src/controller/ops.rs:464 crates/app/src/controller/ops.rs:619
+#: crates/app/src/controller/ops.rs:464 crates/app/src/controller/ops.rs:620
 msgid "Put back"
 msgstr "復元しました:"
 
@@ -1331,7 +1339,7 @@ msgstr "復元しました:"
 msgid "Quit"
 msgstr "終了"
 
-#: crates/app/qml/PreferencesDialog.qml:236
+#: crates/app/qml/PreferencesDialog.qml:244
 msgid "Rebuild"
 msgstr "再構築"
 
@@ -1344,7 +1352,7 @@ msgstr "やり直す"
 msgid "Redo "
 msgstr "やり直す: "
 
-#: crates/app/src/controller/ops.rs:602
+#: crates/app/src/controller/ops.rs:603
 msgid "Redone:"
 msgstr "やり直しました:"
 
@@ -1364,11 +1372,11 @@ msgstr "ワークスペースから外す"
 msgid "Rename"
 msgstr "名前を変更"
 
-#: crates/app/src/controller/ops.rs:622
+#: crates/app/src/controller/ops.rs:623
 msgid "Renamed to"
 msgstr "新しい名前:"
 
-#: crates/app/qml/Main.qml:436
+#: crates/app/qml/Main.qml:455
 msgid "Rename…"
 msgstr "名前を変更…"
 
@@ -1428,7 +1436,7 @@ msgstr "90 日より前の画面録画。"
 msgid "Search and Index"
 msgstr "検索とインデックス"
 
-#: crates/app/qml/SearchOverlay.qml:95
+#: crates/app/qml/SearchOverlay.qml:96
 msgid "Search results"
 msgstr "検索結果"
 
@@ -1444,8 +1452,8 @@ msgstr "セキュリティ"
 msgid "See the plan, then sort. One Undo puts it back."
 msgstr "計画を見てから整理。元に戻すは 1 回で済みます。"
 
-#: crates/app/qml/Header.qml:179 crates/app/qml/Main.qml:452
-#: crates/app/qml/Main.qml:457
+#: crates/app/qml/Header.qml:179 crates/app/qml/Main.qml:471
+#: crates/app/qml/Main.qml:476
 msgid "Select All"
 msgstr "すべて選択"
 
@@ -1465,7 +1473,7 @@ msgstr "ショートカット"
 msgid "Show "
 msgstr "表示: "
 
-#: crates/app/qml/Header.qml:181 crates/app/qml/Main.qml:458
+#: crates/app/qml/Header.qml:181 crates/app/qml/Main.qml:477
 msgid "Show Hidden Files"
 msgstr "隠しファイルを表示"
 
@@ -1495,7 +1503,7 @@ msgstr "サイズ"
 msgid "Skip"
 msgstr "スキップ"
 
-#: crates/app/qml/PreferencesDialog.qml:125
+#: crates/app/qml/PreferencesDialog.qml:129
 #: crates/app/qml/WelcomeDialog.qml:191
 msgid "Small"
 msgstr "小"
@@ -1532,7 +1540,7 @@ msgstr "整理されたフォルダー"
 msgid "Split into two panes"
 msgstr "2 つのペインに分割"
 
-#: crates/app/qml/SearchOverlay.qml:120
+#: crates/app/qml/SearchOverlay.qml:121
 msgid "Start Indexing"
 msgstr "インデックス作成を開始"
 
@@ -1548,11 +1556,11 @@ msgstr "起動ディスク"
 msgid "Step "
 msgstr "ステップ "
 
-#: crates/app/qml/PreferencesDialog.qml:217
+#: crates/app/qml/PreferencesDialog.qml:225
 msgid "Stop leaving out "
 msgstr "除外をやめる: "
 
-#: crates/app/qml/PreferencesDialog.qml:120
+#: crates/app/qml/PreferencesDialog.qml:124
 #: crates/app/qml/WelcomeDialog.qml:165 crates/app/qml/WelcomeDialog.qml:168
 msgid "Style"
 msgstr "スタイル"
@@ -1581,12 +1589,12 @@ msgstr "シンボル: "
 msgid "Symbol and Colour"
 msgstr "シンボルと色"
 
-#: crates/app/qml/Main.qml:438
+#: crates/app/qml/Main.qml:457
 msgid "Symbol and Colour…"
 msgstr "シンボルと色…"
 
-#: crates/app/qml/PreferencesDialog.qml:121
-#: crates/app/qml/PreferencesDialog.qml:123
+#: crates/app/qml/PreferencesDialog.qml:125
+#: crates/app/qml/PreferencesDialog.qml:127
 #: crates/app/qml/WelcomeDialog.qml:169 crates/app/qml/WelcomeDialog.qml:180
 msgid "System"
 msgstr "システム"
@@ -1599,7 +1607,7 @@ msgstr "システムとその他"
 msgid "System journal"
 msgstr "システムジャーナル"
 
-#: crates/app/qml/Main.qml:404
+#: crates/app/qml/Main.qml:423
 msgid "Tab switches pane · drag to move, Ctrl-drag to copy"
 msgstr "Tab でペイン切り替え · ドラッグで移動、Ctrl+ドラッグでコピー"
 
@@ -1619,11 +1627,11 @@ msgstr "その Snap はもうインストールされていません"
 msgid "The Trash is empty"
 msgstr "ゴミ箱は空です"
 
-#: crates/app/qml/PreferencesDialog.qml:177
+#: crates/app/qml/PreferencesDialog.qml:181
 msgid "The index is not running."
 msgstr "インデックスは動作していません。"
 
-#: crates/app/qml/PreferencesDialog.qml:178
+#: crates/app/qml/PreferencesDialog.qml:182
 msgid "The index is up to date and following changes."
 msgstr "インデックスは最新で、変更を追跡しています。"
 
@@ -1643,7 +1651,7 @@ msgstr "同じ内容が複数の場所にあります。常に 1 つは残り、
 msgid "The search index is not running."
 msgstr "検索インデックスは動作していません。"
 
-#: crates/app/qml/PreferencesDialog.qml:104
+#: crates/app/qml/PreferencesDialog.qml:108
 msgid "The system’s Downloads"
 msgstr "システムのダウンロードフォルダー"
 
@@ -1651,11 +1659,11 @@ msgstr "システムのダウンロードフォルダー"
 msgid "Thermal state"
 msgstr "温度の状態"
 
-#: crates/app/src/controller.rs:1304
+#: crates/app/src/controller.rs:1317
 msgid "This Folder Is Gone"
 msgstr "このフォルダーはありません"
 
-#: crates/app/src/controller.rs:1309
+#: crates/app/src/controller.rs:1322
 msgid "This Is Not a Folder"
 msgstr "これはフォルダーではありません"
 
@@ -1671,7 +1679,7 @@ msgstr "チェック: "
 msgid "Tick all"
 msgstr "すべてチェック"
 
-#: crates/app/src/controller/ops.rs:637
+#: crates/app/src/controller/ops.rs:638
 msgid "Tidied"
 msgstr "整理しました:"
 
@@ -1695,7 +1703,7 @@ msgstr "このフォルダーを整理"
 msgid "Tidy “"
 msgstr "整理: “"
 
-#: crates/app/src/format.rs:34
+#: crates/app/src/format.rs:51
 msgid "Today, %H:%M"
 msgstr "今日 %H:%M"
 
@@ -1708,8 +1716,8 @@ msgstr "ツール"
 msgid "Tools"
 msgstr "ツール"
 
-#: crates/app/qml/TrashBar.qml:10 crates/app/src/controller.rs:1278
-#: crates/app/src/controller.rs:1787 crates/app/src/sidebar.rs:61
+#: crates/app/qml/TrashBar.qml:10 crates/app/src/controller.rs:1291
+#: crates/app/src/controller.rs:1804 crates/app/src/sidebar.rs:61
 msgid "Trash"
 msgstr "ゴミ箱"
 
@@ -1726,7 +1734,7 @@ msgstr "元に戻す"
 msgid "Undo "
 msgstr "元に戻す: "
 
-#: crates/app/src/controller/ops.rs:600
+#: crates/app/src/controller/ops.rs:601
 msgid "Undone:"
 msgstr "元に戻しました:"
 
@@ -1746,8 +1754,8 @@ msgstr "起動から"
 msgid "Up to the parent folder"
 msgstr "親フォルダーへ"
 
-#: crates/app/qml/PreferencesDialog.qml:84
-#: crates/app/qml/PreferencesDialog.qml:91
+#: crates/app/qml/PreferencesDialog.qml:86
+#: crates/app/qml/PreferencesDialog.qml:93
 msgid "Use as default file manager"
 msgstr "既定のファイルマネージャーとして使う"
 
@@ -1803,7 +1811,7 @@ msgstr "用途"
 msgid "What’s New in Cairn "
 msgstr "Cairn の新機能 "
 
-#: crates/app/src/controller.rs:1705 crates/app/src/controller/peek.rs:192
+#: crates/app/src/controller.rs:1722 crates/app/src/controller/peek.rs:192
 msgid "Where"
 msgstr "場所"
 
@@ -1855,11 +1863,11 @@ msgstr "Yarn がパッケージを再ダウンロードします"
 msgid "Yes (LUKS)"
 msgstr "はい (LUKS)"
 
-#: crates/app/src/format.rs:35
+#: crates/app/src/format.rs:52
 msgid "Yesterday, %H:%M"
 msgstr "昨日 %H:%M"
 
-#: crates/app/src/controller.rs:1299
+#: crates/app/src/controller.rs:1312
 msgid "You Can't Open This Folder"
 msgstr "このフォルダーは開けません"
 
@@ -1871,7 +1879,7 @@ msgstr "これらは設定 (Ctrl+,) でいつでも変更できます。"
 msgid "You could free about"
 msgstr "空けられる容量の目安:"
 
-#: crates/app/src/controller.rs:1300
+#: crates/app/src/controller.rs:1313
 msgid "You don't have permission to see what's inside."
 msgstr "中身を見る権限がありません。"
 
@@ -1900,7 +1908,7 @@ msgstr "すでに"
 msgid "and "
 msgstr "ほか "
 
-#: crates/app/src/controller.rs:1383
+#: crates/app/src/controller.rs:1396
 msgid "available"
 msgstr "利用可能"
 
@@ -1944,7 +1952,7 @@ msgstr "推定"
 msgid "for"
 msgstr "対象:"
 
-#: crates/app/src/controller.rs:1661
+#: crates/app/src/controller.rs:1678
 msgid "free"
 msgstr "空き"
 
@@ -1980,7 +1988,7 @@ msgstr "インストーラー"
 msgid "installers"
 msgstr "インストーラー"
 
-#: crates/app/src/controller/ops.rs:639
+#: crates/app/src/controller/ops.rs:640
 msgid "into"
 msgstr "→"
 
@@ -2058,7 +2066,7 @@ msgid "npm, pip, Cargo and more"
 msgstr "npm、pip、Cargo など"
 
 #: crates/app/src/controller/about.rs:228
-#: crates/app/src/controller/about.rs:275 crates/app/src/controller/ops.rs:723
+#: crates/app/src/controller/about.rs:275 crates/app/src/controller/ops.rs:724
 #: crates/app/src/controller/pane.rs:335
 msgid "of"
 msgstr "/"
@@ -2095,7 +2103,7 @@ msgstr "件"
 msgid "results"
 msgstr "件"
 
-#: crates/app/src/controller.rs:1380 crates/app/src/controller/pane.rs:336
+#: crates/app/src/controller.rs:1393 crates/app/src/controller/pane.rs:336
 msgid "selected"
 msgstr "選択中"
 
@@ -2201,17 +2209,17 @@ msgstr "権限がありません"
 msgid "you have twice"
 msgstr "重複しています"
 
-#: crates/app/src/format.rs:53
+#: crates/app/src/format.rs:70
 msgid "{} file"
 msgid_plural "{} files"
 msgstr[0] "{} 個のファイル"
 
-#: crates/app/src/format.rs:49
+#: crates/app/src/format.rs:66
 msgid "{} folder"
 msgid_plural "{} folders"
 msgstr[0] "{} 個のフォルダー"
 
-#: crates/app/src/format.rs:45
+#: crates/app/src/format.rs:62
 msgid "{} item"
 msgid_plural "{} items"
 msgstr[0] "{} 個の項目"
@@ -2228,6 +2236,6 @@ msgstr "”。名前を変えても移動しても、この見た目は保たれ
 msgid "‹ All suggestions"
 msgstr "‹ すべての提案"
 
-#: crates/app/qml/SearchOverlay.qml:210
+#: crates/app/qml/SearchOverlay.qml:211
 msgid "↑↓ move   ↵ open   Space peek   Ctrl+↵ show in folder"
 msgstr "↑↓ 移動   ↵ 開く   Space プレビュー   Ctrl+↵ フォルダーで表示"

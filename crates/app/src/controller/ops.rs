@@ -575,6 +575,7 @@ impl Controller {
             self.reload();
         }
         self.refresh_suggestions();
+        self.refresh_git();
     }
 
     /// The toast for a finished report (None: nothing worth saying).

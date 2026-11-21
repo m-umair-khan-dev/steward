@@ -18,6 +18,9 @@ msgstr "[ ör  ~~]"
 msgid " packages, "
 msgstr "[ pàçkàgés,  ~~~]"
 
+msgid " uncommitted changes"
+msgstr "[ üñçömmîttéd çhàñgés ~~~~~~]"
+
 msgid " will be deleted for good. This cannot be undone."
 msgstr "[ wîll bé délétéd för gööd. Thîs çàññöt bé üñdöñé. ~~~~~~~~~~~~~~~~]"
 
@@ -449,6 +452,9 @@ msgstr "[GPL-3.0-ör-làtér ~~~~~]"
 
 msgid "General"
 msgstr "[Géñéràl ~~]"
+
+msgid "Git branch "
+msgstr "[Gît bràñçh  ~~~]"
 
 msgid "Go build cache"
 msgstr "[Gö büîld çàçhé ~~~~]"
