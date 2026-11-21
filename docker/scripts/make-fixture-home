@@ -34,7 +34,7 @@ import zlib
 from datetime import datetime, timezone
 from pathlib import Path
 
-RECIPE_VERSION = 3
+RECIPE_VERSION = 4
 MARKER = ".cairn-fixture"
 NOW = int(datetime(2026, 11, 1, 12, 0, 0, tzinfo=timezone.utc).timestamp())
 DAY = 86_400
@@ -232,6 +232,70 @@ def deb(package: str, version: str, description: str) -> bytes:
 
 def text(*lines: str) -> bytes:
     return ("\n".join(lines) + "\n").encode()
+
+
+# AI Agents (E7-04, ADR 0013): Claude Code logs and settings, and agent files
+# for three projects. Paths are written "~/…" so the fixture can be copied
+# anywhere (Cairn reads both that and absolute paths).
+WEB_CLAUDE_MD = text("# web-app", "", "Run `npm test` before committing.")
+WEB_MCP_JSON = text('{ "mcpServers": { "github": { "command": "github-mcp" }, '
+                    '"postgres": { "command": "pg-mcp", "args": ["--read-only"] } } }')
+AGENT_SESSIONS = {
+    # project: [(day offset from NOW, message id, input, output, cache write, cache read)]
+    "Documents/Projects/web-app": [(-1, "msg_a1", 1200, 400, 8000, 0), (-1, "msg_a2", 900, 300, 0, 9000),
+                                   (-3, "msg_a3", 2000, 800, 4000, 12000)],
+    "Documents/Projects/api": [(-2, "msg_b1", 500, 150, 3000, 0)],
+}
+AGENT_PROJECTS = {
+    "Documents/Projects/web-app": {"tools": ["claude"], "files": ["CLAUDE.md", ".mcp.json"],
+                                   "servers": ["github", "postgres", "playwright"]},
+    "Documents/Projects/api": {"tools": ["claude", "codex", "cursor"], "files": ["AGENTS.md", ".cursor/rules"],
+                               "servers": []},
+    "Documents/Projects/old-site": {"tools": ["cursor"], "files": [".cursorrules"], "servers": []},
+}
+
+
+def plant_agents(b: "Builder") -> None:
+    web, api, old = "Documents/Projects/web-app", "Documents/Projects/api", "Documents/Projects/old-site"
+    b.file(f"{web}/CLAUDE.md", WEB_CLAUDE_MD, 6)
+    b.file(f"{web}/.mcp.json", WEB_MCP_JSON, 6)
+    b.file(f"{api}/AGENTS.md", text("# api", "", "cargo test must pass."), 10)
+    b.file(f"{api}/.cursor/rules/style.md", text("Prefer small functions."), 10)
+    b.file(f"{old}/.cursorrules", text("Use tabs."), 250)
+    b.file(".claude.json", text(json.dumps({
+        "numStartups": 3,
+        "mcpServers": {"docs": {"type": "http", "url": "http://localhost:9000/mcp"}},
+        "projects": {f"~/{web}": {"mcpServers": {"playwright": {"command": "npx", "args": ["@playwright/mcp"]}}},
+                     f"~/{api}": {"mcpServers": {}}},
+    }, indent=2, sort_keys=True)), 2)
+    for project, turns in AGENT_SESSIONS.items():
+        lines = [json.dumps({"type": "user", "cwd": f"~/{project}", "timestamp": iso(NOW + turns[0][0] * DAY),
+                             "message": {"role": "user", "content": "(planted)"}})]
+        for offset, mid, i, o, cw, cr in turns:
+            usage = {"input_tokens": i, "output_tokens": o, "cache_creation_input_tokens": cw,
+                     "cache_read_input_tokens": cr}
+            lines.append(json.dumps({"type": "assistant", "cwd": f"~/{project}", "timestamp": iso(NOW + offset * DAY),
+                                     "message": {"id": mid, "usage": usage}}))
+        folder = "-home-dev-" + project.replace("/", "-")
+        b.file(f".claude/projects/{folder}/session-1.jsonl", ("\n".join(lines) + "\n").encode(), 1)
+
+
+def iso(seconds: float) -> str:
+    return datetime.fromtimestamp(seconds, timezone.utc).strftime("%Y-%m-%dT%H:%M:%S.000Z")
+
+
+def agents_manifest() -> dict:
+    projects = {}
+    days: dict[str, int] = {}
+    for rel, facts in AGENT_PROJECTS.items():
+        turns = AGENT_SESSIONS.get(rel, [])
+        total = sum(i + o + cw + cr for _, _, i, o, cw, cr in turns)
+        for offset, _, i, o, cw, cr in turns:
+            day = iso(NOW + offset * DAY)[:10]
+            days[day] = days.get(day, 0) + i + o + cw + cr
+        projects[rel] = dict(facts, sessions=1 if turns else 0, tokens=total)
+    return {"projects": projects, "user_servers": ["docs"], "days": days,
+            "tokens_total": sum(days.values())}
 
 
 def git_repo(b: "Builder", rel: str, committed: dict[str, bytes], branch: str, age_days: float) -> None:
@@ -434,12 +498,16 @@ def build(root: Path) -> dict:
         "package.json": text('{ "name": "web-app" }'),
         "src/index.js": text("console.log('hello');"),
         "README.md": text("# web-app"),
+        # The agent files (plant_agents) are committed too.
+        "CLAUDE.md": WEB_CLAUDE_MD,
+        ".mcp.json": WEB_MCP_JSON,
     }
     b.file(f"{web}/package.json", text('{ "name": "web-app", "private": true }'), 6)
     b.file(f"{web}/src/index.js", text("console.log('hello, search');"), 6)
     b.file(f"{web}/README.md", committed["README.md"], 6)
     b.file(f"{web}/TODO.md", text("- search results page"), 6)
     git_repo(b, web, committed, branch="feature/search", age_days=7)
+    plant_agents(b)
     b.file(f"{doc}/Projects/old-site/package.json", text('{ "name": "old-site" }'), 250)
     b.file(f"{doc}/Projects/old-site/node_modules/left-pad/index.js", text("module.exports = 1;"), 250)
     b.file(f"{doc}/Projects/old-site/node_modules/left-pad/package.json", text('{ "name": "left-pad" }'), 250)
@@ -549,6 +617,7 @@ def describe(b: Builder) -> dict:
         "installers": {"Downloads/photo-tool_3.2.0_amd64.deb": {"package": "photo-tool",
                                                                  "version": "3.2.0"}},
         "clean": clean_cards(b, duplicates),
+        "agents": agents_manifest(),
         "git": {"Documents/Projects/web-app": {"branch": "feature/search", "changes": 3,
                                                 "changed": ["TODO.md", "package.json", "src/index.js"]}},
     }

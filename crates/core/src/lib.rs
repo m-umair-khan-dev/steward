@@ -4,6 +4,7 @@
 //! shared by the app, the indexer and the command-line tool (DESIGN.md §7.1).
 //! It uses GLib and GIO for files, mounts and models.
 
+pub mod agents;
 pub mod clean;
 pub mod clip;
 pub mod dupes;

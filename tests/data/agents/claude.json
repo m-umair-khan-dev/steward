@@ -1,0 +1,11 @@
+{
+  "numStartups": 12,
+  "mcpServers": { "docs": { "type": "http", "url": "http://localhost:9000/mcp" } },
+  "projects": {
+    "/home/sam/Documents/Projects/web-app": {
+      "allowedTools": [],
+      "mcpServers": { "playwright": { "command": "npx", "args": ["@playwright/mcp"] } }
+    },
+    "/home/sam/Documents/Projects/api": { "mcpServers": {} }
+  }
+}
