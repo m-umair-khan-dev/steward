@@ -257,3 +257,24 @@ def test_E8_05_activities_search_finds_a_workspace(app, home):
     app.wait_for(lambda: f"ws:{wid}" not in provider(app, "GetInitialResultSet",
                                                       GLib.Variant("(as)", (["taxes"],)), "(as)")[0],
                  "no workspaces with the switch off")
+
+
+# --- Colour (product owner's request, 2026-11-22) --------------------------------------
+
+def test_the_colour_follows_ubuntu_with_the_system_style(app, home):
+    """Style "System" takes Ubuntu's accent (Settings › Appearance), live;
+    Light and Dark offer Cairn's own colours."""
+    gsettings(app, "set", "org.gnome.desktop.interface", "accent-color", "teal")
+    app.wait_for(lambda: app.state()["appearance"]["system_accent"] == "#2190a4", "Ubuntu's teal")
+    app.action("app.preferences")
+    app.wait_for(lambda: (d := app.state()["active_window"]["dialog"]) and d["type"] == "preferences", "Preferences")
+    app.a11y_click("Appearance", within="Preferences")
+    assert "Ubuntu’s accent colour, from Settings › Appearance" in app.a11y_names()
+    gsettings(app, "set", "org.gnome.desktop.interface", "accent-color", "pink")
+    app.wait_for(lambda: app.state()["appearance"]["system_accent"] == "#d56199", "a change in Settings, live")
+
+    app.a11y_click("Light", within="Preferences")
+    app.wait_for(lambda: app.state()["appearance"]["style"] == "light", "Light")
+    app.wait_for(lambda: "Orange" in app.a11y_names(), "Cairn's own colours")
+    app.a11y_click("Orange", within="Preferences")
+    app.wait_for(lambda: app.state()["appearance"]["accent"] == "orange", "orange chosen")

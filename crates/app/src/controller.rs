@@ -363,6 +363,10 @@ pub fn init(notifier: impl Fn() + 'static) {
             interface.connect_changed(Some("color-scheme"), |_, _| {
                 later(|c| c.mark(dirty::PREFS));
             });
+            // The accent chosen in Ubuntu's Settings, live.
+            for key in ["accent-color", "gtk-theme"] {
+                interface.connect_changed(Some(key), |_, _| later(|c| c.mark(dirty::PREFS)));
+            }
             interface.connect_changed(Some("enable-animations"), |_, _| {
                 later(|c| {
                     c.motion = c.motion_wanted();
@@ -1192,6 +1196,17 @@ impl Controller {
         self.emit(Event::Quit);
     }
 
+    /// Ubuntu's accent colour (Settings › Appearance), if the desktop has one.
+    pub fn system_accent(&self) -> Option<&'static str> {
+        let i = self.interface.as_ref()?;
+        let schema = i.settings_schema()?;
+        let read = |key: &str| schema.has_key(key).then(|| i.string(key).to_string());
+        cairn_core::desktop::system_accent(
+            read("accent-color").as_deref(),
+            read("gtk-theme").as_deref(),
+        )
+    }
+
     /// Brings the main window forward (shown again if it was hidden).
     pub fn present(&mut self) {
         self.emit(Event::Focus("raise"));
@@ -1936,6 +1951,9 @@ impl Controller {
             "providerLinks": s.boolean("search-provider-links"),
             "openAtLogin": s.boolean("open-at-login"),
             "openIn": self.openin_json(),
+            // Ubuntu's accent colour (Settings › Appearance): the colour when
+            // the style follows the system.
+            "systemAccentColor": self.system_accent(),
             // GNOME's dark mode, for Qt versions that cannot report it (24.04).
             "systemDark": self.interface.as_ref().is_some_and(|i| {
                 i.settings_schema()
@@ -2045,6 +2063,11 @@ impl Controller {
                 Some((e.name().to_string(), json!({ "items": items, "bytes": bytes })))
             }).collect::<serde_json::Map<_, _>>(),
             "dark": self.dark,
+            "appearance": {
+                "style": settings::get().string("color-scheme").to_string(),
+                "accent": settings::get().string("accent").to_string(),
+                "system_accent": self.system_accent(),
+            },
             "motion": self.motion,
             "flying": self.flying,
             "dialog": self.dialog,

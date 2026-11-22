@@ -41,7 +41,7 @@ Sheet {
 
     property string page: "general"
     title: p.t("Preferences")
-    cardWidth: 560
+    cardWidth: 660
     cardHeight: 600
     onVisibleChanged: { if (visible) page = "general"; else recording = "" }
 
@@ -280,8 +280,63 @@ Sheet {
         spacing: 2
         Choice { label: p.t("Style"); key: "color-scheme"
                  options: [{ id: "system", label: p.t("System") }, { id: "light", label: p.t("Light") }, { id: "dark", label: p.t("Dark") }] }
-        Choice { label: p.t("Accent"); key: "accent"
-                 options: [{ id: "cairn", label: p.t("Cairn") }, { id: "system", label: p.t("System") }] }
+        // Colour: the system's accent, or one of Cairn's own (each with a
+        // light and a dark shade, so it suits all three styles).
+        Item {
+            width: parent.width; height: 52
+            readonly property bool followsSystem: (root.prefs.colorScheme || "system") === "system"
+            Text { anchors.verticalCenter: parent.verticalCenter; text: p.t("Colour"); color: Theme.ink; font.pixelSize: 14 }
+            // Style "System": the colour is Ubuntu's (Settings › Appearance).
+            Row {
+                visible: parent.followsSystem
+                anchors.right: parent.right; anchors.verticalCenter: parent.verticalCenter
+                spacing: 10
+                Text { anchors.verticalCenter: parent.verticalCenter; color: Theme.muted; font.pixelSize: 12
+                       text: p.t("Ubuntu’s accent colour, from Settings › Appearance")
+                       Accessible.role: Accessible.StaticText; Accessible.name: text }
+                Rectangle { width: 28; height: 28; radius: 14; color: Theme.systemAccentColor
+                            anchors.verticalCenter: parent.verticalCenter }
+            }
+            // Light or Dark: one of Cairn's own colours.
+            Row {
+                visible: !parent.followsSystem
+                anchors.right: parent.right; anchors.verticalCenter: parent.verticalCenter
+                spacing: 8
+                Accessible.role: Accessible.Grouping
+                Accessible.name: p.t("Colour")
+                Repeater {
+                    model: [
+                        { id: "cairn", label: p.t("Purple") },
+                        { id: "blue", label: p.t("Blue") }, { id: "teal", label: p.t("Teal") },
+                        { id: "green", label: p.t("Green") }, { id: "orange", label: p.t("Orange") },
+                        { id: "rose", label: p.t("Rose") }, { id: "graphite", label: p.t("Graphite") }
+                    ]
+                    delegate: Rectangle {
+                        id: swatch
+                        required property var modelData
+                        readonly property bool chosen: ((root.prefs.accent || "cairn") === "system" ? "cairn" : (root.prefs.accent || "cairn")) === modelData.id
+                        readonly property var set: Theme.accents[modelData.id]
+                        width: 28; height: 28; radius: 14
+                        color: set[Theme.dark ? 1 : 0]
+                        border.color: chosen ? Theme.ink : "transparent"
+                        border.width: 2
+                        Accessible.role: Accessible.RadioButton
+                        Accessible.name: modelData.label
+                        Accessible.checked: chosen
+                        Accessible.onPressAction: p.setpref("accent", modelData.id)
+                        Rectangle {
+                            visible: swatch.chosen
+                            anchors.centerIn: parent; width: 22; height: 22; radius: 11
+                            color: "transparent"; border.color: Theme.pane; border.width: 2
+                        }
+                        ToolTip.visible: tipHover.hovered
+                        ToolTip.text: modelData.label
+                        HoverHandler { id: tipHover; cursorShape: Qt.PointingHandCursor }
+                        TapHandler { onTapped: p.setpref("accent", swatch.modelData.id) }
+                    }
+                }
+            }
+        }
         Choice { label: p.t("Card size"); key: "row-size"
                  options: [{ id: "small", label: p.t("Small") }, { id: "medium", label: p.t("Medium") }, { id: "large", label: p.t("Large") }] }
         Text {

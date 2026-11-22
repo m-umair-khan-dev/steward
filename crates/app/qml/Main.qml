@@ -107,9 +107,13 @@ Window {
         target: Theme; property: "dark"
         value: win.prefs.colorScheme === "dark" || (win.prefs.colorScheme !== "light" && win.systemDark)
     }
-    Binding { target: Theme; property: "systemAccent"; value: win.prefs.accent === "system" }
+    // Style "System" takes Ubuntu's accent colour too; Light and Dark use the
+    // colour chosen in Preferences.
+    Binding { target: Theme; property: "systemAccent"; value: (win.prefs.colorScheme || "system") === "system" || win.prefs.accent === "system" }
+    Binding { target: Theme; property: "accentName"; value: win.prefs.accent && win.prefs.accent !== "system" ? win.prefs.accent : "cairn" }
     Binding { target: Theme; property: "motion"; value: win.prefs.motion === true }
-    Binding { target: Theme; property: "systemAccentColor"; value: win.palette.highlight }
+    // Ubuntu's own accent setting first; the platform palette where it has none.
+    Binding { target: Theme; property: "systemAccentColor"; value: win.prefs.systemAccentColor || win.palette.highlight }
     Connections {
         target: Theme
         function onDarkChanged() { p.darkmode(Theme.dark) }

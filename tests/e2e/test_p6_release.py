@@ -64,13 +64,14 @@ def test_E6_02_whats_new_once_after_an_update(home, app_factory):
 
 
 def test_E6_preferences_pages(app):
-    """P6-T03: four pages; the shortcuts page lists every bound key."""
+    """P6-T03: the pages; the shortcuts page lists every bound key."""
     app.action("app.preferences")
     app.wait_for(lambda: dialog(app) == "preferences", "Preferences")
     names = app.a11y_names()
     assert {"General", "Appearance", "Shortcuts", "Search and Index", "Default view", "Downloads folder"} <= names
     app.a11y_click("Appearance", within="Preferences")
-    app.wait_for(lambda: "Accent" in app.a11y_names(), "Appearance")
+    # The Accent choice became Colour (2026-11-22); Style is always there.
+    app.wait_for(lambda: "Style" in app.a11y_names(), "Appearance")
     app.a11y_click("Shortcuts", within="Preferences")
     app.wait_for(lambda: any(n.startswith("Find anything") for n in app.a11y_names(showing_only=False)), "Shortcuts")
     listed = {n for n in app.a11y_names(showing_only=False) if ": " in n}

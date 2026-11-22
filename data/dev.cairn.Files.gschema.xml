@@ -31,9 +31,15 @@
       <choices>
         <choice value="cairn"/>
         <choice value="system"/>
+        <choice value="blue"/>
+        <choice value="teal"/>
+        <choice value="green"/>
+        <choice value="orange"/>
+        <choice value="rose"/>
+        <choice value="graphite"/>
       </choices>
       <default>'cairn'</default>
-      <summary>Cairn's purple accent, or the system accent colour</summary>
+      <summary>The colour: Cairn's purple, the system accent, or one of Cairn's own colours</summary>
     </key>
     <key name="show-hidden" type="b">
       <default>false</default>

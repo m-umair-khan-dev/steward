@@ -107,3 +107,66 @@ mod tests {
         assert!(entry.starts_with("[Desktop Entry]\n"));
     }
 }
+
+/// The desktop's accent colour (Settings › Appearance), as a hex colour.
+/// GNOME 47 and later keep it in `accent-color`; Ubuntu 24.04 keeps it in
+/// the Yaru theme's name ("Yaru-blue-dark"). None: the desktop has no
+/// accent (then the app uses the platform palette).
+pub fn system_accent(accent_color: Option<&str>, gtk_theme: Option<&str>) -> Option<&'static str> {
+    // libadwaita's accent colours (GNOME 47+), which Ubuntu's Settings sets.
+    let gnome = match accent_color.unwrap_or("") {
+        "blue" => Some("#3584e4"),
+        "teal" => Some("#2190a4"),
+        "green" => Some("#3a944a"),
+        "yellow" => Some("#c88800"),
+        "orange" => Some("#ed5b00"),
+        "red" => Some("#e62d42"),
+        "pink" => Some("#d56199"),
+        "purple" => Some("#9141ac"),
+        "slate" => Some("#6f8396"),
+        _ => None,
+    };
+    if gnome.is_some() {
+        return gnome;
+    }
+    // Ubuntu 24.04: Yaru's accent variants.
+    let theme = gtk_theme?.strip_prefix("Yaru")?;
+    let variant = theme
+        .trim_start_matches('-')
+        .trim_end_matches("-dark")
+        .trim_end_matches("dark");
+    Some(match variant {
+        "" => "#e95420", // Ubuntu orange
+        "bark" => "#787859",
+        "sage" => "#657b69",
+        "olive" => "#4b8501",
+        "viridian" => "#03875b",
+        "prussiangreen" => "#308280",
+        "blue" => "#0073e5",
+        "purple" => "#7764d8",
+        "magenta" => "#b34cb3",
+        "red" => "#da3450",
+        _ => return None,
+    })
+}
+
+#[cfg(test)]
+mod accent_tests {
+    use super::system_accent;
+
+    #[test]
+    fn the_desktop_accent() {
+        assert_eq!(
+            system_accent(Some("teal"), Some("Yaru")),
+            Some("#2190a4"),
+            "GNOME's setting wins"
+        );
+        assert_eq!(
+            system_accent(Some("default"), Some("Yaru-blue-dark")),
+            Some("#0073e5")
+        );
+        assert_eq!(system_accent(None, Some("Yaru")), Some("#e95420"));
+        assert_eq!(system_accent(None, Some("Yaru-dark")), Some("#e95420"));
+        assert_eq!(system_accent(None, Some("Adwaita")), None);
+    }
+}

@@ -4,12 +4,12 @@ Read this first in every session (AGENTS.md rule 2). Update it before stopping.
 
 ## Current phase
 
-**Phase 8: Around the desktop**, in progress (started 2026-11-22). The
-product owner put the phone features (P8-S2, P8-T06 to P8-T08) on hold and
-will check the desktop features on a real desktop later, so the HUMAN spike
-P8-S1 uses DESIGN.md's fallbacks for now (ADR 0014).
-Phase 7 is complete on 26.10 (gate green 2026-11-22). Phase 6 is complete
-except the website (P6-T10), which is on hold.
+**Phase 8: Around the desktop**, complete on 26.10 for what can be built
+without a human (gate green 2026-11-22: lint, 137 unit and integration
+tests, 119 end-to-end scenarios). Not done: P8-T05 (Shell extension, waits
+for spike P8-S1 and decision O4) and the phone tasks (on hold by the
+product owner's decision). The desktop checks are on the HUMAN list.
+**Phase 9: Reach** started 2026-11-22 at the product owner's request.
 
 ## Release targets
 
@@ -367,10 +367,15 @@ Notes:
   query ran again and the selection jumped back to the first result, so
   Enter could open a different file than the one chosen (E3-04 failed under
   load). A re-run now keeps the chosen result.
+- Product owner's request (2026-11-22), outside DESIGN's task list: colour
+  options. Style "System" takes Ubuntu's accent colour (GNOME 47+
+  `accent-color`, or the Yaru variant on 24.04), live; Light and Dark offer
+  Cairn's own colours (purple, blue, teal, green, orange, rose, graphite),
+  each with a light and a dark shade; folders follow the colour.
 - 2026-11-21: the product owner deleted all Docker images and volumes to free
   disk space; the dev image and fixture were rebuilt.
 
-## Phase 8: Around the desktop (in progress)
+## Phase 8: Around the desktop (complete on 26.10, HUMAN checks pending)
 
 | ID | Task | Status | Notes |
 |---|---|---|---|
