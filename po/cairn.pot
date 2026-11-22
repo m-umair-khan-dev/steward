@@ -28,7 +28,7 @@ msgstr ""
 msgid " on port "
 msgstr ""
 
-#: crates/app/qml/PreferencesDialog.qml:319 crates/app/qml/ShortcutsDialog.qml:24
+#: crates/app/qml/PreferencesDialog.qml:342 crates/app/qml/ShortcutsDialog.qml:24
 msgid " or "
 msgstr ""
 
@@ -76,7 +76,7 @@ msgstr ""
 msgid "A file manager for Ubuntu that keeps folders tidy."
 msgstr ""
 
-#: crates/app/qml/PreferencesDialog.qml:470
+#: crates/app/qml/PreferencesDialog.qml:503
 msgid "A folder to leave out, e.g. ~/Videos/Raw"
 msgstr ""
 
@@ -84,7 +84,7 @@ msgstr ""
 msgid "A messy folder, sorted"
 msgstr ""
 
-#: crates/app/qml/AgentsPage.qml:13 crates/app/qml/Main.qml:239 crates/app/src/controller.rs:1745
+#: crates/app/qml/AgentsPage.qml:13 crates/app/qml/Main.qml:242 crates/app/src/controller.rs:1768
 msgid "AI Agents"
 msgstr ""
 
@@ -100,11 +100,11 @@ msgstr ""
 msgid "About Cairn"
 msgstr ""
 
-#: crates/app/qml/AboutPage.qml:12 crates/app/qml/Main.qml:238 crates/app/qml/Sidebar.qml:190
+#: crates/app/qml/AboutPage.qml:12 crates/app/qml/Main.qml:241 crates/app/qml/Sidebar.qml:190
 msgid "About This Computer"
 msgstr ""
 
-#: crates/app/qml/PreferencesDialog.qml:260 crates/app/qml/WelcomeDialog.qml:176 crates/app/qml/WelcomeDialog.qml:179
+#: crates/app/qml/PreferencesDialog.qml:283 crates/app/qml/WelcomeDialog.qml:176 crates/app/qml/WelcomeDialog.qml:179
 msgid "Accent"
 msgstr ""
 
@@ -124,11 +124,11 @@ msgstr ""
 msgid "Add a folder to “"
 msgstr ""
 
-#: crates/app/qml/Main.qml:508
+#: crates/app/qml/Main.qml:511
 msgid "Add to Holding"
 msgstr ""
 
-#: crates/app/qml/Main.qml:516
+#: crates/app/qml/Main.qml:519
 msgid "Add to “"
 msgstr ""
 
@@ -136,7 +136,7 @@ msgstr ""
 msgid "Added"
 msgstr ""
 
-#: crates/app/src/controller.rs:1445 crates/app/src/controller/installed.rs:192 crates/app/src/controller/search.rs:257
+#: crates/app/src/controller.rs:1468 crates/app/src/controller/installed.rs:192 crates/app/src/controller/search.rs:257
 msgid "All"
 msgstr ""
 
@@ -156,7 +156,7 @@ msgstr ""
 msgid "An operation was interrupted:"
 msgstr ""
 
-#: crates/app/qml/PreferencesDialog.qml:266
+#: crates/app/qml/PreferencesDialog.qml:289
 msgid "Animations follow the system: Settings › Accessibility › Seeing › Reduce Animation."
 msgstr ""
 
@@ -172,7 +172,7 @@ msgstr ""
 msgid "AppArmor"
 msgstr ""
 
-#: crates/app/qml/PreferencesDialog.qml:148
+#: crates/app/qml/PreferencesDialog.qml:171
 msgid "Appearance"
 msgstr ""
 
@@ -236,11 +236,11 @@ msgstr ""
 msgid "Bookmark removed"
 msgstr ""
 
-#: crates/app/qml/BookmarksPage.qml:14 crates/app/qml/Main.qml:240 crates/app/qml/Sidebar.qml:109 crates/app/qml/Sidebar.qml:97
+#: crates/app/qml/BookmarksPage.qml:14 crates/app/qml/Main.qml:243 crates/app/qml/Sidebar.qml:109 crates/app/qml/Sidebar.qml:97
 msgid "Bookmarks"
 msgstr ""
 
-#: crates/app/src/controller.rs:1583
+#: crates/app/src/controller.rs:1606
 msgid "By kind"
 msgstr ""
 
@@ -248,11 +248,11 @@ msgstr ""
 msgid "CONTENTS"
 msgstr ""
 
-#: crates/app/qml/AboutDialog.qml:21 crates/app/qml/Main.qml:16 crates/app/qml/PreferencesDialog.qml:261 crates/app/qml/Sidebar.qml:41
+#: crates/app/qml/AboutDialog.qml:21 crates/app/qml/Main.qml:17 crates/app/qml/PreferencesDialog.qml:284 crates/app/qml/Sidebar.qml:41
 msgid "Cairn"
 msgstr ""
 
-#: crates/app/src/controller.rs:732
+#: crates/app/src/controller.rs:740
 msgid "Cairn answers other apps now; folders open in it once Cairn is installed"
 msgstr ""
 
@@ -280,7 +280,7 @@ msgstr ""
 msgid "Cannot tidy this folder:"
 msgstr ""
 
-#: crates/app/qml/PreferencesDialog.qml:262 crates/app/qml/WelcomeDialog.qml:187 crates/app/qml/WelcomeDialog.qml:190
+#: crates/app/qml/PreferencesDialog.qml:285 crates/app/qml/WelcomeDialog.qml:187 crates/app/qml/WelcomeDialog.qml:190
 msgid "Card size"
 msgstr ""
 
@@ -292,15 +292,15 @@ msgstr ""
 msgid "Cargo registry cache"
 msgstr ""
 
-#: crates/app/qml/PreferencesDialog.qml:344
+#: crates/app/qml/PreferencesDialog.qml:367
 msgid "Change shortcut for "
 msgstr ""
 
-#: crates/app/qml/PreferencesDialog.qml:399
+#: crates/app/qml/PreferencesDialog.qml:422
 msgid "Change the Shelf key"
 msgstr ""
 
-#: crates/app/qml/PreferencesDialog.qml:280
+#: crates/app/qml/PreferencesDialog.qml:303
 msgid "Choose Change, then press the keys you want."
 msgstr ""
 
@@ -312,8 +312,16 @@ msgstr ""
 msgid "Clear"
 msgstr ""
 
-#: crates/app/qml/PreferencesDialog.qml:349
+#: crates/app/qml/PreferencesDialog.qml:372
 msgid "Clear shortcut for "
+msgstr ""
+
+#: crates/app/qml/PreferencesDialog.qml:428
+msgid "Click it to open the Shelf. With the icon on, closing the window keeps Cairn running for the Shelf."
+msgstr ""
+
+#: crates/app/src/tray.rs:74
+msgid "Click to open the Shelf"
 msgstr ""
 
 #: crates/app/qml/Header.qml:205 crates/app/qml/PeekOverlay.qml:73 crates/app/qml/Sheet.qml:60 crates/app/qml/TidyDialog.qml:84
@@ -352,7 +360,7 @@ msgstr ""
 msgid "Colour "
 msgstr ""
 
-#: crates/app/qml/Rail.qml:57 crates/app/qml/Sidebar.qml:189 crates/app/qml/Sidebar.qml:198 crates/app/src/controller.rs:1339
+#: crates/app/qml/Rail.qml:57 crates/app/qml/Sidebar.qml:189 crates/app/qml/Sidebar.qml:198 crates/app/src/controller.rs:1362
 msgid "Computer"
 msgstr ""
 
@@ -392,7 +400,7 @@ msgstr ""
 msgid "Copied the remove command. Paste it into a terminal to run it."
 msgstr ""
 
-#: crates/app/qml/CleanPage.qml:210 crates/app/qml/Main.qml:511 crates/app/src/actions.rs:69 crates/app/src/controller/ops.rs:343
+#: crates/app/qml/CleanPage.qml:210 crates/app/qml/Main.qml:514 crates/app/src/actions.rs:69 crates/app/src/controller/ops.rs:343
 msgid "Copy"
 msgstr ""
 
@@ -420,7 +428,7 @@ msgstr ""
 msgid "Copy to the other pane"
 msgstr ""
 
-#: crates/app/qml/Main.qml:458
+#: crates/app/qml/Main.qml:461
 msgid "Copy to “"
 msgstr ""
 
@@ -468,7 +476,7 @@ msgstr ""
 msgid "Could not stop it"
 msgstr ""
 
-#: crates/app/src/controller.rs:1370
+#: crates/app/src/controller.rs:1393
 msgid "Couldn't Open This Folder"
 msgstr ""
 
@@ -476,7 +484,7 @@ msgstr ""
 msgid "Create"
 msgstr ""
 
-#: crates/app/qml/Header.qml:92 crates/app/src/controller.rs:1772
+#: crates/app/qml/Header.qml:92 crates/app/src/controller.rs:1795
 msgid "Created"
 msgstr ""
 
@@ -484,7 +492,7 @@ msgstr ""
 msgid "Ctrl+L to type a path"
 msgstr ""
 
-#: crates/app/qml/Main.qml:512 crates/app/src/actions.rs:70 crates/app/src/controller/ops.rs:282
+#: crates/app/qml/Main.qml:515 crates/app/src/actions.rs:70 crates/app/src/controller/ops.rs:282
 msgid "Cut"
 msgstr ""
 
@@ -492,7 +500,7 @@ msgstr ""
 msgid "Cycles"
 msgstr ""
 
-#: crates/app/qml/Header.qml:187 crates/app/qml/PreferencesDialog.qml:259 crates/app/qml/WelcomeDialog.qml:169
+#: crates/app/qml/Header.qml:187 crates/app/qml/PreferencesDialog.qml:282 crates/app/qml/WelcomeDialog.qml:169
 msgid "Dark"
 msgstr ""
 
@@ -504,7 +512,7 @@ msgstr ""
 msgid "Date"
 msgstr ""
 
-#: crates/app/qml/PreferencesDialog.qml:176
+#: crates/app/qml/PreferencesDialog.qml:199
 msgid "Default view"
 msgstr ""
 
@@ -556,7 +564,7 @@ msgstr ""
 msgid "Downloads"
 msgstr ""
 
-#: crates/app/qml/PreferencesDialog.qml:237 crates/app/qml/PreferencesDialog.qml:244
+#: crates/app/qml/PreferencesDialog.qml:260 crates/app/qml/PreferencesDialog.qml:267
 msgid "Downloads folder"
 msgstr ""
 
@@ -572,7 +580,7 @@ msgstr ""
 msgid "Drop files here to keep them at hand. Nothing moves."
 msgstr ""
 
-#: crates/app/qml/Main.qml:503 crates/app/src/controller/ops.rs:266
+#: crates/app/qml/Main.qml:506 crates/app/src/controller/ops.rs:266
 msgid "Duplicate"
 msgstr ""
 
@@ -604,7 +612,7 @@ msgstr ""
 msgid "Editor"
 msgstr ""
 
-#: crates/app/qml/PreferencesDialog.qml:232
+#: crates/app/qml/PreferencesDialog.qml:255
 msgid "Editor (Shift+F4)"
 msgstr ""
 
@@ -616,7 +624,7 @@ msgstr ""
 msgid "Emptied the Trash"
 msgstr ""
 
-#: crates/app/src/controller.rs:1419
+#: crates/app/src/controller.rs:1442
 msgid "Empty"
 msgstr ""
 
@@ -624,7 +632,7 @@ msgstr ""
 msgid "Empty Trash"
 msgstr ""
 
-#: crates/app/qml/CleanPage.qml:230 crates/app/qml/Main.qml:522 crates/app/qml/TrashBar.qml:25
+#: crates/app/qml/CleanPage.qml:230 crates/app/qml/Main.qml:525 crates/app/qml/TrashBar.qml:25
 msgid "Empty Trash…"
 msgstr ""
 
@@ -660,7 +668,7 @@ msgstr ""
 msgid "Favourites"
 msgstr ""
 
-#: crates/app/qml/PreferencesDialog.qml:218 crates/app/qml/PreferencesDialog.qml:225
+#: crates/app/qml/PreferencesDialog.qml:241 crates/app/qml/PreferencesDialog.qml:248
 msgid "Fetch link titles and pictures"
 msgstr ""
 
@@ -672,7 +680,7 @@ msgstr ""
 msgid "File system"
 msgstr ""
 
-#: crates/app/src/controller.rs:1650
+#: crates/app/src/controller.rs:1673
 msgid "Files"
 msgstr ""
 
@@ -688,7 +696,7 @@ msgstr ""
 msgid "Filters"
 msgstr ""
 
-#: crates/app/qml/PreferencesDialog.qml:288 crates/app/qml/PreferencesDialog.qml:289
+#: crates/app/qml/PreferencesDialog.qml:311 crates/app/qml/PreferencesDialog.qml:312
 msgid "Find a shortcut"
 msgstr ""
 
@@ -704,11 +712,11 @@ msgstr ""
 msgid "Firewall"
 msgstr ""
 
-#: crates/app/src/controller.rs:1513 crates/app/src/controller.rs:1693 crates/app/src/controller.rs:1763
+#: crates/app/src/controller.rs:1536 crates/app/src/controller.rs:1716 crates/app/src/controller.rs:1786
 msgid "Folder"
 msgstr ""
 
-#: crates/app/src/controller.rs:1392
+#: crates/app/src/controller.rs:1415
 msgid "Folder Is Empty"
 msgstr ""
 
@@ -716,11 +724,11 @@ msgstr ""
 msgid "Folder contents"
 msgstr ""
 
-#: crates/app/qml/PreferencesDialog.qml:471
+#: crates/app/qml/PreferencesDialog.qml:504
 msgid "Folder to leave out"
 msgstr ""
 
-#: crates/app/src/controller.rs:1565 crates/app/src/controller.rs:1642 crates/app/src/controller/search.rs:278 crates/app/src/controller/workspaces.rs:385
+#: crates/app/src/controller.rs:1588 crates/app/src/controller.rs:1665 crates/app/src/controller/search.rs:278 crates/app/src/controller/workspaces.rs:385
 msgid "Folders"
 msgstr ""
 
@@ -728,7 +736,7 @@ msgstr ""
 msgid "Folders and files by name, as you type."
 msgstr ""
 
-#: crates/app/qml/PreferencesDialog.qml:200
+#: crates/app/qml/PreferencesDialog.qml:223
 msgid "Folders open in Cairn, and other apps' “Show in folder” comes here."
 msgstr ""
 
@@ -756,7 +764,7 @@ msgstr ""
 msgid "Free"
 msgstr ""
 
-#: crates/app/qml/AboutPage.qml:177 crates/app/qml/CleanPage.qml:13 crates/app/qml/CleanPage.qml:37 crates/app/qml/Main.qml:238
+#: crates/app/qml/AboutPage.qml:177 crates/app/qml/CleanPage.qml:13 crates/app/qml/CleanPage.qml:37 crates/app/qml/Main.qml:241
 msgid "Free Up Space"
 msgstr ""
 
@@ -768,7 +776,7 @@ msgstr ""
 msgid "Free up space"
 msgstr ""
 
-#: crates/app/src/controller.rs:1510
+#: crates/app/src/controller.rs:1533
 msgid "From"
 msgstr ""
 
@@ -784,7 +792,7 @@ msgstr ""
 msgid "GPL-3.0-or-later"
 msgstr ""
 
-#: crates/app/qml/PreferencesDialog.qml:148
+#: crates/app/qml/PreferencesDialog.qml:171
 msgid "General"
 msgstr ""
 
@@ -808,7 +816,7 @@ msgstr ""
 msgid "Gradle downloads and builds them again"
 msgstr ""
 
-#: crates/app/qml/BookmarksPage.qml:44 crates/app/qml/BookmarksPage.qml:56 crates/app/qml/Header.qml:78 crates/app/qml/PreferencesDialog.qml:177
+#: crates/app/qml/BookmarksPage.qml:44 crates/app/qml/BookmarksPage.qml:56 crates/app/qml/Header.qml:78 crates/app/qml/PreferencesDialog.qml:200
 msgid "Grid"
 msgstr ""
 
@@ -840,7 +848,7 @@ msgstr ""
 msgid "Holding"
 msgstr ""
 
-#: crates/app/qml/PreferencesDialog.qml:446 crates/app/src/controller.rs:1338 crates/app/src/controller/shelf.rs:315 crates/app/src/sidebar.rs:44
+#: crates/app/qml/PreferencesDialog.qml:479 crates/app/src/controller.rs:1361 crates/app/src/controller/shelf.rs:315 crates/app/src/sidebar.rs:44
 msgid "Home"
 msgstr ""
 
@@ -896,11 +904,11 @@ msgstr ""
 msgid "In use since"
 msgstr ""
 
-#: crates/app/qml/PreferencesDialog.qml:446
+#: crates/app/qml/PreferencesDialog.qml:479
 msgid "Indexed: "
 msgstr ""
 
-#: crates/app/qml/PreferencesDialog.qml:416
+#: crates/app/qml/PreferencesDialog.qml:449
 msgid "Indexing is paused."
 msgstr ""
 
@@ -908,7 +916,7 @@ msgstr ""
 msgid "Info"
 msgstr ""
 
-#: crates/app/qml/InstalledPage.qml:13 crates/app/qml/Main.qml:238 crates/app/src/controller.rs:1743
+#: crates/app/qml/InstalledPage.qml:13 crates/app/qml/Main.qml:241 crates/app/src/controller.rs:1766
 msgid "Installed"
 msgstr ""
 
@@ -920,7 +928,7 @@ msgstr ""
 msgid "Installers"
 msgstr ""
 
-#: crates/app/src/controller.rs:1362
+#: crates/app/src/controller.rs:1385
 msgid "It was moved or deleted, or its drive is no longer connected."
 msgstr ""
 
@@ -960,7 +968,7 @@ msgstr ""
 msgid "Kernel"
 msgstr ""
 
-#: crates/app/qml/PreferencesDialog.qml:382
+#: crates/app/qml/PreferencesDialog.qml:405
 msgid "Key"
 msgstr ""
 
@@ -968,11 +976,11 @@ msgstr ""
 msgid "Keyboard Shortcuts"
 msgstr ""
 
-#: crates/app/qml/PreferencesDialog.qml:298
+#: crates/app/qml/PreferencesDialog.qml:321
 msgid "Keyboard shortcuts"
 msgstr ""
 
-#: crates/app/qml/FolderList.qml:33 crates/app/qml/Header.qml:71 crates/app/qml/Header.qml:93 crates/app/src/controller.rs:1767
+#: crates/app/qml/FolderList.qml:33 crates/app/qml/Header.qml:71 crates/app/qml/Header.qml:93 crates/app/src/controller.rs:1790
 msgid "Kind"
 msgstr ""
 
@@ -980,7 +988,7 @@ msgstr ""
 msgid "LEFT WHERE THEY ARE"
 msgstr ""
 
-#: crates/app/qml/PreferencesDialog.qml:263 crates/app/qml/WelcomeDialog.qml:191
+#: crates/app/qml/PreferencesDialog.qml:286 crates/app/qml/WelcomeDialog.qml:191
 msgid "Large"
 msgstr ""
 
@@ -992,15 +1000,15 @@ msgstr ""
 msgid "Latest downloads"
 msgstr ""
 
-#: crates/app/qml/PreferencesDialog.qml:476
+#: crates/app/qml/PreferencesDialog.qml:509
 msgid "Leave Out"
 msgstr ""
 
-#: crates/app/qml/PreferencesDialog.qml:449
+#: crates/app/qml/PreferencesDialog.qml:482
 msgid "Left out"
 msgstr ""
 
-#: crates/app/qml/Header.qml:186 crates/app/qml/PreferencesDialog.qml:259 crates/app/qml/WelcomeDialog.qml:169
+#: crates/app/qml/Header.qml:186 crates/app/qml/PreferencesDialog.qml:282 crates/app/qml/WelcomeDialog.qml:169
 msgid "Light"
 msgstr ""
 
@@ -1020,7 +1028,7 @@ msgstr ""
 msgid "Links"
 msgstr ""
 
-#: crates/app/qml/BookmarksPage.qml:44 crates/app/qml/BookmarksPage.qml:56 crates/app/qml/Header.qml:78 crates/app/qml/PreferencesDialog.qml:177
+#: crates/app/qml/BookmarksPage.qml:44 crates/app/qml/BookmarksPage.qml:56 crates/app/qml/Header.qml:78 crates/app/qml/PreferencesDialog.qml:200
 msgid "List"
 msgstr ""
 
@@ -1104,7 +1112,7 @@ msgstr ""
 msgid "Maximum capacity"
 msgstr ""
 
-#: crates/app/qml/PreferencesDialog.qml:263 crates/app/qml/WelcomeDialog.qml:191
+#: crates/app/qml/PreferencesDialog.qml:286 crates/app/qml/WelcomeDialog.qml:191
 msgid "Medium"
 msgstr ""
 
@@ -1124,7 +1132,7 @@ msgstr ""
 msgid "Minimize"
 msgstr ""
 
-#: crates/app/qml/FolderList.qml:33 crates/app/qml/Header.qml:91 crates/app/qml/RightPane.qml:31 crates/app/src/controller.rs:1771
+#: crates/app/qml/FolderList.qml:33 crates/app/qml/Header.qml:91 crates/app/qml/RightPane.qml:31 crates/app/src/controller.rs:1794
 msgid "Modified"
 msgstr ""
 
@@ -1140,7 +1148,7 @@ msgstr ""
 msgid "Move"
 msgstr ""
 
-#: crates/app/qml/Main.qml:460
+#: crates/app/qml/Main.qml:463
 msgid "Move   F6"
 msgstr ""
 
@@ -1156,7 +1164,7 @@ msgstr ""
 msgid "Move ticked items to the Trash"
 msgstr ""
 
-#: crates/app/qml/CleanPage.qml:364 crates/app/qml/Main.qml:514 crates/app/qml/PreviewPane.qml:116
+#: crates/app/qml/CleanPage.qml:364 crates/app/qml/Main.qml:517 crates/app/qml/PreviewPane.qml:116
 msgid "Move to Trash"
 msgstr ""
 
@@ -1192,7 +1200,7 @@ msgstr ""
 msgid "New Collection"
 msgstr ""
 
-#: crates/app/qml/Header.qml:177 crates/app/qml/Main.qml:525
+#: crates/app/qml/Header.qml:177 crates/app/qml/Main.qml:528
 msgid "New Folder"
 msgstr ""
 
@@ -1224,11 +1232,11 @@ msgstr ""
 msgid "No"
 msgstr ""
 
-#: crates/app/src/controller.rs:1376
+#: crates/app/src/controller.rs:1399
 msgid "No Matches"
 msgstr ""
 
-#: crates/app/src/controller.rs:975
+#: crates/app/src/controller.rs:983
 msgid "No app could open"
 msgstr ""
 
@@ -1236,15 +1244,15 @@ msgstr ""
 msgid "No editor found. Choose one in Preferences › General."
 msgstr ""
 
-#: crates/app/src/controller.rs:1167 crates/app/src/controller/downloads.rs:132
+#: crates/app/src/controller.rs:1175 crates/app/src/controller/downloads.rs:132
 msgid "No folder called"
 msgstr ""
 
-#: crates/app/src/controller.rs:1004
+#: crates/app/src/controller.rs:1012
 msgid "No installed app can open this kind of file"
 msgstr ""
 
-#: crates/app/src/controller.rs:1385
+#: crates/app/src/controller.rs:1408
 msgid "No items in this folder are"
 msgstr ""
 
@@ -1252,7 +1260,7 @@ msgstr ""
 msgid "No links here yet. Paste a link with Ctrl+V, drop one onto this page, or choose Add Link."
 msgstr ""
 
-#: crates/app/src/controller.rs:1377
+#: crates/app/src/controller.rs:1400
 msgid "No names in this folder contain what you typed."
 msgstr ""
 
@@ -1264,7 +1272,7 @@ msgstr ""
 msgid "No terminal found. Choose one in Preferences › General."
 msgstr ""
 
-#: crates/app/qml/Header.qml:71 crates/app/qml/PreferencesDialog.qml:330
+#: crates/app/qml/Header.qml:71 crates/app/qml/PreferencesDialog.qml:353
 msgid "None"
 msgstr ""
 
@@ -1324,7 +1332,7 @@ msgstr ""
 msgid "Nothing is deleted, and Undo puts everything back."
 msgstr ""
 
-#: crates/app/src/controller.rs:1393
+#: crates/app/src/controller.rs:1416
 msgid "Nothing is in this folder yet."
 msgstr ""
 
@@ -1332,7 +1340,7 @@ msgstr ""
 msgid "Nothing is running."
 msgstr ""
 
-#: crates/app/src/controller.rs:1382
+#: crates/app/src/controller.rs:1405
 msgid "Nothing of This Kind"
 msgstr ""
 
@@ -1400,7 +1408,7 @@ msgstr ""
 msgid "Only places their tools rebuild by themselves. You lose nothing but time: the next build or install is slower."
 msgstr ""
 
-#: crates/app/qml/AgentsPage.qml:231 crates/app/qml/Main.qml:499 crates/app/qml/PeekOverlay.qml:71
+#: crates/app/qml/AgentsPage.qml:231 crates/app/qml/Main.qml:502 crates/app/qml/PeekOverlay.qml:71
 msgid "Open"
 msgstr ""
 
@@ -1408,15 +1416,19 @@ msgstr ""
 msgid "Open With"
 msgstr ""
 
-#: crates/app/qml/Main.qml:500
+#: crates/app/qml/Main.qml:503
 msgid "Open With…"
 msgstr ""
 
-#: crates/app/qml/Main.qml:506 crates/app/qml/Main.qml:528
+#: crates/app/qml/PreferencesDialog.qml:432
+msgid "Open at login"
+msgstr ""
+
+#: crates/app/qml/Main.qml:509 crates/app/qml/Main.qml:531
 msgid "Open in Editor"
 msgstr ""
 
-#: crates/app/qml/Main.qml:505 crates/app/qml/Main.qml:527
+#: crates/app/qml/Main.qml:508 crates/app/qml/Main.qml:530
 msgid "Open in Terminal"
 msgstr ""
 
@@ -1424,11 +1436,11 @@ msgstr ""
 msgid "Open in the browser: port "
 msgstr ""
 
-#: crates/app/src/controller.rs:1367
+#: crates/app/src/controller.rs:1390
 msgid "Open it from the folder that contains it."
 msgstr ""
 
-#: crates/app/qml/PreferencesDialog.qml:369 crates/app/qml/PreferencesDialog.qml:376
+#: crates/app/qml/PreferencesDialog.qml:392 crates/app/qml/PreferencesDialog.qml:399
 msgid "Open the Shelf with a key"
 msgstr ""
 
@@ -1516,7 +1528,7 @@ msgstr ""
 msgid "Pane"
 msgstr ""
 
-#: crates/app/qml/Header.qml:178 crates/app/qml/Main.qml:526 crates/app/src/actions.rs:71
+#: crates/app/qml/Header.qml:178 crates/app/qml/Main.qml:529 crates/app/src/actions.rs:71
 msgid "Paste"
 msgstr ""
 
@@ -1524,11 +1536,11 @@ msgstr ""
 msgid "Pause"
 msgstr ""
 
-#: crates/app/qml/PreferencesDialog.qml:422 crates/app/qml/PreferencesDialog.qml:426
+#: crates/app/qml/PreferencesDialog.qml:455 crates/app/qml/PreferencesDialog.qml:459
 msgid "Pause indexing"
 msgstr ""
 
-#: crates/app/qml/PreferencesDialog.qml:434 crates/app/qml/PreferencesDialog.qml:438
+#: crates/app/qml/PreferencesDialog.qml:467 crates/app/qml/PreferencesDialog.qml:471
 msgid "Pause on battery"
 msgstr ""
 
@@ -1552,7 +1564,7 @@ msgstr ""
 msgid "Pin a folder from its menu to see it here."
 msgstr ""
 
-#: crates/app/qml/Main.qml:509
+#: crates/app/qml/Main.qml:512
 msgid "Pin to Shelf"
 msgstr ""
 
@@ -1576,15 +1588,15 @@ msgstr ""
 msgid "Preferences"
 msgstr ""
 
-#: crates/app/qml/PreferencesDialog.qml:147
+#: crates/app/qml/PreferencesDialog.qml:170
 msgid "Preferences pages"
 msgstr ""
 
-#: crates/app/qml/PreferencesDialog.qml:328 crates/app/qml/PreferencesDialog.qml:386
+#: crates/app/qml/PreferencesDialog.qml:351 crates/app/qml/PreferencesDialog.qml:409
 msgid "Press keys…"
 msgstr ""
 
-#: crates/app/qml/PreferencesDialog.qml:279
+#: crates/app/qml/PreferencesDialog.qml:302
 msgid "Press the new shortcut for “"
 msgstr ""
 
@@ -1608,7 +1620,7 @@ msgstr ""
 msgid "Projects"
 msgstr ""
 
-#: crates/app/qml/Main.qml:497 crates/app/qml/TrashBar.qml:24
+#: crates/app/qml/Main.qml:500 crates/app/qml/TrashBar.qml:24
 msgid "Put Back"
 msgstr ""
 
@@ -1624,7 +1636,7 @@ msgstr ""
 msgid "Quit"
 msgstr ""
 
-#: crates/app/qml/PreferencesDialog.qml:478
+#: crates/app/qml/PreferencesDialog.qml:511
 msgid "Rebuild"
 msgstr ""
 
@@ -1660,7 +1672,7 @@ msgstr ""
 msgid "Renamed to"
 msgstr ""
 
-#: crates/app/qml/Main.qml:502
+#: crates/app/qml/Main.qml:505
 msgid "Rename…"
 msgstr ""
 
@@ -1676,7 +1688,7 @@ msgstr ""
 msgid "Report a Bug"
 msgstr ""
 
-#: crates/app/qml/PreferencesDialog.qml:282
+#: crates/app/qml/PreferencesDialog.qml:305
 msgid "Restore Defaults"
 msgstr ""
 
@@ -1732,7 +1744,7 @@ msgstr ""
 msgid "Screen recordings older than 90 days."
 msgstr ""
 
-#: crates/app/qml/PreferencesDialog.qml:150
+#: crates/app/qml/PreferencesDialog.qml:173
 msgid "Search and Index"
 msgstr ""
 
@@ -1756,7 +1768,7 @@ msgstr ""
 msgid "See the plan, then sort. One Undo puts it back."
 msgstr ""
 
-#: crates/app/qml/Header.qml:179 crates/app/qml/Main.qml:523 crates/app/qml/Main.qml:530
+#: crates/app/qml/Header.qml:179 crates/app/qml/Main.qml:526 crates/app/qml/Main.qml:533
 msgid "Select All"
 msgstr ""
 
@@ -1764,11 +1776,11 @@ msgstr ""
 msgid "Service recommended"
 msgstr ""
 
-#: crates/app/qml/PreferencesDialog.qml:400 crates/app/qml/ShelfWindow.qml:18 crates/app/qml/ShelfWindow.qml:37 crates/app/qml/ShelfWindow.qml:63
+#: crates/app/qml/PreferencesDialog.qml:423 crates/app/qml/ShelfWindow.qml:18 crates/app/qml/ShelfWindow.qml:37 crates/app/qml/ShelfWindow.qml:63
 msgid "Shelf"
 msgstr ""
 
-#: crates/app/qml/PreferencesDialog.qml:149
+#: crates/app/qml/PreferencesDialog.qml:172
 msgid "Shelf and Tray"
 msgstr ""
 
@@ -1776,7 +1788,7 @@ msgstr ""
 msgid "Shell"
 msgstr ""
 
-#: crates/app/qml/PreferencesDialog.qml:149
+#: crates/app/qml/PreferencesDialog.qml:172
 msgid "Shortcuts"
 msgstr ""
 
@@ -1784,7 +1796,7 @@ msgstr ""
 msgid "Show "
 msgstr ""
 
-#: crates/app/qml/Header.qml:181 crates/app/qml/Main.qml:531
+#: crates/app/qml/Header.qml:181 crates/app/qml/Main.qml:534
 msgid "Show Hidden Files"
 msgstr ""
 
@@ -1792,7 +1804,11 @@ msgstr ""
 msgid "Show Names"
 msgstr ""
 
-#: crates/app/qml/PreferencesDialog.qml:180 crates/app/qml/PreferencesDialog.qml:185 crates/app/src/actions.rs:53
+#: crates/app/qml/PreferencesDialog.qml:427
+msgid "Show an icon in the top bar"
+msgstr ""
+
+#: crates/app/qml/PreferencesDialog.qml:203 crates/app/qml/PreferencesDialog.qml:208 crates/app/src/actions.rs:53
 msgid "Show hidden files"
 msgstr ""
 
@@ -1812,7 +1828,7 @@ msgstr ""
 msgid "Skip"
 msgstr ""
 
-#: crates/app/qml/PreferencesDialog.qml:263 crates/app/qml/WelcomeDialog.qml:191
+#: crates/app/qml/PreferencesDialog.qml:286 crates/app/qml/WelcomeDialog.qml:191
 msgid "Small"
 msgstr ""
 
@@ -1860,6 +1876,10 @@ msgstr ""
 msgid "Start Using Cairn"
 msgstr ""
 
+#: crates/app/qml/PreferencesDialog.qml:433
+msgid "Starts Cairn in the background, without a window, so the Shelf and the icon are ready."
+msgstr ""
+
 #: crates/app/src/controller/about.rs:241
 msgid "Startup disk"
 msgstr ""
@@ -1872,7 +1892,7 @@ msgstr ""
 msgid "Stop"
 msgstr ""
 
-#: crates/app/qml/PreferencesDialog.qml:459
+#: crates/app/qml/PreferencesDialog.qml:492
 msgid "Stop leaving out "
 msgstr ""
 
@@ -1884,7 +1904,7 @@ msgstr ""
 msgid "Stop the server on port "
 msgstr ""
 
-#: crates/app/qml/PreferencesDialog.qml:258 crates/app/qml/WelcomeDialog.qml:165 crates/app/qml/WelcomeDialog.qml:168
+#: crates/app/qml/PreferencesDialog.qml:281 crates/app/qml/WelcomeDialog.qml:165 crates/app/qml/WelcomeDialog.qml:168
 msgid "Style"
 msgstr ""
 
@@ -1912,11 +1932,11 @@ msgstr ""
 msgid "Symbol and Colour"
 msgstr ""
 
-#: crates/app/qml/Main.qml:504
+#: crates/app/qml/Main.qml:507
 msgid "Symbol and Colour…"
 msgstr ""
 
-#: crates/app/qml/PreferencesDialog.qml:259 crates/app/qml/PreferencesDialog.qml:261 crates/app/qml/WelcomeDialog.qml:169 crates/app/qml/WelcomeDialog.qml:180
+#: crates/app/qml/PreferencesDialog.qml:282 crates/app/qml/PreferencesDialog.qml:284 crates/app/qml/WelcomeDialog.qml:169 crates/app/qml/WelcomeDialog.qml:180
 msgid "System"
 msgstr ""
 
@@ -1928,7 +1948,7 @@ msgstr ""
 msgid "System journal"
 msgstr ""
 
-#: crates/app/qml/Main.qml:465
+#: crates/app/qml/Main.qml:468
 msgid "Tab switches pane · drag to move, Ctrl-drag to copy"
 msgstr ""
 
@@ -1948,7 +1968,7 @@ msgstr ""
 msgid "Terminal"
 msgstr ""
 
-#: crates/app/qml/PreferencesDialog.qml:231
+#: crates/app/qml/PreferencesDialog.qml:254
 msgid "Terminal (F4)"
 msgstr ""
 
@@ -1976,11 +1996,11 @@ msgstr ""
 msgid "The Trash is empty"
 msgstr ""
 
-#: crates/app/qml/PreferencesDialog.qml:415
+#: crates/app/qml/PreferencesDialog.qml:448
 msgid "The index is not running."
 msgstr ""
 
-#: crates/app/qml/PreferencesDialog.qml:416
+#: crates/app/qml/PreferencesDialog.qml:449
 msgid "The index is up to date and following changes."
 msgstr ""
 
@@ -2004,7 +2024,7 @@ msgstr ""
 msgid "The shortcut"
 msgstr ""
 
-#: crates/app/qml/PreferencesDialog.qml:242
+#: crates/app/qml/PreferencesDialog.qml:265
 msgid "The system’s Downloads"
 msgstr ""
 
@@ -2020,11 +2040,11 @@ msgstr ""
 msgid "Thermal state"
 msgstr ""
 
-#: crates/app/src/controller.rs:1361
+#: crates/app/src/controller.rs:1384
 msgid "This Folder Is Gone"
 msgstr ""
 
-#: crates/app/src/controller.rs:1366
+#: crates/app/src/controller.rs:1389
 msgid "This Is Not a Folder"
 msgstr ""
 
@@ -2032,7 +2052,7 @@ msgstr ""
 msgid "This computer"
 msgstr ""
 
-#: crates/app/src/controller.rs:719
+#: crates/app/src/controller.rs:725
 msgid "This desktop has no custom shortcuts; open the Shelf with “cairn shelf”"
 msgstr ""
 
@@ -2088,7 +2108,7 @@ msgstr ""
 msgid "Tools"
 msgstr ""
 
-#: crates/app/qml/TrashBar.qml:10 crates/app/src/controller.rs:1335 crates/app/src/controller.rs:1856 crates/app/src/sidebar.rs:61
+#: crates/app/qml/TrashBar.qml:10 crates/app/src/controller.rs:1358 crates/app/src/controller.rs:1879 crates/app/src/sidebar.rs:61
 msgid "Trash"
 msgstr ""
 
@@ -2140,7 +2160,7 @@ msgstr ""
 msgid "Usage is read from Claude Code's logs; other tools keep no local usage Cairn can read yet."
 msgstr ""
 
-#: crates/app/qml/PreferencesDialog.qml:198 crates/app/qml/PreferencesDialog.qml:205
+#: crates/app/qml/PreferencesDialog.qml:221 crates/app/qml/PreferencesDialog.qml:228
 msgid "Use as default file manager"
 msgstr ""
 
@@ -2200,11 +2220,11 @@ msgstr ""
 msgid "What’s New in Cairn "
 msgstr ""
 
-#: crates/app/qml/PreferencesDialog.qml:220
+#: crates/app/qml/PreferencesDialog.qml:243
 msgid "When you save a bookmark, Cairn contacts that link’s site for its title and picture. It is the only request Cairn makes."
 msgstr ""
 
-#: crates/app/src/controller.rs:1774 crates/app/src/controller/peek.rs:192
+#: crates/app/src/controller.rs:1797 crates/app/src/controller/peek.rs:192
 msgid "Where"
 msgstr ""
 
@@ -2220,7 +2240,7 @@ msgstr ""
 msgid "Working…"
 msgstr ""
 
-#: crates/app/qml/PreferencesDialog.qml:371
+#: crates/app/qml/PreferencesDialog.qml:394
 msgid "Works from any app. Cairn adds it to GNOME’s keyboard shortcuts and removes it when you turn this off."
 msgstr ""
 
@@ -2264,7 +2284,7 @@ msgstr ""
 msgid "Yesterday, %H:%M"
 msgstr ""
 
-#: crates/app/src/controller.rs:1356
+#: crates/app/src/controller.rs:1379
 msgid "You Can't Open This Folder"
 msgstr ""
 
@@ -2276,7 +2296,7 @@ msgstr ""
 msgid "You could free about"
 msgstr ""
 
-#: crates/app/src/controller.rs:1357
+#: crates/app/src/controller.rs:1380
 msgid "You don't have permission to see what's inside."
 msgstr ""
 
@@ -2308,7 +2328,7 @@ msgstr ""
 msgid "and "
 msgstr ""
 
-#: crates/app/src/controller.rs:1440
+#: crates/app/src/controller.rs:1463
 msgid "available"
 msgstr ""
 
@@ -2360,7 +2380,7 @@ msgstr ""
 msgid "for"
 msgstr ""
 
-#: crates/app/src/controller.rs:1727
+#: crates/app/src/controller.rs:1750
 msgid "free"
 msgstr ""
 
@@ -2464,7 +2484,7 @@ msgstr ""
 msgid "new folder"
 msgstr ""
 
-#: crates/app/qml/PreferencesDialog.qml:319 crates/app/qml/ShortcutsDialog.qml:24
+#: crates/app/qml/PreferencesDialog.qml:342 crates/app/qml/ShortcutsDialog.qml:24
 msgid "no shortcut"
 msgstr ""
 
@@ -2528,7 +2548,7 @@ msgstr ""
 msgid "results"
 msgstr ""
 
-#: crates/app/src/controller.rs:1437 crates/app/src/controller/pane.rs:336
+#: crates/app/src/controller.rs:1460 crates/app/src/controller/pane.rs:336
 msgid "selected"
 msgstr ""
 
@@ -2678,7 +2698,7 @@ msgstr ""
 msgid "” looks. It keeps this look when renamed or moved."
 msgstr ""
 
-#: crates/app/qml/PreferencesDialog.qml:279
+#: crates/app/qml/PreferencesDialog.qml:302
 msgid "”. Esc cancels."
 msgstr ""
 

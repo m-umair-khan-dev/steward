@@ -34,7 +34,7 @@ msgstr " / "
 msgid " on port "
 msgstr " (ポート "
 
-#: crates/app/qml/PreferencesDialog.qml:319
+#: crates/app/qml/PreferencesDialog.qml:342
 #: crates/app/qml/ShortcutsDialog.qml:24
 msgid " or "
 msgstr " または "
@@ -83,7 +83,7 @@ msgstr ": 独自のコマンド"
 msgid "A file manager for Ubuntu that keeps folders tidy."
 msgstr "フォルダーを整理された状態に保つ Ubuntu 用ファイルマネージャー。"
 
-#: crates/app/qml/PreferencesDialog.qml:470
+#: crates/app/qml/PreferencesDialog.qml:503
 msgid "A folder to leave out, e.g. ~/Videos/Raw"
 msgstr "除外するフォルダー（例: ~/Videos/Raw）"
 
@@ -91,8 +91,8 @@ msgstr "除外するフォルダー（例: ~/Videos/Raw）"
 msgid "A messy folder, sorted"
 msgstr "散らかったフォルダーを整理"
 
-#: crates/app/qml/AgentsPage.qml:13 crates/app/qml/Main.qml:239
-#: crates/app/src/controller.rs:1745
+#: crates/app/qml/AgentsPage.qml:13 crates/app/qml/Main.qml:242
+#: crates/app/src/controller.rs:1768
 msgid "AI Agents"
 msgstr "AI エージェント"
 
@@ -108,12 +108,12 @@ msgstr "詳細: "
 msgid "About Cairn"
 msgstr "Cairn について"
 
-#: crates/app/qml/AboutPage.qml:12 crates/app/qml/Main.qml:238
+#: crates/app/qml/AboutPage.qml:12 crates/app/qml/Main.qml:241
 #: crates/app/qml/Sidebar.qml:190
 msgid "About This Computer"
 msgstr "このコンピューターについて"
 
-#: crates/app/qml/PreferencesDialog.qml:260
+#: crates/app/qml/PreferencesDialog.qml:283
 #: crates/app/qml/WelcomeDialog.qml:176 crates/app/qml/WelcomeDialog.qml:179
 msgid "Accent"
 msgstr "アクセントカラー"
@@ -134,11 +134,11 @@ msgstr "リンクを追加"
 msgid "Add a folder to “"
 msgstr "フォルダーを追加: “"
 
-#: crates/app/qml/Main.qml:508
+#: crates/app/qml/Main.qml:511
 msgid "Add to Holding"
 msgstr "保留に追加"
 
-#: crates/app/qml/Main.qml:516
+#: crates/app/qml/Main.qml:519
 msgid "Add to “"
 msgstr "追加先: “"
 
@@ -146,7 +146,7 @@ msgstr "追加先: “"
 msgid "Added"
 msgstr "追加しました:"
 
-#: crates/app/src/controller.rs:1445 crates/app/src/controller/installed.rs:192
+#: crates/app/src/controller.rs:1468 crates/app/src/controller/installed.rs:192
 #: crates/app/src/controller/search.rs:257
 msgid "All"
 msgstr "すべて"
@@ -168,7 +168,7 @@ msgstr "すでにブックマークにあります"
 msgid "An operation was interrupted:"
 msgstr "操作が中断されました:"
 
-#: crates/app/qml/PreferencesDialog.qml:266
+#: crates/app/qml/PreferencesDialog.qml:289
 msgid "Animations follow the system: Settings › Accessibility › Seeing › Reduce Animation."
 msgstr "アニメーションはシステムの設定に従います: 設定 › アクセシビリティ › 視覚 › アニメーションを減らす。"
 
@@ -184,7 +184,7 @@ msgstr "アプリの残りデータ"
 msgid "AppArmor"
 msgstr "AppArmor"
 
-#: crates/app/qml/PreferencesDialog.qml:148
+#: crates/app/qml/PreferencesDialog.qml:171
 msgid "Appearance"
 msgstr "外観"
 
@@ -251,12 +251,12 @@ msgstr "大きなファイル"
 msgid "Bookmark removed"
 msgstr "ブックマークを削除しました"
 
-#: crates/app/qml/BookmarksPage.qml:14 crates/app/qml/Main.qml:240
+#: crates/app/qml/BookmarksPage.qml:14 crates/app/qml/Main.qml:243
 #: crates/app/qml/Sidebar.qml:109 crates/app/qml/Sidebar.qml:97
 msgid "Bookmarks"
 msgstr "ブックマーク"
 
-#: crates/app/src/controller.rs:1583
+#: crates/app/src/controller.rs:1606
 msgid "By kind"
 msgstr "種類別"
 
@@ -264,12 +264,12 @@ msgstr "種類別"
 msgid "CONTENTS"
 msgstr "内容"
 
-#: crates/app/qml/AboutDialog.qml:21 crates/app/qml/Main.qml:16
-#: crates/app/qml/PreferencesDialog.qml:261 crates/app/qml/Sidebar.qml:41
+#: crates/app/qml/AboutDialog.qml:21 crates/app/qml/Main.qml:17
+#: crates/app/qml/PreferencesDialog.qml:284 crates/app/qml/Sidebar.qml:41
 msgid "Cairn"
 msgstr "Cairn"
 
-#: crates/app/src/controller.rs:732
+#: crates/app/src/controller.rs:740
 msgid "Cairn answers other apps now; folders open in it once Cairn is installed"
 msgstr "Cairn が他のアプリに応答するようになりました。Cairn をインストールするとフォルダーが Cairn で開きます"
 
@@ -300,7 +300,7 @@ msgstr "キャンセルしました"
 msgid "Cannot tidy this folder:"
 msgstr "このフォルダーは整理できません:"
 
-#: crates/app/qml/PreferencesDialog.qml:262
+#: crates/app/qml/PreferencesDialog.qml:285
 #: crates/app/qml/WelcomeDialog.qml:187 crates/app/qml/WelcomeDialog.qml:190
 msgid "Card size"
 msgstr "カードの大きさ"
@@ -313,15 +313,15 @@ msgstr "Cargo がクレートを再ダウンロードします"
 msgid "Cargo registry cache"
 msgstr "Cargo レジストリのキャッシュ"
 
-#: crates/app/qml/PreferencesDialog.qml:344
+#: crates/app/qml/PreferencesDialog.qml:367
 msgid "Change shortcut for "
 msgstr "ショートカットを変更: "
 
-#: crates/app/qml/PreferencesDialog.qml:399
+#: crates/app/qml/PreferencesDialog.qml:422
 msgid "Change the Shelf key"
 msgstr "シェルフのキーを変更"
 
-#: crates/app/qml/PreferencesDialog.qml:280
+#: crates/app/qml/PreferencesDialog.qml:303
 msgid "Choose Change, then press the keys you want."
 msgstr "「変更」を選んでから、使いたいキーを押してください。"
 
@@ -333,9 +333,17 @@ msgstr "見た目を選択: “"
 msgid "Clear"
 msgstr "クリア"
 
-#: crates/app/qml/PreferencesDialog.qml:349
+#: crates/app/qml/PreferencesDialog.qml:372
 msgid "Clear shortcut for "
 msgstr "ショートカットを削除: "
+
+#: crates/app/qml/PreferencesDialog.qml:428
+msgid "Click it to open the Shelf. With the icon on, closing the window keeps Cairn running for the Shelf."
+msgstr "クリックするとシェルフが開きます。アイコンがオンのとき、ウィンドウを閉じても Cairn はシェルフのために動き続けます。"
+
+#: crates/app/src/tray.rs:74
+msgid "Click to open the Shelf"
+msgstr "クリックしてシェルフを開く"
 
 #: crates/app/qml/Header.qml:205 crates/app/qml/PeekOverlay.qml:73
 #: crates/app/qml/Sheet.qml:60 crates/app/qml/TidyDialog.qml:84
@@ -376,7 +384,7 @@ msgid "Colour "
 msgstr "色: "
 
 #: crates/app/qml/Rail.qml:57 crates/app/qml/Sidebar.qml:189
-#: crates/app/qml/Sidebar.qml:198 crates/app/src/controller.rs:1339
+#: crates/app/qml/Sidebar.qml:198 crates/app/src/controller.rs:1362
 msgid "Computer"
 msgstr "コンピューター"
 
@@ -417,7 +425,7 @@ msgstr "コマンドをコピーしました。端末に貼り付けて実行し
 msgid "Copied the remove command. Paste it into a terminal to run it."
 msgstr "削除コマンドをコピーしました。端末に貼り付けて実行してください。"
 
-#: crates/app/qml/CleanPage.qml:210 crates/app/qml/Main.qml:511
+#: crates/app/qml/CleanPage.qml:210 crates/app/qml/Main.qml:514
 #: crates/app/src/actions.rs:69 crates/app/src/controller/ops.rs:343
 msgid "Copy"
 msgstr "コピー"
@@ -446,7 +454,7 @@ msgstr "削除するコマンドをコピー: "
 msgid "Copy to the other pane"
 msgstr "もう一方のペインにコピー"
 
-#: crates/app/qml/Main.qml:458
+#: crates/app/qml/Main.qml:461
 msgid "Copy to “"
 msgstr "コピー先: “"
 
@@ -496,7 +504,7 @@ msgstr "起動できませんでした:"
 msgid "Could not stop it"
 msgstr "停止できませんでした"
 
-#: crates/app/src/controller.rs:1370
+#: crates/app/src/controller.rs:1393
 msgid "Couldn't Open This Folder"
 msgstr "このフォルダーを開けませんでした"
 
@@ -504,7 +512,7 @@ msgstr "このフォルダーを開けませんでした"
 msgid "Create"
 msgstr "作成"
 
-#: crates/app/qml/Header.qml:92 crates/app/src/controller.rs:1772
+#: crates/app/qml/Header.qml:92 crates/app/src/controller.rs:1795
 msgid "Created"
 msgstr "作成日時"
 
@@ -512,7 +520,7 @@ msgstr "作成日時"
 msgid "Ctrl+L to type a path"
 msgstr "Ctrl+L でパスを入力"
 
-#: crates/app/qml/Main.qml:512 crates/app/src/actions.rs:70
+#: crates/app/qml/Main.qml:515 crates/app/src/actions.rs:70
 #: crates/app/src/controller/ops.rs:282
 msgid "Cut"
 msgstr "切り取り"
@@ -521,7 +529,7 @@ msgstr "切り取り"
 msgid "Cycles"
 msgstr "サイクル数"
 
-#: crates/app/qml/Header.qml:187 crates/app/qml/PreferencesDialog.qml:259
+#: crates/app/qml/Header.qml:187 crates/app/qml/PreferencesDialog.qml:282
 #: crates/app/qml/WelcomeDialog.qml:169
 msgid "Dark"
 msgstr "ダーク"
@@ -534,7 +542,7 @@ msgstr "削除された Flatpak や Snap アプリが残したデータで、3 �
 msgid "Date"
 msgstr "日付"
 
-#: crates/app/qml/PreferencesDialog.qml:176
+#: crates/app/qml/PreferencesDialog.qml:199
 msgid "Default view"
 msgstr "既定の表示"
 
@@ -588,8 +596,8 @@ msgstr "ドキュメントとファイル"
 msgid "Downloads"
 msgstr "ダウンロード"
 
-#: crates/app/qml/PreferencesDialog.qml:237
-#: crates/app/qml/PreferencesDialog.qml:244
+#: crates/app/qml/PreferencesDialog.qml:260
+#: crates/app/qml/PreferencesDialog.qml:267
 msgid "Downloads folder"
 msgstr "ダウンロードフォルダー"
 
@@ -605,7 +613,7 @@ msgstr "ドライブ"
 msgid "Drop files here to keep them at hand. Nothing moves."
 msgstr "ここにファイルをドロップすると手元に置けます。ファイルは移動しません。"
 
-#: crates/app/qml/Main.qml:503 crates/app/src/controller/ops.rs:266
+#: crates/app/qml/Main.qml:506 crates/app/src/controller/ops.rs:266
 msgid "Duplicate"
 msgstr "複製"
 
@@ -637,7 +645,7 @@ msgstr "ワークスペースを編集"
 msgid "Editor"
 msgstr "エディター"
 
-#: crates/app/qml/PreferencesDialog.qml:232
+#: crates/app/qml/PreferencesDialog.qml:255
 msgid "Editor (Shift+F4)"
 msgstr "エディター (Shift+F4)"
 
@@ -649,7 +657,7 @@ msgstr "取り出す: "
 msgid "Emptied the Trash"
 msgstr "ゴミ箱を空にしました"
 
-#: crates/app/src/controller.rs:1419
+#: crates/app/src/controller.rs:1442
 msgid "Empty"
 msgstr "空"
 
@@ -657,7 +665,7 @@ msgstr "空"
 msgid "Empty Trash"
 msgstr "ゴミ箱を空にする"
 
-#: crates/app/qml/CleanPage.qml:230 crates/app/qml/Main.qml:522
+#: crates/app/qml/CleanPage.qml:230 crates/app/qml/Main.qml:525
 #: crates/app/qml/TrashBar.qml:25
 msgid "Empty Trash…"
 msgstr "ゴミ箱を空にする…"
@@ -695,8 +703,8 @@ msgstr "お気に入りに追加 "
 msgid "Favourites"
 msgstr "お気に入り"
 
-#: crates/app/qml/PreferencesDialog.qml:218
-#: crates/app/qml/PreferencesDialog.qml:225
+#: crates/app/qml/PreferencesDialog.qml:241
+#: crates/app/qml/PreferencesDialog.qml:248
 msgid "Fetch link titles and pictures"
 msgstr "リンクのタイトルと画像を取得"
 
@@ -708,7 +716,7 @@ msgstr "ファイル操作は利用できません"
 msgid "File system"
 msgstr "ファイルシステム"
 
-#: crates/app/src/controller.rs:1650
+#: crates/app/src/controller.rs:1673
 msgid "Files"
 msgstr "ファイル"
 
@@ -725,8 +733,8 @@ msgstr "このフォルダーを絞り込む"
 msgid "Filters"
 msgstr "フィルター"
 
-#: crates/app/qml/PreferencesDialog.qml:288
-#: crates/app/qml/PreferencesDialog.qml:289
+#: crates/app/qml/PreferencesDialog.qml:311
+#: crates/app/qml/PreferencesDialog.qml:312
 msgid "Find a shortcut"
 msgstr "ショートカットを検索"
 
@@ -742,12 +750,12 @@ msgstr "フォルダーとファイルを検索"
 msgid "Firewall"
 msgstr "ファイアウォール"
 
-#: crates/app/src/controller.rs:1513 crates/app/src/controller.rs:1693
-#: crates/app/src/controller.rs:1763
+#: crates/app/src/controller.rs:1536 crates/app/src/controller.rs:1716
+#: crates/app/src/controller.rs:1786
 msgid "Folder"
 msgstr "フォルダー"
 
-#: crates/app/src/controller.rs:1392
+#: crates/app/src/controller.rs:1415
 msgid "Folder Is Empty"
 msgstr "フォルダーは空です"
 
@@ -755,11 +763,11 @@ msgstr "フォルダーは空です"
 msgid "Folder contents"
 msgstr "フォルダーの内容"
 
-#: crates/app/qml/PreferencesDialog.qml:471
+#: crates/app/qml/PreferencesDialog.qml:504
 msgid "Folder to leave out"
 msgstr "除外するフォルダー"
 
-#: crates/app/src/controller.rs:1565 crates/app/src/controller.rs:1642
+#: crates/app/src/controller.rs:1588 crates/app/src/controller.rs:1665
 #: crates/app/src/controller/search.rs:278
 #: crates/app/src/controller/workspaces.rs:385
 msgid "Folders"
@@ -769,7 +777,7 @@ msgstr "フォルダー"
 msgid "Folders and files by name, as you type."
 msgstr "入力しながら名前でフォルダーとファイルを探します。"
 
-#: crates/app/qml/PreferencesDialog.qml:200
+#: crates/app/qml/PreferencesDialog.qml:223
 msgid "Folders open in Cairn, and other apps' “Show in folder” comes here."
 msgstr "フォルダーが Cairn で開き、他のアプリの「フォルダーで表示」もここに来ます。"
 
@@ -798,7 +806,7 @@ msgid "Free"
 msgstr "空き"
 
 #: crates/app/qml/AboutPage.qml:177 crates/app/qml/CleanPage.qml:13
-#: crates/app/qml/CleanPage.qml:37 crates/app/qml/Main.qml:238
+#: crates/app/qml/CleanPage.qml:37 crates/app/qml/Main.qml:241
 msgid "Free Up Space"
 msgstr "空き領域を増やす"
 
@@ -810,7 +818,7 @@ msgstr "空き領域を増やす…"
 msgid "Free up space"
 msgstr "空き領域を増やす"
 
-#: crates/app/src/controller.rs:1510
+#: crates/app/src/controller.rs:1533
 msgid "From"
 msgstr "提供元"
 
@@ -826,7 +834,7 @@ msgstr "満充電容量"
 msgid "GPL-3.0-or-later"
 msgstr "GPL-3.0-or-later"
 
-#: crates/app/qml/PreferencesDialog.qml:148
+#: crates/app/qml/PreferencesDialog.qml:171
 msgid "General"
 msgstr "一般"
 
@@ -851,7 +859,7 @@ msgid "Gradle downloads and builds them again"
 msgstr "Gradle が再ダウンロードしてビルドし直します"
 
 #: crates/app/qml/BookmarksPage.qml:44 crates/app/qml/BookmarksPage.qml:56
-#: crates/app/qml/Header.qml:78 crates/app/qml/PreferencesDialog.qml:177
+#: crates/app/qml/Header.qml:78 crates/app/qml/PreferencesDialog.qml:200
 msgid "Grid"
 msgstr "グリッド"
 
@@ -883,7 +891,7 @@ msgstr "高い"
 msgid "Holding"
 msgstr "保留"
 
-#: crates/app/qml/PreferencesDialog.qml:446 crates/app/src/controller.rs:1338
+#: crates/app/qml/PreferencesDialog.qml:479 crates/app/src/controller.rs:1361
 #: crates/app/src/controller/shelf.rs:315 crates/app/src/sidebar.rs:44
 msgid "Home"
 msgstr "ホーム"
@@ -942,11 +950,11 @@ msgstr "使用中"
 msgid "In use since"
 msgstr "使用開始"
 
-#: crates/app/qml/PreferencesDialog.qml:446
+#: crates/app/qml/PreferencesDialog.qml:479
 msgid "Indexed: "
 msgstr "インデックス対象: "
 
-#: crates/app/qml/PreferencesDialog.qml:416
+#: crates/app/qml/PreferencesDialog.qml:449
 msgid "Indexing is paused."
 msgstr "インデックス作成は一時停止中です。"
 
@@ -954,8 +962,8 @@ msgstr "インデックス作成は一時停止中です。"
 msgid "Info"
 msgstr "情報"
 
-#: crates/app/qml/InstalledPage.qml:13 crates/app/qml/Main.qml:238
-#: crates/app/src/controller.rs:1743
+#: crates/app/qml/InstalledPage.qml:13 crates/app/qml/Main.qml:241
+#: crates/app/src/controller.rs:1766
 msgid "Installed"
 msgstr "インストール済み"
 
@@ -967,7 +975,7 @@ msgstr "すでにインストールされているアプリのインストーラ
 msgid "Installers"
 msgstr "インストーラー"
 
-#: crates/app/src/controller.rs:1362
+#: crates/app/src/controller.rs:1385
 msgid "It was moved or deleted, or its drive is no longer connected."
 msgstr "移動または削除されたか、ドライブが接続されていません。"
 
@@ -1007,7 +1015,7 @@ msgstr "残すもの:"
 msgid "Kernel"
 msgstr "カーネル"
 
-#: crates/app/qml/PreferencesDialog.qml:382
+#: crates/app/qml/PreferencesDialog.qml:405
 msgid "Key"
 msgstr "キー"
 
@@ -1015,12 +1023,12 @@ msgstr "キー"
 msgid "Keyboard Shortcuts"
 msgstr "キーボードショートカット"
 
-#: crates/app/qml/PreferencesDialog.qml:298
+#: crates/app/qml/PreferencesDialog.qml:321
 msgid "Keyboard shortcuts"
 msgstr "キーボードショートカット"
 
 #: crates/app/qml/FolderList.qml:33 crates/app/qml/Header.qml:71
-#: crates/app/qml/Header.qml:93 crates/app/src/controller.rs:1767
+#: crates/app/qml/Header.qml:93 crates/app/src/controller.rs:1790
 msgid "Kind"
 msgstr "種類"
 
@@ -1028,7 +1036,7 @@ msgstr "種類"
 msgid "LEFT WHERE THEY ARE"
 msgstr "そのまま残るもの"
 
-#: crates/app/qml/PreferencesDialog.qml:263
+#: crates/app/qml/PreferencesDialog.qml:286
 #: crates/app/qml/WelcomeDialog.qml:191
 msgid "Large"
 msgstr "大"
@@ -1041,15 +1049,15 @@ msgstr "大きく"
 msgid "Latest downloads"
 msgstr "最近のダウンロード"
 
-#: crates/app/qml/PreferencesDialog.qml:476
+#: crates/app/qml/PreferencesDialog.qml:509
 msgid "Leave Out"
 msgstr "除外"
 
-#: crates/app/qml/PreferencesDialog.qml:449
+#: crates/app/qml/PreferencesDialog.qml:482
 msgid "Left out"
 msgstr "除外中"
 
-#: crates/app/qml/Header.qml:186 crates/app/qml/PreferencesDialog.qml:259
+#: crates/app/qml/Header.qml:186 crates/app/qml/PreferencesDialog.qml:282
 #: crates/app/qml/WelcomeDialog.qml:169
 msgid "Light"
 msgstr "ライト"
@@ -1071,7 +1079,7 @@ msgid "Links"
 msgstr "リンク"
 
 #: crates/app/qml/BookmarksPage.qml:44 crates/app/qml/BookmarksPage.qml:56
-#: crates/app/qml/Header.qml:78 crates/app/qml/PreferencesDialog.qml:177
+#: crates/app/qml/Header.qml:78 crates/app/qml/PreferencesDialog.qml:200
 msgid "List"
 msgstr "リスト"
 
@@ -1157,7 +1165,7 @@ msgstr "最大化"
 msgid "Maximum capacity"
 msgstr "最大容量"
 
-#: crates/app/qml/PreferencesDialog.qml:263
+#: crates/app/qml/PreferencesDialog.qml:286
 #: crates/app/qml/WelcomeDialog.qml:191
 msgid "Medium"
 msgstr "中"
@@ -1179,7 +1187,7 @@ msgid "Minimize"
 msgstr "最小化"
 
 #: crates/app/qml/FolderList.qml:33 crates/app/qml/Header.qml:91
-#: crates/app/qml/RightPane.qml:31 crates/app/src/controller.rs:1771
+#: crates/app/qml/RightPane.qml:31 crates/app/src/controller.rs:1794
 msgid "Modified"
 msgstr "更新日時"
 
@@ -1198,7 +1206,7 @@ msgstr "その他: "
 msgid "Move"
 msgstr "移動"
 
-#: crates/app/qml/Main.qml:460
+#: crates/app/qml/Main.qml:463
 msgid "Move   F6"
 msgstr "移動   F6"
 
@@ -1214,7 +1222,7 @@ msgstr "上へ移動"
 msgid "Move ticked items to the Trash"
 msgstr "チェックした項目をゴミ箱へ移動"
 
-#: crates/app/qml/CleanPage.qml:364 crates/app/qml/Main.qml:514
+#: crates/app/qml/CleanPage.qml:364 crates/app/qml/Main.qml:517
 #: crates/app/qml/PreviewPane.qml:116
 msgid "Move to Trash"
 msgstr "ゴミ箱へ移動"
@@ -1254,7 +1262,7 @@ msgstr "管理者が必要"
 msgid "New Collection"
 msgstr "新しいコレクション"
 
-#: crates/app/qml/Header.qml:177 crates/app/qml/Main.qml:525
+#: crates/app/qml/Header.qml:177 crates/app/qml/Main.qml:528
 msgid "New Folder"
 msgstr "新しいフォルダー"
 
@@ -1286,11 +1294,11 @@ msgstr "次へ"
 msgid "No"
 msgstr "いいえ"
 
-#: crates/app/src/controller.rs:1376
+#: crates/app/src/controller.rs:1399
 msgid "No Matches"
 msgstr "一致なし"
 
-#: crates/app/src/controller.rs:975
+#: crates/app/src/controller.rs:983
 msgid "No app could open"
 msgstr "開けるアプリがありません:"
 
@@ -1298,15 +1306,15 @@ msgstr "開けるアプリがありません:"
 msgid "No editor found. Choose one in Preferences › General."
 msgstr "エディターが見つかりません。設定 › 一般 で選んでください。"
 
-#: crates/app/src/controller.rs:1167 crates/app/src/controller/downloads.rs:132
+#: crates/app/src/controller.rs:1175 crates/app/src/controller/downloads.rs:132
 msgid "No folder called"
 msgstr "次の名前のフォルダーはありません:"
 
-#: crates/app/src/controller.rs:1004
+#: crates/app/src/controller.rs:1012
 msgid "No installed app can open this kind of file"
 msgstr "この種類のファイルを開けるアプリがインストールされていません"
 
-#: crates/app/src/controller.rs:1385
+#: crates/app/src/controller.rs:1408
 msgid "No items in this folder are"
 msgstr "このフォルダーに該当する項目はありません:"
 
@@ -1314,7 +1322,7 @@ msgstr "このフォルダーに該当する項目はありません:"
 msgid "No links here yet. Paste a link with Ctrl+V, drop one onto this page, or choose Add Link."
 msgstr "まだリンクはありません。Ctrl+V で貼り付けるか、このページにドロップするか、「リンクを追加」を選んでください。"
 
-#: crates/app/src/controller.rs:1377
+#: crates/app/src/controller.rs:1400
 msgid "No names in this folder contain what you typed."
 msgstr "入力した文字を含む名前はこのフォルダーにありません。"
 
@@ -1326,7 +1334,7 @@ msgstr "コーディングエージェント用のプロジェクトはまだあ
 msgid "No terminal found. Choose one in Preferences › General."
 msgstr "端末が見つかりません。設定 › 一般 で選んでください。"
 
-#: crates/app/qml/Header.qml:71 crates/app/qml/PreferencesDialog.qml:330
+#: crates/app/qml/Header.qml:71 crates/app/qml/PreferencesDialog.qml:353
 msgid "None"
 msgstr "なし"
 
@@ -1387,7 +1395,7 @@ msgstr "その名前のものはありません。"
 msgid "Nothing is deleted, and Undo puts everything back."
 msgstr "何も削除されず、元に戻すですべて戻ります。"
 
-#: crates/app/src/controller.rs:1393
+#: crates/app/src/controller.rs:1416
 msgid "Nothing is in this folder yet."
 msgstr "このフォルダーにはまだ何もありません。"
 
@@ -1395,7 +1403,7 @@ msgstr "このフォルダーにはまだ何もありません。"
 msgid "Nothing is running."
 msgstr "実行中の操作はありません。"
 
-#: crates/app/src/controller.rs:1382
+#: crates/app/src/controller.rs:1405
 msgid "Nothing of This Kind"
 msgstr "この種類はありません"
 
@@ -1465,7 +1473,7 @@ msgstr "localhost 上"
 msgid "Only places their tools rebuild by themselves. You lose nothing but time: the next build or install is slower."
 msgstr "ツール自身が再作成する場所だけです。失うのは時間だけで、次のビルドやインストールが遅くなります。"
 
-#: crates/app/qml/AgentsPage.qml:231 crates/app/qml/Main.qml:499
+#: crates/app/qml/AgentsPage.qml:231 crates/app/qml/Main.qml:502
 #: crates/app/qml/PeekOverlay.qml:71
 msgid "Open"
 msgstr "開く"
@@ -1474,15 +1482,19 @@ msgstr "開く"
 msgid "Open With"
 msgstr "アプリで開く"
 
-#: crates/app/qml/Main.qml:500
+#: crates/app/qml/Main.qml:503
 msgid "Open With…"
 msgstr "アプリで開く…"
 
-#: crates/app/qml/Main.qml:506 crates/app/qml/Main.qml:528
+#: crates/app/qml/PreferencesDialog.qml:432
+msgid "Open at login"
+msgstr "ログイン時に起動"
+
+#: crates/app/qml/Main.qml:509 crates/app/qml/Main.qml:531
 msgid "Open in Editor"
 msgstr "エディターで開く"
 
-#: crates/app/qml/Main.qml:505 crates/app/qml/Main.qml:527
+#: crates/app/qml/Main.qml:508 crates/app/qml/Main.qml:530
 msgid "Open in Terminal"
 msgstr "端末で開く"
 
@@ -1490,12 +1502,12 @@ msgstr "端末で開く"
 msgid "Open in the browser: port "
 msgstr "ブラウザーで開く: ポート "
 
-#: crates/app/src/controller.rs:1367
+#: crates/app/src/controller.rs:1390
 msgid "Open it from the folder that contains it."
 msgstr "それを含むフォルダーから開いてください。"
 
-#: crates/app/qml/PreferencesDialog.qml:369
-#: crates/app/qml/PreferencesDialog.qml:376
+#: crates/app/qml/PreferencesDialog.qml:392
+#: crates/app/qml/PreferencesDialog.qml:399
 msgid "Open the Shelf with a key"
 msgstr "キーでシェルフを開く"
 
@@ -1583,7 +1595,7 @@ msgstr "ページ"
 msgid "Pane"
 msgstr "ペイン"
 
-#: crates/app/qml/Header.qml:178 crates/app/qml/Main.qml:526
+#: crates/app/qml/Header.qml:178 crates/app/qml/Main.qml:529
 #: crates/app/src/actions.rs:71
 msgid "Paste"
 msgstr "貼り付け"
@@ -1592,13 +1604,13 @@ msgstr "貼り付け"
 msgid "Pause"
 msgstr "一時停止"
 
-#: crates/app/qml/PreferencesDialog.qml:422
-#: crates/app/qml/PreferencesDialog.qml:426
+#: crates/app/qml/PreferencesDialog.qml:455
+#: crates/app/qml/PreferencesDialog.qml:459
 msgid "Pause indexing"
 msgstr "インデックス作成を一時停止"
 
-#: crates/app/qml/PreferencesDialog.qml:434
-#: crates/app/qml/PreferencesDialog.qml:438
+#: crates/app/qml/PreferencesDialog.qml:467
+#: crates/app/qml/PreferencesDialog.qml:471
 msgid "Pause on battery"
 msgstr "バッテリー駆動中は一時停止"
 
@@ -1622,7 +1634,7 @@ msgstr "期間"
 msgid "Pin a folder from its menu to see it here."
 msgstr "フォルダのメニューからピン留めすると、ここに表示されます。"
 
-#: crates/app/qml/Main.qml:509
+#: crates/app/qml/Main.qml:512
 msgid "Pin to Shelf"
 msgstr "シェルフにピン留め"
 
@@ -1647,16 +1659,16 @@ msgstr "電源アダプター"
 msgid "Preferences"
 msgstr "設定"
 
-#: crates/app/qml/PreferencesDialog.qml:147
+#: crates/app/qml/PreferencesDialog.qml:170
 msgid "Preferences pages"
 msgstr "設定のページ"
 
-#: crates/app/qml/PreferencesDialog.qml:328
-#: crates/app/qml/PreferencesDialog.qml:386
+#: crates/app/qml/PreferencesDialog.qml:351
+#: crates/app/qml/PreferencesDialog.qml:409
 msgid "Press keys…"
 msgstr "キーを押してください…"
 
-#: crates/app/qml/PreferencesDialog.qml:279
+#: crates/app/qml/PreferencesDialog.qml:302
 msgid "Press the new shortcut for “"
 msgstr "次の新しいショートカットを押してください:「"
 
@@ -1681,7 +1693,7 @@ msgstr "プロセッサー"
 msgid "Projects"
 msgstr "プロジェクト"
 
-#: crates/app/qml/Main.qml:497 crates/app/qml/TrashBar.qml:24
+#: crates/app/qml/Main.qml:500 crates/app/qml/TrashBar.qml:24
 msgid "Put Back"
 msgstr "元に戻す（復元）"
 
@@ -1697,7 +1709,7 @@ msgstr "クイックアクセス"
 msgid "Quit"
 msgstr "終了"
 
-#: crates/app/qml/PreferencesDialog.qml:478
+#: crates/app/qml/PreferencesDialog.qml:511
 msgid "Rebuild"
 msgstr "再構築"
 
@@ -1734,7 +1746,7 @@ msgstr "名前を変更"
 msgid "Renamed to"
 msgstr "新しい名前:"
 
-#: crates/app/qml/Main.qml:502
+#: crates/app/qml/Main.qml:505
 msgid "Rename…"
 msgstr "名前を変更…"
 
@@ -1750,7 +1762,7 @@ msgstr "置き換えると既存の項目はゴミ箱に入るので、元に戻
 msgid "Report a Bug"
 msgstr "不具合を報告"
 
-#: crates/app/qml/PreferencesDialog.qml:282
+#: crates/app/qml/PreferencesDialog.qml:305
 msgid "Restore Defaults"
 msgstr "既定に戻す"
 
@@ -1807,7 +1819,7 @@ msgstr "一覧を保存しました:"
 msgid "Screen recordings older than 90 days."
 msgstr "90 日より前の画面録画。"
 
-#: crates/app/qml/PreferencesDialog.qml:150
+#: crates/app/qml/PreferencesDialog.qml:173
 msgid "Search and Index"
 msgstr "検索とインデックス"
 
@@ -1831,8 +1843,8 @@ msgstr "セキュリティ"
 msgid "See the plan, then sort. One Undo puts it back."
 msgstr "計画を見てから整理。元に戻すは 1 回で済みます。"
 
-#: crates/app/qml/Header.qml:179 crates/app/qml/Main.qml:523
-#: crates/app/qml/Main.qml:530
+#: crates/app/qml/Header.qml:179 crates/app/qml/Main.qml:526
+#: crates/app/qml/Main.qml:533
 msgid "Select All"
 msgstr "すべて選択"
 
@@ -1840,12 +1852,12 @@ msgstr "すべて選択"
 msgid "Service recommended"
 msgstr "点検をおすすめします"
 
-#: crates/app/qml/PreferencesDialog.qml:400 crates/app/qml/ShelfWindow.qml:18
+#: crates/app/qml/PreferencesDialog.qml:423 crates/app/qml/ShelfWindow.qml:18
 #: crates/app/qml/ShelfWindow.qml:37 crates/app/qml/ShelfWindow.qml:63
 msgid "Shelf"
 msgstr "シェルフ"
 
-#: crates/app/qml/PreferencesDialog.qml:149
+#: crates/app/qml/PreferencesDialog.qml:172
 msgid "Shelf and Tray"
 msgstr "シェルフとトレイ"
 
@@ -1853,7 +1865,7 @@ msgstr "シェルフとトレイ"
 msgid "Shell"
 msgstr "シェル"
 
-#: crates/app/qml/PreferencesDialog.qml:149
+#: crates/app/qml/PreferencesDialog.qml:172
 msgid "Shortcuts"
 msgstr "ショートカット"
 
@@ -1861,7 +1873,7 @@ msgstr "ショートカット"
 msgid "Show "
 msgstr "表示: "
 
-#: crates/app/qml/Header.qml:181 crates/app/qml/Main.qml:531
+#: crates/app/qml/Header.qml:181 crates/app/qml/Main.qml:534
 msgid "Show Hidden Files"
 msgstr "隠しファイルを表示"
 
@@ -1869,8 +1881,12 @@ msgstr "隠しファイルを表示"
 msgid "Show Names"
 msgstr "名前を表示"
 
-#: crates/app/qml/PreferencesDialog.qml:180
-#: crates/app/qml/PreferencesDialog.qml:185 crates/app/src/actions.rs:53
+#: crates/app/qml/PreferencesDialog.qml:427
+msgid "Show an icon in the top bar"
+msgstr "トップバーにアイコンを表示"
+
+#: crates/app/qml/PreferencesDialog.qml:203
+#: crates/app/qml/PreferencesDialog.qml:208 crates/app/src/actions.rs:53
 msgid "Show hidden files"
 msgstr "隠しファイルを表示"
 
@@ -1891,7 +1907,7 @@ msgstr "サイズ"
 msgid "Skip"
 msgstr "スキップ"
 
-#: crates/app/qml/PreferencesDialog.qml:263
+#: crates/app/qml/PreferencesDialog.qml:286
 #: crates/app/qml/WelcomeDialog.qml:191
 msgid "Small"
 msgstr "小"
@@ -1940,6 +1956,10 @@ msgstr "インデックス作成を開始"
 msgid "Start Using Cairn"
 msgstr "Cairn を使い始める"
 
+#: crates/app/qml/PreferencesDialog.qml:433
+msgid "Starts Cairn in the background, without a window, so the Shelf and the icon are ready."
+msgstr "Cairn をウィンドウなしでバックグラウンド起動し、シェルフとアイコンを使えるようにします。"
+
 #: crates/app/src/controller/about.rs:241
 msgid "Startup disk"
 msgstr "起動ディスク"
@@ -1952,7 +1972,7 @@ msgstr "ステップ "
 msgid "Stop"
 msgstr "停止"
 
-#: crates/app/qml/PreferencesDialog.qml:459
+#: crates/app/qml/PreferencesDialog.qml:492
 msgid "Stop leaving out "
 msgstr "除外をやめる: "
 
@@ -1964,7 +1984,7 @@ msgstr "サーバーを停止しますか？"
 msgid "Stop the server on port "
 msgstr "サーバーを停止: ポート "
 
-#: crates/app/qml/PreferencesDialog.qml:258
+#: crates/app/qml/PreferencesDialog.qml:281
 #: crates/app/qml/WelcomeDialog.qml:165 crates/app/qml/WelcomeDialog.qml:168
 msgid "Style"
 msgstr "スタイル"
@@ -1993,12 +2013,12 @@ msgstr "シンボル: "
 msgid "Symbol and Colour"
 msgstr "シンボルと色"
 
-#: crates/app/qml/Main.qml:504
+#: crates/app/qml/Main.qml:507
 msgid "Symbol and Colour…"
 msgstr "シンボルと色…"
 
-#: crates/app/qml/PreferencesDialog.qml:259
-#: crates/app/qml/PreferencesDialog.qml:261
+#: crates/app/qml/PreferencesDialog.qml:282
+#: crates/app/qml/PreferencesDialog.qml:284
 #: crates/app/qml/WelcomeDialog.qml:169 crates/app/qml/WelcomeDialog.qml:180
 msgid "System"
 msgstr "システム"
@@ -2011,7 +2031,7 @@ msgstr "システムとその他"
 msgid "System journal"
 msgstr "システムジャーナル"
 
-#: crates/app/qml/Main.qml:465
+#: crates/app/qml/Main.qml:468
 msgid "Tab switches pane · drag to move, Ctrl-drag to copy"
 msgstr "Tab でペイン切り替え · ドラッグで移動、Ctrl+ドラッグでコピー"
 
@@ -2032,7 +2052,7 @@ msgstr "保留から外す: "
 msgid "Terminal"
 msgstr "端末"
 
-#: crates/app/qml/PreferencesDialog.qml:231
+#: crates/app/qml/PreferencesDialog.qml:254
 msgid "Terminal (F4)"
 msgstr "端末 (F4)"
 
@@ -2060,11 +2080,11 @@ msgstr "その Snap はもうインストールされていません"
 msgid "The Trash is empty"
 msgstr "ゴミ箱は空です"
 
-#: crates/app/qml/PreferencesDialog.qml:415
+#: crates/app/qml/PreferencesDialog.qml:448
 msgid "The index is not running."
 msgstr "インデックスは動作していません。"
 
-#: crates/app/qml/PreferencesDialog.qml:416
+#: crates/app/qml/PreferencesDialog.qml:449
 msgid "The index is up to date and following changes."
 msgstr "インデックスは最新で、変更を追跡しています。"
 
@@ -2088,7 +2108,7 @@ msgstr "検索インデックスは動作していません。"
 msgid "The shortcut"
 msgstr "ショートカット"
 
-#: crates/app/qml/PreferencesDialog.qml:242
+#: crates/app/qml/PreferencesDialog.qml:265
 msgid "The system’s Downloads"
 msgstr "システムのダウンロードフォルダー"
 
@@ -2104,11 +2124,11 @@ msgstr "次の名前のワークスペースはありません:"
 msgid "Thermal state"
 msgstr "温度の状態"
 
-#: crates/app/src/controller.rs:1361
+#: crates/app/src/controller.rs:1384
 msgid "This Folder Is Gone"
 msgstr "このフォルダーはありません"
 
-#: crates/app/src/controller.rs:1366
+#: crates/app/src/controller.rs:1389
 msgid "This Is Not a Folder"
 msgstr "これはフォルダーではありません"
 
@@ -2116,7 +2136,7 @@ msgstr "これはフォルダーではありません"
 msgid "This computer"
 msgstr "このコンピューター"
 
-#: crates/app/src/controller.rs:719
+#: crates/app/src/controller.rs:725
 msgid "This desktop has no custom shortcuts; open the Shelf with “cairn shelf”"
 msgstr "このデスクトップにはカスタムショートカットがありません。「cairn shelf」でシェルフを開いてください"
 
@@ -2173,8 +2193,8 @@ msgstr "ツール"
 msgid "Tools"
 msgstr "ツール"
 
-#: crates/app/qml/TrashBar.qml:10 crates/app/src/controller.rs:1335
-#: crates/app/src/controller.rs:1856 crates/app/src/sidebar.rs:61
+#: crates/app/qml/TrashBar.qml:10 crates/app/src/controller.rs:1358
+#: crates/app/src/controller.rs:1879 crates/app/src/sidebar.rs:61
 msgid "Trash"
 msgstr "ゴミ箱"
 
@@ -2227,8 +2247,8 @@ msgstr "使用量"
 msgid "Usage is read from Claude Code's logs; other tools keep no local usage Cairn can read yet."
 msgstr "使用量は Claude Code のログから読み取ります。他のツールにはまだ Cairn が読めるローカルの使用量がありません。"
 
-#: crates/app/qml/PreferencesDialog.qml:198
-#: crates/app/qml/PreferencesDialog.qml:205
+#: crates/app/qml/PreferencesDialog.qml:221
+#: crates/app/qml/PreferencesDialog.qml:228
 msgid "Use as default file manager"
 msgstr "既定のファイルマネージャーとして使う"
 
@@ -2289,11 +2309,11 @@ msgstr "用途"
 msgid "What’s New in Cairn "
 msgstr "Cairn の新機能 "
 
-#: crates/app/qml/PreferencesDialog.qml:220
+#: crates/app/qml/PreferencesDialog.qml:243
 msgid "When you save a bookmark, Cairn contacts that link’s site for its title and picture. It is the only request Cairn makes."
 msgstr "ブックマークを保存すると、Cairn はタイトルと画像を得るためにそのリンクのサイトに接続します。Cairn が行う通信はこれだけです。"
 
-#: crates/app/src/controller.rs:1774 crates/app/src/controller/peek.rs:192
+#: crates/app/src/controller.rs:1797 crates/app/src/controller/peek.rs:192
 msgid "Where"
 msgstr "場所"
 
@@ -2309,7 +2329,7 @@ msgstr "移動先: "
 msgid "Working…"
 msgstr "処理中…"
 
-#: crates/app/qml/PreferencesDialog.qml:371
+#: crates/app/qml/PreferencesDialog.qml:394
 msgid "Works from any app. Cairn adds it to GNOME’s keyboard shortcuts and removes it when you turn this off."
 msgstr "どのアプリからでも使えます。Cairn が GNOME のキーボードショートカットに追加し、オフにすると削除します。"
 
@@ -2353,7 +2373,7 @@ msgstr "はい (LUKS)"
 msgid "Yesterday, %H:%M"
 msgstr "昨日 %H:%M"
 
-#: crates/app/src/controller.rs:1356
+#: crates/app/src/controller.rs:1379
 msgid "You Can't Open This Folder"
 msgstr "このフォルダーは開けません"
 
@@ -2365,7 +2385,7 @@ msgstr "これらは設定 (Ctrl+,) でいつでも変更できます。"
 msgid "You could free about"
 msgstr "空けられる容量の目安:"
 
-#: crates/app/src/controller.rs:1357
+#: crates/app/src/controller.rs:1380
 msgid "You don't have permission to see what's inside."
 msgstr "中身を見る権限がありません。"
 
@@ -2398,7 +2418,7 @@ msgstr "すでに"
 msgid "and "
 msgstr "ほか "
 
-#: crates/app/src/controller.rs:1440
+#: crates/app/src/controller.rs:1463
 msgid "available"
 msgstr "利用可能"
 
@@ -2450,7 +2470,7 @@ msgstr "推定"
 msgid "for"
 msgstr "対象:"
 
-#: crates/app/src/controller.rs:1727
+#: crates/app/src/controller.rs:1750
 msgid "free"
 msgstr "空き"
 
@@ -2555,7 +2575,7 @@ msgstr "か月"
 msgid "new folder"
 msgstr "新しいフォルダー"
 
-#: crates/app/qml/PreferencesDialog.qml:319
+#: crates/app/qml/PreferencesDialog.qml:342
 #: crates/app/qml/ShortcutsDialog.qml:24
 msgid "no shortcut"
 msgstr "ショートカットなし"
@@ -2622,7 +2642,7 @@ msgstr "件"
 msgid "results"
 msgstr "件"
 
-#: crates/app/src/controller.rs:1437 crates/app/src/controller/pane.rs:336
+#: crates/app/src/controller.rs:1460 crates/app/src/controller/pane.rs:336
 msgid "selected"
 msgstr "選択中"
 
@@ -2775,7 +2795,7 @@ msgstr "” はすでに次の場所にあります: “"
 msgid "” looks. It keeps this look when renamed or moved."
 msgstr "”。名前を変えても移動しても、この見た目は保たれます。"
 
-#: crates/app/qml/PreferencesDialog.qml:279
+#: crates/app/qml/PreferencesDialog.qml:302
 msgid "”. Esc cancels."
 msgstr "」。Esc で取り消し。"
 

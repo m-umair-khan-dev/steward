@@ -1,4 +1,5 @@
-//! Around the desktop (Phase 8): the Shelf's global shortcut (P8-T02).
+//! Around the desktop (Phase 8): the Shelf's global shortcut (P8-T02) and
+//! open at login (P8-T03).
 //!
 //! The shortcut is a GNOME custom keybinding that runs `cairn shelf`
 //! (ADR 0014: the GlobalShortcuts portal route waits for spike P8-S1 on
@@ -8,7 +9,7 @@
 
 use gio::prelude::*;
 
-use cairn_core::desktop::{KEYBINDING_PATH, gtk_accel};
+use cairn_core::desktop::{KEYBINDING_PATH, autostart_entry, gtk_accel};
 
 use crate::settings;
 
@@ -69,4 +70,23 @@ pub fn apply_shelf_shortcut() -> bool {
     }
     gio::Settings::sync();
     true
+}
+
+/// Open at login (P8-T03): an XDG autostart entry that starts Cairn in the
+/// background, written while the setting is on and removed when it is off.
+pub fn apply_open_at_login() {
+    let entry = glib::user_config_dir()
+        .join("autostart")
+        .join(format!("{}.desktop", cairn_core::APP_ID));
+    if settings::get().boolean("open-at-login") {
+        let exe = std::env::current_exe()
+            .map(|p| p.display().to_string())
+            .unwrap_or_else(|_| "cairn".into());
+        if let Some(dir) = entry.parent() {
+            let _ = std::fs::create_dir_all(dir); // E2-13 allow: the session's autostart folder, not user files
+        }
+        let _ = std::fs::write(&entry, autostart_entry(&exe)); // E2-13 allow: our own autostart entry
+    } else if entry.exists() {
+        let _ = std::fs::remove_file(&entry); // E2-13 allow: our own autostart entry
+    }
 }

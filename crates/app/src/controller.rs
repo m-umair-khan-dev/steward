@@ -382,6 +382,8 @@ pub fn init(notifier: impl Fn() + 'static) {
         c.bookmarks_load();
         // The Shelf's key matches the setting (P8-T02).
         crate::desktop::apply_shelf_shortcut();
+        crate::desktop::apply_open_at_login();
+        crate::tray::show(settings::get().boolean("tray-icon"));
         c.refresh_home_space();
         // Dual pane comes back with both its folders (E4-10).
         let s = settings::get();
@@ -714,6 +716,8 @@ impl Controller {
                 actions::set_state("toggle-sidebar", &settings.boolean(key).to_variant())
             }
             "bookmark-view" | "bookmark-fetch" => self.mark(dirty::TOOLS),
+            "tray-icon" => crate::tray::show(settings.boolean(key)),
+            "open-at-login" => crate::desktop::apply_open_at_login(),
             "shelf-shortcut-enabled" | "shelf-shortcut" => {
                 if !crate::desktop::apply_shelf_shortcut()
                     && settings.boolean("shelf-shortcut-enabled")
@@ -1186,6 +1190,21 @@ impl Controller {
 
     pub fn quit(&mut self) {
         self.emit(Event::Quit);
+    }
+
+    /// Brings the main window forward (shown again if it was hidden).
+    pub fn present(&mut self) {
+        self.emit(Event::Focus("raise"));
+    }
+
+    /// The window's close button: with the tray icon on, Cairn keeps running
+    /// in the background for the Shelf and tray (P8-T03); otherwise it quits.
+    pub fn close_window(&mut self) {
+        if settings::get().boolean("tray-icon") {
+            self.emit(Event::Focus("hide"));
+        } else {
+            self.quit();
+        }
     }
 
     pub fn set_width(&mut self, width: f64) {
@@ -1911,6 +1930,8 @@ impl Controller {
             "bookmarkFetch": s.boolean("bookmark-fetch"),
             "shelfShortcutEnabled": s.boolean("shelf-shortcut-enabled"),
             "shelfShortcut": s.string("shelf-shortcut").to_string(),
+            "trayIcon": s.boolean("tray-icon"),
+            "openAtLogin": s.boolean("open-at-login"),
             "openIn": self.openin_json(),
             // GNOME's dark mode, for Qt versions that cannot report it (24.04).
             "systemDark": self.interface.as_ref().is_some_and(|i| {
@@ -2014,6 +2035,7 @@ impl Controller {
             "markdown": self.markdown_test_json(),
             "bookmarks": self.bookmarks_test_json(),
             "shelf": self.shelf_test_json(),
+            "tray_item": crate::tray::item_name(),
             // Folder numbers as the cards show them, by name.
             "folder_stats": self.visible.iter().filter(|e| e.is_dir()).filter_map(|e| {
                 let (items, bytes) = self.folder_numbers(&e.data().file.path()?)?;

@@ -503,6 +503,10 @@ fn create() -> (gio::SimpleActionGroup, gio::SimpleActionGroup) {
     simple(&win, "shelf-close", || {
         controller::with(|c| c.shelf_close())
     });
+    simple(&win, "present", || controller::with(|c| c.present()));
+    simple(&win, "close-window", || {
+        controller::with(|c| c.close_window())
+    });
     with_string(&win, "shelf-open-pin", |n| {
         controller::with(|c| c.shelf_open_pin(n))
     });

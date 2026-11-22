@@ -107,6 +107,8 @@ pub fn parse(args: &[String], absolute: &dyn Fn(&str) -> String) -> Parsed {
                     "--new-workspace" => out.push(win("workspace-new", None)),
                     "--free-up-space" => out.push(win("tool-open", Some("clean".into()))),
                     "--add-link" => out.push(win("bookmark-add-ask", None)),
+                    // Start without a window (open at login); nothing to send.
+                    "--background" => {}
                     other if other.starts_with("--") => {}
                     path => out.push(win("go-to", Some(absolute(path)))),
                 }
@@ -156,7 +158,16 @@ pub fn forward(requests: &[Request], program: &str) -> bool {
     if !running(&bus) {
         return false;
     }
-    for request in requests {
+    // A command about the window brings it forward, even from the
+    // background (P8-T03). The Shelf and add-link do not need it.
+    let window = requests.iter().any(|r| {
+        matches!(
+            r.name,
+            "go-to" | "workspace-open" | "workspace-create" | "workspace-new" | "tool-open"
+        )
+    });
+    let present = window.then(|| win("present", None));
+    for request in requests.iter().chain(present.as_ref()) {
         let path = if request.scope == "app" {
             APP_OBJECT_PATH.to_string()
         } else {

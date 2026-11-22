@@ -378,7 +378,7 @@ Notes:
 | P8-S2 | Spike: phones | on hold | Product owner's decision |
 | P8-T01 | Shelf window | done | E8-01 to E8-04. Its own window; pins (defaults until chosen), Holding in app.db (migration 6), latest downloads, quick access, result line with Undo; `app.shelf`, `cairn shelf`; "Add to Holding" and "Pin to Shelf" in the item menu |
 | P8-T02 | Shelf shortcut; "Shelf and tray" page | done | E8-07. GNOME custom keybinding running `cairn shelf` (ADR 0014), off by default, removed when turned off; default Ctrl+Alt+Space, changeable on the new "Shelf and Tray" page |
-| P8-T03 | Tray icon; open at login | to do | E8-06 |
+| P8-T03 | Tray icon; open at login | done | E8-06. StatusNotifierItem with its own bus name (off by default); click toggles the Shelf, middle click shows the window; re-registers when the panel appears. Open at login writes an autostart entry that runs `cairn --background` (no window). With the icon on, closing the window keeps Cairn running |
 | P8-T04 | Shell search provider | to do | E8-05 |
 | P8-T05 | Shell extension | waits for P8-S1 and decision O4 | HUMAN |
 | P8-T06 to P8-T08 | Phone | on hold | Product owner's decision |
@@ -404,6 +404,20 @@ Notes:
   compare About with Settings › System › About, and read every suggestion's
   reason for clarity. Check the sidebar's Installed count against
   `apt list --installed`, `snap list` and `flatpak list`.
+- Phase 8, on real 24.04 and 26.04 desktops (P8-S1 was built on the
+  fallbacks, ADR 0014):
+  - turn on "Open the Shelf with a key" and press Ctrl+Alt+Space from
+    another app; check it appears in Settings › Keyboard › Custom Shortcuts
+    and goes away when turned off;
+  - drag files from Files and from Cairn into Holding and onto a pinned
+    folder (Ctrl copies); drag a held file out into another app;
+  - where GNOME places the Shelf window, and whether it should stay on top;
+  - the tray icon in the top bar (needs the Ubuntu AppIndicator extension):
+    click opens and closes the Shelf, middle click shows the window;
+  - "Open at login": log out and in; Cairn should start with no window;
+  - Activities search: type a workspace's name; a link; a collection;
+  - decide whether the portal route for the key is worth adding on 26.04,
+    and decision O4 (is the Shell extension, P8-T05, in scope).
 - Phase 7: try Open In with the terminals and editors actually installed;
   check the AI Agents numbers against a real machine's usage.
 - Phase 6 (from DESIGN.md's HUMAN list):

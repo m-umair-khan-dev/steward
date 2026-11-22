@@ -237,6 +237,12 @@ msgstr "[Çléàr ~~]"
 msgid "Clear shortcut for "
 msgstr "[Çléàr shörtçüt för  ~~~~~~]"
 
+msgid "Click it to open the Shelf. With the icon on, closing the window keeps Cairn running for the Shelf."
+msgstr "[Çlîçk ît tö öpéñ thé Shélf. Wîth thé îçöñ öñ, çlösîñg thé wîñdöw kééps Çàîrñ rüññîñg för thé Shélf. ~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~]"
+
+msgid "Click to open the Shelf"
+msgstr "[Çlîçk tö öpéñ thé Shélf ~~~~~~~]"
+
 msgid "Close"
 msgstr "[Çlösé ~~]"
 
@@ -1059,6 +1065,9 @@ msgstr "[Öpéñ Wîth ~~~]"
 msgid "Open With…"
 msgstr "[Öpéñ Wîth… ~~~]"
 
+msgid "Open at login"
+msgstr "[Öpéñ àt lögîñ ~~~~]"
+
 msgid "Open in Editor"
 msgstr "[Öpéñ îñ Édîtör ~~~~]"
 
@@ -1344,6 +1353,9 @@ msgstr "[Shöw Hîddéñ Fîlés ~~~~~]"
 msgid "Show Names"
 msgstr "[Shöw Ñàmés ~~~]"
 
+msgid "Show an icon in the top bar"
+msgstr "[Shöw àñ îçöñ îñ thé töp bàr ~~~~~~~~~]"
+
 msgid "Show hidden files"
 msgstr "[Shöw hîddéñ fîlés ~~~~~]"
 
@@ -1394,6 +1406,9 @@ msgstr "[Stàrt Îñdéxîñg ~~~~]"
 
 msgid "Start Using Cairn"
 msgstr "[Stàrt Üsîñg Çàîrñ ~~~~~]"
+
+msgid "Starts Cairn in the background, without a window, so the Shelf and the icon are ready."
+msgstr "[Stàrts Çàîrñ îñ thé bàçkgröüñd, wîthöüt à wîñdöw, sö thé Shélf àñd thé îçöñ àré réàdý. ~~~~~~~~~~~~~~~~~~~~~~~~~~~~]"
 
 msgid "Startup disk"
 msgstr "[Stàrtüp dîsk ~~~~]"

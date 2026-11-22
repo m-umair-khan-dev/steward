@@ -12,7 +12,8 @@ Window {
     height: 800
     minimumWidth: 760
     minimumHeight: 480
-    visible: true
+    // Started at login in the background (P8-T03): no window until asked.
+    visible: Qt.application.arguments.indexOf("--background") < 0
     title: p.t("Cairn")
     flags: Qt.Window | Qt.FramelessWindowHint
     color: Theme.bg
@@ -29,7 +30,9 @@ Window {
         }
         onToast: (text, undo) => toast.show(text, undo)
         onFocus: target => {
-            if (target === "raise") {
+            if (target === "hide") {
+                win.hide()
+            } else if (target === "raise") {
                 // The Shelf, the tray or a search result asked for the window.
                 if (!win.visible) win.show()
                 win.raise()

@@ -203,6 +203,6 @@ Rectangle {
                      onClicked: { const w = root.Window.window
                                   w.visibility = w.visibility === Window.Maximized ? Window.Windowed : Window.Maximized } }
         IconButton { width: 28; height: 28; iconSize: 14; icon: "close"; label: p.t("Close")
-                     onClicked: p.activate("app.quit", "") }
+                     onClicked: p.activate("win.close-window", "") }
     }
 }

@@ -17,6 +17,7 @@ mod settings;
 mod sidebar;
 mod thumbnails;
 mod tint;
+mod tray;
 
 use std::path::PathBuf;
 use std::process::ExitCode;

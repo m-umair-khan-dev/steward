@@ -106,6 +106,29 @@ Sheet {
         }
     }
 
+    // A switch with a line of explanation.
+    component PrefSwitch: Item {
+        id: ps
+        property string label: ""
+        property string note: ""
+        property string key: ""
+        property bool on: false
+        width: parent.width; height: 70
+        Column {
+            anchors.verticalCenter: parent.verticalCenter
+            width: parent.width - 70
+            Text { text: ps.label; color: Theme.ink; font.pixelSize: 14 }
+            Text { width: parent.width; wrapMode: Text.WordWrap; color: Theme.muted; font.pixelSize: 12; text: ps.note }
+        }
+        Switch {
+            anchors.right: parent.right; anchors.verticalCenter: parent.verticalCenter
+            checked: ps.on
+            Accessible.name: ps.label
+            // Any change (a click, or an accessibility Toggle); writes only a real change.
+            onCheckedChanged: if (checked !== ps.on) p.setpref(ps.key, checked ? "true" : "false")
+        }
+    }
+
     component Choice: Item {
         id: choice
         property string label: ""
@@ -399,6 +422,16 @@ Sheet {
                              label: p.t("Change the Shelf key")
                              onClicked: { root.recording = "__shelf"; root.recordingName = p.t("Shelf"); recorder.forceActiveFocus() } }
             }
+        }
+        PrefSwitch {
+            label: p.t("Show an icon in the top bar")
+            note: p.t("Click it to open the Shelf. With the icon on, closing the window keeps Cairn running for the Shelf.")
+            key: "tray-icon"; on: !!root.prefs.trayIcon
+        }
+        PrefSwitch {
+            label: p.t("Open at login")
+            note: p.t("Starts Cairn in the background, without a window, so the Shelf and the icon are ready.")
+            key: "open-at-login"; on: !!root.prefs.openAtLogin
         }
     }
 

@@ -135,6 +135,14 @@
       <default>'Ctrl+Alt+Space'</default>
       <summary>The key that opens the Shelf (Qt key-sequence syntax)</summary>
     </key>
+    <key name="tray-icon" type="b">
+      <default>false</default>
+      <summary>Show an icon in the top bar that opens the Shelf</summary>
+    </key>
+    <key name="open-at-login" type="b">
+      <default>false</default>
+      <summary>Start in the background at login, for the Shelf and tray icon</summary>
+    </key>
     <key name="shortcuts" type="a{sas}">
       <default>{}</default>
       <summary>Shortcuts changed by the user</summary>
