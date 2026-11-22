@@ -106,3 +106,38 @@ def test_E8_04_latest_downloads(app, home):
                  "the five newest files")
     open_shelf(app)
     assert "new-1.pdf" in app.a11y_names()
+
+
+# --- the Shelf's key (E8-07) ---------------------------------------------------------
+
+MEDIA_KEYS = "org.gnome.settings-daemon.plugins.media-keys"
+KEYBINDING = "/org/gnome/settings-daemon/plugins/media-keys/custom-keybindings/cairn-shelf/"
+
+
+def gsettings(app, *args: str) -> str:
+    import subprocess
+    done = subprocess.run(["gsettings", *args], env=app.env(), capture_output=True, text=True, timeout=10)
+    assert done.returncode == 0, done.stderr
+    return done.stdout.strip()
+
+
+def keybindings(app) -> str:
+    return gsettings(app, "get", MEDIA_KEYS, "custom-keybindings")
+
+
+def test_E8_07_the_shelf_key_without_a_portal(app, home):
+    # The test session has no desktop portal: the custom keybinding route.
+    assert KEYBINDING not in keybindings(app), "nothing is written until the user asks"
+    app.action("app.preferences")
+    app.wait_for(lambda: (d := app.state()["active_window"]["dialog"]) and d["type"] == "preferences", "Preferences")
+    app.a11y_click("Shelf and Tray", within="Preferences")
+    app.a11y_click("Open the Shelf with a key", within="Preferences")
+    app.wait_for(lambda: KEYBINDING in keybindings(app), "the keybinding to be added")
+    entry = f"{MEDIA_KEYS}.custom-keybinding:{KEYBINDING}"
+    assert gsettings(app, "get", entry, "binding") == "'<Control><Alt>space'"
+    assert gsettings(app, "get", entry, "command").endswith(" shelf'")
+    assert gsettings(app, "get", entry, "name") == "'Cairn Shelf'"
+
+    app.a11y_click("Open the Shelf with a key", within="Preferences")
+    app.wait_for(lambda: KEYBINDING not in keybindings(app), "the keybinding to be removed")
+    assert gsettings(app, "get", entry, "binding") == "''", "its key is reset too"

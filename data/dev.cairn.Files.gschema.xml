@@ -126,6 +126,15 @@
       <default>''</default>
       <summary>Your own editor command; {} is the folder</summary>
     </key>
+    <key name="shelf-shortcut-enabled" type="b">
+      <default>false</default>
+      <summary>Open the Shelf with a key from any app</summary>
+      <description>Written to GNOME as a custom keyboard shortcut that runs “cairn shelf”, and removed when turned off.</description>
+    </key>
+    <key name="shelf-shortcut" type="s">
+      <default>'Ctrl+Alt+Space'</default>
+      <summary>The key that opens the Shelf (Qt key-sequence syntax)</summary>
+    </key>
     <key name="shortcuts" type="a{sas}">
       <default>{}</default>
       <summary>Shortcuts changed by the user</summary>

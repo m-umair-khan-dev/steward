@@ -6,6 +6,7 @@ mod app_data;
 mod bridge;
 mod controller;
 mod dbus;
+mod desktop;
 mod file_manager;
 mod format;
 mod icons;

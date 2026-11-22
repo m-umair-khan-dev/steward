@@ -9,6 +9,7 @@ pub mod bookmarks;
 pub mod clean;
 pub mod cli;
 pub mod clip;
+pub mod desktop;
 pub mod dupes;
 pub mod entry;
 pub mod extract;

@@ -380,6 +380,8 @@ pub fn init(notifier: impl Fn() + 'static) {
         index::start(c);
         c.reload_sidebar();
         c.bookmarks_load();
+        // The Shelf's key matches the setting (P8-T02).
+        crate::desktop::apply_shelf_shortcut();
         c.refresh_home_space();
         // Dual pane comes back with both its folders (E4-10).
         let s = settings::get();
@@ -712,6 +714,15 @@ impl Controller {
                 actions::set_state("toggle-sidebar", &settings.boolean(key).to_variant())
             }
             "bookmark-view" | "bookmark-fetch" => self.mark(dirty::TOOLS),
+            "shelf-shortcut-enabled" | "shelf-shortcut" => {
+                if !crate::desktop::apply_shelf_shortcut()
+                    && settings.boolean("shelf-shortcut-enabled")
+                {
+                    self.toast(&gettext(
+                        "This desktop has no custom shortcuts; open the Shelf with “cairn shelf”",
+                    ));
+                }
+            }
             "shortcuts" => {} // PREFS, below, republishes the shortcuts too
             "downloads-folder" => {
                 self.reload_sidebar();
@@ -1898,6 +1909,8 @@ impl Controller {
             "home": paths::display_path(&glib::home_dir()),
             "defaultFileManager": s.boolean("default-file-manager"),
             "bookmarkFetch": s.boolean("bookmark-fetch"),
+            "shelfShortcutEnabled": s.boolean("shelf-shortcut-enabled"),
+            "shelfShortcut": s.string("shelf-shortcut").to_string(),
             "openIn": self.openin_json(),
             // GNOME's dark mode, for Qt versions that cannot report it (24.04).
             "systemDark": self.interface.as_ref().is_some_and(|i| {

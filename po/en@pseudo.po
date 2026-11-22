@@ -222,6 +222,9 @@ msgstr "[Çàrgö régîstrý çàçhé ~~~~~~]"
 msgid "Change shortcut for "
 msgstr "[Çhàñgé shörtçüt för  ~~~~~~]"
 
+msgid "Change the Shelf key"
+msgstr "[Çhàñgé thé Shélf kéý ~~~~~~]"
+
 msgid "Choose Change, then press the keys you want."
 msgstr "[Çhöösé Çhàñgé, théñ préss thé kéýs ýöü wàñt. ~~~~~~~~~~~~~~]"
 
@@ -717,6 +720,9 @@ msgstr "[Képt: thé öñé îñ ~~~~~]"
 msgid "Kernel"
 msgstr "[Kérñél ~~]"
 
+msgid "Key"
+msgstr "[Kéý ~~]"
+
 msgid "Keyboard Shortcuts"
 msgstr "[Kéýböàrd Shörtçüts ~~~~~~]"
 
@@ -1065,6 +1071,9 @@ msgstr "[Öpéñ îñ thé bröwsér: pört  ~~~~~~~~]"
 msgid "Open it from the folder that contains it."
 msgstr "[Öpéñ ît fröm thé földér thàt çöñtàîñs ît. ~~~~~~~~~~~~~]"
 
+msgid "Open the Shelf with a key"
+msgstr "[Öpéñ thé Shélf wîth à kéý ~~~~~~~~]"
+
 msgid "Open workspace 1"
 msgstr "[Öpéñ wörkspàçé 1 ~~~~~]"
 
@@ -1317,6 +1326,9 @@ msgstr "[Sérvîçé réçömméñdéd ~~~~~~]"
 msgid "Shelf"
 msgstr "[Shélf ~~]"
 
+msgid "Shelf and Tray"
+msgstr "[Shélf àñd Tràý ~~~~]"
+
 msgid "Shell"
 msgstr "[Shéll ~~]"
 
@@ -1512,6 +1524,9 @@ msgstr "[Thîs Îs Ñöt à Földér ~~~~~~]"
 msgid "This computer"
 msgstr "[Thîs çömpütér ~~~~]"
 
+msgid "This desktop has no custom shortcuts; open the Shelf with “cairn shelf”"
+msgstr "[Thîs désktöp hàs ñö çüstöm shörtçüts; öpéñ thé Shélf wîth “çàîrñ shélf” ~~~~~~~~~~~~~~~~~~~~~~~]"
+
 msgid "Tick "
 msgstr "[Tîçk  ~~]"
 
@@ -1649,6 +1664,9 @@ msgstr "[Wîll mövé tö  ~~~~]"
 
 msgid "Working…"
 msgstr "[Wörkîñg… ~~]"
+
+msgid "Works from any app. Cairn adds it to GNOME’s keyboard shortcuts and removes it when you turn this off."
+msgstr "[Wörks fröm àñý àpp. Çàîrñ àdds ît tö GÑÖMÉ’s kéýböàrd shörtçüts àñd rémövés ît whéñ ýöü türñ thîs öff. ~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~]"
 
 msgid "Workspace "
 msgstr "[Wörkspàçé  ~~~]"

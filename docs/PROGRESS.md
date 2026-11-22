@@ -377,7 +377,7 @@ Notes:
 | P8-S1 | Spike: shortcut, tray, extension | deferred to HUMAN | Built on the named fallbacks until checked on real 24.04/26.04 (ADR 0014) |
 | P8-S2 | Spike: phones | on hold | Product owner's decision |
 | P8-T01 | Shelf window | done | E8-01 to E8-04. Its own window; pins (defaults until chosen), Holding in app.db (migration 6), latest downloads, quick access, result line with Undo; `app.shelf`, `cairn shelf`; "Add to Holding" and "Pin to Shelf" in the item menu |
-| P8-T02 | Shelf shortcut; "Shelf and tray" page | to do | E8-07 |
+| P8-T02 | Shelf shortcut; "Shelf and tray" page | done | E8-07. GNOME custom keybinding running `cairn shelf` (ADR 0014), off by default, removed when turned off; default Ctrl+Alt+Space, changeable on the new "Shelf and Tray" page |
 | P8-T03 | Tray icon; open at login | to do | E8-06 |
 | P8-T04 | Shell search provider | to do | E8-05 |
 | P8-T05 | Shell extension | waits for P8-S1 and decision O4 | HUMAN |

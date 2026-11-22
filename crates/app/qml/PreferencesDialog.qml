@@ -125,11 +125,29 @@ Sheet {
         }
     }
 
+    // Takes the key press while recording.
+    Item {
+        id: recorder
+        width: 1; height: 1
+        Keys.onPressed: event => {
+            if (root.recording === "") { event.accepted = false; return }
+            event.accepted = true
+            if (event.key === Qt.Key_Escape) { root.recording = ""; root.refocus(); return }
+            const keys = root.sequence(event)
+            if (keys === "") return
+            // The Shelf's global key is a setting; the rest are app shortcuts.
+            if (root.recording === "__shelf") p.setpref("shelf-shortcut", keys)
+            else p.activate("win.shortcut-set", root.recording + "|" + keys)
+            root.recording = ""
+            root.refocus()
+        }
+    }
     Segmented {
         id: tabs
         name: p.t("Preferences pages")
         options: [{ id: "general", label: p.t("General") }, { id: "appearance", label: p.t("Appearance") },
-                  { id: "shortcuts", label: p.t("Shortcuts") }, { id: "search", label: p.t("Search and Index") }]
+                  { id: "shortcuts", label: p.t("Shortcuts") }, { id: "shelf", label: p.t("Shelf and Tray") },
+                  { id: "search", label: p.t("Search and Index") }]
         current: root.page
         onPicked: id => root.page = id
     }
@@ -148,6 +166,7 @@ Sheet {
             width: parent.width
             implicitHeight: (general.visible ? general.implicitHeight : 0) + (appearance.visible ? appearance.implicitHeight : 0)
                             + (shortcuts.visible ? shortcuts.implicitHeight : 0) + (search.visible ? search.implicitHeight : 0)
+                            + (shelfPage.visible ? shelfPage.implicitHeight : 0)
 
     Column {
         id: general
@@ -272,21 +291,6 @@ Sheet {
             background: Rectangle { radius: 9; color: Theme.pane; border.color: shortcutFilter.activeFocus ? Theme.accent : Theme.line }
         }
         Item { width: 1; height: 6 }
-        // Takes the key press while recording.
-        Item {
-            id: recorder
-            width: 1; height: 1
-            Keys.onPressed: event => {
-                if (root.recording === "") { event.accepted = false; return }
-                event.accepted = true
-                if (event.key === Qt.Key_Escape) { root.recording = ""; root.refocus(); return }
-                const keys = root.sequence(event)
-                if (keys === "") return
-                p.activate("win.shortcut-set", root.recording + "|" + keys)
-                root.recording = ""
-                root.refocus()
-            }
-        }
         Item {
             width: parent.width
             height: list.implicitHeight
@@ -347,6 +351,53 @@ Sheet {
                         }
                     }
                 }
+            }
+        }
+    }
+
+    // Shelf and tray (P8-T02, P8-T03).
+    Column {
+        id: shelfPage
+        visible: root.page === "shelf"
+        width: parent.width
+        spacing: 2
+        Item {
+            width: parent.width; height: 70
+            Column {
+                anchors.verticalCenter: parent.verticalCenter
+                width: parent.width - 70
+                Text { text: p.t("Open the Shelf with a key"); color: Theme.ink; font.pixelSize: 14 }
+                Text { width: parent.width; wrapMode: Text.WordWrap; color: Theme.muted; font.pixelSize: 12
+                       text: p.t("Works from any app. Cairn adds it to GNOME’s keyboard shortcuts and removes it when you turn this off.") }
+            }
+            Switch {
+                anchors.right: parent.right; anchors.verticalCenter: parent.verticalCenter
+                checked: !!root.prefs.shelfShortcutEnabled
+                Accessible.name: p.t("Open the Shelf with a key")
+                onCheckedChanged: if (checked !== !!root.prefs.shelfShortcutEnabled) p.setpref("shelf-shortcut-enabled", checked ? "true" : "false")
+            }
+        }
+        Item {
+            width: parent.width; height: 44
+            Text { anchors.verticalCenter: parent.verticalCenter; text: p.t("Key"); color: Theme.ink; font.pixelSize: 14 }
+            Row {
+                anchors.right: parent.right; anchors.verticalCenter: parent.verticalCenter
+                spacing: 4
+                Text { visible: root.recording === "__shelf"; text: p.t("Press keys…"); color: Theme.accentText
+                       font.pixelSize: 12; anchors.verticalCenter: parent.verticalCenter }
+                Repeater {
+                    model: root.recording === "__shelf" ? [] : (root.prefs.shelfShortcut || "").split(/\+(?!$)/).filter(k => k !== "")
+                    delegate: Rectangle {
+                        required property string modelData
+                        anchors.verticalCenter: parent.verticalCenter
+                        width: Math.max(26, keyText.implicitWidth + 14); height: 24; radius: 6
+                        color: Theme.track; border.color: Theme.line
+                        Text { id: keyText; anchors.centerIn: parent; text: parent.modelData; color: Theme.ink; font.pixelSize: 12 }
+                    }
+                }
+                IconButton { width: 26; height: 26; iconSize: 13; flat: true; icon: "pencil"
+                             label: p.t("Change the Shelf key")
+                             onClicked: { root.recording = "__shelf"; root.recordingName = p.t("Shelf"); recorder.forceActiveFocus() } }
             }
         }
     }
