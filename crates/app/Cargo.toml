@@ -67,6 +67,8 @@ assets = [
     ["../../data/icons/hicolor/symbolic/apps/dev.cairn.Files-symbolic.svg", "usr/share/icons/hicolor/symbolic/apps/", "644"],
     ["../../data/cairn-indexer.service", "usr/lib/systemd/user/", "644"],
     ["../../data/dev.cairn.Indexer.service", "usr/share/dbus-1/services/", "644"],
+    ["../../data/dev.cairn.Files.service", "usr/share/dbus-1/services/", "644"],
+    ["../../data/dev.cairn.Files.search-provider.ini", "usr/share/gnome-shell/search-providers/", "644"],
     ["../../target/package/locale/**/*.mo", "usr/share/locale/", "644"],
     ["../../target/package/cairn.1.gz", "usr/share/man/man1/", "644"],
     ["../../packaging/debian/copyright", "usr/share/doc/cairn/", "644"],

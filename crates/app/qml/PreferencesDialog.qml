@@ -440,6 +440,16 @@ Sheet {
         visible: root.page === "search"
         width: parent.width
         spacing: 2
+        // Activities search (P8-T04): what GNOME's search may show from Cairn.
+        PrefSwitch { label: p.t("Workspaces in Activities search"); key: "search-provider-workspaces"
+                     note: p.t("Type a workspace’s name in the Activities overview to open it.")
+                     on: !!root.prefs.providerWorkspaces }
+        PrefSwitch { label: p.t("Bookmark collections in Activities search"); key: "search-provider-collections"
+                     note: p.t("Collections of saved links, by name.")
+                     on: !!root.prefs.providerCollections }
+        PrefSwitch { label: p.t("Links in Activities search"); key: "search-provider-links"
+                     note: p.t("Saved links, by title, address or tag; they open in the browser.")
+                     on: !!root.prefs.providerLinks }
         // Search and index (P3-T12).
         Text {
             width: parent.width

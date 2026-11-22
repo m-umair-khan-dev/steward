@@ -37,6 +37,8 @@ pub fn start(on_taken: impl Fn() + 'static) {
             {
                 glib::g_warning!("cairn", "could not export window actions: {error}");
             }
+            // Activities search (P8-T04).
+            crate::search_provider::register(&connection);
             #[cfg(feature = "e2e")]
             register_test_interface(&connection);
             CONNECTION.with(|c| *c.borrow_mut() = Some(connection));

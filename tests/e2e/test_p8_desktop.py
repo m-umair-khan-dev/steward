@@ -215,3 +215,45 @@ def test_open_at_login_writes_an_autostart_entry(app, home):
     assert "--background" in text and text.startswith("[Desktop Entry]")
     app.a11y_click("Open at login", within="Preferences")
     app.wait_for(lambda: not entry.exists(), "the entry to be removed")
+
+
+# --- Activities search (E8-05) ---------------------------------------------------------
+
+def provider(app, method: str, args: GLib.Variant, reply: str):
+    from gi.repository import Gio
+    result = app.bus.call_sync("dev.cairn.Files", "/dev/cairn/Files/SearchProvider",
+                               "org.gnome.Shell.SearchProvider2", method, args,
+                               GLib.VariantType(reply) if reply else None, Gio.DBusCallFlags.NONE, 5000, None)
+    return result.unpack() if result is not None else None
+
+
+def test_E8_05_activities_search_finds_a_workspace(app, home):
+    app.action("win.workspace-create", s("Taxes 2026"))
+    app.wait_for(lambda: app.state()["workspace"]["open"], "the workspace")
+    wid = app.state()["workspace"]["id"]
+    app.action("win.workspace-close")
+    app.wait_for(lambda: not app.state()["workspace"]["open"], "back to the folder")
+    app.action("win.bookmark-add", s("http://127.0.0.1:9/tax-guide"))
+    app.wait_for(lambda: app.state()["bookmarks"]["all"], "a link")
+
+    (results,) = provider(app, "GetInitialResultSet", GLib.Variant("(as)", (["taxes"],)), "(as)")
+    assert f"ws:{wid}" in results, results
+    (narrower,) = provider(app, "GetSubsearchResultSet", GLib.Variant("(asas)", (results, ["taxes", "2026"])), "(as)")
+    assert narrower == [f"ws:{wid}"]
+    (metas,) = provider(app, "GetResultMetas", GLib.Variant("(as)", ([f"ws:{wid}"],)), "(aa{sv})")
+    assert metas[0]["name"] == "Taxes 2026" and metas[0]["id"] == f"ws:{wid}"
+    (links,) = provider(app, "GetInitialResultSet", GLib.Variant("(as)", (["tax-guide"],)), "(as)")
+    assert any(r.startswith("link:") for r in links), links
+
+    provider(app, "ActivateResult", GLib.Variant("(sasu)", (f"ws:{wid}", ["taxes"], 0)), "")
+    app.wait_for(lambda: app.state()["workspace"]["open"] and app.state()["workspace"]["id"] == wid,
+                 "the workspace to open")
+
+    # Each kind has its own switch.
+    app.action("app.preferences")
+    app.wait_for(lambda: (d := app.state()["active_window"]["dialog"]) and d["type"] == "preferences", "Preferences")
+    app.a11y_click("Search and Index", within="Preferences")
+    app.a11y_click("Workspaces in Activities search", within="Preferences")
+    app.wait_for(lambda: f"ws:{wid}" not in provider(app, "GetInitialResultSet",
+                                                      GLib.Variant("(as)", (["taxes"],)), "(as)")[0],
+                 "no workspaces with the switch off")

@@ -83,7 +83,7 @@ msgstr ": su propia orden"
 msgid "A file manager for Ubuntu that keeps folders tidy."
 msgstr "Un gestor de archivos para Ubuntu que mantiene las carpetas ordenadas."
 
-#: crates/app/qml/PreferencesDialog.qml:503
+#: crates/app/qml/PreferencesDialog.qml:513
 msgid "A folder to leave out, e.g. ~/Videos/Raw"
 msgstr "Una carpeta que excluir, p. ej. ~/Vídeos/Bruto"
 
@@ -247,6 +247,14 @@ msgstr "Estado de la batería"
 msgid "Big files"
 msgstr "Archivos grandes"
 
+#: crates/app/src/search_provider.rs:82
+msgid "Bookmark collection"
+msgstr "Colección de marcadores"
+
+#: crates/app/qml/PreferencesDialog.qml:447
+msgid "Bookmark collections in Activities search"
+msgstr "Colecciones de marcadores en la búsqueda de Actividades"
+
 #: crates/app/src/controller/bookmarks.rs:219
 msgid "Bookmark removed"
 msgstr "Marcador eliminado"
@@ -377,6 +385,10 @@ msgstr "Colección (un nombre nuevo la crea)"
 #: crates/app/qml/CollectionDialog.qml:20
 msgid "Collection name"
 msgstr "Nombre de la colección"
+
+#: crates/app/qml/PreferencesDialog.qml:448
+msgid "Collections of saved links, by name."
+msgstr "Colecciones de enlaces guardados, por nombre."
 
 #: crates/app/qml/FolderStyleDialog.qml:52
 #: crates/app/qml/WorkspaceDialog.qml:55
@@ -763,7 +775,7 @@ msgstr "La carpeta está vacía"
 msgid "Folder contents"
 msgstr "Contenido de la carpeta"
 
-#: crates/app/qml/PreferencesDialog.qml:504
+#: crates/app/qml/PreferencesDialog.qml:514
 msgid "Folder to leave out"
 msgstr "Carpeta que excluir"
 
@@ -891,7 +903,7 @@ msgstr "Alta"
 msgid "Holding"
 msgstr "Retenidos"
 
-#: crates/app/qml/PreferencesDialog.qml:479 crates/app/src/controller.rs:1361
+#: crates/app/qml/PreferencesDialog.qml:489 crates/app/src/controller.rs:1361
 #: crates/app/src/controller/shelf.rs:315 crates/app/src/sidebar.rs:44
 msgid "Home"
 msgstr "Carpeta personal"
@@ -950,11 +962,11 @@ msgstr "En uso"
 msgid "In use since"
 msgstr "En uso desde"
 
-#: crates/app/qml/PreferencesDialog.qml:479
+#: crates/app/qml/PreferencesDialog.qml:489
 msgid "Indexed: "
 msgstr "Indexado: "
 
-#: crates/app/qml/PreferencesDialog.qml:449
+#: crates/app/qml/PreferencesDialog.qml:459
 msgid "Indexing is paused."
 msgstr "La indexación está en pausa."
 
@@ -1049,11 +1061,11 @@ msgstr "Más grande"
 msgid "Latest downloads"
 msgstr "Últimas descargas"
 
-#: crates/app/qml/PreferencesDialog.qml:509
+#: crates/app/qml/PreferencesDialog.qml:519
 msgid "Leave Out"
 msgstr "Excluir"
 
-#: crates/app/qml/PreferencesDialog.qml:482
+#: crates/app/qml/PreferencesDialog.qml:492
 msgid "Left out"
 msgstr "Excluidas"
 
@@ -1077,6 +1089,10 @@ msgstr "Enlace guardado"
 #: crates/app/qml/BookmarksPage.qml:126 crates/app/qml/BookmarksPage.qml:146
 msgid "Links"
 msgstr "Enlaces"
+
+#: crates/app/qml/PreferencesDialog.qml:450
+msgid "Links in Activities search"
+msgstr "Enlaces en la búsqueda de Actividades"
 
 #: crates/app/qml/BookmarksPage.qml:44 crates/app/qml/BookmarksPage.qml:56
 #: crates/app/qml/Header.qml:78 crates/app/qml/PreferencesDialog.qml:200
@@ -1604,13 +1620,13 @@ msgstr "Pegar"
 msgid "Pause"
 msgstr "Pausa"
 
-#: crates/app/qml/PreferencesDialog.qml:455
-#: crates/app/qml/PreferencesDialog.qml:459
+#: crates/app/qml/PreferencesDialog.qml:465
+#: crates/app/qml/PreferencesDialog.qml:469
 msgid "Pause indexing"
 msgstr "Pausar la indexación"
 
-#: crates/app/qml/PreferencesDialog.qml:467
-#: crates/app/qml/PreferencesDialog.qml:471
+#: crates/app/qml/PreferencesDialog.qml:477
+#: crates/app/qml/PreferencesDialog.qml:481
 msgid "Pause on battery"
 msgstr "Pausar con batería"
 
@@ -1709,7 +1725,7 @@ msgstr "Acceso rápido"
 msgid "Quit"
 msgstr "Salir"
 
-#: crates/app/qml/PreferencesDialog.qml:511
+#: crates/app/qml/PreferencesDialog.qml:521
 msgid "Rebuild"
 msgstr "Reconstruir"
 
@@ -1810,6 +1826,10 @@ msgstr "Guardar el archivo Markdown"
 #: crates/app/src/controller/markdown.rs:97
 msgid "Saved"
 msgstr "Guardado"
+
+#: crates/app/qml/PreferencesDialog.qml:451
+msgid "Saved links, by title, address or tag; they open in the browser."
+msgstr "Enlaces guardados, por título, dirección o etiqueta; se abren en el navegador."
 
 #: crates/app/src/controller/installed.rs:153
 msgid "Saved the list as"
@@ -1972,7 +1992,7 @@ msgstr "Paso "
 msgid "Stop"
 msgstr "Detener"
 
-#: crates/app/qml/PreferencesDialog.qml:492
+#: crates/app/qml/PreferencesDialog.qml:502
 msgid "Stop leaving out "
 msgstr "Dejar de excluir "
 
@@ -2080,11 +2100,11 @@ msgstr "El Snap ya no está instalado"
 msgid "The Trash is empty"
 msgstr "La papelera está vacía"
 
-#: crates/app/qml/PreferencesDialog.qml:448
+#: crates/app/qml/PreferencesDialog.qml:458
 msgid "The index is not running."
 msgstr "El índice no está en marcha."
 
-#: crates/app/qml/PreferencesDialog.qml:449
+#: crates/app/qml/PreferencesDialog.qml:459
 msgid "The index is up to date and following changes."
 msgstr "El índice está al día y sigue los cambios."
 
@@ -2201,6 +2221,10 @@ msgstr "Papelera"
 #: crates/app/src/controller/welcome.rs:139
 msgid "Two folders side by side"
 msgstr "Dos carpetas lado a lado"
+
+#: crates/app/qml/PreferencesDialog.qml:445
+msgid "Type a workspace’s name in the Activities overview to open it."
+msgstr "Escriba el nombre de un espacio de trabajo en la vista de Actividades para abrirlo."
 
 #: crates/app/qml/Header.qml:172 crates/app/qml/ShelfWindow.qml:76
 #: crates/app/qml/Toast.qml:44 crates/app/qml/Toast.qml:46
@@ -2333,6 +2357,10 @@ msgstr "Trabajando…"
 msgid "Works from any app. Cairn adds it to GNOME’s keyboard shortcuts and removes it when you turn this off."
 msgstr "Funciona desde cualquier app. Cairn la añade a los atajos de teclado de GNOME y la quita al desactivar esto."
 
+#: crates/app/src/search_provider.rs:68
+msgid "Workspace"
+msgstr "Espacio de trabajo"
+
 #: crates/app/qml/WorkspacePage.qml:14
 msgid "Workspace "
 msgstr "Espacio de trabajo "
@@ -2356,6 +2384,10 @@ msgstr "Ajustes del espacio de trabajo"
 #: crates/app/qml/Sidebar.qml:74 crates/app/qml/Sidebar.qml:86
 msgid "Workspaces"
 msgstr "Espacios de trabajo"
+
+#: crates/app/qml/PreferencesDialog.qml:444
+msgid "Workspaces in Activities search"
+msgstr "Espacios de trabajo en la búsqueda de Actividades"
 
 #: data/clean/dev-caches.toml
 msgid "Yarn cache"

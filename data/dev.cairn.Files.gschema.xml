@@ -135,6 +135,18 @@
       <default>'Ctrl+Alt+Space'</default>
       <summary>The key that opens the Shelf (Qt key-sequence syntax)</summary>
     </key>
+    <key name="search-provider-workspaces" type="b">
+      <default>true</default>
+      <summary>Workspaces in Activities search</summary>
+    </key>
+    <key name="search-provider-collections" type="b">
+      <default>true</default>
+      <summary>Bookmark collections in Activities search</summary>
+    </key>
+    <key name="search-provider-links" type="b">
+      <default>true</default>
+      <summary>Saved links in Activities search</summary>
+    </key>
     <key name="tray-icon" type="b">
       <default>false</default>
       <summary>Show an icon in the top bar that opens the Shelf</summary>

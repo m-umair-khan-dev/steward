@@ -1931,6 +1931,9 @@ impl Controller {
             "shelfShortcutEnabled": s.boolean("shelf-shortcut-enabled"),
             "shelfShortcut": s.string("shelf-shortcut").to_string(),
             "trayIcon": s.boolean("tray-icon"),
+            "providerWorkspaces": s.boolean("search-provider-workspaces"),
+            "providerCollections": s.boolean("search-provider-collections"),
+            "providerLinks": s.boolean("search-provider-links"),
             "openAtLogin": s.boolean("open-at-login"),
             "openIn": self.openin_json(),
             // GNOME's dark mode, for Qt versions that cannot report it (24.04).

@@ -379,7 +379,7 @@ Notes:
 | P8-T01 | Shelf window | done | E8-01 to E8-04. Its own window; pins (defaults until chosen), Holding in app.db (migration 6), latest downloads, quick access, result line with Undo; `app.shelf`, `cairn shelf`; "Add to Holding" and "Pin to Shelf" in the item menu |
 | P8-T02 | Shelf shortcut; "Shelf and tray" page | done | E8-07. GNOME custom keybinding running `cairn shelf` (ADR 0014), off by default, removed when turned off; default Ctrl+Alt+Space, changeable on the new "Shelf and Tray" page |
 | P8-T03 | Tray icon; open at login | done | E8-06. StatusNotifierItem with its own bus name (off by default); click toggles the Shelf, middle click shows the window; re-registers when the panel appears. Open at login writes an autostart entry that runs `cairn --background` (no window). With the icon on, closing the window keeps Cairn running |
-| P8-T04 | Shell search provider | to do | E8-05 |
+| P8-T04 | Shell search provider | done | E8-05. org.gnome.Shell.SearchProvider2 on the app's bus name for workspaces, collections and links (a switch each, on the Search page); ini and a D-Bus service file (starts `cairn --background`) packaged |
 | P8-T05 | Shell extension | waits for P8-S1 and decision O4 | HUMAN |
 | P8-T06 to P8-T08 | Phone | on hold | Product owner's decision |
 

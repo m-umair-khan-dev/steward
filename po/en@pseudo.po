@@ -174,6 +174,12 @@ msgstr "[Bàttérý héàlth ~~~~]"
 msgid "Big files"
 msgstr "[Bîg fîlés ~~~]"
 
+msgid "Bookmark collection"
+msgstr "[Böökmàrk çölléçtîöñ ~~~~~~]"
+
+msgid "Bookmark collections in Activities search"
+msgstr "[Böökmàrk çölléçtîöñs îñ Àçtîvîtîés séàrçh ~~~~~~~~~~~~~]"
+
 msgid "Bookmark removed"
 msgstr "[Böökmàrk rémövéd ~~~~~]"
 
@@ -266,6 +272,9 @@ msgstr "[Çölléçtîöñ (à ñéw ñàmé màkés öñé) ~~~~~~~~~~~]"
 
 msgid "Collection name"
 msgstr "[Çölléçtîöñ ñàmé ~~~~~]"
+
+msgid "Collections of saved links, by name."
+msgstr "[Çölléçtîöñs öf sàvéd lîñks, bý ñàmé. ~~~~~~~~~~~~]"
 
 msgid "Colour "
 msgstr "[Çölöür  ~~]"
@@ -770,6 +779,9 @@ msgstr "[Lîñk sàvéd ~~~]"
 
 msgid "Links"
 msgstr "[Lîñks ~~]"
+
+msgid "Links in Activities search"
+msgstr "[Lîñks îñ Àçtîvîtîés séàrçh ~~~~~~~~]"
 
 msgid "List"
 msgstr "[Lîst ~~]"
@@ -1302,6 +1314,9 @@ msgstr "[Sàvé thé Màrkdöwñ fîlé ~~~~~~~]"
 msgid "Saved"
 msgstr "[Sàvéd ~~]"
 
+msgid "Saved links, by title, address or tag; they open in the browser."
+msgstr "[Sàvéd lîñks, bý tîtlé, àddréss ör tàg; théý öpéñ îñ thé bröwsér. ~~~~~~~~~~~~~~~~~~~~~]"
+
 msgid "Saved the list as"
 msgstr "[Sàvéd thé lîst às ~~~~~]"
 
@@ -1587,6 +1602,9 @@ msgstr "[Tràsh ~~]"
 msgid "Two folders side by side"
 msgstr "[Twö földérs sîdé bý sîdé ~~~~~~~~]"
 
+msgid "Type a workspace’s name in the Activities overview to open it."
+msgstr "[Týpé à wörkspàçé’s ñàmé îñ thé Àçtîvîtîés övérvîéw tö öpéñ ît. ~~~~~~~~~~~~~~~~~~~~]"
+
 msgid "Undo"
 msgstr "[Üñdö ~~]"
 
@@ -1683,6 +1701,9 @@ msgstr "[Wörkîñg… ~~]"
 msgid "Works from any app. Cairn adds it to GNOME’s keyboard shortcuts and removes it when you turn this off."
 msgstr "[Wörks fröm àñý àpp. Çàîrñ àdds ît tö GÑÖMÉ’s kéýböàrd shörtçüts àñd rémövés ît whéñ ýöü türñ thîs öff. ~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~]"
 
+msgid "Workspace"
+msgstr "[Wörkspàçé ~~~]"
+
 msgid "Workspace "
 msgstr "[Wörkspàçé  ~~~]"
 
@@ -1700,6 +1721,9 @@ msgstr "[Wörkspàçé séttîñgs ~~~~~~]"
 
 msgid "Workspaces"
 msgstr "[Wörkspàçés ~~~]"
+
+msgid "Workspaces in Activities search"
+msgstr "[Wörkspàçés îñ Àçtîvîtîés séàrçh ~~~~~~~~~~]"
 
 msgid "Yarn cache"
 msgstr "[Ýàrñ çàçhé ~~~]"

@@ -83,7 +83,7 @@ msgstr "：自定义命令"
 msgid "A file manager for Ubuntu that keeps folders tidy."
 msgstr "一款让文件夹保持整洁的 Ubuntu 文件管理器。"
 
-#: crates/app/qml/PreferencesDialog.qml:503
+#: crates/app/qml/PreferencesDialog.qml:513
 msgid "A folder to leave out, e.g. ~/Videos/Raw"
 msgstr "要排除的文件夹，例如 ~/Videos/Raw"
 
@@ -247,6 +247,14 @@ msgstr "电池健康"
 msgid "Big files"
 msgstr "大文件"
 
+#: crates/app/src/search_provider.rs:82
+msgid "Bookmark collection"
+msgstr "书签合集"
+
+#: crates/app/qml/PreferencesDialog.qml:447
+msgid "Bookmark collections in Activities search"
+msgstr "在“活动”搜索中显示书签合集"
+
 #: crates/app/src/controller/bookmarks.rs:219
 msgid "Bookmark removed"
 msgstr "书签已移除"
@@ -377,6 +385,10 @@ msgstr "合集（输入新名称即可创建）"
 #: crates/app/qml/CollectionDialog.qml:20
 msgid "Collection name"
 msgstr "合集名称"
+
+#: crates/app/qml/PreferencesDialog.qml:448
+msgid "Collections of saved links, by name."
+msgstr "按名称查找已保存链接的合集。"
 
 #: crates/app/qml/FolderStyleDialog.qml:52
 #: crates/app/qml/WorkspaceDialog.qml:55
@@ -763,7 +775,7 @@ msgstr "文件夹为空"
 msgid "Folder contents"
 msgstr "文件夹内容"
 
-#: crates/app/qml/PreferencesDialog.qml:504
+#: crates/app/qml/PreferencesDialog.qml:514
 msgid "Folder to leave out"
 msgstr "要排除的文件夹"
 
@@ -891,7 +903,7 @@ msgstr "高"
 msgid "Holding"
 msgstr "暂存"
 
-#: crates/app/qml/PreferencesDialog.qml:479 crates/app/src/controller.rs:1361
+#: crates/app/qml/PreferencesDialog.qml:489 crates/app/src/controller.rs:1361
 #: crates/app/src/controller/shelf.rs:315 crates/app/src/sidebar.rs:44
 msgid "Home"
 msgstr "主目录"
@@ -950,11 +962,11 @@ msgstr "已使用"
 msgid "In use since"
 msgstr "使用起始"
 
-#: crates/app/qml/PreferencesDialog.qml:479
+#: crates/app/qml/PreferencesDialog.qml:489
 msgid "Indexed: "
 msgstr "已索引： "
 
-#: crates/app/qml/PreferencesDialog.qml:449
+#: crates/app/qml/PreferencesDialog.qml:459
 msgid "Indexing is paused."
 msgstr "索引已暂停。"
 
@@ -1049,11 +1061,11 @@ msgstr "放大"
 msgid "Latest downloads"
 msgstr "最近下载"
 
-#: crates/app/qml/PreferencesDialog.qml:509
+#: crates/app/qml/PreferencesDialog.qml:519
 msgid "Leave Out"
 msgstr "排除"
 
-#: crates/app/qml/PreferencesDialog.qml:482
+#: crates/app/qml/PreferencesDialog.qml:492
 msgid "Left out"
 msgstr "已排除"
 
@@ -1077,6 +1089,10 @@ msgstr "链接已保存"
 #: crates/app/qml/BookmarksPage.qml:126 crates/app/qml/BookmarksPage.qml:146
 msgid "Links"
 msgstr "链接"
+
+#: crates/app/qml/PreferencesDialog.qml:450
+msgid "Links in Activities search"
+msgstr "在“活动”搜索中显示链接"
 
 #: crates/app/qml/BookmarksPage.qml:44 crates/app/qml/BookmarksPage.qml:56
 #: crates/app/qml/Header.qml:78 crates/app/qml/PreferencesDialog.qml:200
@@ -1604,13 +1620,13 @@ msgstr "粘贴"
 msgid "Pause"
 msgstr "暂停"
 
-#: crates/app/qml/PreferencesDialog.qml:455
-#: crates/app/qml/PreferencesDialog.qml:459
+#: crates/app/qml/PreferencesDialog.qml:465
+#: crates/app/qml/PreferencesDialog.qml:469
 msgid "Pause indexing"
 msgstr "暂停索引"
 
-#: crates/app/qml/PreferencesDialog.qml:467
-#: crates/app/qml/PreferencesDialog.qml:471
+#: crates/app/qml/PreferencesDialog.qml:477
+#: crates/app/qml/PreferencesDialog.qml:481
 msgid "Pause on battery"
 msgstr "使用电池时暂停"
 
@@ -1709,7 +1725,7 @@ msgstr "快速访问"
 msgid "Quit"
 msgstr "退出"
 
-#: crates/app/qml/PreferencesDialog.qml:511
+#: crates/app/qml/PreferencesDialog.qml:521
 msgid "Rebuild"
 msgstr "重建"
 
@@ -1810,6 +1826,10 @@ msgstr "保存 Markdown 文件"
 #: crates/app/src/controller/markdown.rs:97
 msgid "Saved"
 msgstr "已保存"
+
+#: crates/app/qml/PreferencesDialog.qml:451
+msgid "Saved links, by title, address or tag; they open in the browser."
+msgstr "按标题、地址或标签查找已保存的链接；它们会在浏览器中打开。"
 
 #: crates/app/src/controller/installed.rs:153
 msgid "Saved the list as"
@@ -1972,7 +1992,7 @@ msgstr "第 "
 msgid "Stop"
 msgstr "停止"
 
-#: crates/app/qml/PreferencesDialog.qml:492
+#: crates/app/qml/PreferencesDialog.qml:502
 msgid "Stop leaving out "
 msgstr "不再排除 "
 
@@ -2080,11 +2100,11 @@ msgstr "该 Snap 已不再安装"
 msgid "The Trash is empty"
 msgstr "回收站是空的"
 
-#: crates/app/qml/PreferencesDialog.qml:448
+#: crates/app/qml/PreferencesDialog.qml:458
 msgid "The index is not running."
 msgstr "索引未运行。"
 
-#: crates/app/qml/PreferencesDialog.qml:449
+#: crates/app/qml/PreferencesDialog.qml:459
 msgid "The index is up to date and following changes."
 msgstr "索引已是最新，并在跟踪更改。"
 
@@ -2201,6 +2221,10 @@ msgstr "回收站"
 #: crates/app/src/controller/welcome.rs:139
 msgid "Two folders side by side"
 msgstr "两个文件夹并排"
+
+#: crates/app/qml/PreferencesDialog.qml:445
+msgid "Type a workspace’s name in the Activities overview to open it."
+msgstr "在“活动”概览中输入工作区名称即可打开它。"
 
 #: crates/app/qml/Header.qml:172 crates/app/qml/ShelfWindow.qml:76
 #: crates/app/qml/Toast.qml:44 crates/app/qml/Toast.qml:46
@@ -2333,6 +2357,10 @@ msgstr "正在处理…"
 msgid "Works from any app. Cairn adds it to GNOME’s keyboard shortcuts and removes it when you turn this off."
 msgstr "在任何应用中都可使用。Cairn 会将其添加到 GNOME 键盘快捷键中，关闭此项时将其移除。"
 
+#: crates/app/src/search_provider.rs:68
+msgid "Workspace"
+msgstr "工作区"
+
 #: crates/app/qml/WorkspacePage.qml:14
 msgid "Workspace "
 msgstr "工作区 "
@@ -2356,6 +2384,10 @@ msgstr "工作区设置"
 #: crates/app/qml/Sidebar.qml:74 crates/app/qml/Sidebar.qml:86
 msgid "Workspaces"
 msgstr "工作区"
+
+#: crates/app/qml/PreferencesDialog.qml:444
+msgid "Workspaces in Activities search"
+msgstr "在“活动”搜索中显示工作区"
 
 #: data/clean/dev-caches.toml
 msgid "Yarn cache"

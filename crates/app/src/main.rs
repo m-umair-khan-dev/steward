@@ -13,6 +13,7 @@ mod icons;
 mod launch;
 mod paths;
 mod report;
+mod search_provider;
 mod settings;
 mod sidebar;
 mod thumbnails;
