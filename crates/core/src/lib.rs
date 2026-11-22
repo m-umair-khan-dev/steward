@@ -25,6 +25,7 @@ pub mod packages;
 pub mod places;
 pub mod plan;
 pub mod servers;
+pub mod shelf;
 pub mod sort;
 pub mod store;
 pub mod suggest;

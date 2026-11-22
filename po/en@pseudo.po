@@ -12,6 +12,9 @@ msgstr "[    ← → tö mövé · Spàçé ör Ésç tö çlösé ~~~~~~~~~~~~~
 msgid " MCP servers"
 msgstr "[ MÇP sérvérs ~~~~]"
 
+msgid " items"
+msgstr "[ îtéms ~~]"
+
 msgid " of "
 msgstr "[ öf  ~~]"
 
@@ -89,6 +92,9 @@ msgstr "[Àdd Lîñk ~~]"
 
 msgid "Add a folder to “"
 msgstr "[Àdd à földér tö “ ~~~~~]"
+
+msgid "Add to Holding"
+msgstr "[Àdd tö Höldîñg ~~~~]"
 
 msgid "Add to “"
 msgstr "[Àdd tö “ ~~]"
@@ -222,11 +228,17 @@ msgstr "[Çhöösé Çhàñgé, théñ préss thé kéýs ýöü wàñt. ~~~~~~~
 msgid "Choose how “"
 msgstr "[Çhöösé höw “ ~~~~]"
 
+msgid "Clear"
+msgstr "[Çléàr ~~]"
+
 msgid "Clear shortcut for "
 msgstr "[Çléàr shörtçüt för  ~~~~~~]"
 
 msgid "Close"
 msgstr "[Çlösé ~~]"
+
+msgid "Close the Shelf"
+msgstr "[Çlösé thé Shélf ~~~~~]"
 
 msgid "Code"
 msgstr "[Çödé ~~]"
@@ -375,6 +387,9 @@ msgstr "[Délété Çölléçtîöñ ~~~~~]"
 msgid "Descending"
 msgstr "[Désçéñdîñg ~~~]"
 
+msgid "Desktop"
+msgstr "[Désktöp ~~]"
+
 msgid "Developer caches"
 msgstr "[Dévélöpér çàçhés ~~~~~]"
 
@@ -396,6 +411,9 @@ msgstr "[Döçüméñts ~~~]"
 msgid "Documents and files"
 msgstr "[Döçüméñts àñd fîlés ~~~~~~]"
 
+msgid "Downloads"
+msgstr "[Döwñlöàds ~~~]"
+
 msgid "Downloads folder"
 msgstr "[Döwñlöàds földér ~~~~~]"
 
@@ -404,6 +422,9 @@ msgstr "[Döwñlöàds ñöbödý hàs öpéñéd, çhàñgéd ör àddéd för 
 
 msgid "Drive"
 msgstr "[Drîvé ~~]"
+
+msgid "Drop files here to keep them at hand. Nothing moves."
+msgstr "[Dröp fîlés héré tö kéép thém àt hàñd. Ñöthîñg mövés. ~~~~~~~~~~~~~~~~~]"
 
 msgid "Duplicate"
 msgstr "[Düplîçàté ~~~]"
@@ -591,6 +612,9 @@ msgstr "[Gröüp bý ~~]"
 msgid "Headlines"
 msgstr "[Héàdlîñés ~~~]"
 
+msgid "Held items"
+msgstr "[Héld îtéms ~~~]"
+
 msgid "Hide"
 msgstr "[Hîdé ~~]"
 
@@ -599,6 +623,9 @@ msgstr "[Hîdé Ñàmés ~~~]"
 
 msgid "High"
 msgstr "[Hîgh ~~]"
+
+msgid "Holding"
+msgstr "[Höldîñg ~~]"
 
 msgid "Home"
 msgstr "[Hömé ~~]"
@@ -707,6 +734,9 @@ msgstr "[Làrgé ~~]"
 
 msgid "Larger"
 msgstr "[Làrgér ~~]"
+
+msgid "Latest downloads"
+msgstr "[Làtést döwñlöàds ~~~~~]"
 
 msgid "Leave Out"
 msgstr "[Léàvé Öüt ~~~]"
@@ -945,6 +975,9 @@ msgstr "[Ñöt öpéñéd îñ 90 dàýs ~~~~~~~]"
 msgid "Nothing changed"
 msgstr "[Ñöthîñg çhàñgéd ~~~~~]"
 
+msgid "Nothing downloaded yet."
+msgstr "[Ñöthîñg döwñlöàdéd ýét. ~~~~~~~]"
+
 msgid "Nothing has that in its name or text."
 msgstr "[Ñöthîñg hàs thàt îñ îts ñàmé ör téxt. ~~~~~~~~~~~~]"
 
@@ -1119,6 +1152,15 @@ msgstr "[Péék:  ~~]"
 msgid "Period"
 msgstr "[Pérîöd ~~]"
 
+msgid "Pin a folder from its menu to see it here."
+msgstr "[Pîñ à földér fröm îts méñü tö séé ît héré. ~~~~~~~~~~~~~~]"
+
+msgid "Pin to Shelf"
+msgstr "[Pîñ tö Shélf ~~~~]"
+
+msgid "Pinned folders"
+msgstr "[Pîññéd földérs ~~~~]"
+
 msgid "Play"
 msgstr "[Plàý ~~]"
 
@@ -1160,6 +1202,9 @@ msgstr "[Püt Bàçk ~~]"
 
 msgid "Put back"
 msgstr "[Püt bàçk ~~]"
+
+msgid "Quick access"
+msgstr "[Qüîçk àççéss ~~~~]"
 
 msgid "Quit"
 msgstr "[Qüît ~~]"
@@ -1268,6 +1313,9 @@ msgstr "[Séléçt Àll ~~~]"
 
 msgid "Service recommended"
 msgstr "[Sérvîçé réçömméñdéd ~~~~~~]"
+
+msgid "Shelf"
+msgstr "[Shélf ~~]"
 
 msgid "Shell"
 msgstr "[Shéll ~~]"
@@ -1395,6 +1443,9 @@ msgstr "[Tàgs ~~]"
 msgid "Tags, separated by commas"
 msgstr "[Tàgs, sépàràtéd bý çömmàs ~~~~~~~~]"
 
+msgid "Take out of Holding: "
+msgstr "[Tàké öüt öf Höldîñg:  ~~~~~~~]"
+
 msgid "Terminal"
 msgstr "[Térmîñàl ~~]"
 
@@ -1409,6 +1460,9 @@ msgstr "[Thàt plàçé döés ñöt éxîst ~~~~~~~~]"
 
 msgid "The Flatpak is no longer installed"
 msgstr "[Thé Flàtpàk îs ñö löñgér îñstàlléd ~~~~~~~~~~~]"
+
+msgid "The Shelf holds nine folders; unpin one first"
+msgstr "[Thé Shélf hölds ñîñé földérs; üñpîñ öñé fîrst ~~~~~~~~~~~~~~~]"
 
 msgid "The Snap is no longer installed"
 msgstr "[Thé Sñàp îs ñö löñgér îñstàlléd ~~~~~~~~~~]"

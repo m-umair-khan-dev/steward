@@ -33,6 +33,7 @@ mod ops;
 mod pane;
 mod peek;
 mod search;
+mod shelf;
 mod style;
 mod tidy;
 mod tools;
@@ -213,6 +214,7 @@ pub struct Controller {
     agents: agents::AgentsState,
     md: markdown::MarkdownState,
     bookmarks: bookmarks::BookmarksState,
+    shelf: shelf::ShelfState,
     /// Path bar: folders whose name matches what is typed, and the one chosen.
     path_matches: Vec<PathBuf>,
     path_match: Option<usize>,
@@ -317,6 +319,7 @@ pub fn init(notifier: impl Fn() + 'static) {
         agents: agents::AgentsState::default(),
         md: markdown::MarkdownState::default(),
         bookmarks: bookmarks::BookmarksState::default(),
+        shelf: shelf::ShelfState::default(),
         path_matches: Vec::new(),
         path_match: None,
         dialog: String::new(),
@@ -1997,6 +2000,7 @@ impl Controller {
             "agents": self.agents_test_json(),
             "markdown": self.markdown_test_json(),
             "bookmarks": self.bookmarks_test_json(),
+            "shelf": self.shelf_test_json(),
             // Folder numbers as the cards show them, by name.
             "folder_stats": self.visible.iter().filter(|e| e.is_dir()).filter_map(|e| {
                 let (items, bytes) = self.folder_numbers(&e.data().file.path()?)?;

@@ -20,10 +20,21 @@ Window {
     Presenter {
         id: p
         onQuitting: Qt.quit()
-        onShoot: path => win.contentItem.grabToImage(result => p.shot(path, result.saveToFile(path)))
+        // Test1.Screenshot; "shelf:PATH" captures the Shelf window instead.
+        onShoot: path => {
+            const shelfShot = path.startsWith("shelf:")
+            const file = shelfShot ? path.slice(6) : path
+            const item = shelfShot ? shelfWindow.contentItem : win.contentItem
+            item.grabToImage(result => p.shot(path, result.saveToFile(file)))
+        }
         onToast: (text, undo) => toast.show(text, undo)
         onFocus: target => {
-            if (target === "path") {
+            if (target === "raise") {
+                // The Shelf, the tray or a search result asked for the window.
+                if (!win.visible) win.show()
+                win.raise()
+                win.requestActivate()
+            } else if (target === "path") {
                 pathBar.field.text = win.pathbar.text || ""
                 pathBar.field.selectAll()
                 pathBar.field.forceActiveFocus()
@@ -494,6 +505,9 @@ Window {
             { text: p.t("Open in Terminal"), action: "win.open-terminal", param: win.menuFolderPath(), enabled: win.menuFolderPath() !== "" },
             { text: p.t("Open in Editor"), action: "win.open-editor", param: win.menuFolderPath(), enabled: win.menuFolderPath() !== "" },
             { separator: true },
+            { text: p.t("Add to Holding"), action: "win.shelf-hold", param: "" },
+            { text: p.t("Pin to Shelf"), action: "win.shelf-pin", param: win.menuFolderPath(), enabled: win.menuFolderPath() !== "" },
+            { separator: true },
             { text: p.t("Copy"), action: "win.copy", param: "" },
             { text: p.t("Cut"), action: "win.cut", param: "" },
             { separator: true },
@@ -527,6 +541,8 @@ Window {
     WelcomeDialog { visible: p.dialog === "welcome"; info: win.dialogData; prefs: win.prefs; cardWidth: 640 }
     WhatsNewDialog { visible: p.dialog === "whats-new"; info: win.dialogData }
     StopServerDialog { visible: p.dialog === "stop-server"; info: win.dialogData }
+    // The Shelf: a window of its own (P8-T01).
+    ShelfWindow { id: shelfWindow; model: (win.tools || {}).shelf || ({ open: false }) }
     AddLinkDialog { visible: p.dialog === "bookmark-add"; info: win.dialogData }
     BookmarkDialog { visible: p.dialog === "bookmark-edit"; info: win.dialogData }
     CollectionDialog { visible: p.dialog === "collection-new"; info: win.dialogData }

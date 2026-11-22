@@ -99,6 +99,18 @@ const MIGRATIONS: &[&str] = &[
         tag TEXT NOT NULL,
         PRIMARY KEY (bookmark_id, tag)
      );",
+    // 6: the Shelf (P8-T01): pinned folders and Holding.
+    "CREATE TABLE shelf_pin (
+        id INTEGER PRIMARY KEY,
+        path TEXT NOT NULL,
+        position INTEGER NOT NULL
+     );
+     CREATE TABLE shelf_held (
+        id INTEGER PRIMARY KEY,
+        path TEXT NOT NULL UNIQUE,
+        added_at INTEGER NOT NULL
+     );
+     CREATE TABLE shelf_meta (key TEXT PRIMARY KEY, value INTEGER);",
 ];
 
 /// How one folder was last shown. `None` fields fall back to the defaults.

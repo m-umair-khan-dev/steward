@@ -127,12 +127,17 @@ impl Controller {
     }
 
     fn submit(&mut self, request: Request, summary: String) {
+        self.submit_job(request, summary);
+    }
+
+    /// Queues an operation; returns its job, to follow it (the Shelf).
+    pub fn submit_job(&mut self, request: Request, summary: String) -> Option<JobId> {
         let Some(engine) = self.ops.engine.as_mut() else {
             self.emit(Event::Toast(
                 gettext("File operations are not available"),
                 false,
             ));
-            return;
+            return None;
         };
         let id = engine.submit(request, &summary);
         self.ops.jobs.push(JobView {
@@ -146,6 +151,7 @@ impl Controller {
             current: String::new(),
         });
         self.mark(dirty::OPS);
+        Some(id)
     }
 
     /// Selects the item once the folder on screen lists it.
@@ -529,13 +535,13 @@ impl Controller {
                         self.close_dialog();
                     }
                 }
-                self.finished(report);
+                self.finished(job, report);
             }
         }
         self.mark(dirty::OPS);
     }
 
-    fn finished(&mut self, report: Report) {
+    fn finished(&mut self, job: JobId, report: Report) {
         let mut touched: Vec<PathBuf> = cairn_core::ops::touched_folders(&report)
             .into_iter()
             .collect();
@@ -569,11 +575,14 @@ impl Controller {
         }
         let clean_text = self.clean_report_text(&report);
         self.clean_after_op(report.outcome == Outcome::Undo);
-        if let Some(text) = clean_text.or_else(|| self.report_text(&report)) {
-            let undo = report.outcome != Outcome::Undo
-                && report.done > 0
-                && report.kind != "empty-trash"
-                && report.batch.is_some();
+        let text = clean_text.or_else(|| self.report_text(&report));
+        let undo = report.outcome != Outcome::Undo
+            && report.done > 0
+            && report.kind != "empty-trash"
+            && report.batch.is_some();
+        // The Shelf's result line (P8-T01), when the Shelf started it.
+        self.shelf_report(job, report.outcome == Outcome::Undo, text.clone(), undo);
+        if let Some(text) = text {
             self.emit(Event::Toast(text, undo));
         }
         if report.kind == "empty-trash" || self.in_trash() {

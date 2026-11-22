@@ -59,6 +59,8 @@ impl Controller {
             "agents": if page == "agents" { self.agents_json() } else { Value::Null },
             "markdown": if page == "markdown" { self.markdown_json() } else { Value::Null },
             "bookmarks": if page == "bookmarks" { self.bookmarks_json() } else { Value::Null },
+            // The Shelf is its own window (P8-T01), published with the pages.
+            "shelf": self.shelf_json(),
         })
     }
 }

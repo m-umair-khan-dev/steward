@@ -362,6 +362,8 @@ fn create() -> (gio::SimpleActionGroup, gio::SimpleActionGroup) {
     let s = settings::get();
     let app = gio::SimpleActionGroup::new();
     simple(&app, "quit", || controller::with(|c| c.quit()));
+    // The Shelf (P8-T01).
+    simple(&app, "shelf", || controller::with(|c| c.shelf_toggle()));
     simple(&app, "report-bug", || {
         let url = crate::report::open();
         controller::with(|c| c.reported(url));
@@ -498,6 +500,34 @@ fn create() -> (gio::SimpleActionGroup, gio::SimpleActionGroup) {
     simple(&win, "agents-refresh", || {
         controller::with(|c| c.agents_refresh())
     });
+    simple(&win, "shelf-close", || {
+        controller::with(|c| c.shelf_close())
+    });
+    with_string(&win, "shelf-open-pin", |n| {
+        controller::with(|c| c.shelf_open_pin(n))
+    });
+    with_string(&win, "shelf-open", |path| {
+        controller::with(|c| c.shelf_open(path))
+    });
+    with_string(&win, "shelf-pin", |path| {
+        controller::with(|c| c.shelf_pin(path))
+    });
+    with_string(&win, "shelf-unpin", |n| {
+        controller::with(|c| c.shelf_unpin(n))
+    });
+    with_string(&win, "shelf-hold", |list| {
+        controller::with(|c| c.shelf_hold(list))
+    });
+    with_string(&win, "shelf-unhold", |id| {
+        controller::with(|c| c.shelf_unhold(id))
+    });
+    simple(&win, "shelf-clear", || {
+        controller::with(|c| c.shelf_clear())
+    });
+    with_string(&win, "shelf-drop", |v| {
+        controller::with(|c| c.shelf_drop(v))
+    });
+    simple(&win, "shelf-undo", || controller::with(|c| c.shelf_undo()));
     // Customisable shortcuts (P7-T11): "id|key", id, and all.
     with_string(&win, "shortcut-set", |value| {
         let Some((id, key)) = value.rsplit_once('|') else {

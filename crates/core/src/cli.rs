@@ -8,6 +8,7 @@
 //!     cairn new-workspace [NAME]       make a workspace (no name: ask for one)
 //!     cairn add-link URL               save a link to Bookmarks
 //!     cairn free-up-space              open Free Up Space
+//!     cairn shelf                      open or close the Shelf
 //!     cairn --new-window | --new-workspace | --add-link | --free-up-space
 //!                                      (the desktop file's actions)
 
@@ -47,6 +48,7 @@ pub const USAGE: &str = "Usage:
   cairn new-workspace [NAME]     Make a workspace (without a name, ask for one)
   cairn add-link URL             Save a link to Bookmarks
   cairn free-up-space            Open Free Up Space
+  cairn shelf                    Open or close the Shelf
   cairn --help | --version";
 
 /// Reads a command line (without the program name). `absolute` turns a
@@ -89,6 +91,11 @@ pub fn parse(args: &[String], absolute: &dyn Fn(&str) -> String) -> Parsed {
         },
         "add-link" => one("a link").map(|url| vec![win("bookmark-add", Some(url))]),
         "free-up-space" => Ok(vec![win("tool-open", Some("clean".into()))]),
+        "shelf" => Ok(vec![Request {
+            scope: "app",
+            name: "shelf",
+            param: None,
+        }]),
         _ => {
             // Desktop-file options and plain paths (P6-T06).
             let mut out = Vec::new();

@@ -59,6 +59,7 @@ const QML_FILES: &[&str] = &[
     "qml/AgentsPage.qml",
     "qml/MarkdownPage.qml",
     "qml/BookmarksPage.qml",
+    "qml/ShelfWindow.qml",
     "qml/AddLinkDialog.qml",
     "qml/BookmarkDialog.qml",
     "qml/CollectionDialog.qml",
