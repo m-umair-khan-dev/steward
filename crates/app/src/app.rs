@@ -59,13 +59,15 @@ pub fn run() -> ExitCode {
     ExitCode::from(u8::try_from(code).unwrap_or(1))
 }
 
-/// Where the message catalogs are: installed builds use the system's; test
-/// and development builds use the catalogs build.rs compiled from po/.
+/// Where the message catalogs are: installed builds use the system's (or
+/// the folder named at build time, e.g. /app/share/locale in the Flatpak,
+/// P9-T02); test and development builds use the catalogs build.rs compiled
+/// from po/.
 fn locale_dir() -> &'static str {
     if cfg!(any(debug_assertions, feature = "e2e")) {
         concat!(env!("OUT_DIR"), "/locale")
     } else {
-        "/usr/share/locale"
+        option_env!("CAIRN_LOCALEDIR").unwrap_or("/usr/share/locale")
     }
 }
 

@@ -1,0 +1,96 @@
+# Flatpak build of Cairn (P9-T02; DESIGN.md D6). The .deb stays the main
+# channel: inside the sandbox Cairn cannot read the host's package lists or
+# run its package tools, so the Installed page and three Smart Clean
+# features explain that instead (P9-T01, capability detection).
+#
+# Local test build (needs flatpak-builder and about 4 GB for the runtimes):
+#   flatpak-builder --user --install-deps-from=flathub --force-clean \
+#     build-dir packaging/flatpak/dev.cairn.Files.yml
+# Cargo downloads crates during the build (build-args below). A Flathub
+# submission instead vendors them with flatpak-cargo-generator (HUMAN step).
+app-id: dev.cairn.Files
+runtime: org.kde.Platform
+runtime-version: '6.10'
+sdk: org.kde.Sdk
+sdk-extensions:
+  - org.freedesktop.Sdk.Extension.rust-stable
+command: cairn
+finish-args:
+  # Display and GPU.
+  - --share=ipc
+  - --socket=wayland
+  - --socket=fallback-x11
+  - --device=dri
+  # A file manager needs the user's files; the host's other places stay out.
+  - --filesystem=home
+  - --filesystem=/media
+  - --filesystem=/run/media
+  # Bookmarks fetch a link's title and picture (can be turned off).
+  - --share=network
+  # The Trash, mounts and drives (GVfs), the desktop's settings.
+  - --talk-name=org.gtk.vfs.*
+  - --filesystem=xdg-run/gvfsd
+  - --talk-name=ca.desrt.dconf
+  - --filesystem=xdg-run/dconf
+  - --filesystem=~/.config/dconf:ro
+  - --env=DCONF_USER_CONFIG_DIR=.config/dconf
+  # The tray icon and "Show in folder" for other apps.
+  - --talk-name=org.kde.StatusNotifierWatcher
+  - --own-name=org.kde.StatusNotifierItem-*
+  - --own-name=org.freedesktop.FileManager1
+  # The search index runs as a child of the app inside the sandbox. Its
+  # own bwrap sandbox for reading files cannot start inside Flatpak, so
+  # search inside files and thumbnails need another route there (ADR 0015).
+  - --own-name=dev.cairn.Indexer
+build-options:
+  append-path: /usr/lib/sdk/rust-stable/bin
+  env:
+    CARGO_HOME: /run/build/cairn/cargo
+  build-args:
+    - --share=network
+modules:
+  - name: poppler-utils
+    # pdftotext, for search inside PDFs.
+    buildsystem: cmake-ninja
+    config-opts:
+      - -DENABLE_UTILS=ON
+      - -DENABLE_QT5=OFF
+      - -DENABLE_QT6=OFF
+      - -DENABLE_GLIB=OFF
+      - -DENABLE_CPP=OFF
+      - -DENABLE_BOOST=OFF
+      - -DENABLE_LIBOPENJPEG=none
+      - -DENABLE_GPGME=OFF
+      - -DENABLE_NSS3=OFF
+      - -DENABLE_LCMS=OFF
+      - -DENABLE_LIBCURL=OFF
+      - -DBUILD_GTK_TESTS=OFF
+      - -DBUILD_QT5_TESTS=OFF
+      - -DBUILD_QT6_TESTS=OFF
+      - -DBUILD_CPP_TESTS=OFF
+      - -DBUILD_MANUAL_TESTS=OFF
+    sources:
+      - type: archive
+        url: https://poppler.freedesktop.org/poppler-25.10.0.tar.xz
+        # HUMAN: fill in the checksum when the build is first run.
+        sha256: 0000000000000000000000000000000000000000000000000000000000000000
+  - name: cairn
+    buildsystem: simple
+    build-commands:
+      - CAIRN_LOCALEDIR=/app/share/locale cargo build --release --locked -p cairn -p cairn-indexer
+      - install -Dm755 target/release/cairn /app/bin/cairn
+      # The app starts the indexer from beside itself.
+      - install -Dm755 target/release/cairn-indexer /app/bin/cairn-indexer
+      - for po in po/*.po; do lang=$(basename "$po" .po); [ "$lang" = "en@pseudo" ] && continue;
+        install -d /app/share/locale/$lang/LC_MESSAGES;
+        msgfmt -o /app/share/locale/$lang/LC_MESSAGES/cairn.mo "$po"; done
+      - install -Dm644 data/dev.cairn.Files.desktop /app/share/applications/dev.cairn.Files.desktop
+      - install -Dm644 data/dev.cairn.Files.metainfo.xml /app/share/metainfo/dev.cairn.Files.metainfo.xml
+      - install -Dm644 data/dev.cairn.Files.gschema.xml /app/share/glib-2.0/schemas/dev.cairn.Files.gschema.xml
+      - glib-compile-schemas /app/share/glib-2.0/schemas
+      - install -Dm644 data/icons/hicolor/scalable/apps/dev.cairn.Files.svg /app/share/icons/hicolor/scalable/apps/dev.cairn.Files.svg
+      - install -Dm644 data/icons/hicolor/symbolic/apps/dev.cairn.Files-symbolic.svg /app/share/icons/hicolor/symbolic/apps/dev.cairn.Files-symbolic.svg
+      - install -Dm644 data/dev.cairn.Files.search-provider.ini /app/share/gnome-shell/search-providers/dev.cairn.Files.search-provider.ini
+    sources:
+      - type: dir
+        path: ../..
