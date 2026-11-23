@@ -134,8 +134,40 @@ services:
     tty: true
     command: ["bash"]
 
+  # The Flatpak build (P9-T02, ADR 0015): `make flatpak`. Runs as root inside
+  # the container (flatpak-builder installs the runtimes per user); the
+  # bundle is handed back to the host user.
+  flatpak:
+    profiles: ["flatpak"]
+    build:
+      context: .
+      dockerfile: docker/flatpak.Dockerfile
+      args:
+        UBUNTU_IMAGE: ${UBUNTU_IMAGE}
+    image: cairn-flatpak:${UBUNTU_VERSION:-26.10}
+    init: true
+    environment:
+      LANG: C.UTF-8
+      HOME: /flatpak/home
+      HOST_UID: ${HOST_UID:-1000}
+      HOST_GID: ${HOST_GID:-1000}
+    volumes:
+      - .:/workspace
+      - flatpak-home:/flatpak/home   # the KDE runtime and SDK, about 4 GB
+      - flatpak-work:/flatpak/work   # build state and the local repository
+    # bwrap mounts a fresh /proc for each build step; Docker's masked /proc
+    # paths refuse that unless system paths are unconfined. Builder only.
+    security_opt: ["seccomp=unconfined", "apparmor=unconfined", "systempaths=unconfined"]
+    # Flatpak checks the exported icon in a sandbox of its own, which needs
+    # to create namespaces (and bring up their loopback) the default
+    # capabilities do not allow.
+    cap_add: ["SYS_ADMIN", "NET_ADMIN"]
+    command: ["docker/scripts/build-flatpak"]
+
 volumes:
   cargo-registry:
   cargo-target:
     name: cairn-target-${UBUNTU_VERSION:-26.10}   # one build cache per Ubuntu release
   fixture-home:
+  flatpak-home:
+  flatpak-work:

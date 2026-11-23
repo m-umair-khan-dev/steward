@@ -1,0 +1,19 @@
+#!/bin/bash
+# Builds the Flatpak bundle (P9-T02). Runs inside the flatpak service
+# (compose.desktop.yaml); the runtimes and the build state live in Docker
+# volumes, the bundle goes to dist/flatpak/.
+set -euo pipefail
+app=dev.cairn.Files
+work=/flatpak/work
+out=dist/flatpak
+
+flatpak remote-add --user --if-not-exists flathub https://dl.flathub.org/repo/flathub.flatpakrepo
+# rofiles-fuse needs /dev/fuse, which the container does not have.
+flatpak-builder --user --install-deps-from=flathub --disable-rofiles-fuse \
+  --force-clean --ccache --state-dir="$work/state" --repo="$work/repo" \
+  "$work/build" packaging/flatpak/$app.yml
+mkdir -p "$out"
+flatpak build-bundle --runtime-repo=https://dl.flathub.org/repo/flathub.flatpakrepo \
+  "$work/repo" "$out/cairn.flatpak" $app
+chown -R "${HOST_UID:-1000}:${HOST_GID:-1000}" "$out"
+ls -l "$out"

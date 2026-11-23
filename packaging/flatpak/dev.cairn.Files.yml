@@ -3,9 +3,8 @@
 # run its package tools, so the Installed page and three Smart Clean
 # features explain that instead (P9-T01, capability detection).
 #
-# Local test build (needs flatpak-builder and about 4 GB for the runtimes):
-#   flatpak-builder --user --install-deps-from=flathub --force-clean \
-#     build-dir packaging/flatpak/dev.cairn.Files.yml
+# Build it with `make flatpak` (in Docker; the runtimes, about 4 GB, stay in
+# a Docker volume). The bundle lands in dist/flatpak/.
 # Cargo downloads crates during the build (build-args below). A Flathub
 # submission instead vendors them with flatpak-cargo-generator (HUMAN step).
 app-id: dev.cairn.Files
@@ -36,7 +35,10 @@ finish-args:
   - --env=DCONF_USER_CONFIG_DIR=.config/dconf
   # The tray icon and "Show in folder" for other apps.
   - --talk-name=org.kde.StatusNotifierWatcher
-  - --own-name=org.kde.StatusNotifierItem-*
+  # The tray item's name is org.kde.StatusNotifierItem-PID-N; Flatpak only
+  # takes whole-segment wildcards. (Flathub review may prefer the item on
+  # the unique bus name instead: follow-up.)
+  - --own-name=org.kde.*
   - --own-name=org.freedesktop.FileManager1
   # The search index runs as a child of the app inside the sandbox. Its
   # own bwrap sandbox for reading files cannot start inside Flatpak, so
@@ -72,12 +74,14 @@ modules:
     sources:
       - type: archive
         url: https://poppler.freedesktop.org/poppler-25.10.0.tar.xz
-        # HUMAN: fill in the checksum when the build is first run.
-        sha256: 0000000000000000000000000000000000000000000000000000000000000000
+        sha256: 6b5e9bb64dabb15787a14db1675291c7afaf9387438cc93a4fb7f6aec4ee6fe0
   - name: cairn
     buildsystem: simple
     build-commands:
-      - CAIRN_LOCALEDIR=/app/share/locale cargo build --release --locked -p cairn -p cairn-indexer
+      # The SDK's Rust can trail our pinned toolchain (rust-toolchain.toml)
+      # by a release; the declared minimum is ours, not a language need.
+      - CAIRN_LOCALEDIR=/app/share/locale cargo build --release --locked --ignore-rust-version
+        -p cairn -p cairn-indexer
       - install -Dm755 target/release/cairn /app/bin/cairn
       # The app starts the indexer from beside itself.
       - install -Dm755 target/release/cairn-indexer /app/bin/cairn-indexer
@@ -94,3 +98,13 @@ modules:
     sources:
       - type: dir
         path: ../..
+        skip:
+          - .git
+          - target
+          - dist
+          - artifacts
+          - secrets
+          - fileosmac
+          - site/node_modules
+          - spikes
+          - .env

@@ -393,8 +393,8 @@ Notes:
 | ID | Task | Status | Notes |
 |---|---|---|---|
 | P9-T01 | Capability detection | done | E9-01. `cairn_core::sandbox` detects Flatpak, Snap or the test switch; the Installed page, the installers and leftovers cards and the administrator rows explain why |
-| P9-T02 | Flatpak manifest and build | manifest written; build waits | ADR 0015. Needs about 4 GB of runtimes; [verify] item, no fallback named: the product owner decides where to build |
-| P9-T03 | Translation workflow; more languages | waits for the product owner | Which languages, and which hosted service |
+| P9-T02 | Flatpak manifest and build | built; E9-02 open | ADR 0015. `make flatpak` builds the bundle in Docker (runtimes cached in a volume). Next: E9-02 (smoke scenarios inside the bundle); for Flathub, vendored crates, linter, tray bus name |
+| P9-T03 | Translation workflow; more languages | on hold | Product owner's decision (2026-11-23): both more languages and the hosted translation service |
 | P9-T04 | Browser extension (optional) | done (manual check pending) | `browser-extension/`: toolbar button and link menu; native host runs `cairn add-link` (web addresses only, no shell); tested by feeding the host a message. Firefox host manifest packaged; Chromium needs the store ID (HUMAN) |
 
 ## Blocked / waiting for a human
@@ -434,9 +434,8 @@ Notes:
     and decision O4 (is the Shell extension, P8-T05, in scope).
 - Phase 9: load `browser-extension/extension` in Firefox (about:debugging)
   with the packaged Cairn and save a page; sign it on addons.mozilla.org;
-  publish in the Chrome Web Store and fill in its ID; decide where to build
-  the Flatpak (about 4 GB) and whether to submit to Flathub; choose further
-  languages and a hosted translation service (P9-T03).
+  publish in the Chrome Web Store and fill in its ID; decide whether to
+  submit the Flatpak to Flathub (needs the public repository and app ID).
 - Phase 7: try Open In with the terminals and editors actually installed;
   check the AI Agents numbers against a real machine's usage.
 - Phase 6 (from DESIGN.md's HUMAN list):
@@ -454,6 +453,8 @@ Notes:
   - measure launch and memory on real hardware (docs/perf.md);
   - file the performance issues listed in docs/perf.md;
   - tag the release.
+- P9-T03 (more languages, hosted translation service) is on hold by the
+  product owner's decision (2026-11-23).
 - Website (P6-T10) is on hold by the product owner's decision; E6-08 waits
   with it. The draft is in site/.
 - 2026-11-23: this machine moved from Docker Desktop to Docker Engine

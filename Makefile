@@ -35,7 +35,7 @@ export NEXTEST_VERSION NEXTEST_SHA256 WATCHEXEC_VERSION WATCHEXEC_SHA256 CARGO_D
 COMPOSE := docker compose -f compose.desktop.yaml
 RUN := $(COMPOSE) run --rm
 
-.PHONY: help init images fixture app shell test e2e lint lint-host check check-all lockfile down clean i18n deb deb-test keys apt-e2e publish-apt perf shots
+.PHONY: help init images fixture app shell test e2e lint lint-host check check-all lockfile down clean i18n deb deb-test keys apt-e2e publish-apt perf shots flatpak
 
 help: ## Show this help
 	@grep -hE '^[a-z-]+:.*## ' $(MAKEFILE_LIST) | awk -F':.*## ' '{printf "  make %-11s %s\n", $$1, $$2}'
@@ -83,6 +83,10 @@ deb-test: ## Install the .deb in a clean Ubuntu with apt; lintian and the smoke 
 	docker run --rm --security-opt seccomp=unconfined --tmpfs /tmp:exec,mode=1777 \
 	  -v $(CURDIR)/artifacts:/workspace/artifacts cairn-install-test:$(UBUNTU_VERSION)
 
+flatpak: ## Build the Flatpak bundle into dist/flatpak/ (runtimes cached in a volume)
+	$(COMPOSE) --profile flatpak build flatpak
+	$(COMPOSE) --profile flatpak run --rm flatpak
+
 keys: ## Throwaway development key for the apt repository (secrets/, git-ignored)
 	@test -s secrets/apt_signing_key.asc || docker build -q -f docker/aptrepo.Dockerfile \
 	  --build-arg UBUNTU_IMAGE=$(UBUNTU_IMAGE) -t cairn-aptrepo:dev . >/dev/null
@@ -113,6 +117,7 @@ lint: images lint-host ## Formatting, clippy, Dockerfile and Compose checks
 lint-host:
 	docker run --rm -i $(HADOLINT_IMAGE) hadolint --ignore DL3008 --ignore DL3059 - < docker/desktop.Dockerfile
 	docker run --rm -i $(HADOLINT_IMAGE) hadolint --ignore DL3008 - < docker/aptrepo.Dockerfile
+	docker run --rm -i $(HADOLINT_IMAGE) hadolint --ignore DL3008 - < docker/flatpak.Dockerfile
 	docker compose -f compose.yaml -f compose.test.yaml config -q
 	$(COMPOSE) config -q
 	$(COMPOSE) --profile build config -q
