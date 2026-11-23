@@ -79,7 +79,7 @@ msgstr "+ 添加文件夹"
 msgid ": your own command"
 msgstr "：自定义命令"
 
-#: crates/app/qml/AboutDialog.qml:26
+#: crates/app/qml/AboutDialog.qml:24
 msgid "A file manager for Ubuntu that keeps folders tidy."
 msgstr "一款让文件夹保持整洁的 Ubuntu 文件管理器。"
 
@@ -109,7 +109,7 @@ msgid "About Cairn"
 msgstr "关于 Cairn"
 
 #: crates/app/qml/AboutPage.qml:12 crates/app/qml/Main.qml:245
-#: crates/app/qml/Sidebar.qml:190
+#: crates/app/qml/Sidebar.qml:188
 msgid "About This Computer"
 msgstr "关于这台电脑"
 
@@ -195,7 +195,7 @@ msgstr "应用"
 msgid "Apply to all"
 msgstr "应用到全部"
 
-#: crates/app/src/controller/clean.rs:480
+#: crates/app/src/controller/clean.rs:481
 #: crates/app/src/controller/installed.rs:203
 msgid "Apps"
 msgstr "应用"
@@ -215,6 +215,10 @@ msgstr "已要求服务器停止"
 #: crates/app/qml/InstalledPage.qml:214
 msgid "Asking apt, Snap, Flatpak and the other tools…"
 msgstr "正在询问 apt、Snap、Flatpak 和其他工具…"
+
+#: crates/app/qml/PreferencesDialog.qml:309
+msgid "Aubergine"
+msgstr "茄紫"
 
 #: crates/core/src/kind.rs
 msgid "Audio"
@@ -263,7 +267,7 @@ msgid "Bookmark removed"
 msgstr "书签已移除"
 
 #: crates/app/qml/BookmarksPage.qml:14 crates/app/qml/Main.qml:247
-#: crates/app/qml/Sidebar.qml:109 crates/app/qml/Sidebar.qml:97
+#: crates/app/qml/Sidebar.qml:107 crates/app/qml/Sidebar.qml:95
 msgid "Bookmarks"
 msgstr "书签"
 
@@ -275,8 +279,8 @@ msgstr "按类型"
 msgid "CONTENTS"
 msgstr "内容"
 
-#: crates/app/qml/AboutDialog.qml:21 crates/app/qml/Main.qml:17
-#: crates/app/qml/Sidebar.qml:41 crates/app/qml/WelcomeDialog.qml:180
+#: crates/app/qml/AboutDialog.qml:19 crates/app/qml/Main.qml:17
+#: crates/app/qml/Sidebar.qml:39 crates/app/qml/WelcomeDialog.qml:180
 msgid "Cairn"
 msgstr "Cairn"
 
@@ -373,7 +377,7 @@ msgstr "关闭置物架"
 msgid "Code"
 msgstr "代码"
 
-#: crates/app/qml/Sidebar.qml:52
+#: crates/app/qml/Sidebar.qml:50
 msgid "Collapse sidebar"
 msgstr "折叠侧边栏"
 
@@ -407,8 +411,8 @@ msgstr "颜色"
 msgid "Colour "
 msgstr "颜色 "
 
-#: crates/app/qml/Rail.qml:57 crates/app/qml/Sidebar.qml:189
-#: crates/app/qml/Sidebar.qml:198 crates/app/src/controller.rs:1407
+#: crates/app/qml/Rail.qml:55 crates/app/qml/Sidebar.qml:187
+#: crates/app/qml/Sidebar.qml:196 crates/app/src/controller.rs:1407
 msgid "Computer"
 msgstr "电脑"
 
@@ -441,7 +445,7 @@ msgstr "已复制"
 msgid "Copied as text"
 msgstr "已复制为文本"
 
-#: crates/app/src/controller/clean.rs:445
+#: crates/app/src/controller/clean.rs:446
 msgid "Copied the command. Paste it into a terminal to run it."
 msgstr "已复制命令。粘贴到终端中即可运行。"
 
@@ -673,7 +677,7 @@ msgstr "编辑器"
 msgid "Editor (Shift+F4)"
 msgstr "编辑器 (Shift+F4)"
 
-#: crates/app/qml/Sidebar.qml:261
+#: crates/app/qml/Sidebar.qml:259
 msgid "Eject "
 msgstr "弹出 "
 
@@ -710,19 +714,15 @@ msgstr "已加密"
 msgid "Expand Sidebar"
 msgstr "展开侧边栏"
 
-#: crates/app/qml/Rail.qml:33
+#: crates/app/qml/Rail.qml:31
 msgid "Expand sidebar"
 msgstr "展开侧边栏"
-
-#: crates/app/qml/Sidebar.qml:117
-msgid "Favorites"
-msgstr "收藏"
 
 #: crates/app/qml/BookmarksPage.qml:217
 msgid "Favourite "
 msgstr "收藏 "
 
-#: crates/app/src/controller/bookmarks.rs:310
+#: crates/app/qml/Sidebar.qml:115 crates/app/src/controller/bookmarks.rs:310
 #: crates/app/src/controller/bookmarks.rs:333
 msgid "Favourites"
 msgstr "收藏"
@@ -854,7 +854,7 @@ msgstr "来自已卸载的应用"
 msgid "Full charge"
 msgstr "满电容量"
 
-#: crates/app/qml/AboutDialog.qml:28
+#: crates/app/qml/AboutDialog.qml:26
 msgid "GPL-3.0-or-later"
 msgstr "GPL-3.0-or-later"
 
@@ -907,7 +907,7 @@ msgstr "标题"
 msgid "Held items"
 msgstr "暂存的项目"
 
-#: crates/app/qml/Sidebar.qml:355
+#: crates/app/qml/Sidebar.qml:353
 msgid "Hide"
 msgstr "隐藏"
 
@@ -928,7 +928,7 @@ msgstr "暂存"
 msgid "Home"
 msgstr "主目录"
 
-#: crates/app/qml/CleanPage.qml:102 crates/app/src/controller/clean.rs:496
+#: crates/app/qml/CleanPage.qml:102 crates/app/src/controller/clean.rs:497
 msgid "Home disk"
 msgstr "主目录磁盘"
 
@@ -957,7 +957,7 @@ msgstr "图片"
 msgid "Images and videos"
 msgstr "图片和视频"
 
-#: crates/app/src/controller/clean.rs:544
+#: crates/app/src/controller/clean.rs:545
 msgid "Images no container uses"
 msgstr "没有容器使用的镜像"
 
@@ -965,7 +965,7 @@ msgstr "没有容器使用的镜像"
 msgid "In projects untouched for 6 months"
 msgstr "位于 6 个月未动过的项目中"
 
-#: crates/app/src/controller/clean.rs:481
+#: crates/app/src/controller/clean.rs:482
 msgid "In the Trash"
 msgstr "回收站中"
 
@@ -1135,12 +1135,12 @@ msgstr "定位…"
 msgid "Location"
 msgstr "位置"
 
-#: crates/app/qml/Sidebar.qml:147 crates/app/qml/Sidebar.qml:150
-#: crates/app/qml/Sidebar.qml:168
+#: crates/app/qml/Sidebar.qml:145 crates/app/qml/Sidebar.qml:148
+#: crates/app/qml/Sidebar.qml:166
 msgid "Locations"
 msgstr "位置"
 
-#: crates/app/src/controller/clean.rs:532
+#: crates/app/src/controller/clean.rs:533
 msgid "Logs over 200 MB; the newest are kept"
 msgstr "超过 200 MB 的日志；最新的会保留"
 
@@ -1157,7 +1157,7 @@ msgid "Looking for things to clear…"
 msgstr "正在查找可清理的内容…"
 
 #: crates/app/qml/AboutPage.qml:78 crates/app/qml/CleanPage.qml:104
-#: crates/app/qml/InstalledPage.qml:37 crates/app/src/controller/clean.rs:595
+#: crates/app/qml/InstalledPage.qml:37 crates/app/src/controller/clean.rs:596
 msgid "Looking…"
 msgstr "正在查找…"
 
@@ -1235,8 +1235,8 @@ msgstr "月"
 msgid "More for "
 msgstr "更多： "
 
-#: crates/app/src/controller/clean.rs:371
-#: crates/app/src/controller/clean.rs:627
+#: crates/app/src/controller/clean.rs:372
+#: crates/app/src/controller/clean.rs:628
 #: crates/app/src/controller/downloads.rs:105
 #: crates/app/src/controller/ops.rs:254
 msgid "Move"
@@ -1246,11 +1246,11 @@ msgstr "移动"
 msgid "Move   F6"
 msgstr "移动   F6"
 
-#: crates/app/qml/Sidebar.qml:354
+#: crates/app/qml/Sidebar.qml:352
 msgid "Move Down"
 msgstr "下移"
 
-#: crates/app/qml/Sidebar.qml:353
+#: crates/app/qml/Sidebar.qml:351
 msgid "Move Up"
 msgstr "上移"
 
@@ -1271,7 +1271,7 @@ msgstr "移到回收站"
 msgid "Move to the other pane"
 msgstr "移动到另一窗格"
 
-#: crates/app/src/controller/clean.rs:391 crates/app/src/controller/ops.rs:630
+#: crates/app/src/controller/clean.rs:392 crates/app/src/controller/ops.rs:630
 #: crates/app/src/controller/ops.rs:632 crates/app/src/controller/shelf.rs:226
 msgid "Moved"
 msgstr "已移动"
@@ -1306,7 +1306,7 @@ msgstr "新建文件夹"
 msgid "New Workspace"
 msgstr "新建工作区"
 
-#: crates/app/qml/Sidebar.qml:101
+#: crates/app/qml/Sidebar.qml:99
 msgid "New collection"
 msgstr "新建合集"
 
@@ -1318,7 +1318,7 @@ msgstr "新建文件夹"
 msgid "New name"
 msgstr "新名称"
 
-#: crates/app/qml/Sidebar.qml:78
+#: crates/app/qml/Sidebar.qml:76
 msgid "New workspace"
 msgstr "新建工作区"
 
@@ -1387,7 +1387,7 @@ msgstr "正常大小"
 msgid "Normal size"
 msgstr "正常大小"
 
-#: crates/app/src/controller/clean.rs:592
+#: crates/app/src/controller/clean.rs:593
 msgid "Not available in"
 msgstr "不可用于"
 
@@ -1476,7 +1476,7 @@ msgstr "没有可撤销的操作"
 msgid "Off"
 msgstr "关"
 
-#: crates/app/src/controller/clean.rs:523
+#: crates/app/src/controller/clean.rs:524
 msgid "Old Snap revisions"
 msgstr "旧的 Snap 修订版"
 
@@ -1488,7 +1488,7 @@ msgstr "旧的构建产物"
 msgid "Old downloads"
 msgstr "旧的下载"
 
-#: crates/app/src/controller/clean.rs:535
+#: crates/app/src/controller/clean.rs:536
 msgid "Old kernels"
 msgstr "旧内核"
 
@@ -1615,7 +1615,7 @@ msgstr "概览"
 msgid "PDFs"
 msgstr "PDF"
 
-#: crates/app/src/controller/clean.rs:519
+#: crates/app/src/controller/clean.rs:520
 msgid "Package downloads (apt)"
 msgstr "软件包下载 (apt)"
 
@@ -1623,7 +1623,7 @@ msgstr "软件包下载 (apt)"
 msgid "Packages"
 msgstr "软件包"
 
-#: crates/app/src/controller/clean.rs:520
+#: crates/app/src/controller/clean.rs:521
 msgid "Packages apt keeps after installing them"
 msgstr "apt 安装后保留的软件包"
 
@@ -1737,10 +1737,6 @@ msgstr "处理器"
 msgid "Projects"
 msgstr "项目"
 
-#: crates/app/qml/PreferencesDialog.qml:309
-msgid "Purple"
-msgstr "紫色"
-
 #: crates/app/qml/Main.qml:504 crates/app/qml/TrashBar.qml:24
 msgid "Put Back"
 msgstr "放回"
@@ -1838,7 +1834,7 @@ msgstr "玫红色"
 msgid "SUGGESTIONS"
 msgstr "建议"
 
-#: crates/app/qml/CleanPage.qml:392 crates/app/src/controller/clean.rs:639
+#: crates/app/qml/CleanPage.qml:392 crates/app/src/controller/clean.rs:640
 msgid "Safe to clear"
 msgstr "可安全清理"
 
@@ -1946,7 +1942,7 @@ msgstr "在顶栏显示图标"
 msgid "Show hidden files"
 msgstr "显示隐藏文件"
 
-#: crates/app/qml/Sidebar.qml:122
+#: crates/app/qml/Sidebar.qml:120
 msgid "Sidebar"
 msgstr "侧边栏"
 
@@ -2079,11 +2075,11 @@ msgstr "图标和颜色…"
 msgid "System"
 msgstr "系统"
 
-#: crates/app/src/controller/clean.rs:484
+#: crates/app/src/controller/clean.rs:485
 msgid "System and other"
 msgstr "系统和其他"
 
-#: crates/app/src/controller/clean.rs:531
+#: crates/app/src/controller/clean.rs:532
 msgid "System journal"
 msgstr "系统日志"
 
@@ -2252,8 +2248,8 @@ msgstr "今天 %H:%M"
 msgid "Tool"
 msgstr "工具"
 
-#: crates/app/qml/InstalledPage.qml:69 crates/app/qml/Sidebar.qml:131
-#: crates/app/qml/Sidebar.qml:136
+#: crates/app/qml/InstalledPage.qml:69 crates/app/qml/Sidebar.qml:129
+#: crates/app/qml/Sidebar.qml:134
 msgid "Tools"
 msgstr "工具"
 
@@ -2299,7 +2295,7 @@ msgstr "未知"
 msgid "Unsaved changes"
 msgstr "未保存的更改"
 
-#: crates/app/src/controller/clean.rs:543
+#: crates/app/src/controller/clean.rs:544
 msgid "Unused Docker images"
 msgstr "未使用的 Docker 镜像"
 
@@ -2332,7 +2328,7 @@ msgstr "已用"
 msgid "User"
 msgstr "用户"
 
-#: crates/app/qml/AboutDialog.qml:23
+#: crates/app/qml/AboutDialog.qml:21
 msgid "Version "
 msgstr "版本 "
 
@@ -2429,7 +2425,7 @@ msgstr "工作区名称"
 msgid "Workspace settings"
 msgstr "工作区设置"
 
-#: crates/app/qml/Sidebar.qml:74 crates/app/qml/Sidebar.qml:86
+#: crates/app/qml/Sidebar.qml:72 crates/app/qml/Sidebar.qml:84
 msgid "Workspaces"
 msgstr "工作区"
 
@@ -2461,7 +2457,7 @@ msgstr "你无法打开此文件夹"
 msgid "You can change these any time in Preferences (Ctrl+,)."
 msgstr "你可以随时在首选项 (Ctrl+,) 中更改。"
 
-#: crates/app/src/controller/clean.rs:634
+#: crates/app/src/controller/clean.rs:635
 msgid "You could free about"
 msgstr "大约可释放"
 
@@ -2474,11 +2470,11 @@ msgstr "你没有查看其内容的权限。"
 msgid "You installed"
 msgstr "你安装的"
 
-#: crates/app/qml/CleanPage.qml:392 crates/app/src/controller/clean.rs:640
+#: crates/app/qml/CleanPage.qml:392 crates/app/src/controller/clean.rs:641
 msgid "Your call"
 msgstr "由你决定"
 
-#: crates/app/src/controller/clean.rs:479
+#: crates/app/src/controller/clean.rs:480
 msgid "Your files"
 msgstr "你的文件"
 
@@ -2530,7 +2526,7 @@ msgstr "天前"
 msgid "designed"
 msgstr "设计容量"
 
-#: crates/app/src/controller/clean.rs:527
+#: crates/app/src/controller/clean.rs:528
 msgid "disabled revisions kept for rollback"
 msgstr "为回滚保留的已停用修订版"
 
@@ -2554,7 +2550,7 @@ msgstr "用于"
 msgid "free"
 msgstr "可用"
 
-#: crates/app/src/controller/clean.rs:499
+#: crates/app/src/controller/clean.rs:500
 msgid "free of"
 msgstr "可用，共"
 
@@ -2668,7 +2664,7 @@ msgstr "六个月无人动过的项目中的 node_modules、target、.venv 和 b
 msgid "not charging"
 msgstr "未充电"
 
-#: crates/app/src/controller/clean.rs:539
+#: crates/app/src/controller/clean.rs:540
 msgid "not running and not the newest"
 msgstr "既未运行也不是最新的"
 
@@ -2726,7 +2722,7 @@ msgstr "个结果"
 msgid "selected"
 msgstr "已选"
 
-#: crates/app/src/controller/clean.rs:555
+#: crates/app/src/controller/clean.rs:556
 msgid "size unknown"
 msgstr "大小未知"
 
@@ -2762,8 +2758,8 @@ msgstr "终端"
 msgid "threads"
 msgstr "线程"
 
-#: crates/app/src/controller/clean.rs:625
-#: crates/app/src/controller/clean.rs:637
+#: crates/app/src/controller/clean.rs:626
+#: crates/app/src/controller/clean.rs:638
 msgid "ticked"
 msgstr "已勾选"
 
@@ -2772,12 +2768,12 @@ msgstr "已勾选"
 msgid "to"
 msgstr "到"
 
-#: crates/app/src/controller/clean.rs:627
+#: crates/app/src/controller/clean.rs:628
 msgid "to Trash"
 msgstr "移到回收站"
 
-#: crates/app/src/controller/clean.rs:373
-#: crates/app/src/controller/clean.rs:394
+#: crates/app/src/controller/clean.rs:374
+#: crates/app/src/controller/clean.rs:395
 #: crates/app/src/controller/downloads.rs:107
 #: crates/app/src/controller/ops.rs:256
 msgid "to the Trash"
@@ -2819,7 +2815,7 @@ msgstr "未使用已"
 msgid "untouched for 90 days"
 msgstr "90 天未使用"
 
-#: crates/app/src/controller/clean.rs:500
+#: crates/app/src/controller/clean.rs:501
 msgid "used"
 msgstr "已用"
 
@@ -2902,6 +2898,9 @@ msgstr "‹ 全部建议"
 #: crates/app/qml/SearchOverlay.qml:227
 msgid "↑↓ move   ↵ open   Space peek   Ctrl+↵ show in folder"
 msgstr "↑↓ 移动   ↵ 打开   空格 预览   Ctrl+↵ 在文件夹中显示"
+
+#~ msgid "Favorites"
+#~ msgstr "收藏"
 
 #~ msgid "Add a link to Bookmarks"
 #~ msgstr "将链接添加到书签"

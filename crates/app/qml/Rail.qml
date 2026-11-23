@@ -21,14 +21,12 @@ Rectangle {
         anchors.horizontalCenter: parent.horizontalCenter
         y: 14
         spacing: 6
-        Rectangle {
-            width: 34; height: 34; radius: 10
+        Image {
+            width: 34; height: 34
             anchors.horizontalCenter: parent.horizontalCenter
-            gradient: Gradient {
-                GradientStop { position: 0; color: "#a497f2" }
-                GradientStop { position: 1; color: "#6a55db" }
-            }
-            Icon { anchors.centerIn: parent; name: "folder"; size: 17; color: "white" }
+            source: "qrc:/brand/app.svg"
+            sourceSize: Qt.size(width * 2, height * 2)
+            smooth: true
             Accessible.role: Accessible.Button
             Accessible.name: p.t("Expand sidebar")
             Accessible.onPressAction: root.expand()

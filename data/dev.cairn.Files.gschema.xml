@@ -29,7 +29,7 @@
     </key>
     <key name="accent" type="s">
       <choices>
-        <choice value="cairn"/>
+        <choice value="steward"/>
         <choice value="system"/>
         <choice value="blue"/>
         <choice value="teal"/>
@@ -38,8 +38,8 @@
         <choice value="rose"/>
         <choice value="graphite"/>
       </choices>
-      <default>'cairn'</default>
-      <summary>The colour: Cairn's purple, the system accent, or one of Cairn's own colours</summary>
+      <default>'steward'</default>
+      <summary>The colour: aubergine (matches the icon), the system accent, or one of the app's other colours</summary>
     </key>
     <key name="show-hidden" type="b">
       <default>false</default>

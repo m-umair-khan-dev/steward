@@ -153,6 +153,9 @@ msgstr "[Àskéd thé sérvér tö stöp ~~~~~~~~]"
 msgid "Asking apt, Snap, Flatpak and the other tools…"
 msgstr "[Àskîñg àpt, Sñàp, Flàtpàk àñd thé öthér tööls… ~~~~~~~~~~~~~~~]"
 
+msgid "Aubergine"
+msgstr "[Àübérgîñé ~~~]"
+
 msgid "Audio"
 msgstr "[Àüdîö ~~]"
 
@@ -509,9 +512,6 @@ msgstr "[Éxpàñd Sîdébàr ~~~~]"
 
 msgid "Expand sidebar"
 msgstr "[Éxpàñd sîdébàr ~~~~]"
-
-msgid "Favorites"
-msgstr "[Fàvörîtés ~~~]"
 
 msgid "Favourite "
 msgstr "[Fàvöürîté  ~~~]"
@@ -1247,9 +1247,6 @@ msgstr "[Pröçéssör ~~~]"
 
 msgid "Projects"
 msgstr "[Pröjéçts ~~]"
-
-msgid "Purple"
-msgstr "[Pürplé ~~]"
 
 msgid "Put Back"
 msgstr "[Püt Bàçk ~~]"

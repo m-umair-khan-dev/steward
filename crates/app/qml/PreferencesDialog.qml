@@ -297,7 +297,7 @@ Sheet {
                 Rectangle { width: 28; height: 28; radius: 14; color: Theme.systemAccentColor
                             anchors.verticalCenter: parent.verticalCenter }
             }
-            // Light or Dark: one of Cairn's own colours.
+            // Light or Dark: one of the app's own colours (Aubergine matches the icon).
             Row {
                 visible: !parent.followsSystem
                 anchors.right: parent.right; anchors.verticalCenter: parent.verticalCenter
@@ -306,7 +306,7 @@ Sheet {
                 Accessible.name: p.t("Colour")
                 Repeater {
                     model: [
-                        { id: "cairn", label: p.t("Purple") },
+                        { id: "steward", label: p.t("Aubergine") },
                         { id: "blue", label: p.t("Blue") }, { id: "teal", label: p.t("Teal") },
                         { id: "green", label: p.t("Green") }, { id: "orange", label: p.t("Orange") },
                         { id: "rose", label: p.t("Rose") }, { id: "graphite", label: p.t("Graphite") }
@@ -314,7 +314,7 @@ Sheet {
                     delegate: Rectangle {
                         id: swatch
                         required property var modelData
-                        readonly property bool chosen: ((root.prefs.accent || "cairn") === "system" ? "cairn" : (root.prefs.accent || "cairn")) === modelData.id
+                        readonly property bool chosen: ((root.prefs.accent || "steward") === "system" ? "steward" : (root.prefs.accent || "steward")) === modelData.id
                         readonly property var set: Theme.accents[modelData.id]
                         width: 28; height: 28; radius: 14
                         color: set[Theme.dark ? 1 : 0]

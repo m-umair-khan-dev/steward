@@ -1,0 +1,7 @@
+<RCC>
+  <!-- The app icon itself (data/icons), for the sidebar, rail and About:
+       the UI shows the same mark as the desktop. -->
+  <qresource prefix="/brand">
+    <file alias="app.svg">../../../data/icons/hicolor/scalable/apps/dev.cairn.Files.svg</file>
+  </qresource>
+</RCC>

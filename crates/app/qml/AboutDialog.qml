@@ -9,14 +9,12 @@ Sheet {
     Column {
         width: parent.width
         spacing: 8
-        Rectangle {
+        Image {
             anchors.horizontalCenter: parent.horizontalCenter
-            width: 72; height: 72; radius: 20
-            gradient: Gradient {
-                GradientStop { position: 0; color: "#a497f2" }
-                GradientStop { position: 1; color: "#6a55db" }
-            }
-            Icon { anchors.centerIn: parent; name: "folder"; size: 38; color: "white" }
+            width: 72; height: 72
+            source: "qrc:/brand/app.svg"
+            sourceSize: Qt.size(width * 2, height * 2)
+            smooth: true
         }
         Text { anchors.horizontalCenter: parent.horizontalCenter; text: p.t("Cairn"); color: Theme.ink
                font.pixelSize: 22; font.weight: Font.Bold }

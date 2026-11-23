@@ -110,7 +110,7 @@ Window {
     // Style "System" takes Ubuntu's accent colour too; Light and Dark use the
     // colour chosen in Preferences.
     Binding { target: Theme; property: "systemAccent"; value: (win.prefs.colorScheme || "system") === "system" || win.prefs.accent === "system" }
-    Binding { target: Theme; property: "accentName"; value: win.prefs.accent && win.prefs.accent !== "system" ? win.prefs.accent : "cairn" }
+    Binding { target: Theme; property: "accentName"; value: win.prefs.accent && win.prefs.accent !== "system" ? win.prefs.accent : "steward" }
     Binding { target: Theme; property: "motion"; value: win.prefs.motion === true }
     // Ubuntu's own accent setting first; the platform palette where it has none.
     Binding { target: Theme; property: "systemAccentColor"; value: win.prefs.systemAccentColor || win.palette.highlight }

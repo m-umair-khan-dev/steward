@@ -25,15 +25,13 @@ Rectangle {
         width: parent.width - 30
         height: 42
         DragHandler { target: null; onActiveChanged: if (active) root.Window.window.startSystemMove() }
-        Rectangle {
+        Image {
             id: badge
-            width: 34; height: 34; radius: 10
+            width: 34; height: 34
             anchors.verticalCenter: parent.verticalCenter
-            gradient: Gradient {
-                GradientStop { position: 0; color: "#a497f2" }
-                GradientStop { position: 1; color: "#6a55db" }
-            }
-            Icon { anchors.centerIn: parent; name: "folder"; size: 19; color: "white" }
+            source: "qrc:/brand/app.svg"
+            sourceSize: Qt.size(width * 2, height * 2)
+            smooth: true
         }
         Text {
             anchors.left: badge.right; anchors.leftMargin: 12
@@ -114,7 +112,7 @@ Rectangle {
                     Repeater { model: root.model.bookmarks || []; delegate: ToolRow {} }
                 }
             }
-            Heading { text: p.t("Favorites") }
+            Heading { text: p.t("Favourites") }
             Item {
                 width: parent.width
                 height: favoritesList.implicitHeight

@@ -79,7 +79,7 @@ msgstr "+ フォルダーを追加"
 msgid ": your own command"
 msgstr ": 独自のコマンド"
 
-#: crates/app/qml/AboutDialog.qml:26
+#: crates/app/qml/AboutDialog.qml:24
 msgid "A file manager for Ubuntu that keeps folders tidy."
 msgstr "フォルダーを整理された状態に保つ Ubuntu 用ファイルマネージャー。"
 
@@ -109,7 +109,7 @@ msgid "About Cairn"
 msgstr "Cairn について"
 
 #: crates/app/qml/AboutPage.qml:12 crates/app/qml/Main.qml:245
-#: crates/app/qml/Sidebar.qml:190
+#: crates/app/qml/Sidebar.qml:188
 msgid "About This Computer"
 msgstr "このコンピューターについて"
 
@@ -195,7 +195,7 @@ msgstr "適用"
 msgid "Apply to all"
 msgstr "すべてに適用"
 
-#: crates/app/src/controller/clean.rs:480
+#: crates/app/src/controller/clean.rs:481
 #: crates/app/src/controller/installed.rs:203
 msgid "Apps"
 msgstr "アプリ"
@@ -215,6 +215,10 @@ msgstr "サーバーに停止を求めました"
 #: crates/app/qml/InstalledPage.qml:214
 msgid "Asking apt, Snap, Flatpak and the other tools…"
 msgstr "apt、Snap、Flatpak などのツールに問い合わせています…"
+
+#: crates/app/qml/PreferencesDialog.qml:309
+msgid "Aubergine"
+msgstr "ナス紺"
 
 #: crates/core/src/kind.rs
 msgid "Audio"
@@ -263,7 +267,7 @@ msgid "Bookmark removed"
 msgstr "ブックマークを削除しました"
 
 #: crates/app/qml/BookmarksPage.qml:14 crates/app/qml/Main.qml:247
-#: crates/app/qml/Sidebar.qml:109 crates/app/qml/Sidebar.qml:97
+#: crates/app/qml/Sidebar.qml:107 crates/app/qml/Sidebar.qml:95
 msgid "Bookmarks"
 msgstr "ブックマーク"
 
@@ -275,8 +279,8 @@ msgstr "種類別"
 msgid "CONTENTS"
 msgstr "内容"
 
-#: crates/app/qml/AboutDialog.qml:21 crates/app/qml/Main.qml:17
-#: crates/app/qml/Sidebar.qml:41 crates/app/qml/WelcomeDialog.qml:180
+#: crates/app/qml/AboutDialog.qml:19 crates/app/qml/Main.qml:17
+#: crates/app/qml/Sidebar.qml:39 crates/app/qml/WelcomeDialog.qml:180
 msgid "Cairn"
 msgstr "Cairn"
 
@@ -373,7 +377,7 @@ msgstr "シェルフを閉じる"
 msgid "Code"
 msgstr "コード"
 
-#: crates/app/qml/Sidebar.qml:52
+#: crates/app/qml/Sidebar.qml:50
 msgid "Collapse sidebar"
 msgstr "サイドバーをたたむ"
 
@@ -407,8 +411,8 @@ msgstr "色"
 msgid "Colour "
 msgstr "色: "
 
-#: crates/app/qml/Rail.qml:57 crates/app/qml/Sidebar.qml:189
-#: crates/app/qml/Sidebar.qml:198 crates/app/src/controller.rs:1407
+#: crates/app/qml/Rail.qml:55 crates/app/qml/Sidebar.qml:187
+#: crates/app/qml/Sidebar.qml:196 crates/app/src/controller.rs:1407
 msgid "Computer"
 msgstr "コンピューター"
 
@@ -441,7 +445,7 @@ msgstr "コピーしました:"
 msgid "Copied as text"
 msgstr "テキストとしてコピーしました"
 
-#: crates/app/src/controller/clean.rs:445
+#: crates/app/src/controller/clean.rs:446
 msgid "Copied the command. Paste it into a terminal to run it."
 msgstr "コマンドをコピーしました。端末に貼り付けて実行してください。"
 
@@ -673,7 +677,7 @@ msgstr "エディター"
 msgid "Editor (Shift+F4)"
 msgstr "エディター (Shift+F4)"
 
-#: crates/app/qml/Sidebar.qml:261
+#: crates/app/qml/Sidebar.qml:259
 msgid "Eject "
 msgstr "取り出す: "
 
@@ -710,19 +714,15 @@ msgstr "暗号化"
 msgid "Expand Sidebar"
 msgstr "サイドバーを広げる"
 
-#: crates/app/qml/Rail.qml:33
+#: crates/app/qml/Rail.qml:31
 msgid "Expand sidebar"
 msgstr "サイドバーを広げる"
-
-#: crates/app/qml/Sidebar.qml:117
-msgid "Favorites"
-msgstr "お気に入り"
 
 #: crates/app/qml/BookmarksPage.qml:217
 msgid "Favourite "
 msgstr "お気に入りに追加 "
 
-#: crates/app/src/controller/bookmarks.rs:310
+#: crates/app/qml/Sidebar.qml:115 crates/app/src/controller/bookmarks.rs:310
 #: crates/app/src/controller/bookmarks.rs:333
 msgid "Favourites"
 msgstr "お気に入り"
@@ -854,7 +854,7 @@ msgstr "アンインストール済みのアプリから"
 msgid "Full charge"
 msgstr "満充電容量"
 
-#: crates/app/qml/AboutDialog.qml:28
+#: crates/app/qml/AboutDialog.qml:26
 msgid "GPL-3.0-or-later"
 msgstr "GPL-3.0-or-later"
 
@@ -907,7 +907,7 @@ msgstr "見出し"
 msgid "Held items"
 msgstr "保留中の項目"
 
-#: crates/app/qml/Sidebar.qml:355
+#: crates/app/qml/Sidebar.qml:353
 msgid "Hide"
 msgstr "隠す"
 
@@ -928,7 +928,7 @@ msgstr "保留"
 msgid "Home"
 msgstr "ホーム"
 
-#: crates/app/qml/CleanPage.qml:102 crates/app/src/controller/clean.rs:496
+#: crates/app/qml/CleanPage.qml:102 crates/app/src/controller/clean.rs:497
 msgid "Home disk"
 msgstr "ホームのディスク"
 
@@ -957,7 +957,7 @@ msgstr "画像"
 msgid "Images and videos"
 msgstr "画像と動画"
 
-#: crates/app/src/controller/clean.rs:544
+#: crates/app/src/controller/clean.rs:545
 msgid "Images no container uses"
 msgstr "どのコンテナーも使っていないイメージ"
 
@@ -965,7 +965,7 @@ msgstr "どのコンテナーも使っていないイメージ"
 msgid "In projects untouched for 6 months"
 msgstr "6 か月間触られていないプロジェクト内"
 
-#: crates/app/src/controller/clean.rs:481
+#: crates/app/src/controller/clean.rs:482
 msgid "In the Trash"
 msgstr "ゴミ箱内"
 
@@ -1135,12 +1135,12 @@ msgstr "場所を指定…"
 msgid "Location"
 msgstr "場所"
 
-#: crates/app/qml/Sidebar.qml:147 crates/app/qml/Sidebar.qml:150
-#: crates/app/qml/Sidebar.qml:168
+#: crates/app/qml/Sidebar.qml:145 crates/app/qml/Sidebar.qml:148
+#: crates/app/qml/Sidebar.qml:166
 msgid "Locations"
 msgstr "場所"
 
-#: crates/app/src/controller/clean.rs:532
+#: crates/app/src/controller/clean.rs:533
 msgid "Logs over 200 MB; the newest are kept"
 msgstr "200 MB を超えるログ。新しいものは残ります"
 
@@ -1157,7 +1157,7 @@ msgid "Looking for things to clear…"
 msgstr "空けられるものを探しています…"
 
 #: crates/app/qml/AboutPage.qml:78 crates/app/qml/CleanPage.qml:104
-#: crates/app/qml/InstalledPage.qml:37 crates/app/src/controller/clean.rs:595
+#: crates/app/qml/InstalledPage.qml:37 crates/app/src/controller/clean.rs:596
 msgid "Looking…"
 msgstr "探しています…"
 
@@ -1235,8 +1235,8 @@ msgstr "月"
 msgid "More for "
 msgstr "その他: "
 
-#: crates/app/src/controller/clean.rs:371
-#: crates/app/src/controller/clean.rs:627
+#: crates/app/src/controller/clean.rs:372
+#: crates/app/src/controller/clean.rs:628
 #: crates/app/src/controller/downloads.rs:105
 #: crates/app/src/controller/ops.rs:254
 msgid "Move"
@@ -1246,11 +1246,11 @@ msgstr "移動"
 msgid "Move   F6"
 msgstr "移動   F6"
 
-#: crates/app/qml/Sidebar.qml:354
+#: crates/app/qml/Sidebar.qml:352
 msgid "Move Down"
 msgstr "下へ移動"
 
-#: crates/app/qml/Sidebar.qml:353
+#: crates/app/qml/Sidebar.qml:351
 msgid "Move Up"
 msgstr "上へ移動"
 
@@ -1271,7 +1271,7 @@ msgstr "ゴミ箱へ移動"
 msgid "Move to the other pane"
 msgstr "もう一方のペインへ移動"
 
-#: crates/app/src/controller/clean.rs:391 crates/app/src/controller/ops.rs:630
+#: crates/app/src/controller/clean.rs:392 crates/app/src/controller/ops.rs:630
 #: crates/app/src/controller/ops.rs:632 crates/app/src/controller/shelf.rs:226
 msgid "Moved"
 msgstr "移動しました:"
@@ -1306,7 +1306,7 @@ msgstr "新しいフォルダー"
 msgid "New Workspace"
 msgstr "新しいワークスペース"
 
-#: crates/app/qml/Sidebar.qml:101
+#: crates/app/qml/Sidebar.qml:99
 msgid "New collection"
 msgstr "新しいコレクション"
 
@@ -1318,7 +1318,7 @@ msgstr "新しいフォルダー"
 msgid "New name"
 msgstr "新しい名前"
 
-#: crates/app/qml/Sidebar.qml:78
+#: crates/app/qml/Sidebar.qml:76
 msgid "New workspace"
 msgstr "新しいワークスペース"
 
@@ -1387,7 +1387,7 @@ msgstr "標準の大きさ"
 msgid "Normal size"
 msgstr "標準の大きさ"
 
-#: crates/app/src/controller/clean.rs:592
+#: crates/app/src/controller/clean.rs:593
 msgid "Not available in"
 msgstr "利用できません:"
 
@@ -1476,7 +1476,7 @@ msgstr "元に戻すものがありません"
 msgid "Off"
 msgstr "オフ"
 
-#: crates/app/src/controller/clean.rs:523
+#: crates/app/src/controller/clean.rs:524
 msgid "Old Snap revisions"
 msgstr "古い Snap リビジョン"
 
@@ -1488,7 +1488,7 @@ msgstr "古いビルド成果物"
 msgid "Old downloads"
 msgstr "古いダウンロード"
 
-#: crates/app/src/controller/clean.rs:535
+#: crates/app/src/controller/clean.rs:536
 msgid "Old kernels"
 msgstr "古いカーネル"
 
@@ -1615,7 +1615,7 @@ msgstr "概要"
 msgid "PDFs"
 msgstr "PDF"
 
-#: crates/app/src/controller/clean.rs:519
+#: crates/app/src/controller/clean.rs:520
 msgid "Package downloads (apt)"
 msgstr "パッケージのダウンロード (apt)"
 
@@ -1623,7 +1623,7 @@ msgstr "パッケージのダウンロード (apt)"
 msgid "Packages"
 msgstr "パッケージ"
 
-#: crates/app/src/controller/clean.rs:520
+#: crates/app/src/controller/clean.rs:521
 msgid "Packages apt keeps after installing them"
 msgstr "apt がインストール後に保持しているパッケージ"
 
@@ -1737,10 +1737,6 @@ msgstr "プロセッサー"
 msgid "Projects"
 msgstr "プロジェクト"
 
-#: crates/app/qml/PreferencesDialog.qml:309
-msgid "Purple"
-msgstr "紫"
-
 #: crates/app/qml/Main.qml:504 crates/app/qml/TrashBar.qml:24
 msgid "Put Back"
 msgstr "元に戻す（復元）"
@@ -1838,7 +1834,7 @@ msgstr "ローズ"
 msgid "SUGGESTIONS"
 msgstr "提案"
 
-#: crates/app/qml/CleanPage.qml:392 crates/app/src/controller/clean.rs:639
+#: crates/app/qml/CleanPage.qml:392 crates/app/src/controller/clean.rs:640
 msgid "Safe to clear"
 msgstr "消しても安全"
 
@@ -1946,7 +1942,7 @@ msgstr "トップバーにアイコンを表示"
 msgid "Show hidden files"
 msgstr "隠しファイルを表示"
 
-#: crates/app/qml/Sidebar.qml:122
+#: crates/app/qml/Sidebar.qml:120
 msgid "Sidebar"
 msgstr "サイドバー"
 
@@ -2079,11 +2075,11 @@ msgstr "シンボルと色…"
 msgid "System"
 msgstr "システム"
 
-#: crates/app/src/controller/clean.rs:484
+#: crates/app/src/controller/clean.rs:485
 msgid "System and other"
 msgstr "システムとその他"
 
-#: crates/app/src/controller/clean.rs:531
+#: crates/app/src/controller/clean.rs:532
 msgid "System journal"
 msgstr "システムジャーナル"
 
@@ -2252,8 +2248,8 @@ msgstr "今日 %H:%M"
 msgid "Tool"
 msgstr "ツール"
 
-#: crates/app/qml/InstalledPage.qml:69 crates/app/qml/Sidebar.qml:131
-#: crates/app/qml/Sidebar.qml:136
+#: crates/app/qml/InstalledPage.qml:69 crates/app/qml/Sidebar.qml:129
+#: crates/app/qml/Sidebar.qml:134
 msgid "Tools"
 msgstr "ツール"
 
@@ -2299,7 +2295,7 @@ msgstr "不明"
 msgid "Unsaved changes"
 msgstr "未保存の変更"
 
-#: crates/app/src/controller/clean.rs:543
+#: crates/app/src/controller/clean.rs:544
 msgid "Unused Docker images"
 msgstr "使われていない Docker イメージ"
 
@@ -2332,7 +2328,7 @@ msgstr "使用済み"
 msgid "User"
 msgstr "ユーザー"
 
-#: crates/app/qml/AboutDialog.qml:23
+#: crates/app/qml/AboutDialog.qml:21
 msgid "Version "
 msgstr "バージョン "
 
@@ -2429,7 +2425,7 @@ msgstr "ワークスペース名"
 msgid "Workspace settings"
 msgstr "ワークスペースの設定"
 
-#: crates/app/qml/Sidebar.qml:74 crates/app/qml/Sidebar.qml:86
+#: crates/app/qml/Sidebar.qml:72 crates/app/qml/Sidebar.qml:84
 msgid "Workspaces"
 msgstr "ワークスペース"
 
@@ -2461,7 +2457,7 @@ msgstr "このフォルダーは開けません"
 msgid "You can change these any time in Preferences (Ctrl+,)."
 msgstr "これらは設定 (Ctrl+,) でいつでも変更できます。"
 
-#: crates/app/src/controller/clean.rs:634
+#: crates/app/src/controller/clean.rs:635
 msgid "You could free about"
 msgstr "空けられる容量の目安:"
 
@@ -2474,11 +2470,11 @@ msgstr "中身を見る権限がありません。"
 msgid "You installed"
 msgstr "自分でインストール"
 
-#: crates/app/qml/CleanPage.qml:392 crates/app/src/controller/clean.rs:640
+#: crates/app/qml/CleanPage.qml:392 crates/app/src/controller/clean.rs:641
 msgid "Your call"
 msgstr "判断はあなたに"
 
-#: crates/app/src/controller/clean.rs:479
+#: crates/app/src/controller/clean.rs:480
 msgid "Your files"
 msgstr "あなたのファイル"
 
@@ -2530,7 +2526,7 @@ msgstr "日経過"
 msgid "designed"
 msgstr "設計値"
 
-#: crates/app/src/controller/clean.rs:527
+#: crates/app/src/controller/clean.rs:528
 msgid "disabled revisions kept for rollback"
 msgstr "ロールバック用に残された無効なリビジョン"
 
@@ -2554,7 +2550,7 @@ msgstr "対象:"
 msgid "free"
 msgstr "空き"
 
-#: crates/app/src/controller/clean.rs:499
+#: crates/app/src/controller/clean.rs:500
 msgid "free of"
 msgstr "空き /"
 
@@ -2668,7 +2664,7 @@ msgstr "6 か月間誰も触っていないプロジェクトの node_modules、
 msgid "not charging"
 msgstr "充電していません"
 
-#: crates/app/src/controller/clean.rs:539
+#: crates/app/src/controller/clean.rs:540
 msgid "not running and not the newest"
 msgstr "使用中でも最新でもないもの"
 
@@ -2726,7 +2722,7 @@ msgstr "件"
 msgid "selected"
 msgstr "選択中"
 
-#: crates/app/src/controller/clean.rs:555
+#: crates/app/src/controller/clean.rs:556
 msgid "size unknown"
 msgstr "サイズ不明"
 
@@ -2762,8 +2758,8 @@ msgstr "端末"
 msgid "threads"
 msgstr "スレッド"
 
-#: crates/app/src/controller/clean.rs:625
-#: crates/app/src/controller/clean.rs:637
+#: crates/app/src/controller/clean.rs:626
+#: crates/app/src/controller/clean.rs:638
 msgid "ticked"
 msgstr "チェック済み"
 
@@ -2772,12 +2768,12 @@ msgstr "チェック済み"
 msgid "to"
 msgstr "→"
 
-#: crates/app/src/controller/clean.rs:627
+#: crates/app/src/controller/clean.rs:628
 msgid "to Trash"
 msgstr "ゴミ箱へ"
 
-#: crates/app/src/controller/clean.rs:373
-#: crates/app/src/controller/clean.rs:394
+#: crates/app/src/controller/clean.rs:374
+#: crates/app/src/controller/clean.rs:395
 #: crates/app/src/controller/downloads.rs:107
 #: crates/app/src/controller/ops.rs:256
 msgid "to the Trash"
@@ -2819,7 +2815,7 @@ msgstr "未使用の期間:"
 msgid "untouched for 90 days"
 msgstr "90 日間未使用"
 
-#: crates/app/src/controller/clean.rs:500
+#: crates/app/src/controller/clean.rs:501
 msgid "used"
 msgstr "使用中"
 
@@ -2902,6 +2898,9 @@ msgstr "‹ すべての提案"
 #: crates/app/qml/SearchOverlay.qml:227
 msgid "↑↓ move   ↵ open   Space peek   Ctrl+↵ show in folder"
 msgstr "↑↓ 移動   ↵ 開く   Space プレビュー   Ctrl+↵ フォルダーで表示"
+
+#~ msgid "Favorites"
+#~ msgstr "お気に入り"
 
 #~ msgid "Add a link to Bookmarks"
 #~ msgstr "ブックマークにリンクを追加"

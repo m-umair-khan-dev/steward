@@ -79,7 +79,7 @@ msgstr "+ Añadir carpeta"
 msgid ": your own command"
 msgstr ": su propia orden"
 
-#: crates/app/qml/AboutDialog.qml:26
+#: crates/app/qml/AboutDialog.qml:24
 msgid "A file manager for Ubuntu that keeps folders tidy."
 msgstr "Un gestor de archivos para Ubuntu que mantiene las carpetas ordenadas."
 
@@ -109,7 +109,7 @@ msgid "About Cairn"
 msgstr "Acerca de Cairn"
 
 #: crates/app/qml/AboutPage.qml:12 crates/app/qml/Main.qml:245
-#: crates/app/qml/Sidebar.qml:190
+#: crates/app/qml/Sidebar.qml:188
 msgid "About This Computer"
 msgstr "Acerca de este equipo"
 
@@ -195,7 +195,7 @@ msgstr "Aplicar"
 msgid "Apply to all"
 msgstr "Aplicar a todos"
 
-#: crates/app/src/controller/clean.rs:480
+#: crates/app/src/controller/clean.rs:481
 #: crates/app/src/controller/installed.rs:203
 msgid "Apps"
 msgstr "Aplicaciones"
@@ -215,6 +215,10 @@ msgstr "Se pidió al servidor que se detenga"
 #: crates/app/qml/InstalledPage.qml:214
 msgid "Asking apt, Snap, Flatpak and the other tools…"
 msgstr "Consultando apt, Snap, Flatpak y las demás herramientas…"
+
+#: crates/app/qml/PreferencesDialog.qml:309
+msgid "Aubergine"
+msgstr "Berenjena"
 
 #: crates/core/src/kind.rs
 msgid "Audio"
@@ -263,7 +267,7 @@ msgid "Bookmark removed"
 msgstr "Marcador eliminado"
 
 #: crates/app/qml/BookmarksPage.qml:14 crates/app/qml/Main.qml:247
-#: crates/app/qml/Sidebar.qml:109 crates/app/qml/Sidebar.qml:97
+#: crates/app/qml/Sidebar.qml:107 crates/app/qml/Sidebar.qml:95
 msgid "Bookmarks"
 msgstr "Marcadores"
 
@@ -275,8 +279,8 @@ msgstr "Por tipo"
 msgid "CONTENTS"
 msgstr "CONTENIDO"
 
-#: crates/app/qml/AboutDialog.qml:21 crates/app/qml/Main.qml:17
-#: crates/app/qml/Sidebar.qml:41 crates/app/qml/WelcomeDialog.qml:180
+#: crates/app/qml/AboutDialog.qml:19 crates/app/qml/Main.qml:17
+#: crates/app/qml/Sidebar.qml:39 crates/app/qml/WelcomeDialog.qml:180
 msgid "Cairn"
 msgstr "Cairn"
 
@@ -373,7 +377,7 @@ msgstr "Cerrar el estante"
 msgid "Code"
 msgstr "Código"
 
-#: crates/app/qml/Sidebar.qml:52
+#: crates/app/qml/Sidebar.qml:50
 msgid "Collapse sidebar"
 msgstr "Contraer la barra lateral"
 
@@ -407,8 +411,8 @@ msgstr "Color"
 msgid "Colour "
 msgstr "Color "
 
-#: crates/app/qml/Rail.qml:57 crates/app/qml/Sidebar.qml:189
-#: crates/app/qml/Sidebar.qml:198 crates/app/src/controller.rs:1407
+#: crates/app/qml/Rail.qml:55 crates/app/qml/Sidebar.qml:187
+#: crates/app/qml/Sidebar.qml:196 crates/app/src/controller.rs:1407
 msgid "Computer"
 msgstr "Equipo"
 
@@ -441,7 +445,7 @@ msgstr "Copiado:"
 msgid "Copied as text"
 msgstr "Copiado como texto"
 
-#: crates/app/src/controller/clean.rs:445
+#: crates/app/src/controller/clean.rs:446
 msgid "Copied the command. Paste it into a terminal to run it."
 msgstr "Orden copiada. Péguela en una terminal para ejecutarla."
 
@@ -673,7 +677,7 @@ msgstr "Editor"
 msgid "Editor (Shift+F4)"
 msgstr "Editor (Mayús+F4)"
 
-#: crates/app/qml/Sidebar.qml:261
+#: crates/app/qml/Sidebar.qml:259
 msgid "Eject "
 msgstr "Expulsar "
 
@@ -710,19 +714,15 @@ msgstr "Cifrado"
 msgid "Expand Sidebar"
 msgstr "Expandir la barra lateral"
 
-#: crates/app/qml/Rail.qml:33
+#: crates/app/qml/Rail.qml:31
 msgid "Expand sidebar"
 msgstr "Expandir la barra lateral"
-
-#: crates/app/qml/Sidebar.qml:117
-msgid "Favorites"
-msgstr "Favoritos"
 
 #: crates/app/qml/BookmarksPage.qml:217
 msgid "Favourite "
 msgstr "Marcar como favorito "
 
-#: crates/app/src/controller/bookmarks.rs:310
+#: crates/app/qml/Sidebar.qml:115 crates/app/src/controller/bookmarks.rs:310
 #: crates/app/src/controller/bookmarks.rs:333
 msgid "Favourites"
 msgstr "Favoritos"
@@ -854,7 +854,7 @@ msgstr "De aplicaciones ya desinstaladas"
 msgid "Full charge"
 msgstr "Carga completa"
 
-#: crates/app/qml/AboutDialog.qml:28
+#: crates/app/qml/AboutDialog.qml:26
 msgid "GPL-3.0-or-later"
 msgstr "GPL-3.0-or-later"
 
@@ -907,7 +907,7 @@ msgstr "Titulares"
 msgid "Held items"
 msgstr "Elementos retenidos"
 
-#: crates/app/qml/Sidebar.qml:355
+#: crates/app/qml/Sidebar.qml:353
 msgid "Hide"
 msgstr "Ocultar"
 
@@ -928,7 +928,7 @@ msgstr "Retenidos"
 msgid "Home"
 msgstr "Carpeta personal"
 
-#: crates/app/qml/CleanPage.qml:102 crates/app/src/controller/clean.rs:496
+#: crates/app/qml/CleanPage.qml:102 crates/app/src/controller/clean.rs:497
 msgid "Home disk"
 msgstr "Disco personal"
 
@@ -957,7 +957,7 @@ msgstr "Imágenes"
 msgid "Images and videos"
 msgstr "Imágenes y vídeos"
 
-#: crates/app/src/controller/clean.rs:544
+#: crates/app/src/controller/clean.rs:545
 msgid "Images no container uses"
 msgstr "Imágenes que ningún contenedor usa"
 
@@ -965,7 +965,7 @@ msgstr "Imágenes que ningún contenedor usa"
 msgid "In projects untouched for 6 months"
 msgstr "En proyectos sin tocar desde hace 6 meses"
 
-#: crates/app/src/controller/clean.rs:481
+#: crates/app/src/controller/clean.rs:482
 msgid "In the Trash"
 msgstr "En la papelera"
 
@@ -1135,12 +1135,12 @@ msgstr "Localizar…"
 msgid "Location"
 msgstr "Ubicación"
 
-#: crates/app/qml/Sidebar.qml:147 crates/app/qml/Sidebar.qml:150
-#: crates/app/qml/Sidebar.qml:168
+#: crates/app/qml/Sidebar.qml:145 crates/app/qml/Sidebar.qml:148
+#: crates/app/qml/Sidebar.qml:166
 msgid "Locations"
 msgstr "Ubicaciones"
 
-#: crates/app/src/controller/clean.rs:532
+#: crates/app/src/controller/clean.rs:533
 msgid "Logs over 200 MB; the newest are kept"
 msgstr "Registros por encima de 200 MB; se conservan los más recientes"
 
@@ -1157,7 +1157,7 @@ msgid "Looking for things to clear…"
 msgstr "Buscando cosas que liberar…"
 
 #: crates/app/qml/AboutPage.qml:78 crates/app/qml/CleanPage.qml:104
-#: crates/app/qml/InstalledPage.qml:37 crates/app/src/controller/clean.rs:595
+#: crates/app/qml/InstalledPage.qml:37 crates/app/src/controller/clean.rs:596
 msgid "Looking…"
 msgstr "Buscando…"
 
@@ -1235,8 +1235,8 @@ msgstr "Mes"
 msgid "More for "
 msgstr "Más para "
 
-#: crates/app/src/controller/clean.rs:371
-#: crates/app/src/controller/clean.rs:627
+#: crates/app/src/controller/clean.rs:372
+#: crates/app/src/controller/clean.rs:628
 #: crates/app/src/controller/downloads.rs:105
 #: crates/app/src/controller/ops.rs:254
 msgid "Move"
@@ -1246,11 +1246,11 @@ msgstr "Mover"
 msgid "Move   F6"
 msgstr "Mover   F6"
 
-#: crates/app/qml/Sidebar.qml:354
+#: crates/app/qml/Sidebar.qml:352
 msgid "Move Down"
 msgstr "Bajar"
 
-#: crates/app/qml/Sidebar.qml:353
+#: crates/app/qml/Sidebar.qml:351
 msgid "Move Up"
 msgstr "Subir"
 
@@ -1271,7 +1271,7 @@ msgstr "Mover a la papelera"
 msgid "Move to the other pane"
 msgstr "Mover al otro panel"
 
-#: crates/app/src/controller/clean.rs:391 crates/app/src/controller/ops.rs:630
+#: crates/app/src/controller/clean.rs:392 crates/app/src/controller/ops.rs:630
 #: crates/app/src/controller/ops.rs:632 crates/app/src/controller/shelf.rs:226
 msgid "Moved"
 msgstr "Movido:"
@@ -1306,7 +1306,7 @@ msgstr "Carpeta nueva"
 msgid "New Workspace"
 msgstr "Espacio de trabajo nuevo"
 
-#: crates/app/qml/Sidebar.qml:101
+#: crates/app/qml/Sidebar.qml:99
 msgid "New collection"
 msgstr "Nueva colección"
 
@@ -1318,7 +1318,7 @@ msgstr "Carpeta nueva"
 msgid "New name"
 msgstr "Nombre nuevo"
 
-#: crates/app/qml/Sidebar.qml:78
+#: crates/app/qml/Sidebar.qml:76
 msgid "New workspace"
 msgstr "Espacio de trabajo nuevo"
 
@@ -1387,7 +1387,7 @@ msgstr "Tamaño normal"
 msgid "Normal size"
 msgstr "Tamaño normal"
 
-#: crates/app/src/controller/clean.rs:592
+#: crates/app/src/controller/clean.rs:593
 msgid "Not available in"
 msgstr "No disponible en"
 
@@ -1476,7 +1476,7 @@ msgstr "Nada que deshacer"
 msgid "Off"
 msgstr "Desactivado"
 
-#: crates/app/src/controller/clean.rs:523
+#: crates/app/src/controller/clean.rs:524
 msgid "Old Snap revisions"
 msgstr "Revisiones antiguas de Snap"
 
@@ -1488,7 +1488,7 @@ msgstr "Resultados de compilación antiguos"
 msgid "Old downloads"
 msgstr "Descargas antiguas"
 
-#: crates/app/src/controller/clean.rs:535
+#: crates/app/src/controller/clean.rs:536
 msgid "Old kernels"
 msgstr "Núcleos antiguos"
 
@@ -1615,7 +1615,7 @@ msgstr "Resumen"
 msgid "PDFs"
 msgstr "PDF"
 
-#: crates/app/src/controller/clean.rs:519
+#: crates/app/src/controller/clean.rs:520
 msgid "Package downloads (apt)"
 msgstr "Descargas de paquetes (apt)"
 
@@ -1623,7 +1623,7 @@ msgstr "Descargas de paquetes (apt)"
 msgid "Packages"
 msgstr "Paquetes"
 
-#: crates/app/src/controller/clean.rs:520
+#: crates/app/src/controller/clean.rs:521
 msgid "Packages apt keeps after installing them"
 msgstr "Paquetes que apt guarda tras instalarlos"
 
@@ -1737,10 +1737,6 @@ msgstr "Procesador"
 msgid "Projects"
 msgstr "Proyectos"
 
-#: crates/app/qml/PreferencesDialog.qml:309
-msgid "Purple"
-msgstr "Morado"
-
 #: crates/app/qml/Main.qml:504 crates/app/qml/TrashBar.qml:24
 msgid "Put Back"
 msgstr "Devolver"
@@ -1838,7 +1834,7 @@ msgstr "Rosa"
 msgid "SUGGESTIONS"
 msgstr "SUGERENCIAS"
 
-#: crates/app/qml/CleanPage.qml:392 crates/app/src/controller/clean.rs:639
+#: crates/app/qml/CleanPage.qml:392 crates/app/src/controller/clean.rs:640
 msgid "Safe to clear"
 msgstr "Seguro de borrar"
 
@@ -1946,7 +1942,7 @@ msgstr "Mostrar un icono en la barra superior"
 msgid "Show hidden files"
 msgstr "Mostrar archivos ocultos"
 
-#: crates/app/qml/Sidebar.qml:122
+#: crates/app/qml/Sidebar.qml:120
 msgid "Sidebar"
 msgstr "Barra lateral"
 
@@ -2079,11 +2075,11 @@ msgstr "Símbolo y color…"
 msgid "System"
 msgstr "Sistema"
 
-#: crates/app/src/controller/clean.rs:484
+#: crates/app/src/controller/clean.rs:485
 msgid "System and other"
 msgstr "Sistema y otros"
 
-#: crates/app/src/controller/clean.rs:531
+#: crates/app/src/controller/clean.rs:532
 msgid "System journal"
 msgstr "Diario del sistema"
 
@@ -2252,8 +2248,8 @@ msgstr "Hoy, %H:%M"
 msgid "Tool"
 msgstr "Herramienta"
 
-#: crates/app/qml/InstalledPage.qml:69 crates/app/qml/Sidebar.qml:131
-#: crates/app/qml/Sidebar.qml:136
+#: crates/app/qml/InstalledPage.qml:69 crates/app/qml/Sidebar.qml:129
+#: crates/app/qml/Sidebar.qml:134
 msgid "Tools"
 msgstr "Herramientas"
 
@@ -2299,7 +2295,7 @@ msgstr "Desconocido"
 msgid "Unsaved changes"
 msgstr "Cambios sin guardar"
 
-#: crates/app/src/controller/clean.rs:543
+#: crates/app/src/controller/clean.rs:544
 msgid "Unused Docker images"
 msgstr "Imágenes de Docker sin usar"
 
@@ -2332,7 +2328,7 @@ msgstr "Usado"
 msgid "User"
 msgstr "Usuario"
 
-#: crates/app/qml/AboutDialog.qml:23
+#: crates/app/qml/AboutDialog.qml:21
 msgid "Version "
 msgstr "Versión "
 
@@ -2429,7 +2425,7 @@ msgstr "Nombre del espacio de trabajo"
 msgid "Workspace settings"
 msgstr "Ajustes del espacio de trabajo"
 
-#: crates/app/qml/Sidebar.qml:74 crates/app/qml/Sidebar.qml:86
+#: crates/app/qml/Sidebar.qml:72 crates/app/qml/Sidebar.qml:84
 msgid "Workspaces"
 msgstr "Espacios de trabajo"
 
@@ -2461,7 +2457,7 @@ msgstr "No puede abrir esta carpeta"
 msgid "You can change these any time in Preferences (Ctrl+,)."
 msgstr "Puede cambiarlo cuando quiera en Preferencias (Ctrl+,)."
 
-#: crates/app/src/controller/clean.rs:634
+#: crates/app/src/controller/clean.rs:635
 msgid "You could free about"
 msgstr "Podría liberar unos"
 
@@ -2474,11 +2470,11 @@ msgstr "No tiene permiso para ver su contenido."
 msgid "You installed"
 msgstr "Instalado por usted"
 
-#: crates/app/qml/CleanPage.qml:392 crates/app/src/controller/clean.rs:640
+#: crates/app/qml/CleanPage.qml:392 crates/app/src/controller/clean.rs:641
 msgid "Your call"
 msgstr "Usted decide"
 
-#: crates/app/src/controller/clean.rs:479
+#: crates/app/src/controller/clean.rs:480
 msgid "Your files"
 msgstr "Sus archivos"
 
@@ -2530,7 +2526,7 @@ msgstr "días de antigüedad"
 msgid "designed"
 msgstr "de diseño"
 
-#: crates/app/src/controller/clean.rs:527
+#: crates/app/src/controller/clean.rs:528
 msgid "disabled revisions kept for rollback"
 msgstr "revisiones desactivadas guardadas para volver atrás"
 
@@ -2554,7 +2550,7 @@ msgstr "para"
 msgid "free"
 msgstr "libre"
 
-#: crates/app/src/controller/clean.rs:499
+#: crates/app/src/controller/clean.rs:500
 msgid "free of"
 msgstr "libres de"
 
@@ -2668,7 +2664,7 @@ msgstr "Carpetas node_modules, target, .venv y build en proyectos que nadie ha t
 msgid "not charging"
 msgstr "sin cargar"
 
-#: crates/app/src/controller/clean.rs:539
+#: crates/app/src/controller/clean.rs:540
 msgid "not running and not the newest"
 msgstr "ni en uso ni el más reciente"
 
@@ -2726,7 +2722,7 @@ msgstr "resultados"
 msgid "selected"
 msgstr "seleccionado"
 
-#: crates/app/src/controller/clean.rs:555
+#: crates/app/src/controller/clean.rs:556
 msgid "size unknown"
 msgstr "tamaño desconocido"
 
@@ -2762,8 +2758,8 @@ msgstr "la terminal"
 msgid "threads"
 msgstr "hilos"
 
-#: crates/app/src/controller/clean.rs:625
-#: crates/app/src/controller/clean.rs:637
+#: crates/app/src/controller/clean.rs:626
+#: crates/app/src/controller/clean.rs:638
 msgid "ticked"
 msgstr "marcados"
 
@@ -2772,12 +2768,12 @@ msgstr "marcados"
 msgid "to"
 msgstr "a"
 
-#: crates/app/src/controller/clean.rs:627
+#: crates/app/src/controller/clean.rs:628
 msgid "to Trash"
 msgstr "a la papelera"
 
-#: crates/app/src/controller/clean.rs:373
-#: crates/app/src/controller/clean.rs:394
+#: crates/app/src/controller/clean.rs:374
+#: crates/app/src/controller/clean.rs:395
 #: crates/app/src/controller/downloads.rs:107
 #: crates/app/src/controller/ops.rs:256
 msgid "to the Trash"
@@ -2819,7 +2815,7 @@ msgstr "sin tocar desde hace"
 msgid "untouched for 90 days"
 msgstr "sin tocar en 90 días"
 
-#: crates/app/src/controller/clean.rs:500
+#: crates/app/src/controller/clean.rs:501
 msgid "used"
 msgstr "usado"
 
@@ -2905,6 +2901,9 @@ msgstr "‹ Todas las sugerencias"
 #: crates/app/qml/SearchOverlay.qml:227
 msgid "↑↓ move   ↵ open   Space peek   Ctrl+↵ show in folder"
 msgstr "↑↓ moverse   ↵ abrir   Espacio vista previa   Ctrl+↵ mostrar en la carpeta"
+
+#~ msgid "Favorites"
+#~ msgstr "Favoritos"
 
 #~ msgid "Add a link to Bookmarks"
 #~ msgstr "Añadir un enlace a Marcadores"

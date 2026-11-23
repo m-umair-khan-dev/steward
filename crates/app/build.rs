@@ -84,6 +84,7 @@ fn main() {
         // Qt 6.5+ effects, outside the QML module (see qml/fx.qrc).
         .qrc("qml/fx.qrc")
         .qrc("qml/local.qrc")
+        .qrc("qml/brand.qrc")
         .files(["src/bridge.rs"]);
     // SAFETY: `cc_builder` is unsafe because changing compiler flags could
     // make the generated code unsound. We only add an include folder and our

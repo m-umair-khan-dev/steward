@@ -177,8 +177,8 @@ Sheet {
                 Segmented {
                     anchors.right: parent.right; anchors.verticalCenter: parent.verticalCenter
                     name: p.t("Accent")
-                    options: [{ id: "cairn", label: p.t("Cairn") }, { id: "system", label: p.t("System") }]
-                    current: root.prefs.accent || "cairn"
+                    options: [{ id: "steward", label: p.t("Cairn") }, { id: "system", label: p.t("System") }]
+                    current: root.prefs.accent === "system" ? "system" : "steward"
                     onPicked: id => p.setpref("accent", id)
                 }
             }

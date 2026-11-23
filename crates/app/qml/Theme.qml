@@ -5,12 +5,14 @@ import QtQuick
 QtObject {
     property bool dark: false
     property bool systemAccent: false
-    property color systemAccentColor: "#6b56dc"
-    // Cairn's own colours (Preferences › Appearance › Colour). Each has a
+    property color systemAccentColor: "#77216f"
+    // The app's own colours (Preferences › Appearance › Colour). Each has a
     // shade for light and for dark: [accent light, accent dark, text light, text dark].
-    property string accentName: "cairn"
+    // "steward" is the default and matches the app icon: aubergine on warm
+    // cream, with the icon's orange and amber layers.
+    property string accentName: "steward"
     readonly property var accents: ({
-        cairn:    ["#6b56dc", "#7b66e6", "#5a45cc", "#a897f3"],
+        steward:  ["#77216f", "#b45aa9", "#661c5f", "#e3a6db"],
         blue:     ["#2f6fdb", "#4d8af0", "#2459b8", "#8ab4f8"],
         teal:     ["#12858f", "#2aa5ad", "#0d6d75", "#6fd0d6"],
         green:    ["#2e8b57", "#45a96f", "#23704a", "#82d1a2"],
@@ -18,24 +20,30 @@ QtObject {
         rose:     ["#cc3d6e", "#e25b8a", "#ab2d5a", "#f19ab9"],
         graphite: ["#4f5563", "#8a90a0", "#3e4350", "#c3c7d1"]
     })
-    readonly property var accentSet: accents[accentName] || accents.cairn
+    readonly property var accentSet: accents[accentName] || accents.steward
     property bool motion: true
 
-    readonly property color bg: dark ? "#0c0b14" : "#f4f3f9"
-    readonly property color pane: dark ? "#15141f" : "#ffffff"
-    readonly property color sidebar: dark ? "#12111b" : "#f3f2f9"
-    readonly property color card: dark ? "#1e1d2b" : "#ffffff"
-    readonly property color sunken: dark ? "#232232" : "#f1f0f6"
-    readonly property color paneSide: dark ? "#13121c" : "#f8f7fb"
-    readonly property color ink: dark ? "#eeecf7" : "#16132a"
-    readonly property color muted: dark ? "#a6a2bc" : "#5d5a72"
-    readonly property color faint: dark ? "#6f6b85" : "#8a879a"
-    readonly property color line: dark ? Qt.rgba(1, 1, 1, 0.07) : Qt.rgba(0.086, 0.075, 0.165, 0.08)
-    readonly property color track: dark ? Qt.rgba(1, 1, 1, 0.06) : Qt.rgba(0.086, 0.075, 0.165, 0.05)
-    readonly property color hover: dark ? Qt.rgba(1, 1, 1, 0.05) : Qt.rgba(0.086, 0.075, 0.165, 0.04)
+    // Surfaces. The default colours take the icon's warm cream; Ubuntu's
+    // accent and the other colours sit on plain neutrals.
+    readonly property bool warm: !systemAccent && accentName === "steward"
+    function pick(warmLight, warmDark, plainLight, plainDark) {
+        return warm ? (dark ? warmDark : warmLight) : (dark ? plainDark : plainLight)
+    }
+    readonly property color bg: pick("#f6f1ea", "#120d11", "#f4f4f6", "#0e0e10")
+    readonly property color pane: pick("#fffdf9", "#1b1519", "#ffffff", "#161618")
+    readonly property color sidebar: pick("#f3ede5", "#171215", "#f2f2f4", "#131315")
+    readonly property color card: pick("#fffdf9", "#241d22", "#ffffff", "#1f1f22")
+    readonly property color sunken: pick("#f0e9e0", "#2a2228", "#efeff2", "#252528")
+    readonly property color paneSide: pick("#f9f5ef", "#191417", "#f8f8fa", "#141416")
+    readonly property color ink: pick("#26191f", "#f3ede8", "#18181c", "#ededf0")
+    readonly property color muted: pick("#6b5d63", "#b5a9ae", "#5e5e66", "#a5a5ad")
+    readonly property color faint: pick("#958890", "#7f7379", "#8a8a92", "#6f6f78")
+    readonly property color line: dark ? Qt.rgba(1, 1, 1, 0.07) : alpha(ink, 0.08)
+    readonly property color track: dark ? Qt.rgba(1, 1, 1, 0.06) : alpha(ink, 0.05)
+    readonly property color hover: dark ? Qt.rgba(1, 1, 1, 0.05) : alpha(ink, 0.04)
     readonly property color accent: systemAccent ? systemAccentColor : accentSet[dark ? 1 : 0]
     readonly property color accentText: systemAccent ? systemAccentColor : accentSet[dark ? 3 : 2]
-    readonly property color toastBg: dark ? "#2e2b45" : "#26233a"
+    readonly property color toastBg: pick("#2e2128", "#3a2e36", "#26262b", "#323238")
 
     // Accepts a colour or a colour name ("#6bbe91"): names have no r, g, b.
     function alpha(c, a) { const k = Qt.lighter(c, 1.0); return Qt.rgba(k.r, k.g, k.b, a) }
