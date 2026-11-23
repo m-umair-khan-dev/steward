@@ -395,6 +395,7 @@ Notes:
 | P9-T01 | Capability detection | done | E9-01. `steward_core::sandbox` detects Flatpak, Snap or the test switch; the Installed page, the installers and leftovers cards and the administrator rows explain why |
 | P9-T02 | Flatpak manifest and build | built; E9-02 open | ADR 0015. `make flatpak` builds the bundle in Docker (runtimes cached in a volume). Next: E9-02 (smoke scenarios inside the bundle); for Flathub, vendored crates, linter, tray bus name |
 | P9-T03 | Translation workflow; more languages | on hold | Product owner's decision (2026-11-23): both more languages and the hosted translation service |
+| P9-T05 | Snap for the Snap Store and App Center (product owner's request, 2026-11-23) | packaging written; build blocked | `snap/snapcraft.yaml`, docs/snap.md. Name `steward` registered. The LXD build needs the DOCKER-USER rules in docs/snap.md (HUMAN: host firewall); then build, test, upload to edge |
 | P9-T04 | Browser extension (optional) | done (manual check pending) | `browser-extension/`: toolbar button and link menu; native host runs `steward add-link` (web addresses only, no shell); tested by feeding the host a message. Firefox host manifest packaged; Chromium needs the store ID (HUMAN) |
 
 ## Blocked / waiting for a human

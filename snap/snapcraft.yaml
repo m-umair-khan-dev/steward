@@ -1,0 +1,100 @@
+# Snap of Steward for the Snap Store and Ubuntu App Center (DESIGN.md D6:
+# the .deb stays the main channel). Build with `snapcraft pack` (see
+# docs/snap.md). Strictly confined: like the Flatpak, the sandbox keeps
+# the host's package tools out of reach, and the app says so on the
+# Installed page and in Free Up Space (P9-T01, capability detection).
+name: steward
+title: Steward
+base: core24
+adopt-info: steward
+summary: The file manager for Ubuntu that keeps your folders tidy
+description: |
+  Steward sorts a messy Downloads in one click, frees up space safely, and
+  undoes anything. It shows a plan before anything moves, and one Undo puts
+  everything back. Nothing is uploaded and nothing is tracked.
+license: GPL-3.0-or-later
+grade: stable
+confinement: strict
+icon: data/icons/hicolor/scalable/apps/io.github.m_umair_khan_dev.steward.svg
+website: https://github.com/m-umair-khan-dev/steward
+source-code: https://github.com/m-umair-khan-dev/steward
+issues: https://github.com/m-umair-khan-dev/steward/issues
+platforms:
+  amd64:
+
+slots:
+  # Steward answers other apps ("Show in folder", the steward command,
+  # Activities search) on its own bus name; the search index has its own.
+  session-dbus:
+    interface: dbus
+    bus: session
+    name: io.github.m_umair_khan_dev.steward
+  indexer-dbus:
+    interface: dbus
+    bus: session
+    name: io.github.m_umair_khan_dev.steward.Indexer
+
+apps:
+  steward:
+    command: usr/bin/steward
+    common-id: io.github.m_umair_khan_dev.steward
+    desktop: usr/share/applications/io.github.m_umair_khan_dev.steward.desktop
+    extensions: [kde-neon-6]
+    plugs:
+      - home                # your files
+      - removable-media     # USB drives and memory cards
+      - network             # a bookmark's title and picture
+      - mount-observe       # drives in the sidebar, free space
+      - system-observe      # About This Computer
+      - hardware-observe    # About This Computer
+      - upower-observe      # battery health
+      - gsettings
+      - unity7              # the tray icon (StatusNotifierItem)
+
+parts:
+  steward:
+    plugin: nil
+    source: .
+    source-type: local
+    build-packages:
+      - curl
+      - gettext
+      - pkg-config
+      - libglib2.0-dev
+      - libsqlite3-dev
+      - libssl-dev
+      - build-essential
+    stage-packages:
+      - poppler-utils       # pdftotext, for search inside PDFs
+      - shared-mime-info
+    override-pull: |
+      craftctl default
+      craftctl set version="$(sed -n 's/^version = "\(.*\)"/\1/p' Cargo.toml | head -1)"
+    override-build: |
+      # Rust at the version pinned in rust-toolchain.toml.
+      export RUSTUP_HOME="$CRAFT_PART_BUILD/.rustup" CARGO_HOME="$CRAFT_PART_BUILD/.cargo"
+      curl --proto '=https' --tlsv1.2 -sSf https://sh.rustup.rs | sh -s -- -y --profile minimal --default-toolchain none
+      export PATH="$CARGO_HOME/bin:$PATH"
+      # Qt 6 comes from the kde-neon-6 extension's SDK.
+      export QMAKE="$(command -v qmake6 || command -v qmake)"
+      STEWARD_LOCALEDIR=/snap/steward/current/usr/share/locale \
+        cargo build --release --locked -p steward -p steward-indexer
+      install -Dm755 target/release/steward "$CRAFT_PART_INSTALL/usr/bin/steward"
+      # The app starts the search index from beside itself.
+      install -Dm755 target/release/steward-indexer "$CRAFT_PART_INSTALL/usr/bin/steward-indexer"
+      while read -r lang; do
+        [ -n "$lang" ] || continue
+        install -d "$CRAFT_PART_INSTALL/usr/share/locale/$lang/LC_MESSAGES"
+        msgfmt -o "$CRAFT_PART_INSTALL/usr/share/locale/$lang/LC_MESSAGES/steward.mo" "po/$lang.po"
+      done < po/LINGUAS
+      id=io.github.m_umair_khan_dev.steward
+      install -Dm644 data/$id.desktop "$CRAFT_PART_INSTALL/usr/share/applications/$id.desktop"
+      sed -i "s|^Icon=.*|Icon=\${SNAP}/usr/share/icons/hicolor/scalable/apps/$id.svg|" \
+        "$CRAFT_PART_INSTALL/usr/share/applications/$id.desktop"
+      install -Dm644 data/$id.metainfo.xml "$CRAFT_PART_INSTALL/usr/share/metainfo/$id.metainfo.xml"
+      install -Dm644 data/$id.gschema.xml "$CRAFT_PART_INSTALL/usr/share/glib-2.0/schemas/$id.gschema.xml"
+      glib-compile-schemas "$CRAFT_PART_INSTALL/usr/share/glib-2.0/schemas"
+      install -Dm644 data/icons/hicolor/scalable/apps/$id.svg \
+        "$CRAFT_PART_INSTALL/usr/share/icons/hicolor/scalable/apps/$id.svg"
+      install -Dm644 data/icons/hicolor/symbolic/apps/$id-symbolic.svg \
+        "$CRAFT_PART_INSTALL/usr/share/icons/hicolor/symbolic/apps/$id-symbolic.svg"
