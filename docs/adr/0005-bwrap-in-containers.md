@@ -38,3 +38,11 @@ namespaces.
   `--unshare-all --die-with-parent`, read-only `/usr`, `--dev /dev`, the one
   input file bound read-only, no `/proc`.
 - `seccomp=unconfined` remains a dev- and test-only setting.
+
+## Addendum (2026-11-23): Docker Engine
+
+On Docker Engine (Ubuntu's docker.io) the container also runs under Docker's
+default AppArmor profile, which refuses bwrap's mounts ("Failed to make /
+slave: Permission denied"); Docker Desktop's VM has no AppArmor, so this did
+not show before. The dev and test services now add `apparmor=unconfined`
+next to `seccomp=unconfined`. Both stay dev- and test-only (compose.desktop.yaml).

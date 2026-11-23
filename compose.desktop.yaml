@@ -14,8 +14,10 @@ x-dev: &dev
     - .:/workspace
     - cargo-registry:/usr/local/cargo/registry
     - cargo-target:/var/cache/cargo-target
-  # bwrap and the headless compositor need user namespaces (ADR 0005). Dev and test only.
-  security_opt: ["seccomp=unconfined"]
+  # bwrap and the headless compositor need user namespaces and mounts
+  # (ADR 0005). Docker Engine's default AppArmor profile refuses bwrap's
+  # mounts (Docker Desktop's VM has no AppArmor). Dev and test only.
+  security_opt: ["seccomp=unconfined", "apparmor=unconfined"]
 
 x-app: &app
   <<: *dev

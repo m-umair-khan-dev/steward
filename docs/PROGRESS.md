@@ -400,8 +400,8 @@ Notes:
 ## Blocked / waiting for a human
 
 - Enable CI once the repository is on its Git host (P0-T07).
-- With Docker Engine (not Docker Desktop), run `make app` once and confirm the
-  window opens on the desktop (ADR 0004).
+- Now that this machine uses Docker Engine, run `make app` once and confirm
+  the window opens on the desktop (ADR 0004).
 - Confirm or replace the codename "Cairn" and app ID `dev.cairn.Files`.
 - P1-T16: sign off the look against the reference captures.
 - E1-17: check that pointing at the rail slides the sidebar out (pointer input
@@ -456,8 +456,11 @@ Notes:
   - tag the release.
 - Website (P6-T10) is on hold by the product owner's decision; E6-08 waits
   with it. The draft is in site/.
-- Docker Desktop on this machine needs the user in the `kvm` group (done on
-  2026-11-19); without it Docker Desktop stops at start-up after a reboot.
+- 2026-11-23: this machine moved from Docker Desktop to Docker Engine
+  (Ubuntu's docker.io) at the product owner's request: Docker Desktop's
+  virtual disk had grown to 85 GB and never gave space back, and its 3.8 GB
+  VM crashed under load. The Engine keeps data in /var/lib/docker; the user
+  is in the `docker` group (effective after logging in again).
 
 ## Next
 
