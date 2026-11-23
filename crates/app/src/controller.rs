@@ -215,6 +215,8 @@ pub struct Controller {
     md: markdown::MarkdownState,
     bookmarks: bookmarks::BookmarksState,
     shelf: shelf::ShelfState,
+    /// The sandbox Cairn runs in, if any (P9-T01).
+    sandbox: Option<cairn_core::sandbox::Sandbox>,
     /// Path bar: folders whose name matches what is typed, and the one chosen.
     path_matches: Vec<PathBuf>,
     path_match: Option<usize>,
@@ -320,6 +322,7 @@ pub fn init(notifier: impl Fn() + 'static) {
         md: markdown::MarkdownState::default(),
         bookmarks: bookmarks::BookmarksState::default(),
         shelf: shelf::ShelfState::default(),
+        sandbox: detect_sandbox(),
         path_matches: Vec::new(),
         path_match: None,
         dialog: String::new(),
@@ -1196,6 +1199,33 @@ impl Controller {
         self.emit(Event::Quit);
     }
 
+    /// Why a feature that needs the host is not here (P9-T01), or None.
+    pub fn sandbox_note(&self, needs: cairn_core::sandbox::Needs) -> Option<String> {
+        if cairn_core::sandbox::available(self.sandbox, needs) {
+            return None;
+        }
+        let name = self.sandbox.map(|s| s.name()).unwrap_or("a sandbox");
+        let why = match needs {
+            cairn_core::sandbox::Needs::PackageLists => {
+                gettext("which keeps it from reading the system’s list of installed software.")
+            }
+            cairn_core::sandbox::Needs::PackageDatabase => {
+                gettext("which keeps it from seeing which packages are installed.")
+            }
+            cairn_core::sandbox::Needs::AppLists => {
+                gettext("which keeps it from seeing which apps are installed.")
+            }
+            cairn_core::sandbox::Needs::HostCommands => {
+                gettext("which keeps it from asking the system’s own tools.")
+            }
+        };
+        Some(format!(
+            "{} {name}, {why} {}",
+            gettext("Cairn runs in"),
+            gettext("The Cairn package from Ubuntu’s apt repository can show this.")
+        ))
+    }
+
     /// Ubuntu's accent colour (Settings › Appearance), if the desktop has one.
     pub fn system_accent(&self) -> Option<&'static str> {
         let i = self.interface.as_ref()?;
@@ -2063,6 +2093,7 @@ impl Controller {
                 Some((e.name().to_string(), json!({ "items": items, "bytes": bytes })))
             }).collect::<serde_json::Map<_, _>>(),
             "dark": self.dark,
+            "sandbox": self.sandbox.map(|s| s.name()),
             "appearance": {
                 "style": settings::get().string("color-scheme").to_string(),
                 "accent": settings::get().string("accent").to_string(),
@@ -2097,6 +2128,16 @@ fn tint_symbol(kind: Kind) -> &'static str {
 }
 
 /// GNOME's interface settings, when the schema is installed.
+/// Flatpak or Snap (P9-T01). Test builds can simulate one (E9-01).
+fn detect_sandbox() -> Option<cairn_core::sandbox::Sandbox> {
+    let simulate = cfg!(feature = "e2e") && std::env::var_os("CAIRN_SIMULATE_SANDBOX").is_some();
+    cairn_core::sandbox::detect(
+        std::path::Path::new("/"),
+        std::env::var("SNAP").ok().as_deref(),
+        simulate,
+    )
+}
+
 fn interface_settings() -> Option<gio::Settings> {
     let schema =
         gio::SettingsSchemaSource::default()?.lookup("org.gnome.desktop.interface", true)?;

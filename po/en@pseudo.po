@@ -204,6 +204,9 @@ msgstr "[Çàîrñ àñswérs öthér àpps ñöw; földérs öpéñ îñ ît ö
 msgid "Cairn never runs these. Copy a command and run it in a terminal if you want to."
 msgstr "[Çàîrñ ñévér rüñs thésé. Çöpý à çömmàñd àñd rüñ ît îñ à térmîñàl îf ýöü wàñt tö. ~~~~~~~~~~~~~~~~~~~~~~~~~~]"
 
+msgid "Cairn runs in"
+msgstr "[Çàîrñ rüñs îñ ~~~~]"
+
 msgid "Came with others"
 msgstr "[Çàmé wîth öthérs ~~~~~]"
 
@@ -990,6 +993,9 @@ msgstr "[Ñörmàl Sîzé ~~~]"
 msgid "Normal size"
 msgstr "[Ñörmàl sîzé ~~~]"
 
+msgid "Not available in"
+msgstr "[Ñöt àvàîlàblé îñ ~~~~~]"
+
 msgid "Not changed for"
 msgstr "[Ñöt çhàñgéd för ~~~~~]"
 
@@ -1524,6 +1530,9 @@ msgstr "[Thàt îs ñöt à wéb lîñk ~~~~~~~]"
 msgid "That place does not exist"
 msgstr "[Thàt plàçé döés ñöt éxîst ~~~~~~~~]"
 
+msgid "The Cairn package from Ubuntu’s apt repository can show this."
+msgstr "[Thé Çàîrñ pàçkàgé fröm Übüñtü’s àpt répösîtörý çàñ shöw thîs. ~~~~~~~~~~~~~~~~~~~~]"
+
 msgid "The Flatpak is no longer installed"
 msgstr "[Thé Flàtpàk îs ñö löñgér îñstàlléd ~~~~~~~~~~~]"
 
@@ -2036,6 +2045,18 @@ msgstr "[üséd ~~]"
 
 msgid "used of"
 msgstr "[üséd öf ~~]"
+
+msgid "which keeps it from asking the system’s own tools."
+msgstr "[whîçh kééps ît fröm àskîñg thé sýstém’s öwñ tööls. ~~~~~~~~~~~~~~~~]"
+
+msgid "which keeps it from reading the system’s list of installed software."
+msgstr "[whîçh kééps ît fröm réàdîñg thé sýstém’s lîst öf îñstàlléd söftwàré. ~~~~~~~~~~~~~~~~~~~~~~]"
+
+msgid "which keeps it from seeing which apps are installed."
+msgstr "[whîçh kééps ît fröm sééîñg whîçh àpps àré îñstàlléd. ~~~~~~~~~~~~~~~~~]"
+
+msgid "which keeps it from seeing which packages are installed."
+msgstr "[whîçh kééps ît fröm sééîñg whîçh pàçkàgés àré îñstàlléd. ~~~~~~~~~~~~~~~~~~]"
 
 msgid "will move into"
 msgstr "[wîll mövé îñtö ~~~~]"

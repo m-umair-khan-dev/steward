@@ -388,6 +388,15 @@ Notes:
 | P8-T05 | Shell extension | waits for P8-S1 and decision O4 | HUMAN |
 | P8-T06 to P8-T08 | Phone | on hold | Product owner's decision |
 
+## Phase 9: Reach (in progress)
+
+| ID | Task | Status | Notes |
+|---|---|---|---|
+| P9-T01 | Capability detection | done | E9-01. `cairn_core::sandbox` detects Flatpak, Snap or the test switch; the Installed page, the installers and leftovers cards and the administrator rows explain why |
+| P9-T02 | Flatpak manifest and build | manifest written; build waits | ADR 0015. Needs about 4 GB of runtimes; [verify] item, no fallback named: the product owner decides where to build |
+| P9-T03 | Translation workflow; more languages | waits for the product owner | Which languages, and which hosted service |
+| P9-T04 | Browser extension (optional) | to do | Manual check |
+
 ## Blocked / waiting for a human
 
 - Enable CI once the repository is on its Git host (P0-T07).

@@ -160,6 +160,13 @@ Rectangle {
                 }
             }
 
+            // In a sandbox (P9-T01): why there are no administrator rows.
+            Text {
+                width: parent.width; wrapMode: Text.WordWrap; color: Theme.muted; font.pixelSize: 13
+                visible: !!(root.model.admin || {}).unavailable
+                text: (root.model.admin || {}).unavailable || ""
+                Accessible.role: Accessible.StaticText; Accessible.name: text
+            }
             // Needs administrator: sizes and commands to copy. Nothing runs.
             Column {
                 width: parent.width
@@ -417,7 +424,8 @@ Rectangle {
         border.color: cardHover.hovered ? Theme.alpha(Theme.accent, 0.4) : Theme.line
         Accessible.role: Accessible.Button
         Accessible.name: modelData.title
-        Accessible.description: modelData.subtitle + ", " + (looking ? p.t("looking") : modelData.totalText)
+        Accessible.description: modelData.unavailable ? modelData.unavailable
+                                : modelData.subtitle + ", " + (looking ? p.t("looking") : modelData.totalText)
         Accessible.onPressAction: p.activate("win.clean-review", modelData.id)
         HoverHandler { id: cardHover; cursorShape: Qt.PointingHandCursor }
         TapHandler { onTapped: p.activate("win.clean-review", card.modelData.id) }
@@ -429,6 +437,8 @@ Rectangle {
             Text { anchors.horizontalCenter: parent.horizontalCenter; text: card.modelData.title
                    color: Theme.ink; font.pixelSize: 15; font.weight: Font.Bold }
             Text { anchors.horizontalCenter: parent.horizontalCenter; text: card.modelData.subtitle
+                   width: parent.width - 24; horizontalAlignment: Text.AlignHCenter
+                   wrapMode: Text.WordWrap; maximumLineCount: 2; elide: Text.ElideRight
                    color: Theme.muted; font.pixelSize: 12
                    SequentialAnimation on opacity {
                        running: card.looking && Theme.motion; loops: Animation.Infinite

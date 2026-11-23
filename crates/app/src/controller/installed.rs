@@ -48,6 +48,10 @@ fn why_label(why: Why) -> String {
 
 impl Controller {
     pub fn installed_opened(&mut self) {
+        // In a sandbox the host's package tools are out of reach (P9-T01).
+        if self.sandbox.is_some() {
+            return;
+        }
         if self.installed.tools.is_none() && !self.installed.looking {
             self.installed_refresh();
         }
@@ -75,6 +79,9 @@ impl Controller {
     }
 
     pub fn installed_count(&self) -> Option<usize> {
+        if self.sandbox.is_some() {
+            return None;
+        }
         self.installed
             .tools
             .as_ref()
@@ -161,6 +168,9 @@ impl Controller {
     }
 
     pub fn installed_json(&self) -> Value {
+        if let Some(note) = self.sandbox_note(cairn_core::sandbox::Needs::PackageLists) {
+            return json!({ "looking": false, "unavailable": note, "tools": [], "filters": [], "packages": [] });
+        }
         let Some(tools) = &self.installed.tools else {
             return json!({ "looking": true, "tools": [], "filters": [], "packages": [] });
         };
@@ -211,6 +221,7 @@ impl Controller {
     #[cfg(feature = "e2e")]
     pub fn installed_test_json(&self) -> Value {
         json!({
+            "unavailable": self.installed_json()["unavailable"].clone(),
             "looking": self.installed.looking,
             "loaded": self.installed.tools.is_some(),
             "tools": self.installed.tools.as_ref().map(|tools| tools.iter().map(|t| (t.id.to_string(), json!({

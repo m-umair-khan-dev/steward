@@ -242,6 +242,11 @@ impl Controller {
             }),
         );
         self.clean_measure_disk();
+        // The "Needs administrator" rows ask the host's tools (P9-T01).
+        if self.sandbox.is_some() {
+            self.clean.admin = Some(Vec::new());
+            return;
+        }
         std::thread::spawn(move || {
             let rows = clean::admin::rows(&cairn_core::tools::System);
             post(move |c| {
@@ -272,8 +277,11 @@ impl Controller {
         if self.clean.ticket != ticket {
             return;
         }
+        // A card that needs the host shows why, not what it could not see.
+        let out_of_reach = cairn_core::sandbox::card_needs(card.id)
+            .is_some_and(|n| self.sandbox_note(n).is_some());
         if let Some(slot) = self.clean.cards.iter_mut().find(|s| s.0 == card.id) {
-            slot.2 = Some(card.items);
+            slot.2 = Some(if out_of_reach { Vec::new() } else { card.items });
         }
         self.mark(dirty::TOOLS);
     }
@@ -500,6 +508,9 @@ impl Controller {
     }
 
     fn admin_json(&self) -> Value {
+        if let Some(note) = self.sandbox_note(cairn_core::sandbox::Needs::HostCommands) {
+            return json!({ "looking": false, "unavailable": note, "rows": [] });
+        }
         let Some(rows) = &self.clean.admin else {
             return json!({ "looking": true, "rows": [] });
         };
@@ -574,9 +585,16 @@ impl Controller {
             .map(|(card, found)| {
                 let (title, _, symbol, color) = card_text(card.id);
                 let ticked: Vec<&Item> = card.items.iter().filter(|i| self.ticked(i)).collect();
+                let unavailable = cairn_core::sandbox::card_needs(card.id).and_then(|n| self.sandbox_note(n));
                 json!({
                     "id": card.id, "group": card.group.id(), "title": title,
-                    "subtitle": if *found { card_subtitle(card.id, &card.items) } else { gettext("Looking…") },
+                    "unavailable": unavailable,
+                    "subtitle": match (&unavailable, found) {
+                        (Some(_), _) => format!("{} {}", gettext("Not available in"),
+                                                self.sandbox.map(|s| s.name()).unwrap_or_default()),
+                        (None, true) => card_subtitle(card.id, &card.items),
+                        (None, false) => gettext("Looking…"),
+                    },
                     "symbol": symbol, "color": color,
                     "state": if *found { "done" } else { "looking" },
                     "total": card.total(), "totalText": format::size(card.total()),
@@ -651,6 +669,9 @@ impl Controller {
                 "id": r.id, "bytes": r.bytes, "command": r.command,
             })).collect::<Vec<_>>()),
             "copied": self.clean.copied,
+            "unavailable": self.clean_json()["cards"].as_array().map(|cards| cards.iter()
+                .filter(|c| !c["unavailable"].is_null()).map(|c| c["id"].clone()).collect::<Vec<_>>()),
+            "admin_unavailable": self.admin_json()["unavailable"].clone(),
         })
     }
 }

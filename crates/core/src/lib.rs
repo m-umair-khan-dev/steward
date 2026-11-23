@@ -25,6 +25,7 @@ pub mod ops;
 pub mod packages;
 pub mod places;
 pub mod plan;
+pub mod sandbox;
 pub mod servers;
 pub mod shelf;
 pub mod sort;

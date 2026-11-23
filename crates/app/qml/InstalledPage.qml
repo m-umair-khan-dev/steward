@@ -17,6 +17,8 @@ Rectangle {
         x: 32; y: 22
         width: parent.width - 64
         spacing: 16
+        // In a sandbox there is no list to sum up or filter (P9-T01).
+        visible: !root.model.unavailable
 
         Rectangle {
             width: parent.width
@@ -136,6 +138,7 @@ Rectangle {
         x: 32; width: parent.width - 64
         radius: 14; color: Theme.card; border.color: Theme.line
         clip: true
+        visible: !root.model.unavailable
 
         Item {
             id: columns
@@ -211,6 +214,18 @@ Rectangle {
             text: p.t("Asking apt, Snap, Flatpak and the other tools…")
             color: Theme.muted; font.pixelSize: 15
         }
+    }
+
+    // In a sandbox (P9-T01): why the list is not here.
+    Column {
+        anchors.centerIn: parent
+        width: Math.min(parent.width - 80, 520)
+        visible: !!root.model.unavailable
+        spacing: 10
+        Icon { anchors.horizontalCenter: parent.horizontalCenter; name: "lock"; size: 34; color: Theme.faint }
+        Text { width: parent.width; horizontalAlignment: Text.AlignHCenter; wrapMode: Text.WordWrap
+               text: root.model.unavailable || ""; color: Theme.muted; font.pixelSize: 15
+               Accessible.role: Accessible.StaticText; Accessible.name: text }
     }
 
     FileDialog {
