@@ -1,0 +1,20 @@
+<svg xmlns="http://www.w3.org/2000/svg" width="128" height="128" viewBox="0 0 128 128">
+  <!-- Placeholder app icon for Cairn (HUMAN: final icon). A glass folder on a
+       violet tile with three stacked stones: a cairn marks the way. -->
+  <defs>
+    <linearGradient id="tile" x1="0" y1="0" x2="0" y2="1">
+      <stop offset="0" stop-color="#a497f2"/>
+      <stop offset="1" stop-color="#5a45cc"/>
+    </linearGradient>
+    <linearGradient id="front" x1="0" y1="0" x2="0" y2="1">
+      <stop offset="0" stop-color="#ffffff" stop-opacity="0.95"/>
+      <stop offset="1" stop-color="#e9e5ff" stop-opacity="0.85"/>
+    </linearGradient>
+  </defs>
+  <rect x="8" y="8" width="112" height="112" rx="26" fill="url(#tile)"/>
+  <path d="M26 42a8 8 0 0 1 8-8h18l8 8h34a8 8 0 0 1 8 8v4H26z" fill="#d9d3ff"/>
+  <rect x="26" y="48" width="76" height="50" rx="8" fill="url(#front)"/>
+  <ellipse cx="64" cy="86" rx="15" ry="5.5" fill="#6a55db"/>
+  <ellipse cx="64" cy="76" rx="11" ry="4.8" fill="#7d68e3"/>
+  <ellipse cx="64" cy="67.5" rx="7" ry="4" fill="#9585ec"/>
+</svg>

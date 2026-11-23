@@ -1,0 +1,49 @@
+#!/usr/bin/python3
+"""Native messaging host for the "Save to Cairn" browser extension (P9-T04).
+
+The browser starts this program and sends one message: {"url": "..."}
+(a 4-byte length, then UTF-8 JSON). It runs `cairn add-link URL` and
+answers {"ok": true} or {"ok": false, "error": "..."}. Only web addresses
+are accepted, and the address is passed as one argument, never to a shell.
+"""
+
+import json
+import shutil
+import struct
+import subprocess
+import sys
+
+
+def read_message():
+    raw = sys.stdin.buffer.read(4)
+    if len(raw) < 4:
+        return None
+    (length,) = struct.unpack("=I", raw)
+    if length > 64 * 1024:
+        return None
+    return json.loads(sys.stdin.buffer.read(length).decode("utf-8"))
+
+
+def send(message):
+    data = json.dumps(message).encode("utf-8")
+    sys.stdout.buffer.write(struct.pack("=I", len(data)) + data)
+    sys.stdout.buffer.flush()
+
+
+def main():
+    message = read_message() or {}
+    url = message.get("url", "")
+    if not isinstance(url, str) or not url.startswith(("http://", "https://")) or len(url) > 8192:
+        send({"ok": False, "error": "not a web address"})
+        return
+    cairn = shutil.which("cairn") or "/usr/bin/cairn"
+    try:
+        done = subprocess.run([cairn, "add-link", url], capture_output=True, text=True, timeout=20)
+    except (OSError, subprocess.TimeoutExpired) as error:
+        send({"ok": False, "error": str(error)})
+        return
+    send({"ok": done.returncode == 0, "error": done.stderr.strip()[:500]})
+
+
+if __name__ == "__main__":
+    main()

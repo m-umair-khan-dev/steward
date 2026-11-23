@@ -395,7 +395,7 @@ Notes:
 | P9-T01 | Capability detection | done | E9-01. `cairn_core::sandbox` detects Flatpak, Snap or the test switch; the Installed page, the installers and leftovers cards and the administrator rows explain why |
 | P9-T02 | Flatpak manifest and build | manifest written; build waits | ADR 0015. Needs about 4 GB of runtimes; [verify] item, no fallback named: the product owner decides where to build |
 | P9-T03 | Translation workflow; more languages | waits for the product owner | Which languages, and which hosted service |
-| P9-T04 | Browser extension (optional) | to do | Manual check |
+| P9-T04 | Browser extension (optional) | done (manual check pending) | `browser-extension/`: toolbar button and link menu; native host runs `cairn add-link` (web addresses only, no shell); tested by feeding the host a message. Firefox host manifest packaged; Chromium needs the store ID (HUMAN) |
 
 ## Blocked / waiting for a human
 
@@ -432,6 +432,11 @@ Notes:
   - Activities search: type a workspace's name; a link; a collection;
   - decide whether the portal route for the key is worth adding on 26.04,
     and decision O4 (is the Shell extension, P8-T05, in scope).
+- Phase 9: load `browser-extension/extension` in Firefox (about:debugging)
+  with the packaged Cairn and save a page; sign it on addons.mozilla.org;
+  publish in the Chrome Web Store and fill in its ID; decide where to build
+  the Flatpak (about 4 GB) and whether to submit to Flathub; choose further
+  languages and a hosted translation service (P9-T03).
 - Phase 7: try Open In with the terminals and editors actually installed;
   check the AI Agents numbers against a real machine's usage.
 - Phase 6 (from DESIGN.md's HUMAN list):

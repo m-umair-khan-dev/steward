@@ -69,6 +69,8 @@ assets = [
     ["../../data/dev.cairn.Indexer.service", "usr/share/dbus-1/services/", "644"],
     ["../../data/dev.cairn.Files.service", "usr/share/dbus-1/services/", "644"],
     ["../../data/dev.cairn.Files.search-provider.ini", "usr/share/gnome-shell/search-providers/", "644"],
+    ["../../browser-extension/host/cairn-native-host", "usr/libexec/", "755"],
+    ["../../browser-extension/host/dev.cairn.files.firefox.json", "usr/lib/mozilla/native-messaging-hosts/dev.cairn.files.json", "644"],
     ["../../target/package/locale/**/*.mo", "usr/share/locale/", "644"],
     ["../../target/package/cairn.1.gz", "usr/share/man/man1/", "644"],
     ["../../packaging/debian/copyright", "usr/share/doc/cairn/", "644"],
