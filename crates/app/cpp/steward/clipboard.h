@@ -1,5 +1,5 @@
 // The system clipboard for file lists (P2-T04). Only moves bytes; the
-// formats are encoded and decoded in Rust (cairn_core::clip).
+// formats are encoded and decoded in Rust (steward_core::clip).
 #pragma once
 
 #include "rust/cxx.h"

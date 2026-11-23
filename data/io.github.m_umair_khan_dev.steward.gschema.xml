@@ -1,6 +1,6 @@
 <?xml version="1.0" encoding="UTF-8"?>
-<schemalist gettext-domain="cairn">
-  <schema id="dev.cairn.Files" path="/dev/cairn/Files/">
+<schemalist gettext-domain="steward">
+  <schema id="io.github.m_umair_khan_dev.steward" path="/io/github/m_umair_khan_dev/steward/">
     <key name="default-view" type="s">
       <choices>
         <choice value="grid"/>
@@ -111,8 +111,8 @@
     </key>
     <key name="default-file-manager" type="b">
       <default>false</default>
-      <summary>Use Cairn as the default file manager</summary>
-      <description>Open folders in Cairn and answer other apps' "Show in folder" (org.freedesktop.FileManager1) while Cairn runs (P6-T07).</description>
+      <summary>Use Steward as the default file manager</summary>
+      <description>Open folders in Steward and answer other apps' "Show in folder" (org.freedesktop.FileManager1) while Steward runs (P6-T07).</description>
     </key>
     <key name="open-in-terminal" type="s">
       <default>''</default>
@@ -135,7 +135,7 @@
     <key name="shelf-shortcut-enabled" type="b">
       <default>false</default>
       <summary>Open the Shelf with a key from any app</summary>
-      <description>Written to GNOME as a custom keyboard shortcut that runs “cairn shelf”, and removed when turned off.</description>
+      <description>Written to GNOME as a custom keyboard shortcut that runs “steward shelf”, and removed when turned off.</description>
     </key>
     <key name="shelf-shortcut" type="s">
       <default>'Ctrl+Alt+Space'</default>

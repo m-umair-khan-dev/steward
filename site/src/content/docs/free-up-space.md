@@ -5,7 +5,7 @@ order: 11
 section: Tools
 ---
 
-Open **Free Up Space** from the sidebar or with <kbd>Ctrl+Shift+K</kbd>. The ring shows what fills your home disk; the cards below fill in as Cairn looks.
+Open **Free Up Space** from the sidebar or with <kbd>Ctrl+Shift+K</kbd>. The ring shows what fills your home disk; the cards below fill in as Steward looks.
 
 **Safe to clear** (ticked only when clearly spare):
 
@@ -15,6 +15,6 @@ Open **Free Up Space** from the sidebar or with <kbd>Ctrl+Shift+K</kbd>. The rin
 
 **Your call** (never ticked): old build output in projects untouched for six months, data left by removed Flatpaks and Snaps, big files, old screen recordings, and old downloads.
 
-Open a card to review it: each item says why it is there. Tick what should go and press **Move to Trash** — one step, with Undo. **Needs administrator** lists system clean-ups (apt's cache, old Snap revisions, the journal, old kernels, Docker images) with their sizes and the command to copy. Cairn never runs them.
+Open a card to review it: each item says why it is there. Tick what should go and press **Move to Trash** — one step, with Undo. **Needs administrator** lists system clean-ups (apt's cache, old Snap revisions, the journal, old kernels, Docker images) with their sizes and the command to copy. Steward never runs them.
 
 There is no "unused apps" card: Linux keeps no trustworthy record of when an app was last opened.

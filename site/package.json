@@ -1,8 +1,8 @@
 {
-  "name": "cairn-site",
+  "name": "steward-site",
   "private": true,
   "type": "module",
-  "description": "Cairn's website and guide (DESIGN.md §6.2, P6-T10)",
+  "description": "Steward's website and guide (DESIGN.md §6.2, P6-T10)",
   "scripts": {
     "dev": "astro dev --host 0.0.0.0 --port 4321",
     "build": "astro build && pagefind --site dist",

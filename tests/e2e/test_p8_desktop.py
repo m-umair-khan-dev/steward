@@ -111,7 +111,7 @@ def test_E8_04_latest_downloads(app, home):
 # --- the Shelf's key (E8-07) ---------------------------------------------------------
 
 MEDIA_KEYS = "org.gnome.settings-daemon.plugins.media-keys"
-KEYBINDING = "/org/gnome/settings-daemon/plugins/media-keys/custom-keybindings/cairn-shelf/"
+KEYBINDING = "/org/gnome/settings-daemon/plugins/media-keys/custom-keybindings/steward-shelf/"
 
 
 def gsettings(app, *args: str) -> str:
@@ -136,7 +136,7 @@ def test_E8_07_the_shelf_key_without_a_portal(app, home):
     entry = f"{MEDIA_KEYS}.custom-keybinding:{KEYBINDING}"
     assert gsettings(app, "get", entry, "binding") == "'<Control><Alt>space'"
     assert gsettings(app, "get", entry, "command").endswith(" shelf'")
-    assert gsettings(app, "get", entry, "name") == "'Cairn Shelf'"
+    assert gsettings(app, "get", entry, "name") == "'Steward Shelf'"
 
     app.a11y_click("Open the Shelf with a key", within="Preferences")
     app.wait_for(lambda: KEYBINDING not in keybindings(app), "the keybinding to be removed")
@@ -192,7 +192,7 @@ def test_E8_06_the_tray_icon(session, home, app_factory, tmp_path):
         icon = app.bus.call_sync(item, "/StatusNotifierItem", "org.freedesktop.DBus.Properties", "Get",
                                  GLib.Variant("(ss)", ("org.kde.StatusNotifierItem", "IconName")), None,
                                  Gio.DBusCallFlags.NONE, 3000, None).unpack()[0]
-        assert icon == "dev.cairn.Files-symbolic"
+        assert icon == "io.github.m_umair_khan_dev.steward-symbolic"
         call("Activate", 0, 0)
         app.wait_for(lambda: app.state()["shelf"]["open"], "a click to open the Shelf")
         call("Activate", 0, 0)
@@ -206,7 +206,7 @@ def test_E8_06_the_tray_icon(session, home, app_factory, tmp_path):
 
 
 def test_open_at_login_writes_an_autostart_entry(app, home):
-    entry = home / ".config" / "autostart" / "dev.cairn.Files.desktop"
+    entry = home / ".config" / "autostart" / "io.github.m_umair_khan_dev.steward.desktop"
     assert not entry.exists()
     shelf_and_tray(app)
     app.a11y_click("Open at login", within="Preferences")
@@ -221,7 +221,7 @@ def test_open_at_login_writes_an_autostart_entry(app, home):
 
 def provider(app, method: str, args: GLib.Variant, reply: str):
     from gi.repository import Gio
-    result = app.bus.call_sync("dev.cairn.Files", "/dev/cairn/Files/SearchProvider",
+    result = app.bus.call_sync("io.github.m_umair_khan_dev.steward", "/io/github/m_umair_khan_dev/steward/SearchProvider",
                                "org.gnome.Shell.SearchProvider2", method, args,
                                GLib.VariantType(reply) if reply else None, Gio.DBusCallFlags.NONE, 5000, None)
     return result.unpack() if result is not None else None
@@ -263,7 +263,7 @@ def test_E8_05_activities_search_finds_a_workspace(app, home):
 
 def test_the_colour_follows_ubuntu_with_the_system_style(app, home):
     """Style "System" takes Ubuntu's accent (Settings › Appearance), live;
-    Light and Dark offer Cairn's own colours."""
+    Light and Dark offer Steward's own colours."""
     gsettings(app, "set", "org.gnome.desktop.interface", "accent-color", "teal")
     app.wait_for(lambda: app.state()["appearance"]["system_accent"] == "#2190a4", "Ubuntu's teal")
     app.action("app.preferences")
@@ -275,6 +275,6 @@ def test_the_colour_follows_ubuntu_with_the_system_style(app, home):
 
     app.a11y_click("Light", within="Preferences")
     app.wait_for(lambda: app.state()["appearance"]["style"] == "light", "Light")
-    app.wait_for(lambda: "Orange" in app.a11y_names(), "Cairn's own colours")
+    app.wait_for(lambda: "Orange" in app.a11y_names(), "Steward's own colours")
     app.a11y_click("Orange", within="Preferences")
     app.wait_for(lambda: app.state()["appearance"]["accent"] == "orange", "orange chosen")

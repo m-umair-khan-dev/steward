@@ -2,7 +2,7 @@
 # Qt 6 / QML proof (spikes/qt-proof): the 26.10 dev image plus Qt's
 # development packages. Throwaway; if Qt is adopted, these packages move into
 # docker/desktop.Dockerfile.
-ARG BASE=cairn-dev:26.10
+ARG BASE=steward-dev:26.10
 FROM ${BASE}
 SHELL ["/bin/bash", "-o", "pipefail", "-c"]
 USER root

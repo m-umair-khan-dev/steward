@@ -11,8 +11,8 @@ from gi.repository import GLib
 
 pytestmark = pytest.mark.p3
 
-# What the indexer never covers (cairn_core::index::Rules::for_home).
-SKIPPED = (".cache/cairn", ".cache/thumbnails", ".local/share/cairn", ".local/share/Trash")
+# What the indexer never covers (steward_core::index::Rules::for_home).
+SKIPPED = (".cache/steward", ".cache/thumbnails", ".local/share/steward", ".local/share/Trash")
 
 
 def s(text: str) -> GLib.Variant:
@@ -91,12 +91,12 @@ def _install_handler(home, mime: str) -> Path:
     calls = home / "handler-calls.txt"
     apps = home / ".local" / "share" / "applications"
     apps.mkdir(parents=True, exist_ok=True)
-    (apps / "cairn-test-handler.desktop").write_text(
+    (apps / "steward-test-handler.desktop").write_text(
         "[Desktop Entry]\nType=Application\nName=Test Handler\nNoDisplay=true\n"
         f"MimeType={mime};\n"
         f"Exec=/bin/sh -c 'printf \"%%s\\\\n\" \"$@\" >> {calls}' sh %U\n")
     (home / ".config" / "mimeapps.list").write_text(
-        f"[Default Applications]\n{mime}=cairn-test-handler.desktop\n")
+        f"[Default Applications]\n{mime}=steward-test-handler.desktop\n")
     return calls
 
 
@@ -179,7 +179,7 @@ def test_E3_07_a_deleted_index_rebuilds(session, home, app_factory):
             return True
     app.wait_for(gone, "the indexer to stop")
     for suffix in ("", "-wal", "-shm"):
-        Path(f"{home / '.cache' / 'cairn' / 'index.db'}{suffix}").unlink(missing_ok=True)
+        Path(f"{home / '.cache' / 'steward' / 'index.db'}{suffix}").unlink(missing_ok=True)
 
     again = app_factory()
     status = again.wait_index_idle()

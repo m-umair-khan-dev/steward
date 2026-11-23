@@ -36,7 +36,7 @@ Rectangle {
         Text {
             anchors.left: badge.right; anchors.leftMargin: 12
             anchors.verticalCenter: parent.verticalCenter
-            text: p.t("Cairn")
+            text: p.t("Steward")
             color: Theme.ink
             font.pixelSize: 24; font.weight: Font.Bold
         }

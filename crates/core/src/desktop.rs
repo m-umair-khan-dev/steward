@@ -4,7 +4,7 @@
 
 /// Where the Shelf's GNOME custom keybinding is kept (ADR 0014).
 pub const KEYBINDING_PATH: &str =
-    "/org/gnome/settings-daemon/plugins/media-keys/custom-keybindings/cairn-shelf/";
+    "/org/gnome/settings-daemon/plugins/media-keys/custom-keybindings/steward-shelf/";
 
 /// A Qt key sequence ("Ctrl+Alt+Space") as a GTK accelerator for
 /// gnome-settings-daemon ("<Control><Alt>space"). None if it has no key or
@@ -66,12 +66,12 @@ pub fn gtk_accel(qt: &str) -> Option<String> {
     Some(out)
 }
 
-/// The XDG autostart entry that starts Cairn in the background at login
+/// The XDG autostart entry that starts Steward in the background at login
 /// (P8-T03): no window, only the Shelf, the tray icon and search.
 pub fn autostart_entry(exec: &str) -> String {
     format!(
-        "[Desktop Entry]\nType=Application\nName=Cairn\nComment=The Shelf and tray icon\n\
-         Exec={exec} --background\nIcon=dev.cairn.Files\nTerminal=false\nNoDisplay=true\n\
+        "[Desktop Entry]\nType=Application\nName=Steward\nComment=The Shelf and tray icon\n\
+         Exec={exec} --background\nIcon=io.github.m_umair_khan_dev.steward\nTerminal=false\nNoDisplay=true\n\
          X-GNOME-Autostart-enabled=true\n"
     )
 }
@@ -102,8 +102,8 @@ mod tests {
 
     #[test]
     fn the_autostart_entry_starts_in_the_background() {
-        let entry = autostart_entry("/usr/bin/cairn");
-        assert!(entry.contains("Exec=/usr/bin/cairn --background\n"));
+        let entry = autostart_entry("/usr/bin/steward");
+        assert!(entry.contains("Exec=/usr/bin/steward --background\n"));
         assert!(entry.starts_with("[Desktop Entry]\n"));
     }
 }

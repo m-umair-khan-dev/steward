@@ -71,8 +71,8 @@ def screens(app, home):
 @pytest.mark.parametrize("theme", ["light", "dark"])
 def test_shots(app_factory, home, theme):
     OUT.mkdir(parents=True, exist_ok=True)
-    app = app_factory(extra_env={"CAIRN_MOTION": "1", "CAIRN_FAKE_NOW": home.manifest["now"],
-                                 "CAIRN_SYSINFO_FIXTURE": str(FIXTURE)})
+    app = app_factory(extra_env={"STEWARD_MOTION": "1", "STEWARD_FAKE_NOW": home.manifest["now"],
+                                 "STEWARD_SYSINFO_FIXTURE": str(FIXTURE)})
     app.action("app.color-scheme", s(theme))
     app.wait_for(lambda: app.state()["dark"] == (theme == "dark"), f"the {theme} style")
     for name, go in screens(app, home):

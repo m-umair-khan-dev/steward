@@ -8,16 +8,16 @@ use std::fmt;
 use std::path::{Path, PathBuf};
 
 /// Name of the marker file the fixture generator writes into the fake home.
-pub const MARKER: &str = ".cairn-fixture";
+pub const MARKER: &str = ".steward-fixture";
 
 /// Environment variables that switch the guard on in a release build.
-pub const GUARD_ENV_VARS: [&str; 2] = ["CAIRN_DEV", "CAIRN_E2E"];
+pub const GUARD_ENV_VARS: [&str; 2] = ["STEWARD_DEV", "STEWARD_E2E"];
 
 /// Whether the guard applies to this run.
 ///
 /// It applies to every debug build, to builds with the `e2e` feature (passed in
 /// by the caller, because features belong to the app crate), and to any build
-/// started with `CAIRN_DEV` or `CAIRN_E2E` set to a non-empty value.
+/// started with `STEWARD_DEV` or `STEWARD_E2E` set to a non-empty value.
 pub fn is_required(
     debug_build: bool,
     e2e_build: bool,
@@ -82,7 +82,7 @@ mod tests {
     use std::fs;
 
     fn temp_dir(name: &str) -> PathBuf {
-        let dir = std::env::temp_dir().join(format!("cairn-guard-{name}-{}", std::process::id()));
+        let dir = std::env::temp_dir().join(format!("steward-guard-{name}-{}", std::process::id()));
         let _ = fs::remove_dir_all(&dir);
         fs::create_dir_all(&dir).unwrap();
         dir
@@ -129,8 +129,9 @@ mod tests {
         assert!(is_required(true, false, no_env));
         assert!(is_required(false, true, no_env));
         assert!(!is_required(false, false, no_env));
-        assert!(is_required(false, false, |k: &str| (k == "CAIRN_E2E")
+        assert!(is_required(false, false, |k: &str| (k == "STEWARD_E2E")
             .then(|| "1".into())));
-        assert!(!is_required(false, false, |k: &str| (k == "CAIRN_DEV").then(String::new)));
+        assert!(!is_required(false, false, |k: &str| (k == "STEWARD_DEV")
+            .then(String::new)));
     }
 }

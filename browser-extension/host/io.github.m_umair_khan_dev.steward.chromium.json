@@ -1,0 +1,7 @@
+{
+  "name": "io.github.m_umair_khan_dev.steward",
+  "description": "Save to Steward: adds links to Steward's Bookmarks",
+  "path": "/usr/libexec/steward-native-host",
+  "type": "stdio",
+  "allowed_origins": ["chrome-extension://EXTENSION_ID_AFTER_STORE_PUBLICATION/"]
+}

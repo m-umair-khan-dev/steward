@@ -4,14 +4,14 @@ use std::process::ExitCode;
 
 use cxx_qt_lib::{QGuiApplication, QQmlApplicationEngine, QString, QUrl};
 
-/// The gettext domain (po/cairn.pot, P6-T04).
-const GETTEXT_DOMAIN: &str = "cairn";
+/// The gettext domain (po/steward.pot, P6-T04).
+const GETTEXT_DOMAIN: &str = "steward";
 
 pub fn run() -> ExitCode {
     init_gettext();
-    // A second launch hands its request to the running Cairn (P6-T06);
-    // `cairn add-link URL` and the other commands work the same (P7-T10).
-    use cairn_core::cli::{self, Parsed};
+    // A second launch hands its request to the running Steward (P6-T06);
+    // `steward add-link URL` and the other commands work the same (P7-T10).
+    use steward_core::cli::{self, Parsed};
     let args: Vec<String> = std::env::args().skip(1).collect();
     let requests = match cli::parse(&args, &cli::absolute) {
         Parsed::Run(requests) => requests,
@@ -20,15 +20,15 @@ pub fn run() -> ExitCode {
             return ExitCode::SUCCESS;
         }
         Parsed::Version => {
-            println!("cairn {}", env!("CARGO_PKG_VERSION"));
+            println!("steward {}", env!("CARGO_PKG_VERSION"));
             return ExitCode::SUCCESS;
         }
         Parsed::Wrong(message) => {
-            eprintln!("cairn: {message}\n\n{}", cli::USAGE);
+            eprintln!("steward: {message}\n\n{}", cli::USAGE);
             return ExitCode::from(2);
         }
     };
-    if cli::forward(&requests, "cairn") {
+    if cli::forward(&requests, "steward") {
         return ExitCode::SUCCESS;
     }
     crate::launch::set_startup(requests);
@@ -39,19 +39,19 @@ pub fn run() -> ExitCode {
 
     let mut app = QGuiApplication::new();
     if let Some(mut app) = app.as_mut() {
-        app.as_mut().set_application_name(&QString::from("cairn"));
+        app.as_mut().set_application_name(&QString::from("steward"));
         app.as_mut()
-            .set_application_display_name(&QString::from("Cairn"));
+            .set_application_display_name(&QString::from("Steward"));
         app.as_mut()
             .set_application_version(&QString::from(env!("CARGO_PKG_VERSION")));
         app.as_mut()
-            .set_organization_domain(&QString::from("cairn.dev"));
+            .set_organization_domain(&QString::from("m-umair-khan-dev.github.io"));
         // The Wayland app ID, so the shell matches the window to its desktop file.
-        QGuiApplication::set_desktop_file_name(&QString::from(cairn_core::APP_ID));
+        QGuiApplication::set_desktop_file_name(&QString::from(steward_core::APP_ID));
     }
     let mut engine = QQmlApplicationEngine::new();
     if let Some(engine) = engine.as_mut() {
-        engine.load(&QUrl::from("qrc:/qt/qml/dev/cairn/files/qml/Main.qml"));
+        engine.load(&QUrl::from("qrc:/qt/qml/dev/steward/files/qml/Main.qml"));
     }
     let code = app.as_mut().map(|app| app.exec()).unwrap_or(1);
     // Make sure every setting reached dconf before the process ends.
@@ -67,7 +67,7 @@ fn locale_dir() -> &'static str {
     if cfg!(any(debug_assertions, feature = "e2e")) {
         concat!(env!("OUT_DIR"), "/locale")
     } else {
-        option_env!("CAIRN_LOCALEDIR").unwrap_or("/usr/share/locale")
+        option_env!("STEWARD_LOCALEDIR").unwrap_or("/usr/share/locale")
     }
 }
 

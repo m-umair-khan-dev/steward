@@ -12,7 +12,7 @@ use std::path::{Path, PathBuf};
 use gettextrs::gettext;
 use serde_json::{Value, json};
 
-use cairn_core::markdown;
+use steward_core::markdown;
 
 use super::{Controller, Event, dirty};
 use crate::paths;
@@ -91,7 +91,7 @@ impl Controller {
         if self.tools.page != "markdown" || self.md.buffer == self.md.original {
             return;
         }
-        match cairn_core::ops::save_text(&path, &self.md.buffer) {
+        match steward_core::ops::save_text(&path, &self.md.buffer) {
             Ok(()) => {
                 self.md.original = self.md.buffer.clone();
                 self.emit(Event::Toast(gettext("Saved"), false));

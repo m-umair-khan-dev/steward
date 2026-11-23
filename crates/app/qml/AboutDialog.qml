@@ -1,6 +1,6 @@
 import QtQuick
 
-// About Cairn.
+// About Steward.
 Sheet {
     id: root
     property string version: ""
@@ -16,7 +16,7 @@ Sheet {
             sourceSize: Qt.size(width * 2, height * 2)
             smooth: true
         }
-        Text { anchors.horizontalCenter: parent.horizontalCenter; text: p.t("Cairn"); color: Theme.ink
+        Text { anchors.horizontalCenter: parent.horizontalCenter; text: p.t("Steward"); color: Theme.ink
                font.pixelSize: 22; font.weight: Font.Bold }
         Text { anchors.horizontalCenter: parent.horizontalCenter; text: p.t("Version ") + root.version; color: Theme.muted
                font.pixelSize: 13 }

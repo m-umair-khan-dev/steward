@@ -5,7 +5,7 @@ use std::path::{Path, PathBuf};
 use std::process::Command;
 use std::time::Instant;
 
-use cairn_core::index::{Index, Rules};
+use steward_core::index::{Index, Rules};
 
 struct Fixture {
     root: PathBuf,
@@ -14,7 +14,8 @@ struct Fixture {
 
 impl Fixture {
     fn new(name: &str) -> Self {
-        let root = std::env::temp_dir().join(format!("cairn-index-{name}-{}", std::process::id()));
+        let root =
+            std::env::temp_dir().join(format!("steward-index-{name}-{}", std::process::id()));
         let _ = std::fs::remove_dir_all(&root);
         let script =
             Path::new(env!("CARGO_MANIFEST_DIR")).join("../../docker/scripts/make-fixture-home");
@@ -25,7 +26,7 @@ impl Fixture {
             .output()
             .unwrap();
         assert!(status.status.success(), "fixture generator failed");
-        let manifest = std::fs::read_to_string(root.join(".cairn-fixture")).unwrap();
+        let manifest = std::fs::read_to_string(root.join(".steward-fixture")).unwrap();
         Self {
             root,
             manifest: serde_json::from_str(&manifest).unwrap(),
@@ -52,7 +53,7 @@ impl Drop for Fixture {
     }
 }
 
-fn names(hits: &[cairn_core::index::Hit]) -> Vec<String> {
+fn names(hits: &[steward_core::index::Hit]) -> Vec<String> {
     hits.iter().map(|h| h.name.clone()).collect()
 }
 
@@ -217,8 +218,8 @@ fn a_new_crawl_forgets_what_is_gone_and_skips_excluded_folders() {
     let mut index = fixture.crawl();
     let (entries, _) = index.counts();
     std::fs::remove_dir_all(fixture.root.join("Documents/Manuals")).unwrap();
-    std::fs::create_dir_all(fixture.root.join(".cache/cairn")).unwrap();
-    std::fs::write(fixture.root.join(".cache/cairn/index.db"), "x").unwrap();
+    std::fs::create_dir_all(fixture.root.join(".cache/steward")).unwrap();
+    std::fs::write(fixture.root.join(".cache/steward/index.db"), "x").unwrap();
     index
         .crawl(&fixture.root, &Rules::for_home(&fixture.root), &|| true)
         .unwrap();
@@ -257,7 +258,7 @@ fn outline_is_two_levels_folders_first() {
 
 #[test]
 fn e3_10_a_million_entries_answer_within_50_ms() {
-    let dir = std::env::temp_dir().join(format!("cairn-e3-10-{}", std::process::id()));
+    let dir = std::env::temp_dir().join(format!("steward-e3-10-{}", std::process::id()));
     let _ = std::fs::remove_dir_all(&dir);
     std::fs::create_dir_all(&dir).unwrap();
     let path = dir.join("index.db");

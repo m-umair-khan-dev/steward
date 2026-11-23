@@ -48,7 +48,7 @@ def fakes(tmp_path) -> FakeTools:
 @pytest.fixture
 def clean_app(session, home, app_factory, fakes):
     now = home.manifest["now"]
-    return app_factory(extra_env={"PATH": fakes.path(session.base_env()["PATH"]), "CAIRN_FAKE_NOW": now})
+    return app_factory(extra_env={"PATH": fakes.path(session.base_env()["PATH"]), "STEWARD_FAKE_NOW": now})
 
 
 def clean(app) -> dict:
@@ -76,7 +76,7 @@ def expected(home, card: str) -> list:
 
 def test_E5_01_cards_look_then_fill(session, home, app_factory, fakes):
     app = app_factory(extra_env={"PATH": fakes.path(session.base_env()["PATH"]),
-                                 "CAIRN_FAKE_NOW": home.manifest["now"], "CAIRN_CLEAN_DELAY_MS": "1500"})
+                                 "STEWARD_FAKE_NOW": home.manifest["now"], "STEWARD_CLEAN_DELAY_MS": "1500"})
     app.action("win.tool-open", s("clean"))
     first = app.wait_for(lambda: (c := clean(app)) and c["cards"] and c, "the cards")
     assert app.state()["tools"]["page"] == "clean"

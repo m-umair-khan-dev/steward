@@ -44,11 +44,11 @@ def _symbols_and_a_choice_that_survives_a_rename(app, home):
 
 def test_E4_14_folder_symbols(app, home):
     folder = _symbols_and_a_choice_that_survives_a_rename(app, home)
-    assert os.getxattr(folder, "user.cairn.symbol") == b"plane", "kept in an extended attribute"
+    assert os.getxattr(folder, "user.steward.symbol") == b"plane", "kept in an extended attribute"
 
 
 def test_E4_14_folder_symbols_without_attributes(session, home, app_factory):
-    app = app_factory(extra_env={"CAIRN_NO_XATTR": "1"})
+    app = app_factory(extra_env={"STEWARD_NO_XATTR": "1"})
     folder = _symbols_and_a_choice_that_survives_a_rename(app, home)
     with pytest.raises(OSError):
-        os.getxattr(folder, "user.cairn.symbol")
+        os.getxattr(folder, "user.steward.symbol")

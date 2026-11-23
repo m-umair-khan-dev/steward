@@ -1,4 +1,4 @@
-//! Capability detection (P9-T01; DESIGN.md D6): when Cairn runs inside a
+//! Capability detection (P9-T01; DESIGN.md D6): when Steward runs inside a
 //! sandbox (Flatpak, Snap), it cannot ask the host's package tools or read
 //! the host's package databases. Features that need them say so, instead
 //! of showing nothing; everything that works on the user's own files goes
@@ -6,7 +6,7 @@
 
 use std::path::Path;
 
-/// The sandbox Cairn runs in, if any.
+/// The sandbox Steward runs in, if any.
 #[derive(Debug, Clone, Copy, PartialEq, Eq)]
 pub enum Sandbox {
     Flatpak,
@@ -73,11 +73,11 @@ mod tests {
 
     #[test]
     fn detection() {
-        let dir = std::env::temp_dir().join(format!("cairn-sandbox-{}", std::process::id()));
+        let dir = std::env::temp_dir().join(format!("steward-sandbox-{}", std::process::id()));
         std::fs::create_dir_all(&dir).unwrap();
         assert_eq!(detect(&dir, None, false), None);
         assert_eq!(
-            detect(&dir, Some("/snap/cairn/1"), false),
+            detect(&dir, Some("/snap/steward/1"), false),
             Some(Sandbox::Snap)
         );
         assert_eq!(detect(&dir, None, true), Some(Sandbox::Simulated));

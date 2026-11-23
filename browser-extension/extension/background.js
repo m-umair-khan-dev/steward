@@ -1,8 +1,8 @@
-// Save to Cairn (P9-T04): the toolbar button and a "Save Link to Cairn"
+// Save to Steward (P9-T04): the toolbar button and a "Save Link to Steward"
 // menu item send an address to the native host, which runs
-// `cairn add-link ADDRESS`. Nothing else is sent, and only on a click.
+// `steward add-link ADDRESS`. Nothing else is sent, and only on a click.
 const api = globalThis.browser ?? globalThis.chrome;
-const HOST = "dev.cairn.files";
+const HOST = "io.github.m_umair_khan_dev.steward";
 
 function save(url) {
   if (!url || !/^https?:\/\//.test(url)) return;
@@ -20,7 +20,7 @@ function badge(text) {
 api.action.onClicked.addListener((tab) => save(tab.url));
 
 api.runtime.onInstalled.addListener(() => {
-  api.contextMenus.create({ id: "save-link", title: "Save Link to Cairn", contexts: ["link"] });
+  api.contextMenus.create({ id: "save-link", title: "Save Link to Steward", contexts: ["link"] });
 });
 
 api.contextMenus.onClicked.addListener((info) => {

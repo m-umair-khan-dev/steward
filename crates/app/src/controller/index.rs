@@ -1,4 +1,4 @@
-//! The window's side of the index (Phase 3): starting `cairn-indexer`,
+//! The window's side of the index (Phase 3): starting `steward-indexer`,
 //! reading `index.db`, folder sizes and counts, the preview outline, and
 //! telling the indexer about the app's own changes.
 
@@ -8,14 +8,14 @@ use gettextrs::gettext;
 use gio::prelude::*;
 use serde_json::{Value, json};
 
-use cairn_core::index::Index;
+use steward_core::index::Index;
 
 use super::{Controller, dirty, later};
 use crate::format;
 
-const BUS_NAME: &str = "dev.cairn.Indexer";
-const OBJECT_PATH: &str = "/dev/cairn/Indexer";
-const INTERFACE: &str = "dev.cairn.Indexer1";
+const BUS_NAME: &str = "io.github.m_umair_khan_dev.steward.Indexer";
+const OBJECT_PATH: &str = "/io/github/m_umair_khan_dev/steward/Indexer";
+const INTERFACE: &str = "io.github.m_umair_khan_dev.steward.Indexer1";
 
 #[derive(Default)]
 pub struct IndexState {
@@ -42,15 +42,15 @@ fn session() -> Option<gio::DBusConnection> {
 }
 
 /// Where the indexer binary is: next to ours (development, tests), unless
-/// CAIRN_INDEXER_BIN says otherwise.
+/// STEWARD_INDEXER_BIN says otherwise.
 fn indexer_binary() -> Option<PathBuf> {
-    if let Some(bin) = std::env::var_os("CAIRN_INDEXER_BIN") {
+    if let Some(bin) = std::env::var_os("STEWARD_INDEXER_BIN") {
         return Some(PathBuf::from(bin));
     }
     let sibling = std::env::current_exe()
         .ok()?
         .parent()?
-        .join("cairn-indexer");
+        .join("steward-indexer");
     sibling.exists().then_some(sibling)
 }
 
@@ -95,15 +95,15 @@ pub fn ensure_running() {
     }
     let Some(binary) = indexer_binary() else {
         glib::g_warning!(
-            "cairn",
-            "cairn-indexer not found; search and folder sizes are off"
+            "steward",
+            "steward-indexer not found; search and folder sizes are off"
         );
         return;
     };
     let launcher = gio::SubprocessLauncher::new(gio::SubprocessFlags::NONE);
-    launcher.setenv("CAIRN_INDEXER_CHILD", "1", true);
+    launcher.setenv("STEWARD_INDEXER_CHILD", "1", true);
     if let Err(error) = launcher.spawn(&[binary.as_os_str()]) {
-        glib::g_warning!("cairn", "could not start {}: {error}", binary.display());
+        glib::g_warning!("steward", "could not start {}: {error}", binary.display());
     }
 }
 

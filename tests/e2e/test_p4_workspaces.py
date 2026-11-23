@@ -28,7 +28,7 @@ def create(app, name: str) -> int:
 @pytest.fixture
 def second_volume():
     """A folder on another filesystem: /dev/shm is its own tmpfs."""
-    root = Path("/dev/shm") / f"cairn-e2e-{uuid.uuid4().hex[:8]}"
+    root = Path("/dev/shm") / f"steward-e2e-{uuid.uuid4().hex[:8]}"
     (root / "Footage").mkdir(parents=True)
     (root / "Footage" / "clip.mp4").write_bytes(b"\0" * 1024)
     yield root

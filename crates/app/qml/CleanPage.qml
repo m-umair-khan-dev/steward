@@ -175,7 +175,7 @@ Rectangle {
                 GroupHeading { group: "admin"; label: p.t("Needs administrator"); total: "" }
                 Text {
                     width: parent.width; wrapMode: Text.WordWrap; color: Theme.muted; font.pixelSize: 13
-                    text: p.t("Cairn never runs these. Copy a command and run it in a terminal if you want to.")
+                    text: p.t("Steward never runs these. Copy a command and run it in a terminal if you want to.")
                 }
                 Rectangle {
                     width: parent.width

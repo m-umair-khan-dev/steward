@@ -1,8 +1,8 @@
 #!/usr/bin/env python3
-"""Builds Cairn's fixture home: a deterministic fake home folder (DESIGN.md §9.4).
+"""Builds Steward's fixture home: a deterministic fake home folder (DESIGN.md §9.4).
 
 The app runs against this folder in development and tests, never against a real
-home. The marker file `.cairn-fixture` at its root holds the manifest: a JSON
+home. The marker file `.steward-fixture` at its root holds the manifest: a JSON
 description of what was planted (counts, sizes, duplicates, what Tidy should
 move), so tests can assert against known facts.
 
@@ -35,7 +35,7 @@ from datetime import datetime, timezone
 from pathlib import Path
 
 RECIPE_VERSION = 4
-MARKER = ".cairn-fixture"
+MARKER = ".steward-fixture"
 NOW = int(datetime(2026, 11, 1, 12, 0, 0, tzinfo=timezone.utc).timestamp())
 DAY = 86_400
 MIB = 1024 * 1024
@@ -236,7 +236,7 @@ def text(*lines: str) -> bytes:
 
 # AI Agents (E7-04, ADR 0013): Claude Code logs and settings, and agent files
 # for three projects. Paths are written "~/…" so the fixture can be copied
-# anywhere (Cairn reads both that and absolute paths).
+# anywhere (Steward reads both that and absolute paths).
 WEB_CLAUDE_MD = text("# web-app", "", "Run `npm test` before committing.")
 WEB_MCP_JSON = text('{ "mcpServers": { "github": { "command": "github-mcp" }, '
                     '"postgres": { "command": "pg-mcp", "args": ["--read-only"] } } }')

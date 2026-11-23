@@ -114,7 +114,7 @@ pub fn save_text(path: &Path, text: &str) -> std::io::Result<()> {
         .parent()
         .ok_or_else(|| std::io::Error::other("no folder"))?;
     let temp = dir.join(format!(
-        ".{}.cairn-{}",
+        ".{}.steward-{}",
         fsx::file_name(path),
         std::process::id()
     ));
@@ -398,7 +398,7 @@ impl Engine {
         let thread_handler = handler.clone();
         let thread_shared = shared.clone();
         std::thread::Builder::new()
-            .name("cairn-ops".into())
+            .name("steward-ops".into())
             .spawn(move || {
                 let mut worker = Worker::new(store, trash);
                 worker.step_delay = step_delay;

@@ -3,7 +3,7 @@
 # (compose.desktop.yaml); the runtimes and the build state live in Docker
 # volumes, the bundle goes to dist/flatpak/.
 set -euo pipefail
-app=dev.cairn.Files
+app=io.github.m_umair_khan_dev.steward
 work=/flatpak/work
 out=dist/flatpak
 
@@ -14,6 +14,6 @@ flatpak-builder --user --install-deps-from=flathub --disable-rofiles-fuse \
   "$work/build" packaging/flatpak/$app.yml
 mkdir -p "$out"
 flatpak build-bundle --runtime-repo=https://dl.flathub.org/repo/flathub.flatpakrepo \
-  "$work/repo" "$out/cairn.flatpak" $app
+  "$work/repo" "$out/steward.flatpak" $app
 chown -R "${HOST_UID:-1000}:${HOST_GID:-1000}" "$out"
 ls -l "$out"

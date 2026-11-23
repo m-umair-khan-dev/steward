@@ -1,7 +1,7 @@
 # Website and apt repository (DESIGN.md §9.5). The desktop app has its own
 # file (compose.desktop.yaml). Use through the Makefile: make site, make
 # publish-apt, make apt-e2e.
-name: cairn
+name: steward
 
 x-logging: &logging
   driver: json-file
@@ -11,7 +11,7 @@ services:
   # The built site plus the apt repository, served by Caddy. Needs
   # docker/web.Dockerfile, which comes with the website (P6-T10, on hold).
   web:
-    image: ${REGISTRY:-cairn}/cairn-web:${TAG:-dev}
+    image: ${REGISTRY:-steward}/steward-web:${TAG:-dev}
     build:
       context: .
       dockerfile: docker/web.Dockerfile
@@ -44,7 +44,7 @@ services:
       args: { UBUNTU_IMAGE: "${UBUNTU_IMAGE}" }
     environment:
       APT_SUITE: ${APT_SUITE:-dev}
-      APT_ORIGIN: ${APT_ORIGIN:-Cairn}
+      APT_ORIGIN: ${APT_ORIGIN:-Steward}
     volumes:
       - ${APT_IN:-./dist}:/in:ro
       - aptrepo:/srv/apt

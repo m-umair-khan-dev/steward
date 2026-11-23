@@ -1,5 +1,5 @@
 //! The Shelf (P8-T01; DESIGN.md §4.4): a small window summoned from
-//! anywhere (`app.shelf`, `cairn shelf`, the tray icon, the global key).
+//! anywhere (`app.shelf`, `steward shelf`, the tray icon, the global key).
 //! Numbered pinned folders (keys 1 to 9) with item counts, Holding (files
 //! remembered without moving them, kept across restarts), the latest
 //! downloads, quick access, and a result line with Undo for drops.
@@ -13,8 +13,8 @@ use gettextrs::gettext;
 use gio::prelude::*;
 use serde_json::{Value, json};
 
-use cairn_core::ops::{JobId, Request};
-use cairn_core::shelf;
+use steward_core::ops::{JobId, Request};
+use steward_core::shelf;
 
 use super::{Controller, dirty, downloads};
 use crate::{app_data, format, paths, tint};
@@ -57,12 +57,12 @@ fn count_items(folder: &Path) -> Option<usize> {
     )
 }
 
-fn kind_of(path: &Path) -> cairn_core::Kind {
+fn kind_of(path: &Path) -> steward_core::Kind {
     if path.is_dir() {
-        return cairn_core::Kind::Folder;
+        return steward_core::Kind::Folder;
     }
     let (content_type, _) = gio::content_type_guess(Some(name_of(path).as_str()), None);
-    cairn_core::Kind::from_content_type(&content_type)
+    steward_core::Kind::from_content_type(&content_type)
 }
 
 fn name_of(path: &Path) -> String {

@@ -1,5 +1,5 @@
 <div align="center">
-  <img src="data/icons/hicolor/scalable/apps/dev.cairn.Files.svg" width="96" alt="">
+  <img src="data/icons/hicolor/scalable/apps/io.github.m_umair_khan_dev.steward.svg" width="96" alt="">
   <h1>Steward</h1>
   <p><strong>The file manager for Ubuntu that keeps your folders tidy.</strong><br>
   Sort a messy Downloads in one click, free up space safely, and undo anything.</p>

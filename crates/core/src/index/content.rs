@@ -158,7 +158,7 @@ mod tests {
 
     #[test]
     fn pending_store_and_search() {
-        let dir = std::env::temp_dir().join(format!("cairn-content-{}", std::process::id()));
+        let dir = std::env::temp_dir().join(format!("steward-content-{}", std::process::id()));
         let home = dir.join("home");
         std::fs::create_dir_all(home.join("docs")).unwrap();
         std::fs::create_dir_all(dir.join("elsewhere")).unwrap();

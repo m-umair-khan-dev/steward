@@ -22,7 +22,7 @@ pub mod qobject {
 
     // The system clipboard (cpp/clipboard.cpp).
     unsafe extern "C++" {
-        include!("cairn/clipboard.h");
+        include!("steward/clipboard.h");
         fn clipboard_set(mimes: &Vec<String>, data: &Vec<String>);
         fn clipboard_get(mime: &str) -> String;
     }
@@ -175,7 +175,12 @@ impl cxx_qt::Initialize for qobject::Presenter {
         });
         // What the command line or a desktop action asked for.
         glib::idle_add_local_once(crate::launch::run_startup);
-        dbus::start(|| controller::with(|c| c.quit()));
+        // Another Steward took the name first (it started a moment earlier,
+        // for example from Activities search): show its window, then quit.
+        dbus::start(|| {
+            steward_core::cli::forward(&[], "steward");
+            controller::with(|c| c.quit());
+        });
     }
 }
 
@@ -395,7 +400,7 @@ impl qobject::Presenter {
             _ => s.set_string(&key, &value),
         };
         if let Err(error) = result {
-            glib::g_warning!("cairn", "could not set {key}: {error}");
+            glib::g_warning!("steward", "could not set {key}: {error}");
         }
     }
 }

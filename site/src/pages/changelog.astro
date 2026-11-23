@@ -4,9 +4,9 @@ import { getCollection, render } from "astro:content";
 const releases = (await getCollection("changelog")).sort((a, b) => b.data.date.valueOf() - a.data.date.valueOf());
 const rendered = await Promise.all(releases.map(async (r) => ({ release: r, Content: (await render(r)).Content })));
 ---
-<Base title="Changelog" description="What changed in each release of Cairn.">
+<Base title="Changelog" description="What changed in each release of Steward.">
   <h1>Changelog</h1>
-  <p class="lead">These notes are also what Cairn shows once after an update.</p>
+  <p class="lead">These notes are also what Steward shows once after an update.</p>
   {rendered.map(({ release, Content }) => (
     <section class="release" id={`v${release.data.version}`}>
       <h2>{release.data.title}</h2>

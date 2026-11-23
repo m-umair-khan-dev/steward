@@ -69,10 +69,10 @@ impl Plan {
     }
 }
 
-/// Seconds since the epoch: `CAIRN_FAKE_NOW` (seconds, or an RFC 3339
+/// Seconds since the epoch: `STEWARD_FAKE_NOW` (seconds, or an RFC 3339
 /// date) when set, so tests can move time forward; otherwise the clock.
 pub fn now() -> i64 {
-    if let Ok(fake) = std::env::var("CAIRN_FAKE_NOW") {
+    if let Ok(fake) = std::env::var("STEWARD_FAKE_NOW") {
         if let Ok(seconds) = fake.trim().parse::<i64>() {
             return seconds;
         }
@@ -147,7 +147,7 @@ mod tests {
 
     #[test]
     fn partial_and_recent_files_stay() {
-        let dir = std::env::temp_dir().join(format!("cairn-plan-{}", std::process::id()));
+        let dir = std::env::temp_dir().join(format!("steward-plan-{}", std::process::id()));
         let _ = std::fs::remove_dir_all(&dir);
         std::fs::create_dir_all(dir.join("sub")).unwrap();
         for name in ["a.pdf", "b.png", "c.iso.part", ".hidden", "new.txt"] {

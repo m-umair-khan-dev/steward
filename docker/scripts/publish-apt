@@ -4,14 +4,14 @@
 # Runs in the aptrepo image. Every .deb under /in/<ubuntu-release>/ goes into
 # the distribution "<APT_SUITE>-<ubuntu-release>" (for example stable-26.10),
 # component main. The signed static tree lands in /srv/apt, with the public
-# key as /srv/apt/cairn.asc.
+# key as /srv/apt/steward.asc.
 #
 #   APT_SUITE     dev | ci | staging | stable          (default dev)
-#   APT_ORIGIN    Origin and Label of the repository   (default Cairn)
+#   APT_ORIGIN    Origin and Label of the repository   (default Steward)
 #   key           /run/secrets/apt_signing_key (ASCII-armoured private key)
 set -euo pipefail
 suite="${APT_SUITE:-dev}"
-origin="${APT_ORIGIN:-Cairn}"
+origin="${APT_ORIGIN:-Steward}"
 key_file="${APT_SIGNING_KEY:-/run/secrets/apt_signing_key}"
 
 export GNUPGHOME
@@ -32,7 +32,7 @@ for dir in /in/*/; do
   [ ${#debs[@]} -gt 0 ] || continue
   found=1
   dist="${suite}-${release}"
-  repo="cairn-${dist}"
+  repo="steward-${dist}"
   aptly repo show "$repo" >/dev/null 2>&1 || aptly repo create -distribution="$dist" -component=main "$repo"
   aptly repo add -force-replace "$repo" "${debs[@]}"
   if aptly publish show "$dist" >/dev/null 2>&1; then
@@ -46,5 +46,5 @@ done
 
 mkdir -p /srv/apt
 cp -a /var/lib/aptly/public/. /srv/apt/
-gpg --batch --armor --export "$key_id" > /srv/apt/cairn.asc
+gpg --batch --armor --export "$key_id" > /srv/apt/steward.asc
 echo "publish-apt: published to /srv/apt (key $key_id)"

@@ -11,7 +11,7 @@ from datetime import datetime, timezone
 from pathlib import Path
 
 REPO = Path(__file__).resolve().parents[1]
-MAINTAINER = "Cairn contributors <maintainers@example.invalid>"
+MAINTAINER = "Steward contributors <maintainers@example.invalid>"
 
 
 def notes() -> list[dict]:
@@ -41,7 +41,7 @@ def main() -> None:
     release = sys.argv[1]
     for note in notes():
         when = datetime.fromisoformat(note["date"]).replace(hour=12, tzinfo=timezone.utc)
-        print(f"cairn ({note['version']}-1~ubuntu{release}) stable; urgency=medium\n")
+        print(f"steward ({note['version']}-1~ubuntu{release}) stable; urgency=medium\n")
         for item in note["items"]:
             first, *rest = wrap(item)
             print(f"  * {first}")

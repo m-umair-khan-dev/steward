@@ -1,7 +1,0 @@
-{
-  "name": "dev.cairn.files",
-  "description": "Save to Cairn: adds links to Cairn's Bookmarks",
-  "path": "/usr/libexec/cairn-native-host",
-  "type": "stdio",
-  "allowed_extensions": ["save@cairn.dev"]
-}

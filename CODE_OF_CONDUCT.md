@@ -1,6 +1,6 @@
 # Code of conduct
 
-Cairn is made by people who give their time. Treat everyone here the way
+Steward is made by people who give their time. Treat everyone here the way
 you would want to be treated.
 
 - Be kind and assume good intent. Disagree about ideas, never about people.

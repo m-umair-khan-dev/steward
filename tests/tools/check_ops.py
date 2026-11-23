@@ -1,4 +1,4 @@
-"""E2-13 / AGENTS.md rule 10: only cairn-core::ops may change files.
+"""E2-13 / AGENTS.md rule 10: only steward-core::ops may change files.
 
 Scans the Rust sources (outside core::ops, tests and build scripts) for calls
 that move, copy, rename, trash, delete or create files. A line may carry
@@ -56,7 +56,7 @@ def main(argv: list[str]) -> int:
     for problem in problems:
         print(problem)
     if problems:
-        print(f"\n{len(problems)} file change(s) outside cairn-core::ops (AGENTS.md rule 10).")
+        print(f"\n{len(problems)} file change(s) outside steward-core::ops (AGENTS.md rule 10).")
         return 1
     print(f"ops check: {len(paths)} files clean")
     return 0

@@ -220,7 +220,7 @@ Sheet {
                 width: parent.width - 70
                 Text { text: p.t("Use as default file manager"); color: Theme.ink; font.pixelSize: 14 }
                 Text { width: parent.width; wrapMode: Text.WordWrap; color: Theme.muted; font.pixelSize: 12
-                       text: p.t("Folders open in Cairn, and other apps' “Show in folder” comes here.") }
+                       text: p.t("Folders open in Steward, and other apps' “Show in folder” comes here.") }
             }
             Switch {
                 anchors.right: parent.right; anchors.verticalCenter: parent.verticalCenter
@@ -240,7 +240,7 @@ Sheet {
                 width: parent.width - 70
                 Text { text: p.t("Fetch link titles and pictures"); color: Theme.ink; font.pixelSize: 14 }
                 Text { width: parent.width; wrapMode: Text.WordWrap; color: Theme.muted; font.pixelSize: 12
-                       text: p.t("When you save a bookmark, Cairn contacts that link’s site for its title and picture. It is the only request Cairn makes.") }
+                       text: p.t("When you save a bookmark, Steward contacts that link’s site for its title and picture. It is the only request Steward makes.") }
             }
             Switch {
                 anchors.right: parent.right; anchors.verticalCenter: parent.verticalCenter
@@ -280,7 +280,7 @@ Sheet {
         spacing: 2
         Choice { label: p.t("Style"); key: "color-scheme"
                  options: [{ id: "system", label: p.t("System") }, { id: "light", label: p.t("Light") }, { id: "dark", label: p.t("Dark") }] }
-        // Colour: the system's accent, or one of Cairn's own (each with a
+        // Colour: the system's accent, or one of Steward's own (each with a
         // light and a dark shade, so it suits all three styles).
         Item {
             width: parent.width; height: 52
@@ -446,7 +446,7 @@ Sheet {
                 width: parent.width - 70
                 Text { text: p.t("Open the Shelf with a key"); color: Theme.ink; font.pixelSize: 14 }
                 Text { width: parent.width; wrapMode: Text.WordWrap; color: Theme.muted; font.pixelSize: 12
-                       text: p.t("Works from any app. Cairn adds it to GNOME’s keyboard shortcuts and removes it when you turn this off.") }
+                       text: p.t("Works from any app. Steward adds it to GNOME’s keyboard shortcuts and removes it when you turn this off.") }
             }
             Switch {
                 anchors.right: parent.right; anchors.verticalCenter: parent.verticalCenter
@@ -480,12 +480,12 @@ Sheet {
         }
         PrefSwitch {
             label: p.t("Show an icon in the top bar")
-            note: p.t("Click it to open the Shelf. With the icon on, closing the window keeps Cairn running for the Shelf.")
+            note: p.t("Click it to open the Shelf. With the icon on, closing the window keeps Steward running for the Shelf.")
             key: "tray-icon"; on: !!root.prefs.trayIcon
         }
         PrefSwitch {
             label: p.t("Open at login")
-            note: p.t("Starts Cairn in the background, without a window, so the Shelf and the icon are ready.")
+            note: p.t("Starts Steward in the background, without a window, so the Shelf and the icon are ready.")
             key: "open-at-login"; on: !!root.prefs.openAtLogin
         }
     }
@@ -495,7 +495,7 @@ Sheet {
         visible: root.page === "search"
         width: parent.width
         spacing: 2
-        // Activities search (P8-T04): what GNOME's search may show from Cairn.
+        // Activities search (P8-T04): what GNOME's search may show from Steward.
         PrefSwitch { label: p.t("Workspaces in Activities search"); key: "search-provider-workspaces"
                      note: p.t("Type a workspace’s name in the Activities overview to open it.")
                      on: !!root.prefs.providerWorkspaces }

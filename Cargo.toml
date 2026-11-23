@@ -9,11 +9,11 @@ version = "1.0.0"
 edition = "2024"
 rust-version = "1.99"
 license = "GPL-3.0-or-later"
-repository = "https://example.invalid/cairn"   # HUMAN: set when the repository exists
-authors = ["Cairn contributors"]
+repository = "https://github.com/m-umair-khan-dev/steward"
+authors = ["Steward contributors"]
 
 [workspace.dependencies]
-cairn-core = { path = "crates/core" }
+steward-core = { path = "crates/core" }
 # Front end: Qt 6 / QML through cxx-qt (ADR 0009).
 cxx = "1.0.95"
 cxx-qt = "0.10"

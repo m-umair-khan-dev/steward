@@ -24,9 +24,9 @@ impl Rules {
     pub fn for_home(home: &Path) -> Self {
         Self {
             exclude: [
-                ".cache/cairn",
+                ".cache/steward",
                 ".cache/thumbnails",
-                ".local/share/cairn",
+                ".local/share/steward",
                 ".local/share/Trash",
             ]
             .iter()

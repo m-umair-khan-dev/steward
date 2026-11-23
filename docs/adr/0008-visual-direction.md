@@ -18,7 +18,7 @@ Match the reference's visual identity, built from our own drawing and wording:
 
 | Element | Now |
 |---|---|
-| Accent | Cairn purple (`#6B56DC`, `#A897F3` in dark) by default; Preferences › Appearance › "Use system accent colour" switches back |
+| Accent | Steward purple (`#6B56DC`, `#A897F3` in dark) by default; Preferences › Appearance › "Use system accent colour" switches back |
 | Window | Soft lavender background, white rounded content panes |
 | Folders | Tinted "glass" folder shapes drawn with widgets and CSS: coloured back with a tab, paper inside, frosted front with item count and a symbol. Colour by kind |
 | Files | Cards with a preview area, a coloured type badge, name, "Kind · size" |

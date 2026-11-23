@@ -69,7 +69,7 @@ class Keyboard:
                                               "CreateSession", None, "(o)")
         except GLib.Error as error:
             raise AssertionError("real key presses need the mutter compositor "
-                                 f"(CAIRN_COMPOSITOR=mutter): {error.message}") from error
+                                 f"(STEWARD_COMPOSITOR=mutter): {error.message}") from error
         self._call(self.session_path, SESSION_IFACE, "Start", None)
         self._key(SHIFT, True)
         self._key(SHIFT, False)

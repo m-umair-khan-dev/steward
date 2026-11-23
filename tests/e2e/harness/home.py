@@ -6,15 +6,15 @@ import os
 import stat
 from pathlib import Path
 
-MARKER = ".cairn-fixture"
+MARKER = ".steward-fixture"
 BIG = 16 * 1024 * 1024
 
 # Folders the app may write to as part of normal running (its own data, caches
 # and settings). Read-only checks ignore these; everything else must not change.
 APP_OWNED = (
-    ".local/share/cairn",
-    ".cache/cairn",
-    ".config/cairn",
+    ".local/share/steward",
+    ".cache/steward",
+    ".config/steward",
     ".config/glib-2.0",
     ".config/dconf",
     ".cache/thumbnails",

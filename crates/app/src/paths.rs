@@ -104,7 +104,7 @@ mod tests {
     use super::*;
 
     fn temp_tree() -> PathBuf {
-        let root = std::env::temp_dir().join(format!("cairn-paths-{}", std::process::id()));
+        let root = std::env::temp_dir().join(format!("steward-paths-{}", std::process::id()));
         let _ = std::fs::remove_dir_all(&root);
         for dir in ["Documents", "Downloads", "Desktop", "Music", ".config"] {
             std::fs::create_dir_all(root.join(dir)).unwrap();

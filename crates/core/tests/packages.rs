@@ -3,8 +3,8 @@
 
 use std::path::{Path, PathBuf};
 
-use cairn_core::packages::{self, Places, Why};
-use cairn_core::tools::{Ran, Runner};
+use steward_core::packages::{self, Places, Why};
+use steward_core::tools::{Ran, Runner};
 
 fn data(name: &str) -> String {
     let path = Path::new(env!("CARGO_MANIFEST_DIR"))
@@ -45,7 +45,7 @@ impl Runner for Recorded {
 /// A Cargo home with install records, and a pipx home with the recorded
 /// venvs' metadata (what `pipx list --json` prints for each).
 fn homes(name: &str) -> (PathBuf, PathBuf) {
-    let root = std::env::temp_dir().join(format!("cairn-packages-{name}-{}", std::process::id()));
+    let root = std::env::temp_dir().join(format!("steward-packages-{name}-{}", std::process::id()));
     let _ = std::fs::remove_dir_all(&root);
     let cargo = root.join("cargo");
     std::fs::create_dir_all(&cargo).unwrap();
@@ -131,7 +131,7 @@ fn dpkg_reads_why_from_apt_mark_and_launchers() {
 
 #[test]
 fn a_snap_with_a_launcher_is_an_app() {
-    let desktop = std::env::temp_dir().join(format!("cairn-snap-desktop-{}", std::process::id()));
+    let desktop = std::env::temp_dir().join(format!("steward-snap-desktop-{}", std::process::id()));
     std::fs::create_dir_all(&desktop).unwrap();
     std::fs::write(desktop.join("firefox_firefox.desktop"), "[Desktop Entry]\n").unwrap();
     let tools = packages::list_all(&Recorded, &places(desktop.clone()));

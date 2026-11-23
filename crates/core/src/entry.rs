@@ -93,7 +93,7 @@ mod imp {
 
     #[glib::object_subclass]
     impl ObjectSubclass for FileEntry {
-        const NAME: &'static str = "CairnFileEntry";
+        const NAME: &'static str = "StewardFileEntry";
         type Type = super::FileEntry;
     }
 

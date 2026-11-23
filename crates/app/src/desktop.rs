@@ -1,7 +1,7 @@
 //! Around the desktop (Phase 8): the Shelf's global shortcut (P8-T02) and
 //! open at login (P8-T03).
 //!
-//! The shortcut is a GNOME custom keybinding that runs `cairn shelf`
+//! The shortcut is a GNOME custom keybinding that runs `steward shelf`
 //! (ADR 0014: the GlobalShortcuts portal route waits for spike P8-S1 on
 //! real desktops). It is written only while the user has it turned on, and
 //! removed when they turn it off. Without gnome-settings-daemon's schema
@@ -9,7 +9,7 @@
 
 use gio::prelude::*;
 
-use cairn_core::desktop::{KEYBINDING_PATH, autostart_entry, gtk_accel};
+use steward_core::desktop::{KEYBINDING_PATH, autostart_entry, gtk_accel};
 
 use crate::settings;
 
@@ -24,7 +24,7 @@ fn schema_installed(id: &str) -> bool {
 fn command() -> String {
     let exe = std::env::current_exe()
         .map(|p| p.display().to_string())
-        .unwrap_or_else(|_| "cairn".into());
+        .unwrap_or_else(|_| "steward".into());
     format!("{exe} shelf")
 }
 
@@ -48,7 +48,7 @@ pub fn apply_shelf_shortcut() -> bool {
     let entry = gio::Settings::with_path(CUSTOM, KEYBINDING_PATH);
     match wanted {
         Some(binding) => {
-            let _ = entry.set_string("name", "Cairn Shelf");
+            let _ = entry.set_string("name", "Steward Shelf");
             let _ = entry.set_string("command", &command());
             let _ = entry.set_string("binding", &binding);
             if !list.iter().any(|p| p == KEYBINDING_PATH) {
@@ -72,16 +72,16 @@ pub fn apply_shelf_shortcut() -> bool {
     true
 }
 
-/// Open at login (P8-T03): an XDG autostart entry that starts Cairn in the
+/// Open at login (P8-T03): an XDG autostart entry that starts Steward in the
 /// background, written while the setting is on and removed when it is off.
 pub fn apply_open_at_login() {
     let entry = glib::user_config_dir()
         .join("autostart")
-        .join(format!("{}.desktop", cairn_core::APP_ID));
+        .join(format!("{}.desktop", steward_core::APP_ID));
     if settings::get().boolean("open-at-login") {
         let exe = std::env::current_exe()
             .map(|p| p.display().to_string())
-            .unwrap_or_else(|_| "cairn".into());
+            .unwrap_or_else(|_| "steward".into());
         if let Some(dir) = entry.parent() {
             let _ = std::fs::create_dir_all(dir); // E2-13 allow: the session's autostart folder, not user files
         }

@@ -1,7 +1,7 @@
 //! Bookmarks (P7-T08; reference: bookmarks.gif): links with pictures, in
 //! collections, with tags and favourites, shown four ways (Grid, List,
 //! Headlines, Masonry). Ways in: paste a link on the page, drop one onto
-//! it, Add Link (Ctrl+Shift+L), and `cairn add-link` (P7-T10).
+//! it, Add Link (Ctrl+Shift+L), and `steward add-link` (P7-T10).
 //!
 //! A new link's title and picture are fetched from its site, unless
 //! Preferences turn that off; then nothing is requested and the card shows
@@ -11,7 +11,7 @@ use gettextrs::gettext;
 use gio::prelude::*;
 use serde_json::{Value, json};
 
-use cairn_core::bookmarks::{self, Bookmark, Collection};
+use steward_core::bookmarks::{self, Bookmark, Collection};
 
 use super::{Controller, Event, dirty, later};
 use crate::{app_data, format, settings};

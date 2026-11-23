@@ -122,7 +122,7 @@ mod tests {
 
     #[test]
     fn a_missing_program_is_missing() {
-        assert!(System.run("cairn-no-such-program", &[]).is_missing());
+        assert!(System.run("steward-no-such-program", &[]).is_missing());
         assert_eq!(
             System.run("sh", &["-c", "echo hi"]),
             Ran::Output("hi\n".into())

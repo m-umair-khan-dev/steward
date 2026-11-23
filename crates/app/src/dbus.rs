@@ -1,5 +1,5 @@
-//! D-Bus: the bus name dev.cairn.Files (one instance), the exported action
-//! groups (org.gtk.Actions at /dev/cairn/Files and /dev/cairn/Files/window/1),
+//! D-Bus: the bus name io.github.m_umair_khan_dev.steward (one instance), the exported action
+//! groups (org.gtk.Actions at /io/github/m_umair_khan_dev/steward and /io/github/m_umair_khan_dev/steward/window/1),
 //! and, in e2e builds, the Test1 interface (DESIGN.md §10.2).
 
 use std::cell::RefCell;
@@ -7,7 +7,7 @@ use std::collections::HashMap;
 
 use gio::prelude::*;
 
-use cairn_core::{APP_ID, APP_OBJECT_PATH};
+use steward_core::{APP_ID, APP_OBJECT_PATH};
 
 use crate::actions;
 #[cfg(feature = "e2e")]
@@ -30,12 +30,12 @@ pub fn start(on_taken: impl Fn() + 'static) {
         |connection, _| {
             let (app, win) = actions::groups();
             if let Err(error) = connection.export_action_group(APP_OBJECT_PATH, &app) {
-                glib::g_warning!("cairn", "could not export app actions: {error}");
+                glib::g_warning!("steward", "could not export app actions: {error}");
             }
             if let Err(error) =
                 connection.export_action_group(&format!("{APP_OBJECT_PATH}/window/1"), &win)
             {
-                glib::g_warning!("cairn", "could not export window actions: {error}");
+                glib::g_warning!("steward", "could not export window actions: {error}");
             }
             // Activities search (P8-T04).
             crate::search_provider::register(&connection);
@@ -46,7 +46,7 @@ pub fn start(on_taken: impl Fn() + 'static) {
         move |_, _| acquired_flag.set(true),
         move |_, _| {
             if !acquired.get() {
-                eprintln!("cairn: another Cairn is already running");
+                eprintln!("steward: another Steward is already running");
                 on_taken();
             }
         },
@@ -68,7 +68,7 @@ pub fn screenshot_done(path: &str, ok: bool) {
 fn register_test_interface(connection: &gio::DBusConnection) {
     const XML: &str = r#"
 <node>
-  <interface name="dev.cairn.Files.Test1">
+  <interface name="io.github.m_umair_khan_dev.steward.Test1">
     <method name="State"><arg type="s" name="json" direction="out"/></method>
     <method name="WaitIdle">
       <arg type="u" name="timeout_ms" direction="in"/><arg type="b" name="idle" direction="out"/>
@@ -83,7 +83,7 @@ fn register_test_interface(connection: &gio::DBusConnection) {
 </node>"#;
     let info = gio::DBusNodeInfo::for_xml(XML)
         .expect("valid introspection XML")
-        .lookup_interface("dev.cairn.Files.Test1")
+        .lookup_interface("io.github.m_umair_khan_dev.steward.Test1")
         .expect("interface in XML");
     let result = connection
         .register_object(&format!("{APP_OBJECT_PATH}/Test1"), &info)
@@ -101,10 +101,10 @@ fn register_test_interface(connection: &gio::DBusConnection) {
                 let window = state["window"].clone();
                 let dialog = state["dialog"].as_str().unwrap_or("").to_string();
                 value["active_window"] = serde_json::json!({
-                    "title": "Cairn",
+                    "title": "Steward",
                     "width": window["width"], "height": window["height"], "is_active": window["is_active"],
                     "dialog": if dialog.is_empty() { serde_json::Value::Null } else {
-                        serde_json::json!({ "type": dialog, "application_name": "Cairn", "version": env!("CARGO_PKG_VERSION") })
+                        serde_json::json!({ "type": dialog, "application_name": "Steward", "version": env!("CARGO_PKG_VERSION") })
                     },
                 });
                 if let (serde_json::Value::Object(target), serde_json::Value::Object(extra)) = (&mut value, state) {
@@ -147,6 +147,6 @@ fn register_test_interface(connection: &gio::DBusConnection) {
         })
         .build();
     if let Err(error) = result {
-        glib::g_warning!("cairn", "could not register Test1: {error}");
+        glib::g_warning!("steward", "could not register Test1: {error}");
     }
 }

@@ -192,12 +192,12 @@ def test_E1_12_open_a_text_file(session, home, app_factory):
     calls = home / "handler-calls.txt"
     apps = home / ".local" / "share" / "applications"
     apps.mkdir(parents=True, exist_ok=True)
-    (apps / "cairn-test-handler.desktop").write_text(
+    (apps / "steward-test-handler.desktop").write_text(
         "[Desktop Entry]\nType=Application\nName=Test Handler\nNoDisplay=true\n"
         "MimeType=text/plain;\n"
         f"Exec=/bin/sh -c 'printf \"%%s\\\\n\" \"$@\" >> {calls}' sh %U\n")
     (home / ".config" / "mimeapps.list").write_text(
-        "[Default Applications]\ntext/plain=cairn-test-handler.desktop\n")
+        "[Default Applications]\ntext/plain=steward-test-handler.desktop\n")
 
     app = app_factory()
     app.open_folder(home / "Downloads")
@@ -318,8 +318,8 @@ def _by_kind_shown(app) -> bool:
 def test_E1_18_files_fly_into_kind_folders(session, home, app_factory, tmp_path):
     """Added with ADR 0009 (DESIGN.md §3.5): grouping by kind is animated,
     and immediate when motion is off."""
-    app = app_factory(extra_env={"CAIRN_MOTION": "1"})
-    assert app.state()["motion"], "CAIRN_MOTION=1 turns motion on in a test build"
+    app = app_factory(extra_env={"STEWARD_MOTION": "1"})
+    assert app.state()["motion"], "STEWARD_MOTION=1 turns motion on in a test build"
     app.open_folder(home / "Downloads")
     app.wait_idle()
     before = app.screenshot(tmp_path / "before.png")

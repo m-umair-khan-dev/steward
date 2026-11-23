@@ -18,10 +18,10 @@ build, marked [verify: needs a privileged builder or a VM in CI].
   (dpkg, snap, flatpak lists, apt, journalctl). This affects the Installed
   page, Smart Clean's "already installed" installers and leftovers of
   removed apps, and the "Needs administrator" commands.
-- Cairn's own `bwrap` sandbox for untrusted file content (thumbnails, text
+- Steward's own `bwrap` sandbox for untrusted file content (thumbnails, text
   for search inside files, ADR 0005) cannot start inside a Flatpak: the
   runtime ships no `bwrap`, and a nested sandbox needs Flatpak's own
-  sub-sandbox (`flatpak-spawn --sandbox`). Without it Cairn makes no
+  sub-sandbox (`flatpak-spawn --sandbox`). Without it Steward makes no
   thumbnails and reads no file text there; it already copes with `bwrap`
   missing (both features turn off quietly).
 - The manifest needs the KDE 6.10 runtime and SDK with the Rust extension,
@@ -43,11 +43,11 @@ build, marked [verify: needs a privileged builder or a VM in CI].
 
 ## Decision
 
-- Capability detection (P9-T01) is built: `cairn_core::sandbox` detects
+- Capability detection (P9-T01) is built: `steward_core::sandbox` detects
   Flatpak (`/.flatpak-info`), Snap (`$SNAP`) or the test switch, and the
   affected features show why. Scenario E9-01.
-- The manifest is in `packaging/flatpak/dev.cairn.Files.yml` (P9-T02) and
-  builds with `make flatpak` into `dist/flatpak/cairn.flatpak`.
+- The manifest is in `packaging/flatpak/dev.steward.Files.yml` (P9-T02) and
+  builds with `make flatpak` into `dist/flatpak/steward.flatpak`.
 - For Flathub (HUMAN: submission): vendor the crates with
   flatpak-cargo-generator (Flathub builds offline), point the source at a
   release tag of the public repository, pass flatpak-builder-lint, and

@@ -29,7 +29,7 @@ fn output(program: &str, args: &[&str]) -> Option<String> {
     let out = match Command::new(program).args(args).output() {
         Ok(out) => out,
         Err(error) => {
-            glib::g_warning!("cairn", "could not run {program}: {error}");
+            glib::g_warning!("steward", "could not run {program}: {error}");
             return None;
         }
     };

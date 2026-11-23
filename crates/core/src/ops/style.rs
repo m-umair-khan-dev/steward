@@ -1,7 +1,7 @@
 //! Folder symbols and colours chosen by the user (P4-T10). Stored in
-//! extended attributes (`user.cairn.symbol`, `user.cairn.color`), which
+//! extended attributes (`user.steward.symbol`, `user.steward.color`), which
 //! travel with the folder; where the filesystem has none (or the test
-//! switch CAIRN_NO_XATTR is set), in app.db keyed by filesystem and inode.
+//! switch STEWARD_NO_XATTR is set), in app.db keyed by filesystem and inode.
 //! Either way the choice survives a rename.
 
 use std::os::unix::fs::MetadataExt;
@@ -11,8 +11,8 @@ use rusqlite::{OptionalExtension, params};
 
 use crate::store::Store;
 
-const SYMBOL: &str = "user.cairn.symbol";
-const COLOR: &str = "user.cairn.color";
+const SYMBOL: &str = "user.steward.symbol";
+const COLOR: &str = "user.steward.color";
 
 #[derive(Debug, Clone, Default, PartialEq, Eq)]
 pub struct Style {
@@ -28,7 +28,7 @@ impl Style {
 
 /// False when the test switch turns extended attributes off.
 pub fn xattrs_enabled() -> bool {
-    std::env::var_os("CAIRN_NO_XATTR").is_none()
+    std::env::var_os("STEWARD_NO_XATTR").is_none()
 }
 
 fn get_xattr(path: &Path, name: &str) -> Option<String> {

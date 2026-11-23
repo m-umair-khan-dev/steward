@@ -7,10 +7,10 @@ use std::time::{Duration, SystemTime};
 
 use gio::prelude::*;
 
-use cairn_core::ops::{
+use steward_core::ops::{
     Answer, Choice, Context, FailReason, Outcome, Report, Request, Trash, Worker,
 };
-use cairn_core::store::Store;
+use steward_core::store::Store;
 
 struct Place {
     root: PathBuf,
@@ -18,7 +18,7 @@ struct Place {
 
 impl Place {
     fn new(name: &str) -> Self {
-        let root = std::env::temp_dir().join(format!("cairn-ops-{}-{name}", std::process::id()));
+        let root = std::env::temp_dir().join(format!("steward-ops-{}-{name}", std::process::id()));
         let _ = std::fs::remove_dir_all(&root);
         std::fs::create_dir_all(root.join("home")).unwrap();
         Self { root }
@@ -774,7 +774,7 @@ fn trashing_a_link_to_a_folder_keeps_the_folder() {
 fn a_batch_left_running_is_recovered_as_partial() {
     let place = Place::new("e2-11");
     let store = Store::open(&place.root.join("app.db")).unwrap();
-    use cairn_core::ops::journal::Action;
+    use steward_core::ops::journal::Action;
     let a = place.write("dst/a.txt", "moved before the crash");
     let b = place.write("src/b.txt", "not moved");
     let batch = store.begin_batch("move", "Move 2 items").unwrap();
@@ -857,7 +857,7 @@ fn copies_keep_holes_times_and_permissions() {
 
 #[test]
 fn drops_move_by_default_and_copy_with_ctrl() {
-    use cairn_core::ops::drop_request;
+    use steward_core::ops::drop_request;
     let place = Place::new("drop");
     let a = place.write("src/a.txt", "A");
     let folder = place.path("src");
@@ -940,7 +940,7 @@ fn a_plan_runs_as_one_batch_and_one_undo_restores_it_exactly() {
 
 #[test]
 fn workspace_items_are_found_again_after_a_rename() {
-    use cairn_core::workspace::Where;
+    use steward_core::workspace::Where;
     let place = Place::new("workspace");
     let store = Store::open(&place.root.join("app.db")).unwrap();
     let invoices = place.write("Documents/Invoices/a.pdf", "A");
@@ -982,7 +982,7 @@ fn workspace_items_are_found_again_after_a_rename() {
 
 #[test]
 fn a_chosen_folder_style_survives_a_rename_with_and_without_attributes() {
-    use cairn_core::ops::style::{self, Style};
+    use steward_core::ops::style::{self, Style};
     let place = Place::new("style");
     let store = Store::open(&place.root.join("app.db")).unwrap();
     let chosen = Style {
@@ -1004,7 +1004,7 @@ fn a_chosen_folder_style_survives_a_rename_with_and_without_attributes() {
     assert!(
         rustix::fs::getxattr(
             place.path("B2").as_path(),
-            "user.cairn.symbol",
+            "user.steward.symbol",
             &mut [0u8; 64]
         )
         .is_err()

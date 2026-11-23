@@ -1,5 +1,5 @@
 [package]
-name = "cairn"
+name = "steward"
 description = "file manager for Ubuntu that keeps folders tidy"
 version.workspace = true
 edition.workspace = true
@@ -10,16 +10,16 @@ authors.workspace = true
 build = "build.rs"
 
 [[bin]]
-name = "cairn"
+name = "steward"
 path = "src/main.rs"
 
 [features]
-# Compiles in the dev.cairn.Files.Test1 D-Bus interface used by end-to-end
+# Compiles in the io.github.m_umair_khan_dev.steward.Test1 D-Bus interface used by end-to-end
 # tests (DESIGN.md §10.2). Never enabled in release packages.
 e2e = []
 
 [dependencies]
-cairn-core.workspace = true
+steward-core.workspace = true
 cxx.workspace = true
 cxx-qt.workspace = true
 cxx-qt-lib.workspace = true
@@ -37,13 +37,17 @@ workspace = true
 # The .deb (P6-T08, DESIGN.md §8.8). Built by packaging/build-deb, which first
 # stages the translations and the changelog under target/package/.
 [package.metadata.deb]
-name = "cairn"
-maintainer = "Cairn contributors <maintainers@example.invalid>"   # HUMAN: real address
-copyright = "2026 Cairn contributors"
+name = "steward"
+maintainer = "Steward contributors <maintainers@example.invalid>"   # HUMAN: real address
+copyright = "2026 Steward contributors"
 section = "utils"
+# The package was called cairn before the rename (2026-11-23).
+conflicts = "cairn"
+replaces = "cairn"
+provides = "cairn"
 priority = "optional"
 extended-description = """\
-Cairn is a file manager for Ubuntu that keeps folders tidy. It shows a plan
+Steward is a file manager for Ubuntu that keeps folders tidy. It shows a plan
 before anything moves, and one Undo puts everything back. It adds folder
 sizes, search as you type, two panes, workspaces, Free Up Space, a list of
 everything installed, and About This Computer."""
@@ -58,29 +62,29 @@ recommends = "gvfs, xdg-user-dirs, poppler-utils"
 suggests = "nautilus"
 changelog = "../../target/package/changelog"
 assets = [
-    ["target/release/cairn", "usr/bin/", "755"],
-    ["target/release/cairn-indexer", "usr/libexec/", "755"],
-    ["../../data/dev.cairn.Files.desktop", "usr/share/applications/", "644"],
-    ["../../data/dev.cairn.Files.metainfo.xml", "usr/share/metainfo/", "644"],
-    ["../../data/dev.cairn.Files.gschema.xml", "usr/share/glib-2.0/schemas/", "644"],
-    ["../../data/icons/hicolor/scalable/apps/dev.cairn.Files.svg", "usr/share/icons/hicolor/scalable/apps/", "644"],
-    ["../../data/icons/hicolor/symbolic/apps/dev.cairn.Files-symbolic.svg", "usr/share/icons/hicolor/symbolic/apps/", "644"],
-    ["../../data/cairn-indexer.service", "usr/lib/systemd/user/", "644"],
-    ["../../data/dev.cairn.Indexer.service", "usr/share/dbus-1/services/", "644"],
-    ["../../data/dev.cairn.Files.service", "usr/share/dbus-1/services/", "644"],
-    ["../../data/dev.cairn.Files.search-provider.ini", "usr/share/gnome-shell/search-providers/", "644"],
-    ["../../browser-extension/host/cairn-native-host", "usr/libexec/", "755"],
-    ["../../browser-extension/host/dev.cairn.files.firefox.json", "usr/lib/mozilla/native-messaging-hosts/dev.cairn.files.json", "644"],
+    ["target/release/steward", "usr/bin/", "755"],
+    ["target/release/steward-indexer", "usr/libexec/", "755"],
+    ["../../data/io.github.m_umair_khan_dev.steward.desktop", "usr/share/applications/", "644"],
+    ["../../data/io.github.m_umair_khan_dev.steward.metainfo.xml", "usr/share/metainfo/", "644"],
+    ["../../data/io.github.m_umair_khan_dev.steward.gschema.xml", "usr/share/glib-2.0/schemas/", "644"],
+    ["../../data/icons/hicolor/scalable/apps/io.github.m_umair_khan_dev.steward.svg", "usr/share/icons/hicolor/scalable/apps/", "644"],
+    ["../../data/icons/hicolor/symbolic/apps/io.github.m_umair_khan_dev.steward-symbolic.svg", "usr/share/icons/hicolor/symbolic/apps/", "644"],
+    ["../../data/steward-indexer.service", "usr/lib/systemd/user/", "644"],
+    ["../../data/io.github.m_umair_khan_dev.steward.Indexer.service", "usr/share/dbus-1/services/", "644"],
+    ["../../data/io.github.m_umair_khan_dev.steward.service", "usr/share/dbus-1/services/", "644"],
+    ["../../data/io.github.m_umair_khan_dev.steward.search-provider.ini", "usr/share/gnome-shell/search-providers/", "644"],
+    ["../../browser-extension/host/steward-native-host", "usr/libexec/", "755"],
+    ["../../browser-extension/host/io.github.m_umair_khan_dev.steward.firefox.json", "usr/lib/mozilla/native-messaging-hosts/io.github.m_umair_khan_dev.steward.json", "644"],
     ["../../target/package/locale/**/*.mo", "usr/share/locale/", "644"],
-    ["../../target/package/cairn.1.gz", "usr/share/man/man1/", "644"],
-    ["../../packaging/debian/copyright", "usr/share/doc/cairn/", "644"],
+    ["../../target/package/steward.1.gz", "usr/share/man/man1/", "644"],
+    ["../../packaging/debian/copyright", "usr/share/doc/steward/", "644"],
 ]
 
 # Ubuntu 24.04 (GNOME 46, Qt 6.4): no qml6-module-qtquick-effects (the app falls
 # back without blur and shadows) and the SVG plugin is in libqt6svg6.
 # packaging/build-deb picks this variant on 24.04.
 [package.metadata.deb.variants.ubuntu2404]
-name = "cairn"   # a variant would otherwise be named cairn-ubuntu2404
+name = "steward"   # a variant would otherwise be named steward-ubuntu2404
 depends = """$auto, qml6-module-qtquick, qml6-module-qtquick-window, qml6-module-qtquick-controls, \
 qml6-module-qtquick-templates, qml6-module-qtquick-layouts, \
 qml6-module-qtquick-shapes, qml6-module-qtqml-workerscript, qml6-module-qtquick-dialogs, \

@@ -104,7 +104,7 @@ def open_agents(app) -> dict:
 
 
 def test_E7_04_ai_agents_match_the_manifest(session, home, app_factory):
-    app = app_factory(extra_env={"CAIRN_FAKE_NOW": home.manifest["now"]})
+    app = app_factory(extra_env={"STEWARD_FAKE_NOW": home.manifest["now"]})
     expected = home.manifest["agents"]
     state = open_agents(app)
     projects = {str(__import__("pathlib").Path(p["path"]).relative_to(home.path)): p for p in state["projects"]}
@@ -468,8 +468,8 @@ def test_E7_09_extraction_is_contained(session, home, app_factory, tmp_path):
         (planted / "stuck.hang").write_text("anything")
         (planted / "probe.net").write_text("anything")
         app = app_factory(extra_env={
-            "CAIRN_TEST_EXTRACTORS": f"hang={hang},net={net}",
-            "CAIRN_EXTRACT_TIMEOUT_MS": "2000",
+            "STEWARD_TEST_EXTRACTORS": f"hang={hang},net={net}",
+            "STEWARD_EXTRACT_TIMEOUT_MS": "2000",
         })
         # While the stuck extractor runs, the app answers at once.
         started = time.monotonic()
@@ -488,46 +488,46 @@ def test_E7_09_extraction_is_contained(session, home, app_factory, tmp_path):
         watcher.close()
 
 
-# --- The cairn command (E7-10) ----------------------------------------------------------
+# --- The steward command (E7-10) ----------------------------------------------------------
 
-def cairn(app, *args: str, program: str | None = None) -> subprocess.CompletedProcess:
-    """Runs a `cairn` command in the test session, as a user in a terminal would."""
+def steward(app, *args: str, program: str | None = None) -> subprocess.CompletedProcess:
+    """Runs a `steward` command in the test session, as a user in a terminal would."""
     binary = program or app.binary
     return subprocess.run([binary, *args], env=app.env(), capture_output=True, text=True, timeout=20)
 
 
-def test_E7_10_the_cairn_command(app, home):
+def test_E7_10_the_steward_command(app, home):
     app.action("win.workspace-create", s("Taxes 2026"))
     app.wait_for(lambda: app.state()["workspace"]["open"], "the new workspace")
     app.action("win.workspace-close")
     app.wait_for(lambda: not app.state()["workspace"]["open"], "back to the folder")
 
-    done = cairn(app, "open-workspace", "taxes 2026")
+    done = steward(app, "open-workspace", "taxes 2026")
     assert done.returncode == 0, done.stderr
     app.wait_for(lambda: app.state()["workspace"]["open"]
                  and app.state()["workspace"]["name"] == "Taxes 2026", "the workspace, by name")
 
     link = "http://127.0.0.1:9/cli-saved"
-    done = cairn(app, "add-link", link)
+    done = steward(app, "add-link", link)
     assert done.returncode == 0, done.stderr
     app.wait_for(lambda: any(b["url"] == link for b in app.state()["bookmarks"]["all"]), "the saved link")
 
     invoices = home / "Documents" / "Invoices"
-    done = cairn(app, "open", str(invoices))
+    done = steward(app, "open", str(invoices))
     assert done.returncode == 0, done.stderr
     app.wait_for(lambda: app.folder()["path"] == str(invoices) and not app.state()["workspace"]["open"],
                  "the folder")
 
-    # cairn-cli, without Qt, does the same.
-    cli = str(Path(app.binary).with_name("cairn-cli"))
-    done = cairn(app, "free-up-space", program=cli)
+    # steward-cli, without Qt, does the same.
+    cli = str(Path(app.binary).with_name("steward-cli"))
+    done = steward(app, "free-up-space", program=cli)
     assert done.returncode == 0, done.stderr
     app.wait_for(lambda: app.state()["tools"]["page"] == "clean", "Free Up Space")
 
     # Mistakes are explained, and change nothing.
-    wrong = cairn(app, "add-link")
+    wrong = steward(app, "add-link")
     assert wrong.returncode == 2 and "add-link needs a link" in wrong.stderr
-    assert "open-workspace NAME" in cairn(app, "--help").stdout
+    assert "open-workspace NAME" in steward(app, "--help").stdout
     assert app.running()
 
 

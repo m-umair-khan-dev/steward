@@ -132,54 +132,6 @@ source = "registry+https://github.com/rust-lang/crates.io-index"
 checksum = "776dfebd015e2d8732c684a2c71003674ccb49457b539b9e82151ba38e96dd7c"
 
 [[package]]
-name = "cairn"
-version = "1.0.0"
-dependencies = [
- "cairn-core",
- "cxx",
- "cxx-qt",
- "cxx-qt-build",
- "cxx-qt-lib",
- "gettext-rs",
- "gio",
- "glib",
- "serde_json",
-]
-
-[[package]]
-name = "cairn-cli"
-version = "1.0.0"
-dependencies = [
- "cairn-core",
-]
-
-[[package]]
-name = "cairn-core"
-version = "1.0.0"
-dependencies = [
- "blake3",
- "gio",
- "gix",
- "glib",
- "rusqlite",
- "rustix",
- "serde_json",
- "ureq",
- "zip",
-]
-
-[[package]]
-name = "cairn-indexer"
-version = "1.0.0"
-dependencies = [
- "cairn-core",
- "gio",
- "glib",
- "rustix",
- "serde_json",
-]
-
-[[package]]
 name = "cc"
 version = "1.11.2"
 source = "registry+https://github.com/rust-lang/crates.io-index"
@@ -2330,6 +2282,54 @@ name = "static_assertions"
 version = "1.1.0"
 source = "registry+https://github.com/rust-lang/crates.io-index"
 checksum = "a2eb9349b6444b326872e140eb1cf5e7c522154d69e7a0ffb0fb81c06b37543f"
+
+[[package]]
+name = "steward"
+version = "1.0.0"
+dependencies = [
+ "cxx",
+ "cxx-qt",
+ "cxx-qt-build",
+ "cxx-qt-lib",
+ "gettext-rs",
+ "gio",
+ "glib",
+ "serde_json",
+ "steward-core",
+]
+
+[[package]]
+name = "steward-cli"
+version = "1.0.0"
+dependencies = [
+ "steward-core",
+]
+
+[[package]]
+name = "steward-core"
+version = "1.0.0"
+dependencies = [
+ "blake3",
+ "gio",
+ "gix",
+ "glib",
+ "rusqlite",
+ "rustix",
+ "serde_json",
+ "ureq",
+ "zip",
+]
+
+[[package]]
+name = "steward-indexer"
+version = "1.0.0"
+dependencies = [
+ "gio",
+ "glib",
+ "rustix",
+ "serde_json",
+ "steward-core",
+]
 
 [[package]]
 name = "strsim"

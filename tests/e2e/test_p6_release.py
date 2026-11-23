@@ -21,7 +21,7 @@ def quit_app(app) -> None:
 
 
 def test_E6_01_welcome_shows_once(app_factory):
-    app = app_factory(extra_env={"CAIRN_NO_WELCOME": ""})
+    app = app_factory(extra_env={"STEWARD_NO_WELCOME": ""})
     app.wait_for(lambda: dialog(app) == "welcome", "the welcome")
     assert app.state()["welcome"]["step"] == "demo"
     assert "Messy folder" in app.a11y_names()
@@ -38,7 +38,7 @@ def test_E6_01_welcome_shows_once(app_factory):
     assert app.state()["welcome"]["shown"]
     quit_app(app)
 
-    again = app_factory(extra_env={"CAIRN_NO_WELCOME": ""})
+    again = app_factory(extra_env={"STEWARD_NO_WELCOME": ""})
     again.wait_idle()
     assert dialog(again) is None, "the second start goes straight to the window"
 
@@ -47,12 +47,12 @@ def test_E6_02_whats_new_once_after_an_update(home, app_factory):
     # An earlier version ran before (settings in a key file the test can write).
     keyfile = home / ".config" / "glib-2.0" / "settings" / "keyfile"
     keyfile.parent.mkdir(parents=True, exist_ok=True)
-    keyfile.write_text("[dev/cairn/Files]\nwelcome-shown=true\nlast-version='0.9.0'\n")
-    env = {"CAIRN_NO_WELCOME": "", "GSETTINGS_BACKEND": "keyfile"}
+    keyfile.write_text("[io/github/m_umair_khan_dev/steward]\nwelcome-shown=true\nlast-version='0.9.0'\n")
+    env = {"STEWARD_NO_WELCOME": "", "GSETTINGS_BACKEND": "keyfile"}
     app = app_factory(extra_env=env)
     app.wait_for(lambda: dialog(app) == "whats-new", "What's New")
     assert app.state()["welcome"]["notes"] > 0
-    assert any(name.startswith("What’s New in Cairn") for name in app.a11y_names())
+    assert any(name.startswith("What’s New in Steward") for name in app.a11y_names())
     app.action("win.welcome-done")
     app.wait_for(lambda: dialog(app) is None, "the window")
     assert app.state()["welcome"]["last_version"] == app.state()["version"]
@@ -112,7 +112,7 @@ def test_E6_03_the_main_screens_in_each_language(app_factory, home, language):
     lang, catalog = LANGUAGES[language]
     collapse, tools = translated(language, "Collapse sidebar"), translated(language, "Free Up Space")
     app = app_factory(extra_env={"LANG": lang, "LC_ALL": lang, "LANGUAGE": catalog,
-                                 "CAIRN_SYSINFO_FIXTURE": str(REPO / "tests/data/sysinfo/fixture.json")})
+                                 "STEWARD_SYSINFO_FIXTURE": str(REPO / "tests/data/sysinfo/fixture.json")})
     out = REPO / "artifacts" / "i18n" / language
     out.mkdir(parents=True, exist_ok=True)
     app.wait_for(lambda: {collapse, tools} <= app.a11y_names(), f"the sidebar in {language}")

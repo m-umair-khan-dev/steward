@@ -8,8 +8,8 @@ use std::path::Path;
 use gettextrs::gettext;
 use serde_json::{Value, json};
 
-use cairn_core::agents::{self, AGENT_FILES, Agents};
-use cairn_core::servers::{self, Server};
+use steward_core::agents::{self, AGENT_FILES, Agents};
+use steward_core::servers::{self, Server};
 
 use super::{Controller, Event, dirty, later};
 use crate::{format, paths};
@@ -163,7 +163,7 @@ impl Controller {
             "month" => 30,
             _ => 7,
         };
-        let now = cairn_core::plan::now();
+        let now = steward_core::plan::now();
         let bars: Vec<(String, u64)> = (0..days)
             .rev()
             .map(|back| {
@@ -192,7 +192,7 @@ impl Controller {
                 "day": day, "value": n, "share": *n as f64 / max as f64, "label": compact(*n),
             })).collect::<Vec<_>>(),
             "legend": [{ "tool": "Claude Code", "text": compact(total) }],
-            "note": gettext("Usage is read from Claude Code's logs; other tools keep no local usage Cairn can read yet."),
+            "note": gettext("Usage is read from Claude Code's logs; other tools keep no local usage Steward can read yet."),
         })
     }
 

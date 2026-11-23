@@ -1,9 +1,9 @@
 # Desktop app: development, tests and end-to-end tests (DESIGN.md §9.3).
 # Use it through the Makefile (`make app`, `make test`, `make e2e`, ...).
-name: cairn-desktop
+name: steward-desktop
 
 x-dev: &dev
-  image: cairn-dev:${UBUNTU_VERSION:-26.10}
+  image: steward-dev:${UBUNTU_VERSION:-26.10}
   pull_policy: never
   init: true
   environment: &dev-env
@@ -34,7 +34,7 @@ services:
   # Builds the dev image once; every other service reuses it.
   dev-image:
     profiles: ["build"]
-    image: cairn-dev:${UBUNTU_VERSION:-26.10}
+    image: steward-dev:${UBUNTU_VERSION:-26.10}
     build:
       context: .
       dockerfile: docker/desktop.Dockerfile
@@ -59,7 +59,7 @@ services:
       GDK_BACKEND: wayland
       GTK_DEBUG: ${GTK_DEBUG:-}
       G_MESSAGES_DEBUG: ${G_MESSAGES_DEBUG:-}
-      CAIRN_DEV: "1"
+      STEWARD_DEV: "1"
     tmpfs:
       - /run/user/${HOST_UID:-1000}:uid=${HOST_UID:-1000},gid=${HOST_GID:-1000},mode=0700
     volumes:
@@ -71,7 +71,7 @@ services:
     devices: ["/dev/dri:/dev/dri"]
     command: >
       dbus-run-session -- watchexec --restart --exts rs,blp,xml,toml
-      --ignore 'target/**' -- cargo run -p cairn
+      --ignore 'target/**' -- cargo run -p steward
 
   # Docker Desktop cannot reach the host's display (ADR 0004). This variant shows
   # the window in a browser at http://127.0.0.1:8085 using GTK's Broadway backend.
@@ -85,7 +85,7 @@ services:
       QT_LINUX_ACCESSIBILITY_ALWAYS_ON: "1"
       XDG_RUNTIME_DIR: /tmp/runtime-dev
       G_MESSAGES_DEBUG: ${G_MESSAGES_DEBUG:-}
-      CAIRN_DEV: "1"
+      STEWARD_DEV: "1"
     ports: ["127.0.0.1:5900:5900"]
     command: docker/scripts/run-vnc
 
@@ -112,7 +112,7 @@ services:
       <<: *dev-env
       E2E_MARK: ${E2E_MARK:-not manual and not shots}
       E2E_K: ${E2E_K:-}
-      CAIRN_COMPOSITOR: ${CAIRN_COMPOSITOR:-}
+      STEWARD_COMPOSITOR: ${STEWARD_COMPOSITOR:-}
     tmpfs:
       - /home/dev:uid=${HOST_UID:-1000},gid=${HOST_GID:-1000}
       # exec: tests put stand-in programs (dpkg-query, snap, editors) on PATH
@@ -144,7 +144,7 @@ services:
       dockerfile: docker/flatpak.Dockerfile
       args:
         UBUNTU_IMAGE: ${UBUNTU_IMAGE}
-    image: cairn-flatpak:${UBUNTU_VERSION:-26.10}
+    image: steward-flatpak:${UBUNTU_VERSION:-26.10}
     init: true
     environment:
       LANG: C.UTF-8
@@ -167,7 +167,7 @@ services:
 volumes:
   cargo-registry:
   cargo-target:
-    name: cairn-target-${UBUNTU_VERSION:-26.10}   # one build cache per Ubuntu release
+    name: steward-target-${UBUNTU_VERSION:-26.10}   # one build cache per Ubuntu release
   fixture-home:
   flatpak-home:
   flatpak-work:

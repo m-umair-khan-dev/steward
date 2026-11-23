@@ -2,7 +2,7 @@
 
 use gettextrs::{gettext, ngettext};
 
-use cairn_core::Kind;
+use steward_core::Kind;
 
 pub fn size(bytes: u64) -> String {
     glib::format_size(bytes).to_string()

@@ -2,14 +2,14 @@
 # Starts a headless Wayland compositor in the background and waits for its socket.
 #
 # Needs XDG_RUNTIME_DIR (and a D-Bus session for mutter). Prints "PID SOCKET" on
-# success. The compositor is chosen by CAIRN_COMPOSITOR (default: see ADR 0002).
+# success. The compositor is chosen by STEWARD_COMPOSITOR (default: see ADR 0002).
 # Its output goes to COMPOSITOR_LOG (default: /dev/null).
 set -euo pipefail
 
 # mutter is GNOME's own compositor and lets tests inject real key presses
 # (ADR 0002, ADR 0003); weston is the lighter fallback.
-kind=${CAIRN_COMPOSITOR:-mutter}
-socket=${CAIRN_WAYLAND_SOCKET:-wayland-cairn}
+kind=${STEWARD_COMPOSITOR:-mutter}
+socket=${STEWARD_WAYLAND_SOCKET:-wayland-steward}
 log=${COMPOSITOR_LOG:-/dev/null}
 : "${XDG_RUNTIME_DIR:?XDG_RUNTIME_DIR must be set}"
 

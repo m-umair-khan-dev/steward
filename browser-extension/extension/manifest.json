@@ -1,19 +1,19 @@
 {
   "manifest_version": 3,
-  "name": "Save to Cairn",
+  "name": "Save to Steward",
   "version": "1.0.0",
-  "description": "Saves the current page to Cairn's Bookmarks, with its title and picture.",
+  "description": "Saves the current page to Steward's Bookmarks, with its title and picture.",
   "permissions": ["activeTab", "nativeMessaging", "contextMenus"],
   "background": {
     "service_worker": "background.js",
     "scripts": ["background.js"]
   },
   "action": {
-    "default_title": "Save to Cairn",
+    "default_title": "Save to Steward",
     "default_icon": { "32": "icon.svg" }
   },
   "icons": { "48": "icon.svg", "96": "icon.svg" },
   "browser_specific_settings": {
-    "gecko": { "id": "save@cairn.dev", "strict_min_version": "115.0" }
+    "gecko": { "id": "save@steward.dev", "strict_min_version": "115.0" }
   }
 }

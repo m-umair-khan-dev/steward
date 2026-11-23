@@ -8,7 +8,7 @@ Sheet {
     id: root
     property var info: ({ step: "demo", index: 0, count: 3, sorted: false, tour: [] })
     property var prefs: ({})
-    title: p.t("Welcome to Cairn")
+    title: p.t("Welcome to Steward")
     cardWidth: 620
 
     // Loose files of the demo, and the kind folder each one belongs in.
@@ -58,7 +58,7 @@ Sheet {
                 width: parent.width; wrapMode: Text.WordWrap; color: Theme.muted; font.pixelSize: 14
                 text: root.info.sorted
                       ? "That is Tidy. In your own folders it shows the plan first, and one Undo puts everything back."
-                      : "Downloads fill up fast. Cairn sorts loose files into folders by kind, and moves nothing until you agree."
+                      : "Downloads fill up fast. Steward sorts loose files into folders by kind, and moves nothing until you agree."
             }
             Rectangle {
                 id: stage
@@ -177,7 +177,7 @@ Sheet {
                 Segmented {
                     anchors.right: parent.right; anchors.verticalCenter: parent.verticalCenter
                     name: p.t("Accent")
-                    options: [{ id: "steward", label: p.t("Cairn") }, { id: "system", label: p.t("System") }]
+                    options: [{ id: "steward", label: p.t("Steward") }, { id: "system", label: p.t("System") }]
                     current: root.prefs.accent === "system" ? "system" : "steward"
                     onPicked: id => p.setpref("accent", id)
                 }
@@ -209,7 +209,7 @@ Sheet {
                 PillButton { visible: root.info.index > 0; text: p.t("Back"); onClicked: p.activate("win.welcome-step", "back") }
                 PillButton {
                     primary: true
-                    text: root.info.index < root.info.count - 1 ? p.t("Next") : p.t("Start Using Cairn")
+                    text: root.info.index < root.info.count - 1 ? p.t("Next") : p.t("Start Using Steward")
                     onClicked: p.activate(root.info.index < root.info.count - 1 ? "win.welcome-step" : "win.welcome-done",
                                           root.info.index < root.info.count - 1 ? "next" : "")
                 }

@@ -1,5 +1,5 @@
 # syntax=docker/dockerfile:1.7
-# Build, run and test image for the Cairn desktop app (DESIGN.md §9.3).
+# Build, run and test image for the Steward desktop app (DESIGN.md §9.3).
 # Stages: base -> dev (interactive work, tests) -> build (release binaries)
 #         base -> package (.deb) -> artifact (just the .deb, for --output)
 #         clean Ubuntu -> install-test (installs the .deb with apt, smoke tests).
@@ -118,10 +118,10 @@ ARG UBUNTU_VERSION=unknown
 COPY . .
 RUN --mount=type=cache,target=/usr/local/cargo/registry \
     --mount=type=cache,id=cargo-target-build-${UBUNTU_VERSION},target=/var/cache/cargo-target \
-    cargo build --release --locked -p cairn -p cairn-indexer -p cairn-cli && \
+    cargo build --release --locked -p steward -p steward-indexer -p steward-cli && \
     mkdir -p /out && \
-    cp "${CARGO_TARGET_DIR}/release/cairn" "${CARGO_TARGET_DIR}/release/cairn-indexer" \
-       "${CARGO_TARGET_DIR}/release/cairn-cli" /out/
+    cp "${CARGO_TARGET_DIR}/release/steward" "${CARGO_TARGET_DIR}/release/steward-indexer" \
+       "${CARGO_TARGET_DIR}/release/steward-cli" /out/
 
 # ---- package: the .deb for this Ubuntu release (P6-T08) ----------------------
 FROM base AS package
@@ -178,6 +178,6 @@ COPY tests/ tests/
 COPY docker/scripts/ docker/scripts/
 RUN chown -R tester /workspace
 USER 1000:1000
-ENV CAIRN_BIN=/usr/bin/cairn \
-    CAIRN_INSTALLED=1
+ENV STEWARD_BIN=/usr/bin/steward \
+    STEWARD_INSTALLED=1
 CMD ["docker/scripts/run-install-test"]

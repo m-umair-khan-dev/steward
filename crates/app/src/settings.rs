@@ -1,11 +1,11 @@
-//! Access to the app's GSettings (schema in `data/dev.cairn.Files.gschema.xml`).
+//! Access to the app's GSettings (schema in `data/io.github.m_umair_khan_dev.steward.gschema.xml`).
 //!
 //! Development and test builds load the schema compiled by build.rs into
 //! OUT_DIR, so nothing needs installing. Release builds use the installed schema.
 
 use std::cell::OnceCell;
 
-use cairn_core::APP_ID;
+use steward_core::APP_ID;
 
 thread_local! {
     static SETTINGS: OnceCell<gio::Settings> = const { OnceCell::new() };

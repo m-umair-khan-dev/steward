@@ -1,9 +1,9 @@
-# Chinese (Simplified) translation of Cairn.
+# Chinese (Simplified) translation of Steward.
 # DRAFT: written by an AI model and not yet reviewed by a native speaker.
 # Please review before relying on it (DESIGN.md Phase 6, HUMAN).
 msgid ""
 msgstr ""
-"Project-Id-Version: cairn 1.0.0\n"
+"Project-Id-Version: steward 1.0.0\n"
 "PO-Revision-Date: 2026-11-20 12:00+0000\n"
 "Last-Translator: AI draft (unreviewed)\n"
 "Language-Team: Chinese (Simplified)\n"
@@ -105,8 +105,8 @@ msgid "About "
 msgstr "关于 "
 
 #: crates/app/qml/Header.qml:192
-msgid "About Cairn"
-msgstr "关于 Cairn"
+msgid "About Steward"
+msgstr "关于 Steward"
 
 #: crates/app/qml/AboutPage.qml:12 crates/app/qml/Main.qml:245
 #: crates/app/qml/Sidebar.qml:188
@@ -279,23 +279,6 @@ msgstr "按类型"
 msgid "CONTENTS"
 msgstr "内容"
 
-#: crates/app/qml/AboutDialog.qml:19 crates/app/qml/Main.qml:17
-#: crates/app/qml/Sidebar.qml:39 crates/app/qml/WelcomeDialog.qml:180
-msgid "Cairn"
-msgstr "Cairn"
-
-#: crates/app/src/controller.rs:747
-msgid "Cairn answers other apps now; folders open in it once Cairn is installed"
-msgstr "Cairn 现在会响应其他应用；安装 Cairn 后文件夹将在其中打开"
-
-#: crates/app/qml/CleanPage.qml:178
-msgid "Cairn never runs these. Copy a command and run it in a terminal if you want to."
-msgstr "Cairn 从不运行这些命令。如有需要，请复制命令并在终端中运行。"
-
-#: crates/app/src/controller.rs:1224
-msgid "Cairn runs in"
-msgstr "Cairn 运行在"
-
 #: crates/app/src/controller/installed.rs:205
 #: crates/app/src/controller/installed.rs:45
 msgid "Came with others"
@@ -357,8 +340,8 @@ msgid "Clear shortcut for "
 msgstr "清除快捷键： "
 
 #: crates/app/qml/PreferencesDialog.qml:483
-msgid "Click it to open the Shelf. With the icon on, closing the window keeps Cairn running for the Shelf."
-msgstr "点击即可打开置物架。开启图标后，关闭窗口时 Cairn 会继续为置物架运行。"
+msgid "Click it to open the Shelf. With the icon on, closing the window keeps Steward running for the Shelf."
+msgstr "点击即可打开置物架。开启图标后，关闭窗口时 Steward 会继续为置物架运行。"
 
 #: crates/app/src/tray.rs:74
 msgid "Click to open the Shelf"
@@ -802,8 +785,8 @@ msgid "Folders and files by name, as you type."
 msgstr "输入时按名称查找文件夹和文件。"
 
 #: crates/app/qml/PreferencesDialog.qml:223
-msgid "Folders open in Cairn, and other apps' “Show in folder” comes here."
-msgstr "文件夹在 Cairn 中打开，其他应用的“在文件夹中显示”也会来到这里。"
+msgid "Folders open in Steward, and other apps' “Show in folder” comes here."
+msgstr "文件夹在 Steward 中打开，其他应用的“在文件夹中显示”也会来到这里。"
 
 #: crates/app/qml/PathBar.qml:128
 msgid "Folders with that name"
@@ -2005,12 +1988,12 @@ msgid "Start Indexing"
 msgstr "开始索引"
 
 #: crates/app/qml/WelcomeDialog.qml:212
-msgid "Start Using Cairn"
-msgstr "开始使用 Cairn"
+msgid "Start Using Steward"
+msgstr "开始使用 Steward"
 
 #: crates/app/qml/PreferencesDialog.qml:488
-msgid "Starts Cairn in the background, without a window, so the Shelf and the icon are ready."
-msgstr "在后台启动 Cairn（不显示窗口），让置物架和图标随时可用。"
+msgid "Starts Steward in the background, without a window, so the Shelf and the icon are ready."
+msgstr "在后台启动 Steward（不显示窗口），让置物架和图标随时可用。"
 
 #: crates/app/src/controller/about.rs:241
 msgid "Startup disk"
@@ -2019,6 +2002,23 @@ msgstr "启动磁盘"
 #: crates/app/qml/WelcomeDialog.qml:38
 msgid "Step "
 msgstr "第 "
+
+#: crates/app/qml/AboutDialog.qml:19 crates/app/qml/Main.qml:17
+#: crates/app/qml/Sidebar.qml:39 crates/app/qml/WelcomeDialog.qml:180
+msgid "Steward"
+msgstr "Steward"
+
+#: crates/app/src/controller.rs:747
+msgid "Steward answers other apps now; folders open in it once Steward is installed"
+msgstr "Steward 现在会响应其他应用；安装 Steward 后文件夹将在其中打开"
+
+#: crates/app/qml/CleanPage.qml:178
+msgid "Steward never runs these. Copy a command and run it in a terminal if you want to."
+msgstr "Steward 从不运行这些命令。如有需要，请复制命令并在终端中运行。"
+
+#: crates/app/src/controller.rs:1224
+msgid "Steward runs in"
+msgstr "Steward 运行在"
 
 #: crates/app/qml/StopServerDialog.qml:23
 msgid "Stop"
@@ -2120,10 +2120,6 @@ msgstr "这不是网页链接"
 msgid "That place does not exist"
 msgstr "该位置不存在"
 
-#: crates/app/src/controller.rs:1225
-msgid "The Cairn package from Ubuntu’s apt repository can show this."
-msgstr "通过 Ubuntu apt 软件源安装的 Cairn 软件包可以显示此内容。"
-
 #: crates/app/src/controller/clean.rs:165
 msgid "The Flatpak is no longer installed"
 msgstr "该 Flatpak 已不再安装"
@@ -2135,6 +2131,10 @@ msgstr "置物架最多容纳九个文件夹，请先取消固定一个"
 #: crates/app/src/controller/clean.rs:164
 msgid "The Snap is no longer installed"
 msgstr "该 Snap 已不再安装"
+
+#: crates/app/src/controller.rs:1225
+msgid "The Steward package from Ubuntu’s apt repository can show this."
+msgstr "通过 Ubuntu apt 软件源安装的 Steward 软件包可以显示此内容。"
 
 #: crates/app/src/controller/ops.rs:483
 msgid "The Trash is empty"
@@ -2197,8 +2197,8 @@ msgid "This computer"
 msgstr "这台电脑"
 
 #: crates/app/src/controller.rs:732
-msgid "This desktop has no custom shortcuts; open the Shelf with “cairn shelf”"
-msgstr "此桌面不支持自定义快捷键；请用“cairn shelf”打开置物架"
+msgid "This desktop has no custom shortcuts; open the Shelf with “steward shelf”"
+msgstr "此桌面不支持自定义快捷键；请用“steward shelf”打开置物架"
 
 #: crates/app/qml/CleanPage.qml:321
 msgid "Tick "
@@ -2312,8 +2312,8 @@ msgid "Usage"
 msgstr "用量"
 
 #: crates/app/src/controller/agents.rs:195
-msgid "Usage is read from Claude Code's logs; other tools keep no local usage Cairn can read yet."
-msgstr "用量读取自 Claude Code 的日志；其他工具尚未保存 Cairn 可读取的本地用量。"
+msgid "Usage is read from Claude Code's logs; other tools keep no local usage Steward can read yet."
+msgstr "用量读取自 Claude Code 的日志；其他工具尚未保存 Steward 可读取的本地用量。"
 
 #: crates/app/qml/PreferencesDialog.qml:221
 #: crates/app/qml/PreferencesDialog.qml:228
@@ -2362,8 +2362,8 @@ msgid "Week"
 msgstr "周"
 
 #: crates/app/qml/WelcomeDialog.qml:11
-msgid "Welcome to Cairn"
-msgstr "欢迎使用 Cairn"
+msgid "Welcome to Steward"
+msgstr "欢迎使用 Steward"
 
 #: crates/app/src/controller/welcome.rs:140
 msgid "What is safe to clear, and why."
@@ -2374,12 +2374,12 @@ msgid "What it is for"
 msgstr "用途"
 
 #: crates/app/qml/WhatsNewDialog.qml:8
-msgid "What’s New in Cairn "
-msgstr "Cairn 新功能 "
+msgid "What’s New in Steward "
+msgstr "Steward 新功能 "
 
 #: crates/app/qml/PreferencesDialog.qml:243
-msgid "When you save a bookmark, Cairn contacts that link’s site for its title and picture. It is the only request Cairn makes."
-msgstr "保存书签时，Cairn 会联系该链接的网站以获取标题和图片。这是 Cairn 发出的唯一请求。"
+msgid "When you save a bookmark, Steward contacts that link’s site for its title and picture. It is the only request Steward makes."
+msgstr "保存书签时，Steward 会联系该链接的网站以获取标题和图片。这是 Steward 发出的唯一请求。"
 
 #: crates/app/src/controller.rs:1842 crates/app/src/controller/peek.rs:192
 msgid "Where"
@@ -2398,8 +2398,8 @@ msgid "Working…"
 msgstr "正在处理…"
 
 #: crates/app/qml/PreferencesDialog.qml:449
-msgid "Works from any app. Cairn adds it to GNOME’s keyboard shortcuts and removes it when you turn this off."
-msgstr "在任何应用中都可使用。Cairn 会将其添加到 GNOME 键盘快捷键中，关闭此项时将其移除。"
+msgid "Works from any app. Steward adds it to GNOME’s keyboard shortcuts and removes it when you turn this off."
+msgstr "在任何应用中都可使用。Steward 会将其添加到 GNOME 键盘快捷键中，关闭此项时将其移除。"
 
 #: crates/app/src/search_provider.rs:68
 msgid "Workspace"

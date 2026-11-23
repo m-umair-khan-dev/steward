@@ -8,7 +8,7 @@ use std::path::PathBuf;
 use gio::prelude::*;
 use serde_json::{Value, json};
 
-use cairn_core::git::{self, GitInfo};
+use steward_core::git::{self, GitInfo};
 
 use super::{Controller, dirty, later};
 

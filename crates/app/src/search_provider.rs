@@ -5,14 +5,14 @@
 //! Result ids: "ws:ID", "col:ID", "link:ID". Activating a workspace or a
 //! collection opens it in the window; a link opens in the browser. The
 //! Shell finds the provider through
-//! /usr/share/gnome-shell/search-providers/dev.cairn.Files.search-provider.ini
-//! and starts Cairn in the background through its D-Bus service file.
+//! /usr/share/gnome-shell/search-providers/io.github.m_umair_khan_dev.steward.search-provider.ini
+//! and starts Steward in the background through its D-Bus service file.
 
 use gio::prelude::*;
 
 use crate::{app_data, controller, settings};
 
-pub const PATH: &str = "/dev/cairn/Files/SearchProvider";
+pub const PATH: &str = "/io/github/m_umair_khan_dev/steward/SearchProvider";
 const XML: &str = r#"
 <node>
   <interface name="org.gnome.Shell.SearchProvider2">
@@ -167,7 +167,7 @@ pub fn activate(id: &str) {
     });
 }
 
-/// "Search in Cairn": the window's own search, with the same words.
+/// "Search in Steward": the window's own search, with the same words.
 fn launch_search(terms: &[String]) {
     let query = terms.join(" ");
     controller::with(|c| {
@@ -213,6 +213,6 @@ pub fn register(connection: &gio::DBusConnection) {
         })
         .build();
     if let Err(error) = result {
-        glib::g_warning!("cairn", "could not offer Activities search: {error}");
+        glib::g_warning!("steward", "could not offer Activities search: {error}");
     }
 }

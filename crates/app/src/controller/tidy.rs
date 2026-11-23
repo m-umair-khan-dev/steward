@@ -6,8 +6,8 @@ use gettextrs::gettext;
 use gio::prelude::*;
 use serde_json::{Value, json};
 
-use cairn_core::ops::Request;
-use cairn_core::plan::{self, Plan, SkipReason};
+use steward_core::ops::Request;
+use steward_core::plan::{self, Plan, SkipReason};
 
 use super::{Controller, Event};
 use crate::format;

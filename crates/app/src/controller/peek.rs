@@ -8,7 +8,7 @@ use gettextrs::gettext;
 use gio::prelude::*;
 use serde_json::{Value, json};
 
-use cairn_core::Kind;
+use steward_core::Kind;
 
 use super::{Controller, Event, dirty};
 use crate::{format, paths, tint};
@@ -149,7 +149,7 @@ impl Controller {
             if let Err(error) =
                 gio::AppInfo::launch_default_for_uri_future(&uri, gio::AppLaunchContext::NONE).await
             {
-                glib::g_warning!("cairn", "could not open {uri}: {error}");
+                glib::g_warning!("steward", "could not open {uri}: {error}");
             }
         });
     }

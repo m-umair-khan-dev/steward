@@ -4,9 +4,9 @@ import { getCollection } from "astro:content";
 const pages = (await getCollection("docs")).sort((a, b) => a.data.order - b.data.order);
 const sections = ["Start", "Everyday", "Tools", "Reference"];
 ---
-<Base title="Guide" description="How to use Cairn, from the first start to every tool.">
-  <h1>Cairn guide</h1>
-  <p class="lead">Everything Cairn does, one short page at a time.</p>
+<Base title="Guide" description="How to use Steward, from the first start to every tool.">
+  <h1>Steward guide</h1>
+  <p class="lead">Everything Steward does, one short page at a time.</p>
   {sections.map((section) => (
     <section>
       <h2>{section}</h2>

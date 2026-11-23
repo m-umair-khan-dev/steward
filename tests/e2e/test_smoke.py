@@ -42,7 +42,7 @@ def test_smoke_a_second_launch_reaches_the_window(ready):
 def test_smoke_the_index_starts(ready):
     def owned() -> bool:
         reply = ready.bus.call_sync("org.freedesktop.DBus", "/org/freedesktop/DBus", "org.freedesktop.DBus",
-                                    "NameHasOwner", GLib.Variant("(s)", ("dev.cairn.Indexer",)), None,
+                                    "NameHasOwner", GLib.Variant("(s)", ("io.github.m_umair_khan_dev.steward.Indexer",)), None,
                                     Gio.DBusCallFlags.NONE, 2000, None)
         return reply.unpack()[0]
 
@@ -51,6 +51,6 @@ def test_smoke_the_index_starts(ready):
 
 def test_smoke_in_german(app_factory):
     app = app_factory(extra_env={"LANG": "de_DE.UTF-8", "LC_ALL": "de_DE.UTF-8", "LANGUAGE": "de"})
-    if "Willkommen bei Cairn" in app.a11y_names():
+    if "Willkommen bei Steward" in app.a11y_names():
         app.a11y_click("Überspringen", role="button")
     app.wait_for(lambda: "Seitenleiste einklappen" in app.a11y_names(), "the German sidebar")

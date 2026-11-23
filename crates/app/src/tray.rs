@@ -60,17 +60,17 @@ fn icon_theme_path() -> String {
 fn property(name: &str) -> glib::Variant {
     match name {
         "Category" => "ApplicationStatus".to_variant(),
-        "Id" => cairn_core::APP_ID.to_variant(),
-        "Title" => "Cairn".to_variant(),
+        "Id" => steward_core::APP_ID.to_variant(),
+        "Title" => "Steward".to_variant(),
         "Status" => "Active".to_variant(),
-        "IconName" => format!("{}-symbolic", cairn_core::APP_ID).to_variant(),
+        "IconName" => format!("{}-symbolic", steward_core::APP_ID).to_variant(),
         "IconThemePath" => icon_theme_path().to_variant(),
         "ToolTip" => {
             let pixmaps: Vec<(i32, i32, Vec<u8>)> = Vec::new();
             (
                 String::new(),
                 pixmaps,
-                "Cairn".to_string(),
+                "Steward".to_string(),
                 gettextrs::gettext("Click to open the Shelf"),
             )
                 .to_variant()
@@ -95,7 +95,7 @@ fn register_with_watcher(connection: &gio::DBusConnection, name: &str) {
         gio::Cancellable::NONE,
         |result| {
             if let Err(error) = result {
-                glib::g_warning!("cairn", "the panel did not take the tray icon: {error}");
+                glib::g_warning!("steward", "the panel did not take the tray icon: {error}");
             }
         },
     );
@@ -151,7 +151,7 @@ pub fn show(enabled: bool) {
                         tray.registration = Some(id);
                     }
                 }),
-                Err(error) => glib::g_warning!("cairn", "could not offer the tray icon: {error}"),
+                Err(error) => glib::g_warning!("steward", "could not offer the tray icon: {error}"),
             }
         },
         |connection, name| {

@@ -9,6 +9,6 @@ section: Reference
 
 **A file change went wrong.** Press <kbd>Ctrl+Z</kbd>. Undo works across restarts. Items moved to the Trash can also be put back from the Trash.
 
-**"Show in folder" in another app opens Files.** Turn on *Use as default file manager* in Preferences. It takes effect while Cairn is running and Files is closed.
+**"Show in folder" in another app opens Files.** Turn on *Use as default file manager* in Preferences. It takes effect while Steward is running and Files is closed.
 
 **Something else.** Choose *Report a Bug* in the main menu: it opens the issue tracker with your version and Ubuntu release filled in. Copy as Text on About This Computer adds useful details.

@@ -9,7 +9,7 @@ use gettextrs::gettext;
 use gio::prelude::*;
 use serde_json::{Value, json};
 
-use cairn_core::openin::{self, Found, PathCommand, Role};
+use steward_core::openin::{self, Found, PathCommand, Role};
 
 use super::{Controller, Event, dirty};
 use crate::settings;
@@ -22,7 +22,7 @@ pub struct OpenInState {
 }
 
 fn on_path(program: &str) -> bool {
-    cairn_core::tools::on_path(program)
+    steward_core::tools::on_path(program)
 }
 
 impl Controller {

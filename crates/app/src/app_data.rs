@@ -3,7 +3,7 @@
 use std::cell::{OnceCell, RefCell};
 use std::rc::Rc;
 
-use cairn_core::store::Store;
+use steward_core::store::Store;
 
 thread_local! {
     static STORE: OnceCell<Rc<RefCell<Store>>> = const { OnceCell::new() };
@@ -16,7 +16,7 @@ pub fn store() -> Rc<RefCell<Store>> {
         cell.get_or_init(|| {
             let path = Store::default_path();
             let store = Store::open(&path).unwrap_or_else(|error| {
-                glib::g_warning!("cairn", "could not open {}: {error}", path.display());
+                glib::g_warning!("steward", "could not open {}: {error}", path.display());
                 Store::open_in_memory().expect("in-memory store")
             });
             Rc::new(RefCell::new(store))

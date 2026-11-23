@@ -31,7 +31,7 @@ class Session:
             "LC_ALL": "C.UTF-8",
             "NO_AT_BRIDGE": "0",
         }
-        for key in ("CAIRN_COMPOSITOR",):
+        for key in ("STEWARD_COMPOSITOR",):
             if os.environ.get(key):
                 env[key] = os.environ[key]
         if self.bus_address:

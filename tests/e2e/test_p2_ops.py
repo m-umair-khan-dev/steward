@@ -215,7 +215,7 @@ def test_E2_07_cancel_a_big_copy(session, home, app_factory):
     with open(big, "wb") as handle:
         handle.truncate(2 * 1024**3)  # 2 GB, sparse
     # A small pause per progress step keeps the copy running long enough.
-    app = app_factory(extra_env={"CAIRN_OPS_STEP_DELAY_MS": "2"})
+    app = app_factory(extra_env={"STEWARD_OPS_STEP_DELAY_MS": "2"})
     app.open_folder(home / "Downloads")
     app.select("disk-image.raw")
     app.press("ctrl+c")
@@ -344,7 +344,7 @@ def test_E2_11_kill_during_a_big_move(session, home, app_factory):
     dest = home / "Documents" / "Moved"
     dest.mkdir()
 
-    app = app_factory(extra_env={"CAIRN_OPS_STEP_DELAY_MS": "25"})
+    app = app_factory(extra_env={"STEWARD_OPS_STEP_DELAY_MS": "25"})
     app.open_folder(source)
     app.wait_for(lambda: len(app.folder()["items"]) == 200, "200 files listed")
     app.action("win.select-all")

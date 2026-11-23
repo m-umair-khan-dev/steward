@@ -314,7 +314,7 @@ mod tests {
 
     #[test]
     fn free_names_follow_the_pattern() {
-        let dir = std::env::temp_dir().join(format!("cairn-fsx-{}", std::process::id()));
+        let dir = std::env::temp_dir().join(format!("steward-fsx-{}", std::process::id()));
         let _ = std::fs::remove_dir_all(&dir);
         std::fs::create_dir_all(&dir).unwrap();
         assert_eq!(free_name(&dir, "a.txt"), "a.txt");

@@ -12,7 +12,7 @@ pub enum Role {
     Editor,
 }
 
-/// A terminal or editor Cairn knows how to open a folder in.
+/// A terminal or editor Steward knows how to open a folder in.
 #[derive(Debug, Clone, PartialEq, Eq)]
 pub struct Known {
     pub id: &'static str,
@@ -202,7 +202,7 @@ fn shell_words(text: &str) -> Vec<String> {
     out
 }
 
-/// Matches installed desktop files (id, Exec, Name) against what Cairn knows.
+/// Matches installed desktop files (id, Exec, Name) against what Steward knows.
 pub fn detect(desktop: &[(String, String, String)]) -> Vec<Found> {
     KNOWN
         .iter()

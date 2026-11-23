@@ -36,10 +36,10 @@ def main() -> None:
         home = Home(source)
         session = Session(root / "session", home.path)
         session.start()
-        app = App(session, home, extra_env={"CAIRN_MOTION": "1",
-                                            "CAIRN_FAKE_NOW": home.manifest["now"],
+        app = App(session, home, extra_env={"STEWARD_MOTION": "1",
+                                            "STEWARD_FAKE_NOW": home.manifest["now"],
                                             # About shows the fixture machine (a laptop).
-                                            "CAIRN_SYSINFO_FIXTURE": str(REPO / "tests/data/sysinfo/fixture.json")})
+                                            "STEWARD_SYSINFO_FIXTURE": str(REPO / "tests/data/sysinfo/fixture.json")})
         try:
             app.launch()
             if "--from" in sys.argv and int(sys.argv[sys.argv.index("--from") + 1]) >= 5:

@@ -11,8 +11,8 @@ use gettextrs::gettext;
 use gio::prelude::*;
 use serde_json::{Value, json};
 
-use cairn_core::ops::Request;
-use cairn_core::{FileEntry, FolderModel, LoadState};
+use steward_core::ops::Request;
+use steward_core::{FileEntry, FolderModel, LoadState};
 
 use super::{Controller, dirty, later};
 use crate::{format, paths, settings};
@@ -80,7 +80,7 @@ impl Controller {
         entries.sort_by(|a, b| {
             b.is_dir()
                 .cmp(&a.is_dir())
-                .then_with(|| cairn_core::natural::compare(a.name(), b.name()))
+                .then_with(|| steward_core::natural::compare(a.name(), b.name()))
         });
         let uris: HashSet<String> = entries.iter().map(|e| e.data().uri()).collect();
         self.pane.selection.retain(|u| uris.contains(u));

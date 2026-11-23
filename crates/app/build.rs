@@ -1,4 +1,4 @@
-//! Builds the QML module (dev.cairn.files) and the cxx-qt bridge, embeds the
+//! Builds the QML module (dev.steward.files) and the cxx-qt bridge, embeds the
 //! icons, and compiles the settings schema for development builds.
 
 use std::env;
@@ -78,14 +78,15 @@ fn main() {
             file
         }
     });
-    let builder = CxxQtBuilder::new_qml_module(QmlModule::new("dev.cairn.files").qml_files(files))
-        .qt_module("Quick")
-        .qrc("qml/icons.qrc")
-        // Qt 6.5+ effects, outside the QML module (see qml/fx.qrc).
-        .qrc("qml/fx.qrc")
-        .qrc("qml/local.qrc")
-        .qrc("qml/brand.qrc")
-        .files(["src/bridge.rs"]);
+    let builder =
+        CxxQtBuilder::new_qml_module(QmlModule::new("dev.steward.files").qml_files(files))
+            .qt_module("Quick")
+            .qrc("qml/icons.qrc")
+            // Qt 6.5+ effects, outside the QML module (see qml/fx.qrc).
+            .qrc("qml/fx.qrc")
+            .qrc("qml/local.qrc")
+            .qrc("qml/brand.qrc")
+            .files(["src/bridge.rs"]);
     // SAFETY: `cc_builder` is unsafe because changing compiler flags could
     // make the generated code unsound. We only add an include folder and our
     // own source file (the clipboard helper); no flags change.
@@ -104,11 +105,15 @@ fn main() {
     let out_dir = PathBuf::from(env::var("OUT_DIR").expect("OUT_DIR is set by cargo"));
     let manifest_dir =
         PathBuf::from(env::var("CARGO_MANIFEST_DIR").expect("CARGO_MANIFEST_DIR is set by cargo"));
-    let schema = manifest_dir.join("../../data/dev.cairn.Files.gschema.xml");
+    let schema = manifest_dir.join("../../data/io.github.m_umair_khan_dev.steward.gschema.xml");
     println!("cargo:rerun-if-changed={}", schema.display());
     let schema_out = out_dir.join("schemas");
     fs::create_dir_all(&schema_out).expect("create OUT_DIR/schemas");
-    fs::copy(&schema, schema_out.join("dev.cairn.Files.gschema.xml")).expect("copy schema");
+    fs::copy(
+        &schema,
+        schema_out.join("io.github.m_umair_khan_dev.steward.gschema.xml"),
+    )
+    .expect("copy schema");
     let status = Command::new("glib-compile-schemas")
         .arg("--strict")
         .arg(&schema_out)
@@ -145,7 +150,7 @@ fn main() {
     )
     .expect("write icons.rs");
 
-    // Translations (P6-T04): po/<lang>.po -> OUT_DIR/locale/<lang>/LC_MESSAGES/cairn.mo
+    // Translations (P6-T04): po/<lang>.po -> OUT_DIR/locale/<lang>/LC_MESSAGES/steward.mo
     // for development and test builds (installed builds use /usr/share/locale).
     let po = manifest_dir.join("../../po");
     println!("cargo:rerun-if-changed={}", po.display());
@@ -165,7 +170,7 @@ fn main() {
         let status = Command::new("msgfmt")
             .arg("--check")
             .arg("-o")
-            .arg(dir.join("cairn.mo"))
+            .arg(dir.join("steward.mo"))
             .arg(&path)
             .status()
             .expect("run msgfmt");

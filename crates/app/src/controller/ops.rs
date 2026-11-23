@@ -1,6 +1,6 @@
 //! File operations from the window (Phase 2): new folder, rename in place,
 //! Trash, duplicate, clipboard, undo and redo, the queue, name clashes and
-//! the Trash view. Every change goes through `cairn_core::ops`.
+//! the Trash view. Every change goes through `steward_core::ops`.
 
 use std::path::{Path, PathBuf};
 
@@ -8,11 +8,11 @@ use gettextrs::gettext;
 use gio::prelude::*;
 use serde_json::{Value, json};
 
-use cairn_core::clip;
-use cairn_core::ops::{
+use steward_core::clip;
+use steward_core::ops::{
     Answer, Choice, Engine, Event as OpEvent, FailReason, JobId, Outcome, Report, Request, Trash,
 };
-use cairn_core::store::Store;
+use steward_core::store::Store;
 
 use super::{Controller, Event, dirty, later};
 use crate::{app_data, format, paths};
@@ -91,7 +91,7 @@ pub fn start(c: &mut Controller) {
     // Test hook (e2e builds): slow every step down so a test can interrupt
     // a batch midway (E2-11).
     let delay = if cfg!(feature = "e2e") {
-        std::env::var("CAIRN_OPS_STEP_DELAY_MS")
+        std::env::var("STEWARD_OPS_STEP_DELAY_MS")
             .ok()
             .and_then(|v| v.parse().ok())
             .map(std::time::Duration::from_millis)
@@ -114,7 +114,7 @@ pub fn start(c: &mut Controller) {
                 c.emit(Event::Toast(text, true));
             }
         }
-        Err(error) => glib::g_warning!("cairn", "could not start the operations engine: {error}"),
+        Err(error) => glib::g_warning!("steward", "could not start the operations engine: {error}"),
     }
     c.ops.trash = Some(trash);
     c.mark(dirty::OPS);
@@ -391,7 +391,7 @@ impl Controller {
             self.submit(Request::Trash { sources }, summary);
             return;
         }
-        match cairn_core::ops::drop_request(&sources, &dest, ctrl) {
+        match steward_core::ops::drop_request(&sources, &dest, ctrl) {
             Some(request @ Request::Copy { .. }) => {
                 let summary = format!(
                     "{} {} {} “{}”",
@@ -542,7 +542,7 @@ impl Controller {
     }
 
     fn finished(&mut self, job: JobId, report: Report) {
-        let mut touched: Vec<PathBuf> = cairn_core::ops::touched_folders(&report)
+        let mut touched: Vec<PathBuf> = steward_core::ops::touched_folders(&report)
             .into_iter()
             .collect();
         touched.extend(self.current_path());

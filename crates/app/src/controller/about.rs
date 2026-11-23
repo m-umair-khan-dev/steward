@@ -8,7 +8,7 @@ use std::sync::Arc;
 use gettextrs::gettext;
 use serde_json::{Value, json};
 
-use cairn_core::sysinfo::{RealProbe, SysInfo, SysProbe};
+use steward_core::sysinfo::{RealProbe, SysInfo, SysProbe};
 
 use super::{Controller, Event, dirty, later};
 use crate::format;
@@ -172,7 +172,7 @@ impl Controller {
             }
         };
         let unknown = || gettext("Unknown");
-        let now = cairn_core::plan::now();
+        let now = steward_core::plan::now();
         let title = info
             .model
             .clone()
@@ -186,7 +186,7 @@ impl Controller {
         if let Some(d) = &info.disk {
             subtitle.push(format!("{} {}", format::size(d.size), gettext("storage")));
         }
-        let condition = |b: &cairn_core::sysinfo::Battery| match b.capacity() {
+        let condition = |b: &steward_core::sysinfo::Battery| match b.capacity() {
             Some(c) if c < 80.0 => gettext("Service recommended"),
             Some(_) => gettext("Normal"),
             None => unknown(),
@@ -368,13 +368,13 @@ impl Controller {
 }
 
 /// This machine, or (in test builds) the fixture named by
-/// `CAIRN_SYSINFO_FIXTURE`.
+/// `STEWARD_SYSINFO_FIXTURE`.
 fn probe() -> Box<dyn SysProbe> {
     #[cfg(feature = "e2e")]
-    if let Some(path) = std::env::var_os("CAIRN_SYSINFO_FIXTURE") {
-        return Box::new(cairn_core::sysinfo::FixtureProbe { path: path.into() });
+    if let Some(path) = std::env::var_os("STEWARD_SYSINFO_FIXTURE") {
+        return Box::new(steward_core::sysinfo::FixtureProbe { path: path.into() });
     }
     Box::new(RealProbe {
-        runner: Arc::new(cairn_core::tools::System),
+        runner: Arc::new(steward_core::tools::System),
     })
 }

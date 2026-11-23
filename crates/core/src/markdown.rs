@@ -221,7 +221,7 @@ mod tests {
 
     #[test]
     fn remote_images_are_removed_and_local_ones_kept() {
-        let dir = std::env::temp_dir().join(format!("cairn-md-{}", std::process::id()));
+        let dir = std::env::temp_dir().join(format!("steward-md-{}", std::process::id()));
         std::fs::create_dir_all(&dir).unwrap();
         std::fs::write(dir.join("pic.png"), b"x").unwrap();
         let text = "A ![logo](https://example.invalid/logo.png) and ![](pic.png \"t\") and ![up](../etc/passwd)\n<img src=\"http://x.invalid/a.png\"> <IMG src='pic.png'>";

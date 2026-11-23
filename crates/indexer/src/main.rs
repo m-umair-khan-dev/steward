@@ -1,13 +1,13 @@
-//! cairn-indexer: keeps `index.db` up to date (DESIGN.md §7.1, Phase 3).
+//! steward-indexer: keeps `index.db` up to date (DESIGN.md §7.1, Phase 3).
 //!
 //! - Crawls the roots at idle priority, then watches every folder (GIO file
 //!   monitors, i.e. inotify). Past the watch limit it re-crawls on a timer.
 //! - Is the only writer of the index; the app reads it.
-//! - D-Bus `dev.cairn.Indexer1` at `/dev/cairn/Indexer`: Status, Pause,
+//! - D-Bus `io.github.m_umair_khan_dev.steward.Indexer1` at `/io/github/m_umair_khan_dev/steward/Indexer`: Status, Pause,
 //!   Resume, Rescan, WaitIdle, Notify (the app's own changes), and the
 //!   signal Changed(folders).
 //! - Reads the text of documents for search inside files (P7-T09), each in
-//!   a `bwrap` sandbox: this same program started as `cairn-indexer extract
+//!   a `bwrap` sandbox: this same program started as `steward-indexer extract
 //!   FILE` inside it. Only under Home, plus folders the user adds.
 //! - Reads the same settings as the app (roots, exclusions, pause, pause on
 //!   battery). Started by the app in development; a systemd user service and
@@ -24,14 +24,14 @@ use std::time::{Duration, Instant};
 
 use gio::prelude::*;
 
-use cairn_core::extract::{self, Sandbox};
-use cairn_core::index::{Index, Rules};
+use steward_core::extract::{self, Sandbox};
+use steward_core::index::{Index, Rules};
 
-const BUS_NAME: &str = "dev.cairn.Indexer";
-const OBJECT_PATH: &str = "/dev/cairn/Indexer";
+const BUS_NAME: &str = "io.github.m_umair_khan_dev.steward.Indexer";
+const OBJECT_PATH: &str = "/io/github/m_umair_khan_dev/steward/Indexer";
 const INTERFACE: &str = r#"
 <node>
-  <interface name="dev.cairn.Indexer1">
+  <interface name="io.github.m_umair_khan_dev.steward.Indexer1">
     <method name="Status"><arg type="s" name="json" direction="out"/></method>
     <method name="Pause"/>
     <method name="Resume"/>
@@ -96,12 +96,12 @@ fn settings() -> gio::Settings {
         let dir = concat!(env!("OUT_DIR"), "/schemas");
         let parent = gio::SettingsSchemaSource::default();
         if let Ok(source) = gio::SettingsSchemaSource::from_directory(dir, parent.as_ref(), false)
-            && let Some(schema) = source.lookup(cairn_core::APP_ID, false)
+            && let Some(schema) = source.lookup(steward_core::APP_ID, false)
         {
             return gio::Settings::new_full(&schema, None::<&gio::SettingsBackend>, None);
         }
     }
-    gio::Settings::new(cairn_core::APP_ID)
+    gio::Settings::new(steward_core::APP_ID)
 }
 
 fn roots_and_rules(settings: &gio::Settings) -> (Vec<PathBuf>, Rules) {
@@ -154,7 +154,10 @@ fn worker(
                     match index.crawl(root, &rules, &keep_going) {
                         Ok(stats) => finished &= stats.finished,
                         Err(error) => {
-                            eprintln!("cairn-indexer: crawl of {} failed: {error}", root.display())
+                            eprintln!(
+                                "steward-indexer: crawl of {} failed: {error}",
+                                root.display()
+                            )
                         }
                     }
                 }
@@ -168,7 +171,7 @@ fn worker(
                 set_state("updating");
                 if let Err(error) = index.refresh_dir(&dir, &rules) {
                     eprintln!(
-                        "cairn-indexer: refresh of {} failed: {error}",
+                        "steward-indexer: refresh of {} failed: {error}",
                         dir.display()
                     );
                 }
@@ -241,7 +244,7 @@ impl Main {
             if self.monitors.len() >= self.watch_limit {
                 if !self.polling {
                     self.polling = true;
-                    eprintln!("cairn-indexer: watch limit reached; re-crawling every 15 minutes");
+                    eprintln!("steward-indexer: watch limit reached; re-crawling every 15 minutes");
                     glib::timeout_add_local(POLL_EVERY, || {
                         with(|main| main.queue(Work::Crawl));
                         glib::ControlFlow::Continue
@@ -317,7 +320,7 @@ impl Main {
             let _ = connection.emit_signal(
                 None::<&str>,
                 OBJECT_PATH,
-                "dev.cairn.Indexer1",
+                "io.github.m_umair_khan_dev.steward.Indexer1",
                 "Changed",
                 Some(&(folders.to_vec(),).to_variant()),
             );
@@ -354,7 +357,7 @@ impl Main {
 fn register(connection: &gio::DBusConnection) {
     let node = gio::DBusNodeInfo::for_xml(INTERFACE).expect("valid interface XML");
     let interface = node
-        .lookup_interface("dev.cairn.Indexer1")
+        .lookup_interface("io.github.m_umair_khan_dev.steward.Indexer1")
         .expect("interface");
     let result = connection
         .register_object(OBJECT_PATH, &interface)
@@ -403,7 +406,7 @@ fn register(connection: &gio::DBusConnection) {
         })
         .build();
     if let Err(error) = result {
-        eprintln!("cairn-indexer: could not register {OBJECT_PATH}: {error}");
+        eprintln!("steward-indexer: could not register {OBJECT_PATH}: {error}");
     }
 }
 
@@ -469,18 +472,18 @@ fn extract_main(file: &Path) -> ExitCode {
 fn sandbox() -> Option<Sandbox> {
     let me = std::env::current_exe().ok()?;
     let Some(mut sandbox) = Sandbox::new(me) else {
-        eprintln!("cairn-indexer: bwrap not found; search inside files is off");
+        eprintln!("steward-indexer: bwrap not found; search inside files is off");
         return None;
     };
     // Tests plant extractors that hang or try the network (E7-09).
     #[cfg(feature = "e2e")]
     {
-        if let Ok(ms) = std::env::var("CAIRN_EXTRACT_TIMEOUT_MS")
+        if let Ok(ms) = std::env::var("STEWARD_EXTRACT_TIMEOUT_MS")
             && let Ok(ms) = ms.parse()
         {
             sandbox.timeout = Duration::from_millis(ms);
         }
-        if let Ok(list) = std::env::var("CAIRN_TEST_EXTRACTORS") {
+        if let Ok(list) = std::env::var("STEWARD_TEST_EXTRACTORS") {
             sandbox.test_helpers = list
                 .split(',')
                 .filter_map(|pair| pair.split_once('='))
@@ -520,12 +523,12 @@ fn read_contents(index: &mut Index, sandbox: &Sandbox, folders: &[PathBuf], shar
             let outcome = sandbox.extract(&pending.path);
             if outcome == extract::Outcome::TimedOut {
                 eprintln!(
-                    "cairn-indexer: reading {} took too long; skipped",
+                    "steward-indexer: reading {} took too long; skipped",
                     pending.path.display()
                 );
             }
             if let Err(error) = index.content_store(pending, &outcome) {
-                eprintln!("cairn-indexer: could not store text: {error}");
+                eprintln!("steward-indexer: could not store text: {error}");
                 return;
             }
         }
@@ -540,39 +543,39 @@ fn main() -> ExitCode {
     // Same rule as the app (AGENTS.md rule 4): development and test builds
     // only ever run against a fixture home.
     let guard_required =
-        cairn_core::guard::is_required(cfg!(debug_assertions), cfg!(feature = "e2e"), |name| {
+        steward_core::guard::is_required(cfg!(debug_assertions), cfg!(feature = "e2e"), |name| {
             std::env::var(name).ok()
         });
     if guard_required {
         let home = std::env::var_os("HOME").map(PathBuf::from);
-        if let Err(error) = cairn_core::guard::check(home.as_deref()) {
-            eprintln!("cairn-indexer: {error}");
+        if let Err(error) = steward_core::guard::check(home.as_deref()) {
+            eprintln!("steward-indexer: {error}");
             return ExitCode::from(2);
         }
     }
     // When the app started us, go when it goes.
-    if std::env::var_os("CAIRN_INDEXER_CHILD").is_some() {
+    if std::env::var_os("STEWARD_INDEXER_CHILD").is_some() {
         let _ =
             rustix::process::set_parent_process_death_signal(Some(rustix::process::Signal::TERM));
     }
     // Idle priority: indexing never competes with what the user is doing.
     let _ = rustix::process::nice(19);
 
-    let path = std::env::var_os("CAIRN_INDEX_DB")
+    let path = std::env::var_os("STEWARD_INDEX_DB")
         .map(PathBuf::from)
         .unwrap_or_else(Index::default_path);
     let index = match Index::open(&path) {
         Ok(index) => index,
         Err(error) => {
             // A damaged index is only a cache: start again.
-            eprintln!("cairn-indexer: {error}; rebuilding {}", path.display());
+            eprintln!("steward-indexer: {error}; rebuilding {}", path.display());
             for suffix in ["", "-wal", "-shm"] {
                 let _ = std::fs::remove_file(format!("{}{suffix}", path.display())); // E2-13 allow: the index's own files
             }
             match Index::open(&path) {
                 Ok(index) => index,
                 Err(error) => {
-                    eprintln!("cairn-indexer: cannot open {}: {error}", path.display());
+                    eprintln!("steward-indexer: cannot open {}: {error}", path.display());
                     return ExitCode::FAILURE;
                 }
             }
@@ -595,7 +598,7 @@ fn main() -> ExitCode {
     {
         let shared = shared.clone();
         std::thread::Builder::new()
-            .name("cairn-index".into())
+            .name("steward-index".into())
             .spawn(move || worker(index, queue, shared, roots, rules, sandbox, content))
             .expect("start the worker");
     }
@@ -627,7 +630,7 @@ fn main() -> ExitCode {
         // systemd, starts the indexer again when it is needed).
         "index-roots" | "index-exclude" | "content-folders" => {
             let _ = settings;
-            eprintln!("cairn-indexer: roots or exclusions changed; restarting");
+            eprintln!("steward-indexer: roots or exclusions changed; restarting");
             std::process::exit(0);
         }
         _ => {}
@@ -651,7 +654,7 @@ fn main() -> ExitCode {
         |_, _| {},
         move |_, _| {
             // Another indexer already runs (or the bus went away).
-            eprintln!("cairn-indexer: {BUS_NAME} is taken; leaving");
+            eprintln!("steward-indexer: {BUS_NAME} is taken; leaving");
             quit.quit();
         },
     );

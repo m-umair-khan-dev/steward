@@ -478,7 +478,7 @@ fn agent() -> ureq::Agent {
     ureq::Agent::config_builder()
         .timeout_global(Some(Duration::from_secs(10)))
         .max_redirects(5)
-        .user_agent(concat!("Cairn/", env!("CARGO_PKG_VERSION")))
+        .user_agent(concat!("Steward/", env!("CARGO_PKG_VERSION")))
         .build()
         .into()
 }
@@ -507,9 +507,9 @@ fn picture_extension(mime: &str) -> Option<&'static str> {
     }
 }
 
-/// The folder bookmark pictures are kept in: `$XDG_DATA_HOME/cairn/bookmarks`.
+/// The folder bookmark pictures are kept in: `$XDG_DATA_HOME/steward/bookmarks`.
 pub fn pictures_dir() -> PathBuf {
-    glib::user_data_dir().join("cairn").join("bookmarks")
+    glib::user_data_dir().join("steward").join("bookmarks")
 }
 
 fn save_picture(agent: &ureq::Agent, url: &str, folder: &Path) -> Option<PathBuf> {

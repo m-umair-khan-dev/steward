@@ -2,17 +2,17 @@
 <!-- AppStream metadata (P6-T06). Screenshots come from `make shots` (P6-T11);
      their URLs point at the project website (HUMAN: final domain). -->
 <component type="desktop-application">
-  <id>dev.cairn.Files</id>
+  <id>io.github.m_umair_khan_dev.steward</id>
   <metadata_license>CC0-1.0</metadata_license>
   <project_license>GPL-3.0-or-later</project_license>
-  <name>Cairn</name>
+  <name>Steward</name>
   <summary>Browse your files and keep folders tidy</summary>
-  <developer id="dev.cairn">
-    <name>Cairn contributors</name>
+  <developer id="io.github.m_umair_khan_dev">
+    <name>Steward contributors</name>
   </developer>
   <description>
     <p>
-      Cairn is a file manager for Ubuntu that keeps folders tidy. It shows a
+      Steward is a file manager for Ubuntu that keeps folders tidy. It shows a
       plan before anything moves, and one Undo puts everything back.
     </p>
     <ul>
@@ -25,13 +25,13 @@
       <li>Installed lists what apt, Snap, Flatpak and the language tools installed</li>
       <li>About This Computer shows battery health, storage and security at a glance</li>
     </ul>
-    <p>Cairn works on your files where they are. Nothing is uploaded and nothing is tracked.</p>
+    <p>Steward works on your files where they are. Nothing is uploaded and nothing is tracked.</p>
   </description>
-  <launchable type="desktop-id">dev.cairn.Files.desktop</launchable>
-  <icon type="stock">dev.cairn.Files</icon>
-  <url type="homepage">https://example.invalid/cairn</url>
-  <url type="bugtracker">https://example.invalid/cairn/issues</url>
-  <url type="vcs-browser">https://example.invalid/cairn</url>
+  <launchable type="desktop-id">io.github.m_umair_khan_dev.steward.desktop</launchable>
+  <icon type="stock">io.github.m_umair_khan_dev.steward</icon>
+  <url type="homepage">https://github.com/m-umair-khan-dev/steward</url>
+  <url type="bugtracker">https://github.com/m-umair-khan-dev/steward/issues</url>
+  <url type="vcs-browser">https://github.com/m-umair-khan-dev/steward</url>
   <categories>
     <category>Utility</category>
     <category>FileManager</category>
@@ -43,7 +43,7 @@
     <keyword>disk space</keyword>
   </keywords>
   <provides>
-    <binary>cairn</binary>
+    <binary>steward</binary>
     <mediatype>inode/directory</mediatype>
   </provides>
   <supports>
@@ -56,11 +56,11 @@
   <screenshots>
     <screenshot type="default">
       <caption>A folder with its files as cards and its folders as glass folders</caption>
-      <image>https://example.invalid/cairn/screenshots/folder-light.png</image>
+      <image>https://github.com/m-umair-khan-dev/steward/raw/main/docs/screenshots/folder-light.png</image>
     </screenshot>
     <screenshot>
       <caption>Free Up Space: what is safe to clear, and why</caption>
-      <image>https://example.invalid/cairn/screenshots/free-up-space-light.png</image>
+      <image>https://github.com/m-umair-khan-dev/steward/raw/main/docs/screenshots/free-up-space-light.png</image>
     </screenshot>
   </screenshots>
   <content_rating type="oars-1.1"/>

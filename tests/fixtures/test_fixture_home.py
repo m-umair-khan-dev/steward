@@ -24,7 +24,7 @@ def built(tmp_path_factory) -> Path:
 
 
 def manifest_of(home: Path) -> dict:
-    return json.loads((home / ".cairn-fixture").read_text())
+    return json.loads((home / ".steward-fixture").read_text())
 
 
 def test_same_recipe_gives_identical_trees(built, tmp_path):
@@ -34,7 +34,7 @@ def test_same_recipe_gives_identical_trees(built, tmp_path):
 
 
 def test_marker_is_a_file_holding_the_manifest(built):
-    marker = built / ".cairn-fixture"
+    marker = built / ".steward-fixture"
     assert marker.is_file()
     assert manifest_of(built)["recipe_version"] >= 1
 
@@ -109,7 +109,7 @@ def test_accepts_a_fresh_user_skeleton(tmp_path):
     for name in (".bashrc", ".profile"):
         (home / name).write_text("# skeleton")
     run(str(home), "--force")
-    assert (home / ".cairn-fixture").is_file()
+    assert (home / ".steward-fixture").is_file()
     assert not (home / ".bashrc").exists()
 
 

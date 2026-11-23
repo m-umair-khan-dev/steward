@@ -170,7 +170,7 @@ mod tests {
 
     #[test]
     fn latest_files_skip_folders_hidden_and_partial() {
-        let dir = std::env::temp_dir().join(format!("cairn-shelf-{}", std::process::id()));
+        let dir = std::env::temp_dir().join(format!("steward-shelf-{}", std::process::id()));
         std::fs::create_dir_all(dir.join("sub")).unwrap();
         for (i, name) in [
             "a.pdf",

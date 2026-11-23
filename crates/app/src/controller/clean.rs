@@ -13,10 +13,10 @@ use gettextrs::gettext;
 use gio::prelude::*;
 use serde_json::{Value, json};
 
-use cairn_core::clean::admin::AdminRow;
-use cairn_core::clean::disk::Disk;
-use cairn_core::clean::{self, Card, Context, Group, Item, Reason};
-use cairn_core::ops::Request;
+use steward_core::clean::admin::AdminRow;
+use steward_core::clean::disk::Disk;
+use steward_core::clean::{self, Card, Context, Group, Item, Reason};
+use steward_core::ops::Request;
 
 use super::{Controller, Event, dirty, later};
 use crate::{format, paths};
@@ -165,7 +165,7 @@ fn why(item: &Item) -> String {
             _ => gettext("The Flatpak is no longer installed"),
         },
         Reason::Big => {
-            let kind = cairn_core::plan::kind_of(&name_of(&item.path));
+            let kind = steward_core::plan::kind_of(&name_of(&item.path));
             gettext(kind.label())
         }
         Reason::OldRecording { days } => format!("{days} {}", gettext("days old")),
@@ -221,8 +221,8 @@ impl Controller {
         let ctx = Arc::new(Context::for_home(
             home.clone(),
             super::downloads_folder(),
-            Arc::new(cairn_core::suggest::Dpkg),
-            Arc::new(cairn_core::tools::System),
+            Arc::new(steward_core::suggest::Dpkg),
+            Arc::new(steward_core::tools::System),
         ));
         let keep = running.clone();
         clean::scan(
@@ -232,7 +232,7 @@ impl Controller {
                 // Test hook (e2e builds): hold each card back so "Looking…"
                 // can be seen (E5-01).
                 #[cfg(feature = "e2e")]
-                if let Some(ms) = std::env::var("CAIRN_CLEAN_DELAY_MS")
+                if let Some(ms) = std::env::var("STEWARD_CLEAN_DELAY_MS")
                     .ok()
                     .and_then(|v| v.parse().ok())
                 {
@@ -248,7 +248,7 @@ impl Controller {
             return;
         }
         std::thread::spawn(move || {
-            let rows = clean::admin::rows(&cairn_core::tools::System);
+            let rows = clean::admin::rows(&steward_core::tools::System);
             post(move |c| {
                 if c.clean.ticket == ticket {
                     c.clean.admin = Some(rows);
@@ -261,9 +261,9 @@ impl Controller {
     fn clean_measure_disk(&mut self) {
         let ticket = self.clean.ticket;
         let home = glib::home_dir();
-        let trash = cairn_core::ops::Trash::default_home().join("files");
+        let trash = steward_core::ops::Trash::default_home().join("files");
         std::thread::spawn(move || {
-            let disk = clean::disk::overview(&home, &trash, &cairn_core::tools::System);
+            let disk = clean::disk::overview(&home, &trash, &steward_core::tools::System);
             post(move |c| {
                 if c.clean.ticket == ticket {
                     c.clean.disk = Some(disk);
@@ -278,7 +278,7 @@ impl Controller {
             return;
         }
         // A card that needs the host shows why, not what it could not see.
-        let out_of_reach = cairn_core::sandbox::card_needs(card.id)
+        let out_of_reach = steward_core::sandbox::card_needs(card.id)
             .is_some_and(|n| self.sandbox_note(n).is_some());
         if let Some(slot) = self.clean.cards.iter_mut().find(|s| s.0 == card.id) {
             slot.2 = Some(if out_of_reach { Vec::new() } else { card.items });
@@ -378,9 +378,9 @@ impl Controller {
     }
 
     /// The toast for a batch this page started (None: not ours).
-    pub fn clean_report_text(&mut self, report: &cairn_core::ops::Report) -> Option<String> {
+    pub fn clean_report_text(&mut self, report: &steward_core::ops::Report) -> Option<String> {
         let (_, count, bytes) = self.clean.pending.clone()?;
-        if report.kind != "trash" || report.outcome != cairn_core::ops::Outcome::Forward {
+        if report.kind != "trash" || report.outcome != steward_core::ops::Outcome::Forward {
             return None;
         }
         self.clean.pending = None;
@@ -508,7 +508,7 @@ impl Controller {
     }
 
     fn admin_json(&self) -> Value {
-        if let Some(note) = self.sandbox_note(cairn_core::sandbox::Needs::HostCommands) {
+        if let Some(note) = self.sandbox_note(steward_core::sandbox::Needs::HostCommands) {
             return json!({ "looking": false, "unavailable": note, "rows": [] });
         }
         let Some(rows) = &self.clean.admin else {
@@ -585,7 +585,7 @@ impl Controller {
             .map(|(card, found)| {
                 let (title, _, symbol, color) = card_text(card.id);
                 let ticked: Vec<&Item> = card.items.iter().filter(|i| self.ticked(i)).collect();
-                let unavailable = cairn_core::sandbox::card_needs(card.id).and_then(|n| self.sandbox_note(n));
+                let unavailable = steward_core::sandbox::card_needs(card.id).and_then(|n| self.sandbox_note(n));
                 json!({
                     "id": card.id, "group": card.group.id(), "title": title,
                     "unavailable": unavailable,

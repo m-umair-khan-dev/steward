@@ -11,7 +11,7 @@ if [ $# -eq 0 ]; then
 fi
 
 here=$(cd "$(dirname "$0")" && pwd)
-XDG_RUNTIME_DIR=$(mktemp -d /tmp/cairn-runtime.XXXXXX)
+XDG_RUNTIME_DIR=$(mktemp -d /tmp/steward-runtime.XXXXXX)
 chmod 700 "$XDG_RUNTIME_DIR"
 export XDG_RUNTIME_DIR
 

@@ -1,4 +1,4 @@
-//! Cairn, a file manager for Ubuntu.
+//! Steward, a file manager for Ubuntu.
 
 mod actions;
 mod app;
@@ -27,13 +27,13 @@ fn main() -> ExitCode {
     // The guard runs before Qt or GLib start, so a refused start creates nothing
     // in the home folder (AGENTS.md rule 4, scenario E0-04).
     let guard_required =
-        cairn_core::guard::is_required(cfg!(debug_assertions), cfg!(feature = "e2e"), |name| {
+        steward_core::guard::is_required(cfg!(debug_assertions), cfg!(feature = "e2e"), |name| {
             std::env::var(name).ok()
         });
     if guard_required {
         let home = std::env::var_os("HOME").map(PathBuf::from);
-        if let Err(error) = cairn_core::guard::check(home.as_deref()) {
-            eprintln!("cairn: {error}");
+        if let Err(error) = steward_core::guard::check(home.as_deref()) {
+            eprintln!("steward: {error}");
             return ExitCode::from(2);
         }
     }

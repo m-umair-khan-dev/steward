@@ -1,6 +1,6 @@
 [package]
-name = "cairn-cli"
-description = "The cairn commands without loading Qt: open, open-workspace, new-workspace, add-link, free-up-space."
+name = "steward-cli"
+description = "The steward commands without loading Qt: open, open-workspace, new-workspace, add-link, free-up-space."
 version.workspace = true
 edition.workspace = true
 rust-version.workspace = true
@@ -9,7 +9,7 @@ repository.workspace = true
 authors.workspace = true
 
 [dependencies]
-cairn-core.workspace = true
+steward-core.workspace = true
 
 [features]
 # Built with the e2e scenarios (docker/scripts/run-e2e); no test hooks of its own.

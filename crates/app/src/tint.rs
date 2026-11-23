@@ -1,6 +1,6 @@
 //! Type badges per kind (ADR 0008). Colours live in qml/Theme.qml.
 
-use cairn_core::Kind;
+use steward_core::Kind;
 
 /// The short label on a file's type badge: its extension, upper-case.
 pub fn badge(name: &str, kind: Kind) -> String {

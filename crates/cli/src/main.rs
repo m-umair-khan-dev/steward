@@ -1,20 +1,20 @@
-//! `cairn-cli`: the `cairn` commands without loading Qt (P7-T10; DESIGN.md
-//! §4.2). A running Cairn gets the request over D-Bus; otherwise `cairn`
-//! itself is started with the same arguments. See `cairn_core::cli`.
+//! `steward-cli`: the `steward` commands without loading Qt (P7-T10; DESIGN.md
+//! §4.2). A running Steward gets the request over D-Bus; otherwise `steward`
+//! itself is started with the same arguments. See `steward_core::cli`.
 
 use std::os::unix::process::CommandExt;
 use std::path::PathBuf;
 use std::process::{Command, ExitCode};
 
-use cairn_core::cli::{self, Parsed};
+use steward_core::cli::{self, Parsed};
 
 /// The app: next to this program (development, tests), else on PATH.
 fn app_binary() -> PathBuf {
     std::env::current_exe()
         .ok()
-        .and_then(|me| me.parent().map(|dir| dir.join("cairn")))
+        .and_then(|me| me.parent().map(|dir| dir.join("steward")))
         .filter(|path| path.exists())
-        .unwrap_or_else(|| PathBuf::from("cairn"))
+        .unwrap_or_else(|| PathBuf::from("steward"))
 }
 
 fn main() -> ExitCode {
@@ -26,19 +26,19 @@ fn main() -> ExitCode {
             return ExitCode::SUCCESS;
         }
         Parsed::Version => {
-            println!("cairn-cli {}", env!("CARGO_PKG_VERSION"));
+            println!("steward-cli {}", env!("CARGO_PKG_VERSION"));
             return ExitCode::SUCCESS;
         }
         Parsed::Wrong(message) => {
-            eprintln!("cairn-cli: {message}\n\n{}", cli::USAGE);
+            eprintln!("steward-cli: {message}\n\n{}", cli::USAGE);
             return ExitCode::from(2);
         }
     };
-    if cli::forward(&requests, "cairn-cli") {
+    if cli::forward(&requests, "steward-cli") {
         return ExitCode::SUCCESS;
     }
-    // No Cairn running: become it.
+    // No Steward running: become it.
     let error = Command::new(app_binary()).args(&args).exec();
-    eprintln!("cairn-cli: could not start cairn: {error}");
+    eprintln!("steward-cli: could not start steward: {error}");
     ExitCode::FAILURE
 }

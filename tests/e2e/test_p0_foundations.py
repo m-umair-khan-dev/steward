@@ -11,7 +11,7 @@ pytestmark = pytest.mark.p0
 def test_E0_01_launch_headless(app):
     state = app.state()
     assert state["windows"] == 1
-    assert state["active_window"]["title"] == "Cairn"
+    assert state["active_window"]["title"] == "Steward"
 
     names = app.a11y_names()
     assert "Main toolbar" in names, f"no header bar in the accessibility tree: {sorted(names)}"
@@ -27,7 +27,7 @@ def test_E0_02_about_dialog_opens_and_closes(app):
     app.action("app.about")
     dialog = app.wait_for(lambda: app.state()["active_window"]["dialog"], "the About dialog")
     assert dialog["type"] == "about"
-    assert dialog["application_name"] == "Cairn"
+    assert dialog["application_name"] == "Steward"
     assert dialog["version"] == app.state()["version"]
 
     # The main window has a "Close" button too; target the dialog's.
@@ -47,7 +47,7 @@ def test_E0_03_screenshot_is_a_real_image(app, tmp_path):
 
 
 def test_E0_04_refuses_a_home_without_the_marker(session, home, app_factory):
-    (home / ".cairn-fixture").unlink()
+    (home / ".steward-fixture").unlink()
     before = home.snapshot()
 
     app = app_factory(wait=False)

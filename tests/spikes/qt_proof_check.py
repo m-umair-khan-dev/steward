@@ -1,6 +1,6 @@
 """Checks for the Qt/QML proof (spikes/qt-proof), under headless mutter:
 
-1. cairn-core's folder listing (GIO on the GLib loop Qt runs) reaches QML;
+1. steward-core's folder listing (GIO on the GLib loop Qt runs) reaches QML;
 2. the accessibility tree is visible to the harness;
 3. real key presses drive it (Ctrl+K, Delete, Ctrl+Q);
 4. a scripted demo records frames to artifacts/qt-proof/frames.
@@ -25,7 +25,7 @@ from gi.repository import Gio  # noqa: E402
 from harness import Home, Session, wait_for  # noqa: E402
 from harness.keys import Keyboard  # noqa: E402
 
-BIN = "/var/cache/cargo-target/debug/cairn-qt-proof"
+BIN = "/var/cache/cargo-target/debug/steward-qt-proof"
 ATSPI = REPO / "tests" / "e2e" / "harness" / "atspi_tool.py"
 OUT = REPO / "artifacts" / "qt-proof"
 OUT.mkdir(parents=True, exist_ok=True)
@@ -60,7 +60,7 @@ def launch(session, home, extra=None):
     env = session.base_env() | {
         "QT_QPA_PLATFORM": "wayland",
         "QT_LINUX_ACCESSIBILITY_ALWAYS_ON": "1",
-        "CAIRN_PROOF_FOLDER": str(home / "Downloads"),
+        "STEWARD_PROOF_FOLDER": str(home / "Downloads"),
     } | (extra or {})
     log = open(session.logs / "proof.log", "ab")
     return subprocess.Popen([BIN], env=env, stdout=log, stderr=subprocess.STDOUT)
@@ -112,7 +112,7 @@ with tempfile.TemporaryDirectory(ignore_cleanup_errors=True) as tmp:
         frames.mkdir(exist_ok=True)
         for old in frames.glob("*.png"):
             old.unlink()
-        proc = launch(session, home, {"CAIRN_CAPTURE_DIR": str(frames)})
+        proc = launch(session, home, {"STEWARD_CAPTURE_DIR": str(frames)})
         report["capture_exit_code"] = proc.wait(timeout=120)
         report["frames"] = len(list(frames.glob("*.png")))
     finally:

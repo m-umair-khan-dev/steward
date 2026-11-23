@@ -4,11 +4,11 @@ use std::path::{Path, PathBuf};
 use std::process::Command;
 use std::time::{Duration, Instant};
 
-use cairn_core::{FileEntry, FolderModel, Kind, LoadState};
 use gio::prelude::*;
+use steward_core::{FileEntry, FolderModel, Kind, LoadState};
 
 fn fixture_home(name: &str) -> (PathBuf, serde_json::Value) {
-    let root = std::env::temp_dir().join(format!("cairn-l2-{name}-{}", std::process::id()));
+    let root = std::env::temp_dir().join(format!("steward-l2-{name}-{}", std::process::id()));
     let _ = std::fs::remove_dir_all(&root);
     let script =
         Path::new(env!("CARGO_MANIFEST_DIR")).join("../../docker/scripts/make-fixture-home");
@@ -19,7 +19,7 @@ fn fixture_home(name: &str) -> (PathBuf, serde_json::Value) {
         .status()
         .unwrap();
     assert!(status.success(), "fixture generator failed");
-    let manifest = std::fs::read_to_string(root.join(".cairn-fixture")).unwrap();
+    let manifest = std::fs::read_to_string(root.join(".steward-fixture")).unwrap();
     (root, serde_json::from_str(&manifest).unwrap())
 }
 

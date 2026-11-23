@@ -87,5 +87,5 @@ jobs:
         env:
           GH_TOKEN: ${{ github.token }}
         run: |
-          gh release create "$GITHUB_REF_NAME" dist/*/*.deb --title "Cairn ${GITHUB_REF_NAME#v}" \
+          gh release create "$GITHUB_REF_NAME" dist/*/*.deb --title "Steward ${GITHUB_REF_NAME#v}" \
             --notes-file "site/src/content/changelog/${GITHUB_REF_NAME#v}.md"

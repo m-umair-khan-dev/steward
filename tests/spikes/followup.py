@@ -46,7 +46,7 @@ def key_injection(work: Path) -> None:
     subprocess.run([sys.executable, "-I", str(REPO / "docker/scripts/make-fixture-home"),
                     str(work / "home")], check=True, capture_output=True)
     home = Home(work / "home")
-    os.environ["CAIRN_COMPOSITOR"] = "mutter"
+    os.environ["STEWARD_COMPOSITOR"] = "mutter"
     session = Session(work / "session", home.path)
     session.start()
     app = App(session, home)

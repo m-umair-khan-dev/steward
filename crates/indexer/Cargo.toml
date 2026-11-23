@@ -1,6 +1,6 @@
 [package]
-name = "cairn-indexer"
-description = "Cairn's background indexer: keeps index.db up to date (DESIGN.md §7.1)."
+name = "steward-indexer"
+description = "Steward's background indexer: keeps index.db up to date (DESIGN.md §7.1)."
 version.workspace = true
 edition.workspace = true
 rust-version.workspace = true
@@ -9,7 +9,7 @@ repository.workspace = true
 authors.workspace = true
 
 [dependencies]
-cairn-core.workspace = true
+steward-core.workspace = true
 gio.workspace = true
 glib.workspace = true
 rustix.workspace = true

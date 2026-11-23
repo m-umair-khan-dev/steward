@@ -1,12 +1,12 @@
-//! "Use Cairn as the default file manager" (P6-T07), off unless chosen in
+//! "Use Steward as the default file manager" (P6-T07), off unless chosen in
 //! Preferences. When on:
 //!
-//! - Cairn owns `org.freedesktop.FileManager1` while it runs, so other apps'
+//! - Steward owns `org.freedesktop.FileManager1` while it runs, so other apps'
 //!   "Show in folder" (ShowItems), "Open folder" (ShowFolders) and
 //!   "Properties" (ShowItemProperties) come here. Files (Nautilus) normally
 //!   owns the name; it gives it up only when it is not running, so this
 //!   works when Files is closed.
-//! - Cairn becomes the default app for folders (`inode/directory`).
+//! - Steward becomes the default app for folders (`inode/directory`).
 //!
 //! Turning it off releases the name and gives folders back to the system's
 //! default.
@@ -42,7 +42,7 @@ fn show(method: &str, uris: &[String]) {
     let Some(first) = uris.first().cloned() else {
         return;
     };
-    // Cairn has one window: the first item is shown (as Files does with one).
+    // Steward has one window: the first item is shown (as Files does with one).
     match method {
         "ShowFolders" => actions::activate("win.go-to", &first),
         "ShowItems" => actions::activate("win.go-to", &first),
@@ -96,7 +96,7 @@ pub fn serve(enabled: bool) {
                         entry.1 = Some(id);
                     }
                 }),
-                Err(error) => glib::g_warning!("cairn", "could not serve {NAME}: {error}"),
+                Err(error) => glib::g_warning!("steward", "could not serve {NAME}: {error}"),
             }
         },
         |_, _| {},
@@ -105,10 +105,10 @@ pub fn serve(enabled: bool) {
     OWNER.with(|o| *o.borrow_mut() = Some((owner, None)));
 }
 
-/// Makes Cairn the default app for folders, or gives them back. Returns
-/// false when Cairn's desktop file is not installed (a development build).
+/// Makes Steward the default app for folders, or gives them back. Returns
+/// false when Steward's desktop file is not installed (a development build).
 pub fn set_default_for_folders(enabled: bool) -> bool {
-    let id = format!("{}.desktop", cairn_core::APP_ID);
+    let id = format!("{}.desktop", steward_core::APP_ID);
     let Some(app) = gio::AppInfo::all()
         .into_iter()
         .find(|a| a.id().as_deref() == Some(id.as_str()))

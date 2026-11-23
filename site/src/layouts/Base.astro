@@ -11,7 +11,7 @@ const nav = [
   { href: "/contribute/", label: "Contribute" },
   { href: "/search/", label: "Search" },
 ];
-const full = title === "Cairn" ? "Cairn — a file manager for Ubuntu that keeps folders tidy" : `${title} · Cairn`;
+const full = title === "Steward" ? "Steward — a file manager for Ubuntu that keeps folders tidy" : `${title} · Steward`;
 ---
 <!doctype html>
 <html lang="en" data-theme="light">
@@ -27,7 +27,7 @@ const full = title === "Cairn" ? "Cairn — a file manager for Ubuntu that keeps
   <body>
     <a class="skip" href="#main">Skip to content</a>
     <header class="top">
-      <a class="brand" href="/"><img src="/icon.svg" alt="" width="30" height="30" /> Cairn</a>
+      <a class="brand" href="/"><img src="/icon.svg" alt="" width="30" height="30" /> Steward</a>
       <nav aria-label="Site">
         {nav.map((item) => (
           <a href={item.href} aria-current={path.startsWith(item.href) ? "page" : undefined}>{item.label}</a>
@@ -41,7 +41,7 @@ const full = title === "Cairn" ? "Cairn — a file manager for Ubuntu that keeps
       <slot />
     </main>
     <footer>
-      <p>Cairn is free software under the GPL 3.0 or later. It keeps no accounts, sends nothing, and tracks no one.</p>
+      <p>Steward is free software under the GPL 3.0 or later. It keeps no accounts, sends nothing, and tracks no one.</p>
       <p><a href="/privacy/">Privacy</a> · <a href="/contribute/">Contribute</a> · <a href="/changelog/">Changelog</a></p>
     </footer>
   </body>

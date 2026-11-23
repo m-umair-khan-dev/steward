@@ -32,7 +32,7 @@ Seen in the 26.10 dev container (no human, no real desktop):
 
 Until P8-S1 is run:
 
-- **Shelf key:** a GNOME custom keybinding running `cairn shelf`, written
+- **Shelf key:** a GNOME custom keybinding running `steward shelf`, written
   only while "Open the Shelf with a key" is on (off by default) and removed
   when it is turned off. Default key Ctrl+Alt+Space. This route works on
   both 24.04 and 26.04. The portal route is added only if the spike shows a

@@ -1,9 +1,9 @@
-# Spanish translation of Cairn.
+# Spanish translation of Steward.
 # DRAFT: written by an AI model and not yet reviewed by a native speaker.
 # Please review before relying on it (DESIGN.md Phase 6, HUMAN).
 msgid ""
 msgstr ""
-"Project-Id-Version: cairn 1.0.0\n"
+"Project-Id-Version: steward 1.0.0\n"
 "PO-Revision-Date: 2026-11-20 12:00+0000\n"
 "Last-Translator: AI draft (unreviewed)\n"
 "Language-Team: Spanish\n"
@@ -105,8 +105,8 @@ msgid "About "
 msgstr "Acerca de "
 
 #: crates/app/qml/Header.qml:192
-msgid "About Cairn"
-msgstr "Acerca de Cairn"
+msgid "About Steward"
+msgstr "Acerca de Steward"
 
 #: crates/app/qml/AboutPage.qml:12 crates/app/qml/Main.qml:245
 #: crates/app/qml/Sidebar.qml:188
@@ -279,23 +279,6 @@ msgstr "Por tipo"
 msgid "CONTENTS"
 msgstr "CONTENIDO"
 
-#: crates/app/qml/AboutDialog.qml:19 crates/app/qml/Main.qml:17
-#: crates/app/qml/Sidebar.qml:39 crates/app/qml/WelcomeDialog.qml:180
-msgid "Cairn"
-msgstr "Cairn"
-
-#: crates/app/src/controller.rs:747
-msgid "Cairn answers other apps now; folders open in it once Cairn is installed"
-msgstr "Cairn responde ya a otras aplicaciones; las carpetas se abrirán en él cuando Cairn esté instalado"
-
-#: crates/app/qml/CleanPage.qml:178
-msgid "Cairn never runs these. Copy a command and run it in a terminal if you want to."
-msgstr "Cairn nunca ejecuta estas órdenes. Copie una y ejecútela en una terminal si lo desea."
-
-#: crates/app/src/controller.rs:1224
-msgid "Cairn runs in"
-msgstr "Cairn se ejecuta en"
-
 #: crates/app/src/controller/installed.rs:205
 #: crates/app/src/controller/installed.rs:45
 msgid "Came with others"
@@ -357,8 +340,8 @@ msgid "Clear shortcut for "
 msgstr "Quitar el atajo de "
 
 #: crates/app/qml/PreferencesDialog.qml:483
-msgid "Click it to open the Shelf. With the icon on, closing the window keeps Cairn running for the Shelf."
-msgstr "Al pulsarlo se abre el estante. Con el icono activo, cerrar la ventana mantiene Cairn en marcha para el estante."
+msgid "Click it to open the Shelf. With the icon on, closing the window keeps Steward running for the Shelf."
+msgstr "Al pulsarlo se abre el estante. Con el icono activo, cerrar la ventana mantiene Steward en marcha para el estante."
 
 #: crates/app/src/tray.rs:74
 msgid "Click to open the Shelf"
@@ -802,8 +785,8 @@ msgid "Folders and files by name, as you type."
 msgstr "Carpetas y archivos por nombre, mientras escribe."
 
 #: crates/app/qml/PreferencesDialog.qml:223
-msgid "Folders open in Cairn, and other apps' “Show in folder” comes here."
-msgstr "Las carpetas se abren en Cairn, y «Mostrar en la carpeta» de otras aplicaciones llega aquí."
+msgid "Folders open in Steward, and other apps' “Show in folder” comes here."
+msgstr "Las carpetas se abren en Steward, y «Mostrar en la carpeta» de otras aplicaciones llega aquí."
 
 #: crates/app/qml/PathBar.qml:128
 msgid "Folders with that name"
@@ -2005,12 +1988,12 @@ msgid "Start Indexing"
 msgstr "Iniciar indexación"
 
 #: crates/app/qml/WelcomeDialog.qml:212
-msgid "Start Using Cairn"
-msgstr "Empezar a usar Cairn"
+msgid "Start Using Steward"
+msgstr "Empezar a usar Steward"
 
 #: crates/app/qml/PreferencesDialog.qml:488
-msgid "Starts Cairn in the background, without a window, so the Shelf and the icon are ready."
-msgstr "Inicia Cairn en segundo plano, sin ventana, para que el estante y el icono estén listos."
+msgid "Starts Steward in the background, without a window, so the Shelf and the icon are ready."
+msgstr "Inicia Steward en segundo plano, sin ventana, para que el estante y el icono estén listos."
 
 #: crates/app/src/controller/about.rs:241
 msgid "Startup disk"
@@ -2019,6 +2002,23 @@ msgstr "Disco de arranque"
 #: crates/app/qml/WelcomeDialog.qml:38
 msgid "Step "
 msgstr "Paso "
+
+#: crates/app/qml/AboutDialog.qml:19 crates/app/qml/Main.qml:17
+#: crates/app/qml/Sidebar.qml:39 crates/app/qml/WelcomeDialog.qml:180
+msgid "Steward"
+msgstr "Steward"
+
+#: crates/app/src/controller.rs:747
+msgid "Steward answers other apps now; folders open in it once Steward is installed"
+msgstr "Steward responde ya a otras aplicaciones; las carpetas se abrirán en él cuando Steward esté instalado"
+
+#: crates/app/qml/CleanPage.qml:178
+msgid "Steward never runs these. Copy a command and run it in a terminal if you want to."
+msgstr "Steward nunca ejecuta estas órdenes. Copie una y ejecútela en una terminal si lo desea."
+
+#: crates/app/src/controller.rs:1224
+msgid "Steward runs in"
+msgstr "Steward se ejecuta en"
 
 #: crates/app/qml/StopServerDialog.qml:23
 msgid "Stop"
@@ -2120,10 +2120,6 @@ msgstr "Eso no es un enlace web"
 msgid "That place does not exist"
 msgstr "Ese lugar no existe"
 
-#: crates/app/src/controller.rs:1225
-msgid "The Cairn package from Ubuntu’s apt repository can show this."
-msgstr "El paquete de Cairn del repositorio apt de Ubuntu puede mostrarlo."
-
 #: crates/app/src/controller/clean.rs:165
 msgid "The Flatpak is no longer installed"
 msgstr "El Flatpak ya no está instalado"
@@ -2135,6 +2131,10 @@ msgstr "El estante admite nueve carpetas; quite una primero"
 #: crates/app/src/controller/clean.rs:164
 msgid "The Snap is no longer installed"
 msgstr "El Snap ya no está instalado"
+
+#: crates/app/src/controller.rs:1225
+msgid "The Steward package from Ubuntu’s apt repository can show this."
+msgstr "El paquete de Steward del repositorio apt de Ubuntu puede mostrarlo."
 
 #: crates/app/src/controller/ops.rs:483
 msgid "The Trash is empty"
@@ -2197,8 +2197,8 @@ msgid "This computer"
 msgstr "Este equipo"
 
 #: crates/app/src/controller.rs:732
-msgid "This desktop has no custom shortcuts; open the Shelf with “cairn shelf”"
-msgstr "Este escritorio no admite atajos propios; abra el estante con «cairn shelf»"
+msgid "This desktop has no custom shortcuts; open the Shelf with “steward shelf”"
+msgstr "Este escritorio no admite atajos propios; abra el estante con «steward shelf»"
 
 #: crates/app/qml/CleanPage.qml:321
 msgid "Tick "
@@ -2312,8 +2312,8 @@ msgid "Usage"
 msgstr "Uso"
 
 #: crates/app/src/controller/agents.rs:195
-msgid "Usage is read from Claude Code's logs; other tools keep no local usage Cairn can read yet."
-msgstr "El uso se lee de los registros de Claude Code; las demás herramientas aún no guardan un uso local que Cairn pueda leer."
+msgid "Usage is read from Claude Code's logs; other tools keep no local usage Steward can read yet."
+msgstr "El uso se lee de los registros de Claude Code; las demás herramientas aún no guardan un uso local que Steward pueda leer."
 
 #: crates/app/qml/PreferencesDialog.qml:221
 #: crates/app/qml/PreferencesDialog.qml:228
@@ -2362,8 +2362,8 @@ msgid "Week"
 msgstr "Semana"
 
 #: crates/app/qml/WelcomeDialog.qml:11
-msgid "Welcome to Cairn"
-msgstr "Bienvenido a Cairn"
+msgid "Welcome to Steward"
+msgstr "Bienvenido a Steward"
 
 #: crates/app/src/controller/welcome.rs:140
 msgid "What is safe to clear, and why."
@@ -2374,12 +2374,12 @@ msgid "What it is for"
 msgstr "Para qué sirve"
 
 #: crates/app/qml/WhatsNewDialog.qml:8
-msgid "What’s New in Cairn "
-msgstr "Novedades de Cairn "
+msgid "What’s New in Steward "
+msgstr "Novedades de Steward "
 
 #: crates/app/qml/PreferencesDialog.qml:243
-msgid "When you save a bookmark, Cairn contacts that link’s site for its title and picture. It is the only request Cairn makes."
-msgstr "Al guardar un marcador, Cairn contacta con el sitio del enlace para obtener su título e imagen. Es la única petición que hace Cairn."
+msgid "When you save a bookmark, Steward contacts that link’s site for its title and picture. It is the only request Steward makes."
+msgstr "Al guardar un marcador, Steward contacta con el sitio del enlace para obtener su título e imagen. Es la única petición que hace Steward."
 
 #: crates/app/src/controller.rs:1842 crates/app/src/controller/peek.rs:192
 msgid "Where"
@@ -2398,8 +2398,8 @@ msgid "Working…"
 msgstr "Trabajando…"
 
 #: crates/app/qml/PreferencesDialog.qml:449
-msgid "Works from any app. Cairn adds it to GNOME’s keyboard shortcuts and removes it when you turn this off."
-msgstr "Funciona desde cualquier app. Cairn la añade a los atajos de teclado de GNOME y la quita al desactivar esto."
+msgid "Works from any app. Steward adds it to GNOME’s keyboard shortcuts and removes it when you turn this off."
+msgstr "Funciona desde cualquier app. Steward la añade a los atajos de teclado de GNOME y la quita al desactivar esto."
 
 #: crates/app/src/search_provider.rs:68
 msgid "Workspace"

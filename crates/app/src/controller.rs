@@ -15,8 +15,8 @@ use gettextrs::gettext;
 use gio::prelude::*;
 use serde_json::{Value, json};
 
-use cairn_core::sort::{self, GroupBy, SortKey};
-use cairn_core::{FileEntry, FolderModel, Kind, LoadState};
+use steward_core::sort::{self, GroupBy, SortKey};
+use steward_core::{FileEntry, FolderModel, Kind, LoadState};
 
 mod about;
 mod agents;
@@ -215,8 +215,8 @@ pub struct Controller {
     md: markdown::MarkdownState,
     bookmarks: bookmarks::BookmarksState,
     shelf: shelf::ShelfState,
-    /// The sandbox Cairn runs in, if any (P9-T01).
-    sandbox: Option<cairn_core::sandbox::Sandbox>,
+    /// The sandbox Steward runs in, if any (P9-T01).
+    sandbox: Option<steward_core::sandbox::Sandbox>,
     /// Path bar: folders whose name matches what is typed, and the one chosen.
     path_matches: Vec<PathBuf>,
     path_match: Option<usize>,
@@ -476,7 +476,7 @@ impl Controller {
         self.close_tool();
         // Opening the Trash before anything was ever trashed: make it, so
         // the view shows an empty Trash rather than a missing folder.
-        let trash = cairn_core::ops::Trash::new(cairn_core::ops::Trash::default_home());
+        let trash = steward_core::ops::Trash::new(steward_core::ops::Trash::default_home());
         if folder.path().as_deref() == Some(trash.files_dir().as_path())
             && !folder.query_exists(gio::Cancellable::NONE)
         {
@@ -657,7 +657,7 @@ impl Controller {
         let Some(folder) = self.current() else {
             return;
         };
-        let stored = cairn_core::store::FolderView {
+        let stored = steward_core::store::FolderView {
             view: Some(self.view.id().into()),
             sort: Some(self.sort.id().into()),
             descending: Some(self.descending),
@@ -730,7 +730,7 @@ impl Controller {
                     && settings.boolean("shelf-shortcut-enabled")
                 {
                     self.toast(&gettext(
-                        "This desktop has no custom shortcuts; open the Shelf with “cairn shelf”",
+                        "This desktop has no custom shortcuts; open the Shelf with “steward shelf”",
                     ));
                 }
             }
@@ -744,7 +744,7 @@ impl Controller {
                 crate::file_manager::serve(on);
                 if !crate::file_manager::set_default_for_folders(on) && on {
                     self.emit(Event::Toast(
-                        gettext("Cairn answers other apps now; folders open in it once Cairn is installed"),
+                        gettext("Steward answers other apps now; folders open in it once Steward is installed"),
                         false,
                     ));
                 }
@@ -984,7 +984,7 @@ impl Controller {
             if let Err(error) =
                 gio::AppInfo::launch_default_for_uri_future(&uri, gio::AppLaunchContext::NONE).await
             {
-                glib::g_warning!("cairn", "could not open {uri}: {error}");
+                glib::g_warning!("steward", "could not open {uri}: {error}");
                 later(move |c| {
                     c.emit(Event::Toast(
                         format!("{} “{name}”", gettext("No app could open")),
@@ -1034,7 +1034,7 @@ impl Controller {
         if let (Some(app), Some(uri)) = (self.open_with_apps.get(index), uri)
             && let Err(error) = app.launch_uris(&[uri.as_str()], gio::AppLaunchContext::NONE)
         {
-            glib::g_warning!("cairn", "could not launch: {error}");
+            glib::g_warning!("steward", "could not launch: {error}");
         }
         self.close_dialog();
     }
@@ -1200,29 +1200,29 @@ impl Controller {
     }
 
     /// Why a feature that needs the host is not here (P9-T01), or None.
-    pub fn sandbox_note(&self, needs: cairn_core::sandbox::Needs) -> Option<String> {
-        if cairn_core::sandbox::available(self.sandbox, needs) {
+    pub fn sandbox_note(&self, needs: steward_core::sandbox::Needs) -> Option<String> {
+        if steward_core::sandbox::available(self.sandbox, needs) {
             return None;
         }
         let name = self.sandbox.map(|s| s.name()).unwrap_or("a sandbox");
         let why = match needs {
-            cairn_core::sandbox::Needs::PackageLists => {
+            steward_core::sandbox::Needs::PackageLists => {
                 gettext("which keeps it from reading the system’s list of installed software.")
             }
-            cairn_core::sandbox::Needs::PackageDatabase => {
+            steward_core::sandbox::Needs::PackageDatabase => {
                 gettext("which keeps it from seeing which packages are installed.")
             }
-            cairn_core::sandbox::Needs::AppLists => {
+            steward_core::sandbox::Needs::AppLists => {
                 gettext("which keeps it from seeing which apps are installed.")
             }
-            cairn_core::sandbox::Needs::HostCommands => {
+            steward_core::sandbox::Needs::HostCommands => {
                 gettext("which keeps it from asking the system’s own tools.")
             }
         };
         Some(format!(
             "{} {name}, {why} {}",
-            gettext("Cairn runs in"),
-            gettext("The Cairn package from Ubuntu’s apt repository can show this.")
+            gettext("Steward runs in"),
+            gettext("The Steward package from Ubuntu’s apt repository can show this.")
         ))
     }
 
@@ -1231,7 +1231,7 @@ impl Controller {
         let i = self.interface.as_ref()?;
         let schema = i.settings_schema()?;
         let read = |key: &str| schema.has_key(key).then(|| i.string(key).to_string());
-        cairn_core::desktop::system_accent(
+        steward_core::desktop::system_accent(
             read("accent-color").as_deref(),
             read("gtk-theme").as_deref(),
         )
@@ -1242,7 +1242,7 @@ impl Controller {
         self.emit(Event::Focus("raise"));
     }
 
-    /// The window's close button: with the tray icon on, Cairn keeps running
+    /// The window's close button: with the tray icon on, Steward keeps running
     /// in the background for the Shelf and tray (P8-T03); otherwise it quits.
     pub fn close_window(&mut self) {
         if settings::get().boolean("tray-icon") {
@@ -1264,9 +1264,9 @@ impl Controller {
     }
 
     /// The system's reduced-motion setting. End-to-end runs keep motion off
-    /// unless a test asks for it with CAIRN_MOTION=1 (DESIGN.md §3.5).
+    /// unless a test asks for it with STEWARD_MOTION=1 (DESIGN.md §3.5).
     fn motion_wanted(&self) -> bool {
-        if cfg!(feature = "e2e") && std::env::var("CAIRN_MOTION").as_deref() != Ok("1") {
+        if cfg!(feature = "e2e") && std::env::var("STEWARD_MOTION").as_deref() != Ok("1") {
             return false;
         }
         self.interface
@@ -1991,7 +1991,7 @@ impl Controller {
                     && i.string("color-scheme") == "prefer-dark"
             }),
             // Test hook: force the Qt 6.4 fallbacks on any Qt.
-            "legacyFx": std::env::var("CAIRN_LEGACY_FX").is_ok_and(|v| v == "1"),
+            "legacyFx": std::env::var("STEWARD_LEGACY_FX").is_ok_and(|v| v == "1"),
         })
     }
 
@@ -2108,7 +2108,7 @@ impl Controller {
 }
 
 /// A file card's symbol: its kind's (folders get theirs from style.rs).
-fn folder_symbol(data: &cairn_core::EntryData) -> &'static str {
+fn folder_symbol(data: &steward_core::EntryData) -> &'static str {
     tint_symbol(data.kind)
 }
 
@@ -2129,9 +2129,9 @@ fn tint_symbol(kind: Kind) -> &'static str {
 
 /// GNOME's interface settings, when the schema is installed.
 /// Flatpak or Snap (P9-T01). Test builds can simulate one (E9-01).
-fn detect_sandbox() -> Option<cairn_core::sandbox::Sandbox> {
-    let simulate = cfg!(feature = "e2e") && std::env::var_os("CAIRN_SIMULATE_SANDBOX").is_some();
-    cairn_core::sandbox::detect(
+fn detect_sandbox() -> Option<steward_core::sandbox::Sandbox> {
+    let simulate = cfg!(feature = "e2e") && std::env::var_os("STEWARD_SIMULATE_SANDBOX").is_some();
+    steward_core::sandbox::detect(
         std::path::Path::new("/"),
         std::env::var("SNAP").ok().as_deref(),
         simulate,
@@ -2169,7 +2169,7 @@ async fn list_names(folder: &gio::File) -> Vec<String> {
             );
         }
     }
-    names.sort_by(|a, b| cairn_core::natural::compare(a, b));
+    names.sort_by(|a, b| steward_core::natural::compare(a, b));
     names
 }
 

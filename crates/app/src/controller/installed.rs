@@ -5,7 +5,7 @@
 use gettextrs::gettext;
 use serde_json::{Value, json};
 
-use cairn_core::packages::{self, Package, Places, Tool, Why};
+use steward_core::packages::{self, Package, Places, Tool, Why};
 
 use super::{Controller, Event, dirty, later};
 use crate::format;
@@ -65,7 +65,7 @@ impl Controller {
         self.mark(dirty::TOOLS);
         std::thread::spawn(move || {
             let places = Places::system(glib::home_dir());
-            let tools = packages::list_all(&cairn_core::tools::System, &places);
+            let tools = packages::list_all(&steward_core::tools::System, &places);
             glib::MainContext::default().invoke(move || {
                 later(move |c| {
                     if c.installed.ticket == ticket {
@@ -154,7 +154,7 @@ impl Controller {
         };
         let path = crate::paths::expand(path.trim_start_matches("file://"), None);
         let text = packages::saved_list(tools);
-        let message = match cairn_core::ops::save_text(&path, &text) {
+        let message = match steward_core::ops::save_text(&path, &text) {
             Ok(()) => format!(
                 "{} “{}”",
                 gettext("Saved the list as"),
@@ -168,7 +168,7 @@ impl Controller {
     }
 
     pub fn installed_json(&self) -> Value {
-        if let Some(note) = self.sandbox_note(cairn_core::sandbox::Needs::PackageLists) {
+        if let Some(note) = self.sandbox_note(steward_core::sandbox::Needs::PackageLists) {
             return json!({ "looking": false, "unavailable": note, "tools": [], "filters": [], "packages": [] });
         }
         let Some(tools) = &self.installed.tools else {

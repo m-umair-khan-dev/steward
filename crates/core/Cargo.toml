@@ -1,6 +1,6 @@
 [package]
-name = "cairn-core"
-description = "Cairn's file-management engine. Has no UI dependency."
+name = "steward-core"
+description = "Steward's file-management engine. Has no UI dependency."
 version.workspace = true
 edition.workspace = true
 rust-version.workspace = true

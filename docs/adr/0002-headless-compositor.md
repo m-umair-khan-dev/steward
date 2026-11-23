@@ -38,7 +38,7 @@ GPU is needed in CI.
 
 - **mutter is the default** test compositor. It is what Ubuntu users run, and it
   lets tests inject real key presses (ADR 0003).
-- **weston stays as the fallback**, selected with `CAIRN_COMPOSITOR=weston`. It
+- **weston stays as the fallback**, selected with `STEWARD_COMPOSITOR=weston`. It
   starts faster but offers no input injection.
 - One script, `docker/scripts/start-compositor`, starts either. Both
   `headless-run` and the Python harness use it, so there is one place to change.

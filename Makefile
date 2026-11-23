@@ -79,9 +79,9 @@ deb: ## Build the .deb for UBUNTU_VERSION into dist/
 	@ls -l dist/$(UBUNTU_VERSION)
 
 deb-test: ## Install the .deb in a clean Ubuntu with apt; lintian and the smoke scenarios
-	$(DEB_BUILD) --target install-test -t cairn-install-test:$(UBUNTU_VERSION) .
+	$(DEB_BUILD) --target install-test -t steward-install-test:$(UBUNTU_VERSION) .
 	docker run --rm --security-opt seccomp=unconfined --tmpfs /tmp:exec,mode=1777 \
-	  -v $(CURDIR)/artifacts:/workspace/artifacts cairn-install-test:$(UBUNTU_VERSION)
+	  -v $(CURDIR)/artifacts:/workspace/artifacts steward-install-test:$(UBUNTU_VERSION)
 
 flatpak: ## Build the Flatpak bundle into dist/flatpak/ (runtimes cached in a volume)
 	$(COMPOSE) --profile flatpak build flatpak
@@ -89,9 +89,9 @@ flatpak: ## Build the Flatpak bundle into dist/flatpak/ (runtimes cached in a vo
 
 keys: ## Throwaway development key for the apt repository (secrets/, git-ignored)
 	@test -s secrets/apt_signing_key.asc || docker build -q -f docker/aptrepo.Dockerfile \
-	  --build-arg UBUNTU_IMAGE=$(UBUNTU_IMAGE) -t cairn-aptrepo:dev . >/dev/null
+	  --build-arg UBUNTU_IMAGE=$(UBUNTU_IMAGE) -t steward-aptrepo:dev . >/dev/null
 	@test -s secrets/apt_signing_key.asc || docker run --rm --entrypoint bash -u $(HOST_UID):$(HOST_GID) \
-	  -v $(CURDIR):/w -w /w cairn-aptrepo:dev docker/scripts/make-dev-key secrets
+	  -v $(CURDIR):/w -w /w steward-aptrepo:dev docker/scripts/make-dev-key secrets
 
 publish-apt: keys ## Publish dist/*/ to the local repository (APT_SUITE=dev by default)
 	docker compose --profile publish run --rm aptrepo
@@ -104,11 +104,11 @@ shots: images ## Light and dark screenshots for the site and AppStream (artifact
 
 perf: images ## Performance pass (DESIGN.md §8.4): optimised build, timings in artifacts/perf/
 	$(RUN) e2e bash -c 'export CARGO_TARGET_DIR=$$CARGO_TARGET_DIR/perf && \
-	  cargo build --release --locked -p cairn -p cairn-indexer --features cairn/e2e,cairn-indexer/e2e && \
-	  cargo test --release --locked -p cairn-core --test index e3_10 -- --nocapture | grep E3-10 && \
-	  CAIRN_BIN=$$CARGO_TARGET_DIR/release/cairn python3 tests/tools/perf.py'
+	  cargo build --release --locked -p steward -p steward-indexer --features steward/e2e,steward-indexer/e2e && \
+	  cargo test --release --locked -p steward-core --test index e3_10 -- --nocapture | grep E3-10 && \
+	  STEWARD_BIN=$$CARGO_TARGET_DIR/release/steward python3 tests/tools/perf.py'
 
-i18n: images ## Extract messages to po/cairn.pot, merge into po/*.po, remake the pseudo-locale
+i18n: images ## Extract messages to po/steward.pot, merge into po/*.po, remake the pseudo-locale
 	$(RUN) shell bash -c 'docker/scripts/i18n extract && docker/scripts/i18n update && docker/scripts/i18n pseudo && docker/scripts/i18n check'
 
 lint: images lint-host ## Formatting, clippy, Dockerfile and Compose checks
@@ -134,4 +134,4 @@ down: ## Stop containers
 
 clean: ## Stop containers and delete build caches and the fake home
 	$(COMPOSE) down --remove-orphans --volumes
-	-docker volume rm cairn-target-24.04 cairn-target-26.04 cairn-target-26.10
+	-docker volume rm steward-target-24.04 steward-target-26.04 steward-target-26.10

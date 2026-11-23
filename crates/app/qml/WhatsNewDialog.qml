@@ -5,7 +5,7 @@ import QtQuick
 Sheet {
     id: root
     property var info: ({ items: [] })
-    title: p.t("What’s New in Cairn ") + (info.version || "")
+    title: p.t("What’s New in Steward ") + (info.version || "")
     cardWidth: 520
     Column {
         width: parent.width

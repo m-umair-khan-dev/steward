@@ -21,8 +21,8 @@ def about(app) -> dict:
 
 @pytest.fixture
 def about_app(session, home, app_factory):
-    return app_factory(extra_env={"CAIRN_SYSINFO_FIXTURE": str(DATA / "fixture.json"),
-                                  "CAIRN_FAKE_NOW": home.manifest["now"], "TZ": "UTC"})
+    return app_factory(extra_env={"STEWARD_SYSINFO_FIXTURE": str(DATA / "fixture.json"),
+                                  "STEWARD_FAKE_NOW": home.manifest["now"], "TZ": "UTC"})
 
 
 def test_E5_10_about_with_fixture_probes(about_app):
@@ -67,8 +67,8 @@ def test_E5_10_about_with_fixture_probes(about_app):
 
 def test_E5_11_reading_changes_nothing(session, home, app_factory, tmp_path):
     before = home.snapshot(ignore_app_owned=True)
-    app = app_factory(extra_env={"CAIRN_SYSINFO_FIXTURE": str(DATA / "fixture.json"),
-                                 "CAIRN_FAKE_NOW": home.manifest["now"]})
+    app = app_factory(extra_env={"STEWARD_SYSINFO_FIXTURE": str(DATA / "fixture.json"),
+                                 "STEWARD_FAKE_NOW": home.manifest["now"]})
     app.action("win.tool-open", s("clean"))
     app.wait_for(lambda: (c := app.state()["clean"]) and c["cards"] and not c["looking"] and c["disk"],
                  "Free Up Space", timeout=60)

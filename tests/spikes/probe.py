@@ -70,7 +70,7 @@ def s2_compositors() -> None:
     for kind in ("mutter", "weston"):
         with tempfile.TemporaryDirectory() as runtime:
             os.chmod(runtime, 0o700)
-            env = dict(os.environ, XDG_RUNTIME_DIR=runtime, CAIRN_COMPOSITOR=kind,
+            env = dict(os.environ, XDG_RUNTIME_DIR=runtime, STEWARD_COMPOSITOR=kind,
                        COMPOSITOR_LOG=f"{runtime}/log")
             started = time.monotonic()
             out = sh("dbus-run-session", "--", "bash", "-c",
@@ -88,7 +88,7 @@ def s3_a11y_and_input(work: Path) -> None:
     subprocess.run([sys.executable, "-I", str(REPO / "docker/scripts/make-fixture-home"),
                     str(work / "home")], check=True, capture_output=True)
     home = Home(work / "home")
-    os.environ["CAIRN_COMPOSITOR"] = "mutter"
+    os.environ["STEWARD_COMPOSITOR"] = "mutter"
     session = Session(work / "session", home.path)
     session.start()
     app = App(session, home)

@@ -21,7 +21,7 @@ problems with that:
 
 ## Decision
 
-`cairn-core::ops::trash` implements the FreeDesktop Trash specification
+`steward-core::ops::trash` implements the FreeDesktop Trash specification
 directly:
 
 - Items on the home filesystem go to `$XDG_DATA_HOME/Trash`; items on other
@@ -33,9 +33,9 @@ directly:
 
 ## Consequences
 
-- Items trashed by Cairn appear in Files (Nautilus) and in `trash:///`, and
-  items trashed by them appear in Cairn's Trash view: they share the format.
-- Cairn does not yet use the `$topdir/.Trash/$uid` variant (an admin-made
+- Items trashed by Steward appear in Files (Nautilus) and in `trash:///`, and
+  items trashed by them appear in Steward's Trash view: they share the format.
+- Steward does not yet use the `$topdir/.Trash/$uid` variant (an admin-made
   shared `.Trash` with the sticky bit). It uses `.Trash-$uid`, which the
   specification allows as the fallback.
 - No `directorysizes` cache is written; the specification makes it optional.

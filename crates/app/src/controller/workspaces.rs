@@ -8,8 +8,8 @@ use gettextrs::gettext;
 use gio::prelude::*;
 use serde_json::{Value, json};
 
-use cairn_core::Kind;
-use cairn_core::workspace::{Item, Where};
+use steward_core::Kind;
+use steward_core::workspace::{Item, Where};
 
 use super::{Controller, Event, dirty};
 use crate::{app_data, format, paths};
@@ -50,7 +50,7 @@ fn kind_of(path: &Path, is_dir: bool) -> Kind {
     if is_dir {
         Kind::Folder
     } else {
-        cairn_core::plan::kind_of(&name_of(path))
+        steward_core::plan::kind_of(&name_of(path))
     }
 }
 
@@ -114,7 +114,7 @@ impl Controller {
         } else if let Ok(id) = arg.parse() {
             Some(id)
         } else {
-            // By name (`cairn open-workspace NAME`), ignoring case.
+            // By name (`steward open-workspace NAME`), ignoring case.
             let wanted = arg.trim().to_lowercase();
             app_data::store().borrow().workspaces().ok().and_then(|w| {
                 w.into_iter()

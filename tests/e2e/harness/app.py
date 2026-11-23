@@ -1,4 +1,4 @@
-"""The real Cairn binary, started inside a test session and driven like a user."""
+"""The real Steward binary, started inside a test session and driven like a user."""
 
 import json
 import os
@@ -16,11 +16,11 @@ from .keys import Keyboard  # noqa: E402
 from .session import Session  # noqa: E402
 from .wait import wait_for  # noqa: E402
 
-APP_ID = "dev.cairn.Files"
-APP_PATH = "/dev/cairn/Files"
-TEST_IFACE = "dev.cairn.Files.Test1"
+APP_ID = "io.github.m_umair_khan_dev.steward"
+APP_PATH = "/io/github/m_umair_khan_dev/steward"
+TEST_IFACE = "io.github.m_umair_khan_dev.steward.Test1"
 ATSPI_TOOL = Path(__file__).with_name("atspi_tool.py")
-DEFAULT_BIN = "/var/cache/cargo-target/e2e/debug/cairn"  # built by docker/scripts/run-e2e
+DEFAULT_BIN = "/var/cache/cargo-target/e2e/debug/steward"  # built by docker/scripts/run-e2e
 
 
 class App:
@@ -28,7 +28,7 @@ class App:
                  extra_env: dict[str, str] | None = None) -> None:
         self.session = session
         self.home = home
-        self.binary = binary or os.environ.get("CAIRN_BIN", DEFAULT_BIN)
+        self.binary = binary or os.environ.get("STEWARD_BIN", DEFAULT_BIN)
         self.extra_env = extra_env or {}
         self.log_path = session.logs / "app.log"
         self.process: subprocess.Popen | None = None
@@ -39,9 +39,9 @@ class App:
 
     def env(self) -> dict[str, str]:
         return self.session.base_env() | {
-            "CAIRN_E2E": "1",
+            "STEWARD_E2E": "1",
             # No first-run welcome unless a test asks (E6-01 sets it empty).
-            "CAIRN_NO_WELCOME": "1",
+            "STEWARD_NO_WELCOME": "1",
             "G_DEBUG": "fatal-criticals",
             "RUST_BACKTRACE": "1",
             "QT_QPA_PLATFORM": "wayland",
@@ -119,19 +119,19 @@ class App:
     def installed(self) -> bool:
         """Testing the installed package: a release build without Test1, so
         only public interfaces (D-Bus actions, accessibility) are used."""
-        return os.environ.get("CAIRN_INSTALLED") == "1"
+        return os.environ.get("STEWARD_INSTALLED") == "1"
 
     def _window_ready(self) -> bool:
         if self.installed:
-            return "Cairn" in self.a11y_names()
+            return "Steward" in self.a11y_names()
         window = self.state().get("active_window")
         return bool(window and window["width"] > 0)
 
     def dismiss_welcome(self) -> None:
         """Release builds show the welcome on a first run: skip it."""
-        if "Welcome to Cairn" in self.a11y_names():
-            self.a11y_click("Skip", role="button", within="Welcome to Cairn")
-            wait_for(lambda: "Welcome to Cairn" not in self.a11y_names(), "the welcome to close", 10)
+        if "Welcome to Steward" in self.a11y_names():
+            self.a11y_click("Skip", role="button", within="Welcome to Steward")
+            wait_for(lambda: "Welcome to Steward" not in self.a11y_names(), "the welcome to close", 10)
 
     def action(self, name: str, parameter: GLib.Variant | None = None) -> None:
         """Activates a GAction the way a menu item or shortcut would.
@@ -159,7 +159,7 @@ class App:
 
     # -- the indexer (Phase 3) -----------------------------------------------
 
-    INDEXER = ("dev.cairn.Indexer", "/dev/cairn/Indexer", "dev.cairn.Indexer1")
+    INDEXER = ("io.github.m_umair_khan_dev.steward.Indexer", "/io/github/m_umair_khan_dev/steward/Indexer", "io.github.m_umair_khan_dev.steward.Indexer1")
 
     def indexer(self, method: str, args: GLib.Variant | None = None, reply: str | None = None,
                 timeout_ms: int = 5000):

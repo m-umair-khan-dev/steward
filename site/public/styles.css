@@ -1,4 +1,4 @@
-/* Cairn's site. Plain CSS with custom properties (DESIGN.md §6.2). */
+/* Steward's site. Plain CSS with custom properties (DESIGN.md §6.2). */
 :root {
   --bg: #f4f3f9; --pane: #ffffff; --card: #ffffff; --sunken: #ecebf3;
   --ink: #16132a; --muted: #5d5a72; --faint: #8a879a; --line: rgba(22, 19, 42, 0.09);

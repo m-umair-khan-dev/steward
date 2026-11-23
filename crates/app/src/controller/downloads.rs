@@ -7,9 +7,9 @@ use gettextrs::gettext;
 use gio::prelude::*;
 use serde_json::{Value, json};
 
-use cairn_core::index::Index;
-use cairn_core::ops::Request;
-use cairn_core::suggest::{self, Item, Suggestions};
+use steward_core::index::Index;
+use steward_core::ops::Request;
+use steward_core::suggest::{self, Item, Suggestions};
 
 use super::{Controller, dirty, later};
 use crate::{format, settings};
@@ -63,12 +63,12 @@ impl Controller {
         std::thread::spawn(move || {
             let index = Index::open_read_only(&Index::default_path()).ok();
             let cache =
-                cairn_core::dupes::HashCache::open(&cairn_core::dupes::default_cache_path())
-                    .or_else(|_| cairn_core::dupes::HashCache::in_memory());
+                steward_core::dupes::HashCache::open(&steward_core::dupes::default_cache_path())
+                    .or_else(|_| steward_core::dupes::HashCache::in_memory());
             let Ok(cache) = cache else { return };
             let found = suggest::downloads(
                 &folder,
-                cairn_core::plan::now(),
+                steward_core::plan::now(),
                 &suggest::Dpkg,
                 index.as_ref(),
                 &cache,

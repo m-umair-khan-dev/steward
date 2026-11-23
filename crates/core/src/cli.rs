@@ -1,15 +1,15 @@
-//! The `cairn` command line (P6-T06, P7-T10; DESIGN.md §4.2): what each
-//! command asks the window to do, and handing that to a running Cairn over
-//! D-Bus (`org.gtk.Actions`). Shared by the app binary and `cairn-cli`.
+//! The `steward` command line (P6-T06, P7-T10; DESIGN.md §4.2): what each
+//! command asks the window to do, and handing that to a running Steward over
+//! D-Bus (`org.gtk.Actions`). Shared by the app binary and `steward-cli`.
 //!
-//!     cairn [FOLDER-OR-FILE…]          open a folder (a file: its folder, selected)
-//!     cairn open PATH…                 the same, as a command
-//!     cairn open-workspace NAME        open a workspace by name (or #1…#9)
-//!     cairn new-workspace [NAME]       make a workspace (no name: ask for one)
-//!     cairn add-link URL               save a link to Bookmarks
-//!     cairn free-up-space              open Free Up Space
-//!     cairn shelf                      open or close the Shelf
-//!     cairn --new-window | --new-workspace | --add-link | --free-up-space
+//!     steward [FOLDER-OR-FILE…]          open a folder (a file: its folder, selected)
+//!     steward open PATH…                 the same, as a command
+//!     steward open-workspace NAME        open a workspace by name (or #1…#9)
+//!     steward new-workspace [NAME]       make a workspace (no name: ask for one)
+//!     steward add-link URL               save a link to Bookmarks
+//!     steward free-up-space              open Free Up Space
+//!     steward shelf                      open or close the Shelf
+//!     steward --new-window | --new-workspace | --add-link | --free-up-space
 //!                                      (the desktop file's actions)
 
 use gio::prelude::*;
@@ -42,14 +42,14 @@ pub enum Parsed {
 }
 
 pub const USAGE: &str = "Usage:
-  cairn [FOLDER-OR-FILE…]        Open a folder, or a file's folder with it selected
-  cairn open PATH…               The same
-  cairn open-workspace NAME      Open a workspace by its name (or #1 to #9)
-  cairn new-workspace [NAME]     Make a workspace (without a name, ask for one)
-  cairn add-link URL             Save a link to Bookmarks
-  cairn free-up-space            Open Free Up Space
-  cairn shelf                    Open or close the Shelf
-  cairn --help | --version";
+  steward [FOLDER-OR-FILE…]        Open a folder, or a file's folder with it selected
+  steward open PATH…               The same
+  steward open-workspace NAME      Open a workspace by its name (or #1 to #9)
+  steward new-workspace [NAME]     Make a workspace (without a name, ask for one)
+  steward add-link URL             Save a link to Bookmarks
+  steward free-up-space            Open Free Up Space
+  steward shelf                    Open or close the Shelf
+  steward --help | --version";
 
 /// Reads a command line (without the program name). `absolute` turns a
 /// path argument into an absolute path or URI.
@@ -131,7 +131,7 @@ pub fn absolute(arg: &str) -> String {
         .unwrap_or_else(|| file.uri().to_string())
 }
 
-/// True when a Cairn is running in this session.
+/// True when a Steward is running in this session.
 pub fn running(bus: &gio::DBusConnection) -> bool {
     bus.call_sync(
         Some("org.freedesktop.DBus"),
@@ -149,7 +149,7 @@ pub fn running(bus: &gio::DBusConnection) -> bool {
     .unwrap_or(false)
 }
 
-/// Sends `requests` to the running Cairn. Returns false when none is
+/// Sends `requests` to the running Steward. Returns false when none is
 /// running; errors are printed with `program` as the prefix.
 pub fn forward(requests: &[Request], program: &str) -> bool {
     let Ok(bus) = gio::bus_get_sync(gio::BusType::Session, gio::Cancellable::NONE) else {
@@ -166,7 +166,10 @@ pub fn forward(requests: &[Request], program: &str) -> bool {
             "go-to" | "workspace-open" | "workspace-create" | "workspace-new" | "tool-open"
         )
     });
-    let present = window.then(|| win("present", None));
+    // A plain launch (the app icon, `steward` alone) shows the window of
+    // the running Steward, which may be in the background (started by
+    // Activities search or at login).
+    let present = (window || requests.is_empty()).then(|| win("present", None));
     for request in requests.iter().chain(present.as_ref()) {
         let path = if request.scope == "app" {
             APP_OBJECT_PATH.to_string()
@@ -196,7 +199,7 @@ pub fn forward(requests: &[Request], program: &str) -> bool {
             gio::Cancellable::NONE,
         ) {
             eprintln!(
-                "{program}: could not pass {} to the running Cairn: {error}",
+                "{program}: could not pass {} to the running Steward: {error}",
                 request.name
             );
         }

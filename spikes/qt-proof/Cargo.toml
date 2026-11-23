@@ -1,6 +1,6 @@
 [package]
-name = "cairn-qt-proof"
-description = "Throwaway proof: Qt 6 / QML front end on Cairn's Rust engine."
+name = "steward-qt-proof"
+description = "Throwaway proof: Qt 6 / QML front end on Steward's Rust engine."
 version = "0.0.0"
 edition = "2024"
 license = "GPL-3.0-or-later"
@@ -10,7 +10,7 @@ publish = false
 [workspace]
 
 [dependencies]
-cairn-core = { path = "../../crates/core" }
+steward-core = { path = "../../crates/core" }
 cxx = "1.0.95"
 cxx-qt = "0.10"
 cxx-qt-lib = { version = "0.10", features = ["qt_gui", "qt_qml"] }

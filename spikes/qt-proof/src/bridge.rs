@@ -1,12 +1,12 @@
 //! The Rust side of the proof: a QObject that lists a folder with
-//! cairn-core's FolderModel (GIO, running on the GLib main loop that Qt itself
+//! steward-core's FolderModel (GIO, running on the GLib main loop that Qt itself
 //! runs on Linux) and hands the result to QML.
 
 use std::cell::RefCell;
 use std::pin::Pin;
 
-use cairn_core::sort::{self, SortKey};
-use cairn_core::{FileEntry, FolderModel, LoadState};
+use steward_core::sort::{self, SortKey};
+use steward_core::{FileEntry, FolderModel, LoadState};
 use cxx_qt::Threading;
 use cxx_qt_lib::QString;
 use gio::prelude::*;
@@ -54,8 +54,8 @@ thread_local! {
 
 impl cxx_qt::Initialize for qobject::FolderLister {
     fn initialize(mut self: Pin<&mut Self>) {
-        let folder = std::env::var("CAIRN_PROOF_FOLDER").unwrap_or_default();
-        let capture = std::env::var("CAIRN_CAPTURE_DIR").unwrap_or_default();
+        let folder = std::env::var("STEWARD_PROOF_FOLDER").unwrap_or_default();
+        let capture = std::env::var("STEWARD_CAPTURE_DIR").unwrap_or_default();
         self.as_mut().set_folder(QString::from(folder.as_str()));
         self.as_mut().set_capture(QString::from(capture.as_str()));
         self.set_status(QString::from("idle"));

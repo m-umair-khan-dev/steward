@@ -9,8 +9,8 @@ use std::collections::HashMap;
 use gio::prelude::*;
 use serde_json::{Value, json};
 
-use cairn_core::Kind;
-use cairn_core::sort::{GroupBy, SortKey};
+use steward_core::Kind;
+use steward_core::sort::{GroupBy, SortKey};
 
 use crate::controller::{self, RowSize, ViewMode};
 use crate::settings;
@@ -276,7 +276,7 @@ pub fn activate(detailed: &str, param: &str) {
     };
     let group = if scope == "app" { app } else { win };
     let Some(action) = group.lookup_action(name) else {
-        glib::g_warning!("cairn", "no action {detailed}");
+        glib::g_warning!("steward", "no action {detailed}");
         return;
     };
     let wants_string = action
@@ -599,10 +599,10 @@ fn create() -> (gio::SimpleActionGroup, gio::SimpleActionGroup) {
     });
     simple(&win, "md-revert", || controller::with(|c| c.md_revert()));
     with_string(&win, "open-terminal", |path| {
-        controller::with(|c| c.open_in(cairn_core::openin::Role::Terminal, path))
+        controller::with(|c| c.open_in(steward_core::openin::Role::Terminal, path))
     });
     with_string(&win, "open-editor", |path| {
-        controller::with(|c| c.open_in(cairn_core::openin::Role::Editor, path))
+        controller::with(|c| c.open_in(steward_core::openin::Role::Editor, path))
     });
     simple(&win, "openin-rescan", || {
         controller::with(|c| c.openin_rescan())

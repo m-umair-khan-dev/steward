@@ -1,0 +1,16 @@
+# Steward's search index, as a systemd user service (DESIGN.md §7.1, P3-T05).
+# Installed to /usr/lib/systemd/user/. D-Bus activation starts it on demand
+# (io.github.m_umair_khan_dev.steward.Indexer.service); the app asks for it on first launch.
+[Unit]
+Description=Steward search index
+
+[Service]
+Type=dbus
+BusName=io.github.m_umair_khan_dev.steward.Indexer
+ExecStart=/usr/libexec/steward-indexer
+# Idle priority for CPU and disk: indexing never competes with the user.
+Nice=19
+IOSchedulingClass=idle
+CPUSchedulingPolicy=idle
+Restart=on-failure
+RestartSec=30

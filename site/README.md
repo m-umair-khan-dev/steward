@@ -1,4 +1,4 @@
-# Cairn's website (P6-T10) — ON HOLD
+# Steward's website (P6-T10) — ON HOLD
 
 Paused by the product owner on 2026-11-20. This is a draft that has never
 been built or tested: Astro project, landing page, guide (18 pages),

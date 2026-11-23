@@ -6,7 +6,7 @@
 //!
 //! Two halves:
 //! - [`text_of`] runs **inside** the sandbox (the indexer started as
-//!   `cairn-indexer extract FILE`): plain text and code, Markdown, PDF
+//!   `steward-indexer extract FILE`): plain text and code, Markdown, PDF
 //!   (`pdftotext`), OpenDocument and Office files (zipped XML).
 //! - [`Sandbox::extract`] runs outside: it starts the sandbox and reads
 //!   its output, and stops it when the time is up.
@@ -235,7 +235,7 @@ pub fn text_of(path: &Path) -> std::io::Result<String> {
 #[derive(Debug, Clone, PartialEq, Eq)]
 pub enum Outcome {
     Text(String),
-    /// Not a format Cairn reads, or the file could not be read.
+    /// Not a format Steward reads, or the file could not be read.
     Failed,
     /// The extractor ran past its time and was stopped.
     TimedOut,
@@ -335,8 +335,8 @@ impl Sandbox {
                 command
                     .arg("--ro-bind")
                     .arg(&self.helper)
-                    .arg("/tmp/cairn-extract");
-                command.args(["/tmp/cairn-extract", "extract", &inner]);
+                    .arg("/tmp/steward-extract");
+                command.args(["/tmp/steward-extract", "extract", &inner]);
             }
         }
         command

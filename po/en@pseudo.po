@@ -72,8 +72,8 @@ msgstr "[Àböüt ~~]"
 msgid "About "
 msgstr "[Àböüt  ~~]"
 
-msgid "About Cairn"
-msgstr "[Àböüt Çàîrñ ~~~]"
+msgid "About Steward"
+msgstr "[Àböüt Stéwàrd ~~~~]"
 
 msgid "About This Computer"
 msgstr "[Àböüt Thîs Çömpütér ~~~~~~]"
@@ -198,18 +198,6 @@ msgstr "[Bý kîñd ~~]"
 msgid "CONTENTS"
 msgstr "[ÇÖÑTÉÑTS ~~]"
 
-msgid "Cairn"
-msgstr "[Çàîrñ ~~]"
-
-msgid "Cairn answers other apps now; folders open in it once Cairn is installed"
-msgstr "[Çàîrñ àñswérs öthér àpps ñöw; földérs öpéñ îñ ît öñçé Çàîrñ îs îñstàlléd ~~~~~~~~~~~~~~~~~~~~~~~~]"
-
-msgid "Cairn never runs these. Copy a command and run it in a terminal if you want to."
-msgstr "[Çàîrñ ñévér rüñs thésé. Çöpý à çömmàñd àñd rüñ ît îñ à térmîñàl îf ýöü wàñt tö. ~~~~~~~~~~~~~~~~~~~~~~~~~~]"
-
-msgid "Cairn runs in"
-msgstr "[Çàîrñ rüñs îñ ~~~~]"
-
 msgid "Came with others"
 msgstr "[Çàmé wîth öthérs ~~~~~]"
 
@@ -252,8 +240,8 @@ msgstr "[Çléàr ~~]"
 msgid "Clear shortcut for "
 msgstr "[Çléàr shörtçüt för  ~~~~~~]"
 
-msgid "Click it to open the Shelf. With the icon on, closing the window keeps Cairn running for the Shelf."
-msgstr "[Çlîçk ît tö öpéñ thé Shélf. Wîth thé îçöñ öñ, çlösîñg thé wîñdöw kééps Çàîrñ rüññîñg för thé Shélf. ~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~]"
+msgid "Click it to open the Shelf. With the icon on, closing the window keeps Steward running for the Shelf."
+msgstr "[Çlîçk ît tö öpéñ thé Shélf. Wîth thé îçöñ öñ, çlösîñg thé wîñdöw kééps Stéwàrd rüññîñg för thé Shélf. ~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~]"
 
 msgid "Click to open the Shelf"
 msgstr "[Çlîçk tö öpéñ thé Shélf ~~~~~~~]"
@@ -570,8 +558,8 @@ msgstr "[Földérs ~~]"
 msgid "Folders and files by name, as you type."
 msgstr "[Földérs àñd fîlés bý ñàmé, às ýöü týpé. ~~~~~~~~~~~~~]"
 
-msgid "Folders open in Cairn, and other apps' “Show in folder” comes here."
-msgstr "[Földérs öpéñ îñ Çàîrñ, àñd öthér àpps' “Shöw îñ földér” çömés héré. ~~~~~~~~~~~~~~~~~~~~~~]"
+msgid "Folders open in Steward, and other apps' “Show in folder” comes here."
+msgstr "[Földérs öpéñ îñ Stéwàrd, àñd öthér àpps' “Shöw îñ földér” çömés héré. ~~~~~~~~~~~~~~~~~~~~~~~]"
 
 msgid "Folders with that name"
 msgstr "[Földérs wîth thàt ñàmé ~~~~~~~]"
@@ -1443,17 +1431,29 @@ msgstr "[Splît îñtö twö pàñés ~~~~~~]"
 msgid "Start Indexing"
 msgstr "[Stàrt Îñdéxîñg ~~~~]"
 
-msgid "Start Using Cairn"
-msgstr "[Stàrt Üsîñg Çàîrñ ~~~~~]"
+msgid "Start Using Steward"
+msgstr "[Stàrt Üsîñg Stéwàrd ~~~~~~]"
 
-msgid "Starts Cairn in the background, without a window, so the Shelf and the icon are ready."
-msgstr "[Stàrts Çàîrñ îñ thé bàçkgröüñd, wîthöüt à wîñdöw, sö thé Shélf àñd thé îçöñ àré réàdý. ~~~~~~~~~~~~~~~~~~~~~~~~~~~~]"
+msgid "Starts Steward in the background, without a window, so the Shelf and the icon are ready."
+msgstr "[Stàrts Stéwàrd îñ thé bàçkgröüñd, wîthöüt à wîñdöw, sö thé Shélf àñd thé îçöñ àré réàdý. ~~~~~~~~~~~~~~~~~~~~~~~~~~~~~]"
 
 msgid "Startup disk"
 msgstr "[Stàrtüp dîsk ~~~~]"
 
 msgid "Step "
 msgstr "[Stép  ~~]"
+
+msgid "Steward"
+msgstr "[Stéwàrd ~~]"
+
+msgid "Steward answers other apps now; folders open in it once Steward is installed"
+msgstr "[Stéwàrd àñswérs öthér àpps ñöw; földérs öpéñ îñ ît öñçé Stéwàrd îs îñstàlléd ~~~~~~~~~~~~~~~~~~~~~~~~~]"
+
+msgid "Steward never runs these. Copy a command and run it in a terminal if you want to."
+msgstr "[Stéwàrd ñévér rüñs thésé. Çöpý à çömmàñd àñd rüñ ît îñ à térmîñàl îf ýöü wàñt tö. ~~~~~~~~~~~~~~~~~~~~~~~~~~~]"
+
+msgid "Steward runs in"
+msgstr "[Stéwàrd rüñs îñ ~~~~~]"
 
 msgid "Stop"
 msgstr "[Stöp ~~]"
@@ -1527,9 +1527,6 @@ msgstr "[Thàt îs ñöt à wéb lîñk ~~~~~~~]"
 msgid "That place does not exist"
 msgstr "[Thàt plàçé döés ñöt éxîst ~~~~~~~~]"
 
-msgid "The Cairn package from Ubuntu’s apt repository can show this."
-msgstr "[Thé Çàîrñ pàçkàgé fröm Übüñtü’s àpt répösîtörý çàñ shöw thîs. ~~~~~~~~~~~~~~~~~~~~]"
-
 msgid "The Flatpak is no longer installed"
 msgstr "[Thé Flàtpàk îs ñö löñgér îñstàlléd ~~~~~~~~~~~]"
 
@@ -1538,6 +1535,9 @@ msgstr "[Thé Shélf hölds ñîñé földérs; üñpîñ öñé fîrst ~~~~~~~~
 
 msgid "The Snap is no longer installed"
 msgstr "[Thé Sñàp îs ñö löñgér îñstàlléd ~~~~~~~~~~]"
+
+msgid "The Steward package from Ubuntu’s apt repository can show this."
+msgstr "[Thé Stéwàrd pàçkàgé fröm Übüñtü’s àpt répösîtörý çàñ shöw thîs. ~~~~~~~~~~~~~~~~~~~~~]"
 
 msgid "The Trash is empty"
 msgstr "[Thé Tràsh îs émptý ~~~~~~]"
@@ -1584,8 +1584,8 @@ msgstr "[Thîs Îs Ñöt à Földér ~~~~~~]"
 msgid "This computer"
 msgstr "[Thîs çömpütér ~~~~]"
 
-msgid "This desktop has no custom shortcuts; open the Shelf with “cairn shelf”"
-msgstr "[Thîs désktöp hàs ñö çüstöm shörtçüts; öpéñ thé Shélf wîth “çàîrñ shélf” ~~~~~~~~~~~~~~~~~~~~~~~]"
+msgid "This desktop has no custom shortcuts; open the Shelf with “steward shelf”"
+msgstr "[Thîs désktöp hàs ñö çüstöm shörtçüts; öpéñ thé Shélf wîth “stéwàrd shélf” ~~~~~~~~~~~~~~~~~~~~~~~~]"
 
 msgid "Tick "
 msgstr "[Tîçk  ~~]"
@@ -1668,8 +1668,8 @@ msgstr "[Üp tö thé pàréñt földér ~~~~~~~]"
 msgid "Usage"
 msgstr "[Üsàgé ~~]"
 
-msgid "Usage is read from Claude Code's logs; other tools keep no local usage Cairn can read yet."
-msgstr "[Üsàgé îs réàd fröm Çlàüdé Çödé's lögs; öthér tööls kéép ñö löçàl üsàgé Çàîrñ çàñ réàd ýét. ~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~]"
+msgid "Usage is read from Claude Code's logs; other tools keep no local usage Steward can read yet."
+msgstr "[Üsàgé îs réàd fröm Çlàüdé Çödé's lögs; öthér tööls kéép ñö löçàl üsàgé Stéwàrd çàñ réàd ýét. ~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~]"
 
 msgid "Use as default file manager"
 msgstr "[Üsé às défàült fîlé màñàgér ~~~~~~~~~]"
@@ -1704,8 +1704,8 @@ msgstr "[Wàrm ~~]"
 msgid "Week"
 msgstr "[Wéék ~~]"
 
-msgid "Welcome to Cairn"
-msgstr "[Wélçömé tö Çàîrñ ~~~~~]"
+msgid "Welcome to Steward"
+msgstr "[Wélçömé tö Stéwàrd ~~~~~~]"
 
 msgid "What is safe to clear, and why."
 msgstr "[Whàt îs sàfé tö çléàr, àñd whý. ~~~~~~~~~~]"
@@ -1713,11 +1713,11 @@ msgstr "[Whàt îs sàfé tö çléàr, àñd whý. ~~~~~~~~~~]"
 msgid "What it is for"
 msgstr "[Whàt ît îs för ~~~~]"
 
-msgid "What’s New in Cairn "
-msgstr "[Whàt’s Ñéw îñ Çàîrñ  ~~~~~~]"
+msgid "What’s New in Steward "
+msgstr "[Whàt’s Ñéw îñ Stéwàrd  ~~~~~~~]"
 
-msgid "When you save a bookmark, Cairn contacts that link’s site for its title and picture. It is the only request Cairn makes."
-msgstr "[Whéñ ýöü sàvé à böökmàrk, Çàîrñ çöñtàçts thàt lîñk’s sîté för îts tîtlé àñd pîçtüré. Ît îs thé öñlý réqüést Çàîrñ màkés. ~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~]"
+msgid "When you save a bookmark, Steward contacts that link’s site for its title and picture. It is the only request Steward makes."
+msgstr "[Whéñ ýöü sàvé à böökmàrk, Stéwàrd çöñtàçts thàt lîñk’s sîté för îts tîtlé àñd pîçtüré. Ît îs thé öñlý réqüést Stéwàrd màkés. ~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~]"
 
 msgid "Where"
 msgstr "[Whéré ~~]"
@@ -1731,8 +1731,8 @@ msgstr "[Wîll mövé tö  ~~~~]"
 msgid "Working…"
 msgstr "[Wörkîñg… ~~]"
 
-msgid "Works from any app. Cairn adds it to GNOME’s keyboard shortcuts and removes it when you turn this off."
-msgstr "[Wörks fröm àñý àpp. Çàîrñ àdds ît tö GÑÖMÉ’s kéýböàrd shörtçüts àñd rémövés ît whéñ ýöü türñ thîs öff. ~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~]"
+msgid "Works from any app. Steward adds it to GNOME’s keyboard shortcuts and removes it when you turn this off."
+msgstr "[Wörks fröm àñý àpp. Stéwàrd àdds ît tö GÑÖMÉ’s kéýböàrd shörtçüts àñd rémövés ît whéñ ýöü türñ thîs öff. ~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~]"
 
 msgid "Workspace"
 msgstr "[Wörkspàçé ~~~]"

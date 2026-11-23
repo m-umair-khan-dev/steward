@@ -1,6 +1,6 @@
 ---
 title: Keyboard shortcuts
-description: Every key Cairn uses.
+description: Every key Steward uses.
 order: 17
 section: Reference
 ---

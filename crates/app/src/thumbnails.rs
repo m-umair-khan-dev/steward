@@ -15,7 +15,7 @@ use std::time::Duration;
 
 use gio::prelude::*;
 
-use cairn_core::FileEntry;
+use steward_core::FileEntry;
 
 const MAX_RUNNING: usize = 2;
 const SIZE: &str = "256"; // the "large" size in the FreeDesktop spec
@@ -41,7 +41,10 @@ impl Thumbnailer {
     pub fn new() -> Rc<Self> {
         let sandbox = glib::find_program_in_path("bwrap");
         if sandbox.is_none() {
-            glib::g_warning!("cairn", "bwrap not found; thumbnails will not be generated");
+            glib::g_warning!(
+                "steward",
+                "bwrap not found; thumbnails will not be generated"
+            );
         }
         Rc::new(Self {
             specs: load_specs(),
@@ -108,7 +111,7 @@ impl Thumbnailer {
                             *n
                         };
                         glib::g_debug!(
-                            "cairn",
+                            "steward",
                             "no thumbnail for {uri} (attempt {attempts}): {reason}"
                         );
                         if attempts >= 2 {
@@ -142,7 +145,7 @@ impl Thumbnailer {
         create_private_dir(&cache)?;
         self.serial.set(self.serial.get() + 1);
         let work = glib::user_cache_dir()
-            .join("cairn")
+            .join("steward")
             .join("thumbnail-work")
             .join(format!("{md5}-{}", self.serial.get()));
         let _ = std::fs::remove_dir_all(&work); // E2-13 allow: thumbnail work folder, not user files
@@ -181,12 +184,12 @@ impl Thumbnailer {
             &[
                 ("Thumb::URI", uri.as_str()),
                 ("Thumb::MTime", mtime.as_str()),
-                ("Software", "Cairn"),
+                ("Software", "Steward"),
             ],
         )
         .ok_or("thumbnailer did not write a PNG")?;
         let final_path = cache.join(format!("{md5}.png"));
-        let temp_path = cache.join(format!("{md5}.png.cairn-part-{}", self.serial.get()));
+        let temp_path = cache.join(format!("{md5}.png.steward-part-{}", self.serial.get()));
         std::fs::write(&temp_path, tagged).map_err(|e| e.to_string())?; // E2-13 allow: thumbnail cache, not user files
         std::fs::rename(&temp_path, &final_path).map_err(|e| e.to_string())?; // E2-13 allow: thumbnail cache, not user files
         let _ = std::fs::remove_dir_all(&work); // E2-13 allow: thumbnail work folder, not user files

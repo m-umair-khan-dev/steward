@@ -1,4 +1,4 @@
-"""End-to-end test harness for Cairn (DESIGN.md §10.2).
+"""End-to-end test harness for Steward (DESIGN.md §10.2).
 
 - `Session`: a private D-Bus session and headless Wayland compositor.
 - `App`: the real app binary, started in a session and driven over D-Bus

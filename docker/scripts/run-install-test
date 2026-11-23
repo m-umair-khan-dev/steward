@@ -2,14 +2,14 @@
 # `make deb-test` (E6-05, E6-07): inside the install-test image, where the .deb
 # was installed with apt into a clean Ubuntu (lintian already ran in the
 # package stage). Checks the installed files, then runs the smoke scenarios
-# against /usr/bin/cairn.
+# against /usr/bin/steward.
 set -euo pipefail
 cd /workspace
 echo "== installed files"
-for f in /usr/bin/cairn /usr/libexec/cairn-indexer /usr/share/applications/dev.cairn.Files.desktop \
-         /usr/share/metainfo/dev.cairn.Files.metainfo.xml /usr/share/glib-2.0/schemas/gschemas.compiled \
-         /usr/share/locale/de/LC_MESSAGES/cairn.mo /usr/share/dbus-1/services/dev.cairn.Indexer.service \
-         /usr/lib/systemd/user/cairn-indexer.service; do
+for f in /usr/bin/steward /usr/libexec/steward-indexer /usr/share/applications/io.github.m_umair_khan_dev.steward.desktop \
+         /usr/share/metainfo/io.github.m_umair_khan_dev.steward.metainfo.xml /usr/share/glib-2.0/schemas/gschemas.compiled \
+         /usr/share/locale/de/LC_MESSAGES/steward.mo /usr/share/dbus-1/services/io.github.m_umair_khan_dev.steward.Indexer.service \
+         /usr/lib/systemd/user/steward-indexer.service; do
   test -e "$f" || { echo "missing: $f"; exit 1; }
 done
 echo "== smoke tests against the installed app"

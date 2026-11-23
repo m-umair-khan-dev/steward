@@ -5,11 +5,11 @@ use std::path::{Path, PathBuf};
 use std::process::Command;
 use std::sync::{Arc, Mutex};
 
-use cairn_core::clean::{self, Card, Context, Reason};
-use cairn_core::tools::{Ran, Runner};
+use steward_core::clean::{self, Card, Context, Reason};
+use steward_core::tools::{Ran, Runner};
 
 fn fixture(name: &str) -> (PathBuf, serde_json::Value) {
-    let root = std::env::temp_dir().join(format!("cairn-clean-{name}-{}", std::process::id()));
+    let root = std::env::temp_dir().join(format!("steward-clean-{name}-{}", std::process::id()));
     let _ = std::fs::remove_dir_all(&root);
     let script =
         Path::new(env!("CARGO_MANIFEST_DIR")).join("../../docker/scripts/make-fixture-home");
@@ -23,7 +23,7 @@ fn fixture(name: &str) -> (PathBuf, serde_json::Value) {
             .status
             .success()
     );
-    let manifest = std::fs::read_to_string(root.join(".cairn-fixture")).unwrap();
+    let manifest = std::fs::read_to_string(root.join(".steward-fixture")).unwrap();
     (root, serde_json::from_str(&manifest).unwrap())
 }
 
@@ -31,15 +31,15 @@ fn fixture(name: &str) -> (PathBuf, serde_json::Value) {
 /// org.example.Kept an installed Flatpak, no Snaps.
 struct FakePackages;
 
-impl cairn_core::suggest::PackageDb for FakePackages {
+impl steward_core::suggest::PackageDb for FakePackages {
     fn deb_fields(&self, deb: &Path) -> Option<(String, String)> {
-        cairn_core::suggest::Dpkg.deb_fields(deb)
+        steward_core::suggest::Dpkg.deb_fields(deb)
     }
     fn installed(&self, package: &str) -> Option<String> {
         (package == "photo-tool").then(|| "3.2.0".to_string())
     }
     fn at_least(&self, a: &str, b: &str) -> bool {
-        cairn_core::suggest::Dpkg.at_least(a, b)
+        steward_core::suggest::Dpkg.at_least(a, b)
     }
 }
 

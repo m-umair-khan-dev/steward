@@ -1,5 +1,5 @@
-# Flatpak build of Cairn (P9-T02; DESIGN.md D6). The .deb stays the main
-# channel: inside the sandbox Cairn cannot read the host's package lists or
+# Flatpak build of Steward (P9-T02; DESIGN.md D6). The .deb stays the main
+# channel: inside the sandbox Steward cannot read the host's package lists or
 # run its package tools, so the Installed page and three Smart Clean
 # features explain that instead (P9-T01, capability detection).
 #
@@ -7,13 +7,13 @@
 # a Docker volume). The bundle lands in dist/flatpak/.
 # Cargo downloads crates during the build (build-args below). A Flathub
 # submission instead vendors them with flatpak-cargo-generator (HUMAN step).
-app-id: dev.cairn.Files
+app-id: io.github.m_umair_khan_dev.steward
 runtime: org.kde.Platform
 runtime-version: '6.10'
 sdk: org.kde.Sdk
 sdk-extensions:
   - org.freedesktop.Sdk.Extension.rust-stable
-command: cairn
+command: steward
 finish-args:
   # Display and GPU.
   - --share=ipc
@@ -43,11 +43,11 @@ finish-args:
   # The search index runs as a child of the app inside the sandbox. Its
   # own bwrap sandbox for reading files cannot start inside Flatpak, so
   # search inside files and thumbnails need another route there (ADR 0015).
-  - --own-name=dev.cairn.Indexer
+  - --own-name=io.github.m_umair_khan_dev.steward.Indexer
 build-options:
   append-path: /usr/lib/sdk/rust-stable/bin
   env:
-    CARGO_HOME: /run/build/cairn/cargo
+    CARGO_HOME: /run/build/steward/cargo
   build-args:
     - --share=network
 modules:
@@ -75,26 +75,26 @@ modules:
       - type: archive
         url: https://poppler.freedesktop.org/poppler-25.10.0.tar.xz
         sha256: 6b5e9bb64dabb15787a14db1675291c7afaf9387438cc93a4fb7f6aec4ee6fe0
-  - name: cairn
+  - name: steward
     buildsystem: simple
     build-commands:
       # The SDK's Rust can trail our pinned toolchain (rust-toolchain.toml)
       # by a release; the declared minimum is ours, not a language need.
-      - CAIRN_LOCALEDIR=/app/share/locale cargo build --release --locked --ignore-rust-version
-        -p cairn -p cairn-indexer
-      - install -Dm755 target/release/cairn /app/bin/cairn
+      - STEWARD_LOCALEDIR=/app/share/locale cargo build --release --locked --ignore-rust-version
+        -p steward -p steward-indexer
+      - install -Dm755 target/release/steward /app/bin/steward
       # The app starts the indexer from beside itself.
-      - install -Dm755 target/release/cairn-indexer /app/bin/cairn-indexer
+      - install -Dm755 target/release/steward-indexer /app/bin/steward-indexer
       - for po in po/*.po; do lang=$(basename "$po" .po); [ "$lang" = "en@pseudo" ] && continue;
         install -d /app/share/locale/$lang/LC_MESSAGES;
-        msgfmt -o /app/share/locale/$lang/LC_MESSAGES/cairn.mo "$po"; done
-      - install -Dm644 data/dev.cairn.Files.desktop /app/share/applications/dev.cairn.Files.desktop
-      - install -Dm644 data/dev.cairn.Files.metainfo.xml /app/share/metainfo/dev.cairn.Files.metainfo.xml
-      - install -Dm644 data/dev.cairn.Files.gschema.xml /app/share/glib-2.0/schemas/dev.cairn.Files.gschema.xml
+        msgfmt -o /app/share/locale/$lang/LC_MESSAGES/steward.mo "$po"; done
+      - install -Dm644 data/io.github.m_umair_khan_dev.steward.desktop /app/share/applications/io.github.m_umair_khan_dev.steward.desktop
+      - install -Dm644 data/io.github.m_umair_khan_dev.steward.metainfo.xml /app/share/metainfo/io.github.m_umair_khan_dev.steward.metainfo.xml
+      - install -Dm644 data/io.github.m_umair_khan_dev.steward.gschema.xml /app/share/glib-2.0/schemas/io.github.m_umair_khan_dev.steward.gschema.xml
       - glib-compile-schemas /app/share/glib-2.0/schemas
-      - install -Dm644 data/icons/hicolor/scalable/apps/dev.cairn.Files.svg /app/share/icons/hicolor/scalable/apps/dev.cairn.Files.svg
-      - install -Dm644 data/icons/hicolor/symbolic/apps/dev.cairn.Files-symbolic.svg /app/share/icons/hicolor/symbolic/apps/dev.cairn.Files-symbolic.svg
-      - install -Dm644 data/dev.cairn.Files.search-provider.ini /app/share/gnome-shell/search-providers/dev.cairn.Files.search-provider.ini
+      - install -Dm644 data/icons/hicolor/scalable/apps/io.github.m_umair_khan_dev.steward.svg /app/share/icons/hicolor/scalable/apps/io.github.m_umair_khan_dev.steward.svg
+      - install -Dm644 data/icons/hicolor/symbolic/apps/io.github.m_umair_khan_dev.steward-symbolic.svg /app/share/icons/hicolor/symbolic/apps/io.github.m_umair_khan_dev.steward-symbolic.svg
+      - install -Dm644 data/io.github.m_umair_khan_dev.steward.search-provider.ini /app/share/gnome-shell/search-providers/io.github.m_umair_khan_dev.steward.search-provider.ini
     sources:
       - type: dir
         path: ../..

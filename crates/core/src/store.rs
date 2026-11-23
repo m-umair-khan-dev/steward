@@ -135,9 +135,9 @@ pub struct Store {
 }
 
 impl Store {
-    /// The default location: `$XDG_DATA_HOME/cairn/app.db`.
+    /// The default location: `$XDG_DATA_HOME/steward/app.db`.
     pub fn default_path() -> PathBuf {
-        glib::user_data_dir().join("cairn").join("app.db")
+        glib::user_data_dir().join("steward").join("app.db")
     }
 
     pub fn open(path: &Path) -> rusqlite::Result<Self> {
@@ -145,6 +145,10 @@ impl Store {
             let _ = std::fs::create_dir_all(dir); // E2-13 allow: app.db folder, not user files
         }
         let conn = Connection::open(path)?;
+        // Two processes can open app.db at once (the app started by
+        // Activities search, then by the user): wait for the other's lock
+        // instead of failing.
+        conn.busy_timeout(std::time::Duration::from_secs(10))?;
         conn.pragma_update(None, "journal_mode", "WAL")?;
         conn.pragma_update(None, "foreign_keys", "ON")?;
         let mut store = Self { conn };
@@ -173,15 +177,23 @@ impl Store {
             .pragma_query_value(None, "user_version", |row| row.get(0))
     }
 
+    /// Applies the missing migrations, one per transaction. The version is
+    /// read inside a write-locked transaction, so a second process that
+    /// opens the same file at the same moment waits and then skips what the
+    /// first one already did.
     fn migrate(&mut self) -> rusqlite::Result<()> {
-        let current = self.schema_version()? as usize;
-        for (index, sql) in MIGRATIONS.iter().enumerate().skip(current) {
-            let tx = self.conn.transaction()?;
+        loop {
+            let tx = self
+                .conn
+                .transaction_with_behavior(rusqlite::TransactionBehavior::Immediate)?;
+            let current: i64 = tx.pragma_query_value(None, "user_version", |row| row.get(0))?;
+            let Some(sql) = MIGRATIONS.get(current as usize) else {
+                return Ok(());
+            };
             tx.execute_batch(sql)?;
-            tx.pragma_update(None, "user_version", (index + 1) as i64)?;
+            tx.pragma_update(None, "user_version", current + 1)?;
             tx.commit()?;
         }
-        Ok(())
     }
 
     // --- sidebar -------------------------------------------------------------
@@ -278,7 +290,7 @@ mod tests {
 
     #[test]
     fn reopening_does_not_rerun_migrations() {
-        let path = std::env::temp_dir().join(format!("cairn-store-{}.db", std::process::id()));
+        let path = std::env::temp_dir().join(format!("steward-store-{}.db", std::process::id()));
         let _ = std::fs::remove_file(&path);
         {
             let store = Store::open(&path).unwrap();
@@ -330,5 +342,25 @@ mod tests {
         };
         store.set_folder_view("file:///x", &view, 1).unwrap();
         assert_eq!(store.folder_view("file:///x").unwrap(), Some(view));
+    }
+
+    #[test]
+    fn two_processes_can_open_a_new_store_at_once() {
+        let path =
+            std::env::temp_dir().join(format!("steward-store-race-{}.db", std::process::id()));
+        let _ = std::fs::remove_file(&path);
+        let threads: Vec<_> = (0..4)
+            .map(|_| {
+                let path = path.clone();
+                std::thread::spawn(move || Store::open(&path).map(|s| s.schema_version().unwrap()))
+            })
+            .collect();
+        for thread in threads {
+            let version = thread.join().unwrap().expect("each opener succeeds");
+            assert_eq!(version, MIGRATIONS.len() as i64);
+        }
+        for suffix in ["", "-wal", "-shm"] {
+            let _ = std::fs::remove_file(format!("{}{suffix}", path.display()));
+        }
     }
 }

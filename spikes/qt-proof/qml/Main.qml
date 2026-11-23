@@ -1,17 +1,17 @@
 import QtQuick
 import QtQuick.Effects
 import QtQuick.Window
-import dev.cairn.proof
+import dev.steward.proof
 
-// The proof window: a Downloads-like folder from cairn-core, glass folders,
+// The proof window: a Downloads-like folder from steward-core, glass folders,
 // files flying into kind folders, a list that collapses and reflows, a toast.
-// With CAIRN_CAPTURE_DIR set, a scripted demo runs and saves frames.
+// With STEWARD_CAPTURE_DIR set, a scripted demo runs and saves frames.
 Window {
     id: win
     width: 1100
     height: 720
     visible: true
-    title: "Cairn Qt proof"
+    title: "Steward Qt proof"
     color: "#f4f3f9"
 
     property bool byKind: false
@@ -75,7 +75,7 @@ Window {
                     width: 28; height: 28; radius: 9
                     gradient: Gradient { GradientStop { position: 0; color: "#a497f2" } GradientStop { position: 1; color: "#6a55db" } }
                 }
-                Text { text: "Cairn"; font.pixelSize: 19; font.weight: Font.Bold; color: "#16132a"; anchors.verticalCenter: parent.verticalCenter }
+                Text { text: "Steward"; font.pixelSize: 19; font.weight: Font.Bold; color: "#16132a"; anchors.verticalCenter: parent.verticalCenter }
             }
             Item { width: 1; height: 10 }
             Text { text: "Favorites"; color: "#8a879a"; font.pixelSize: 12; font.weight: Font.DemiBold }
@@ -306,7 +306,7 @@ Window {
         Timer { id: hideTimer; interval: 2600; onTriggered: toast.shown = false }
     }
 
-    // --- scripted demo and frame capture (CAIRN_CAPTURE_DIR) ------------------------------
+    // --- scripted demo and frame capture (STEWARD_CAPTURE_DIR) ------------------------------
     QtObject {
         id: script
         property int frame: 0

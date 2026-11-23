@@ -5,7 +5,7 @@
 use gettextrs::gettext;
 use gio::prelude::*;
 
-use cairn_core::places;
+use steward_core::places;
 
 use crate::app_data;
 
@@ -60,7 +60,7 @@ fn default_entries() -> Vec<SidebarEntry> {
         key: "place:trash".into(),
         label: gettext("Trash"),
         section: "favorites",
-        file: gio::File::for_path(cairn_core::ops::Trash::default_home().join("files")),
+        file: gio::File::for_path(steward_core::ops::Trash::default_home().join("files")),
         icon: "trash",
         can_eject: false,
     });
@@ -153,7 +153,7 @@ pub fn eject(file: &gio::File) {
                 .await
         };
         if let Err(error) = result {
-            glib::g_warning!("cairn", "could not eject: {error}");
+            glib::g_warning!("steward", "could not eject: {error}");
         }
     });
 }

@@ -1,6 +1,0 @@
-# D-Bus activation for Cairn (installed to /usr/share/dbus-1/services/): the
-# Shell's Activities search starts Cairn in the background when it is not
-# running (P8-T04). No window opens until a result is chosen.
-[D-BUS Service]
-Name=dev.cairn.Files
-Exec=/usr/bin/cairn --background

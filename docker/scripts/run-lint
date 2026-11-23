@@ -7,7 +7,7 @@ cd /workspace
 
 cargo fmt --all -- --check
 cargo clippy --workspace --all-targets --locked -- -D warnings
-cargo clippy -p cairn --all-targets --locked --features e2e -- -D warnings
+cargo clippy -p steward --all-targets --locked --features e2e -- -D warnings
 python3 -m py_compile docker/scripts/make-fixture-home tests/e2e/*.py tests/e2e/harness/*.py tests/fixtures/*.py tests/tools/*.py
 python3 -I tests/tools/check_ops.py
 bash -n docker/scripts/start-compositor docker/scripts/headless-run docker/scripts/run-*

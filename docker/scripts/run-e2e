@@ -3,15 +3,15 @@
 # scenarios (DESIGN.md §10.2). Each test starts its own D-Bus session,
 # compositor and app against a fresh copy of the fixture home.
 #
-# Environment: E2E_MARK (pytest -m), E2E_K (pytest -k), CAIRN_COMPOSITOR.
+# Environment: E2E_MARK (pytest -m), E2E_K (pytest -k), STEWARD_COMPOSITOR.
 set -euo pipefail
 cd /workspace
 
 # Separate target folder: the e2e build (with the Test1 interface) must never
 # overwrite the binary `make app` is running, or the other way round.
 export CARGO_TARGET_DIR="$CARGO_TARGET_DIR/e2e"
-cargo build --locked -p cairn -p cairn-indexer -p cairn-cli --features e2e
-export CAIRN_BIN="$CARGO_TARGET_DIR/debug/cairn"
+cargo build --locked -p steward -p steward-indexer -p steward-cli --features e2e
+export STEWARD_BIN="$CARGO_TARGET_DIR/debug/steward"
 
 # `run-e2e python3 SCRIPT` runs a helper script (e.g. tests/spikes/*) against
 # the same e2e build instead of the test suite.

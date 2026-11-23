@@ -8,7 +8,7 @@
 
 ## Context
 
-Ubuntu 24.04 LTS (GNOME 46) ships Qt 6.4.2. Cairn was built on Qt 6.11.
+Ubuntu 24.04 LTS (GNOME 46) ships Qt 6.4.2. Steward was built on Qt 6.11.
 ADR 0009 noted two gaps and deferred the choice between Qt5Compat effects and
 a Flatpak.
 
@@ -25,7 +25,7 @@ back only where a feature is missing.
 
 ## Findings
 
-- Cairn and its C++ bridge (cxx-qt 0.10) build against Qt 6.4.2 without
+- Steward and its C++ bridge (cxx-qt 0.10) build against Qt 6.4.2 without
   changes.
 - **Theme was not a singleton on Qt 6.4.** The QML files live in a `qml/`
   folder inside the module. On Qt 6.4 a file's implicit import of its own
@@ -45,7 +45,7 @@ back only where a feature is missing.
   - If that works (Qt 6.5+), `Theme.effects` is true and everything is
     drawn exactly as before.
   - If it fails (Qt 6.4), the fallbacks below are used.
-  - `CAIRN_LEGACY_FX=1` forces the fallbacks on any Qt, for testing and
+  - `STEWARD_LEGACY_FX=1` forces the fallbacks on any Qt, for testing and
     screenshots.
 - **Effects behind wrappers.** The three effect files (`qml/fx/Shadow.qml`,
   `Tint.qml`, `Blur.qml`) are outside the QML module, in `qml/fx.qrc`, so Qt

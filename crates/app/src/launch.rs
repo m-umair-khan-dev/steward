@@ -1,11 +1,11 @@
 //! What to do at launch (P6-T06, P7-T10): the command line and the desktop
-//! file's actions. Cairn runs once per session; a second launch hands its
+//! file's actions. Steward runs once per session; a second launch hands its
 //! request to the running window over D-Bus (org.gtk.Actions) and exits.
-//! The commands themselves are in `cairn_core::cli`.
+//! The commands themselves are in `steward_core::cli`.
 
 use std::cell::RefCell;
 
-pub use cairn_core::cli::Request;
+pub use steward_core::cli::Request;
 
 thread_local! {
     static STARTUP: RefCell<Vec<Request>> = const { RefCell::new(Vec::new()) };

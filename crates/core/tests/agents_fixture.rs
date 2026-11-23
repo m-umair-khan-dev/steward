@@ -6,7 +6,7 @@ use std::process::Command;
 
 #[test]
 fn the_fixture_agents_match_the_manifest() {
-    let root = std::env::temp_dir().join(format!("cairn-agents-{}", std::process::id()));
+    let root = std::env::temp_dir().join(format!("steward-agents-{}", std::process::id()));
     let _ = std::fs::remove_dir_all(&root);
     let script =
         Path::new(env!("CARGO_MANIFEST_DIR")).join("../../docker/scripts/make-fixture-home");
@@ -20,10 +20,10 @@ fn the_fixture_agents_match_the_manifest() {
             .success()
     );
     let manifest: serde_json::Value =
-        serde_json::from_str(&std::fs::read_to_string(root.join(".cairn-fixture")).unwrap())
+        serde_json::from_str(&std::fs::read_to_string(root.join(".steward-fixture")).unwrap())
             .unwrap();
     let expected = &manifest["agents"];
-    let agents = cairn_core::agents::scan(&root);
+    let agents = steward_core::agents::scan(&root);
 
     let found: Vec<String> = agents
         .projects

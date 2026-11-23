@@ -6,7 +6,7 @@
 | **Date** | 15 November 2026 |
 | **Reference product** | FileOS 1.0.3 for macOS, [fileosmac.com](https://fileosmac.com/) |
 | **Reference capture** | [fileosmac/README.md](fileosmac/README.md), with recordings in [fileosmac/gifs/](fileosmac/gifs/) and stills in [fileosmac/screenshots/](fileosmac/screenshots/) |
-| **Working codename** | **Cairn** (placeholder; see [§1.3](#13-name-brand-and-what-we-may-not-copy)) |
+| **Working codename** | **Steward** (placeholder; see [§1.3](#13-name-brand-and-what-we-may-not-copy)) |
 | **Targets** | Ubuntu 24.04 LTS, Ubuntu 26.04 LTS and the current interim release, on GNOME with Wayland |
 | **Licence** | Open source; GPL-3.0-or-later recommended ([§11.2](#112-open-decisions-for-the-product-owner)) |
 | **Built by** | An AI coding agent (Claude Opus) phase by phase, with a human maintainer for the steps marked HUMAN ([§10](#10-implementation-plan-phases-and-end-to-end-tests)) |
@@ -74,7 +74,7 @@ A desktop file manager is not *deployed* in a container. End users install a `.d
 
 "FileOS", its icon, its purple brand, its site copy, its demo animations and its customer testimonials belong to its maker. The Ubuntu product takes the *ideas* (which are not protected) and must supply its own *expression*:
 
-- A new name and icon. "Cairn" is a placeholder; pick a name, check it against existing trademarks, and register a domain so the app ID can be proper reverse-DNS (this document uses `dev.cairn.Files`).
+- A new name and icon. "Steward" is a placeholder; pick a name, check it against existing trademarks, and register a domain so the app ID can be proper reverse-DNS (this document uses `io.github.m_umair_khan_dev.steward`).
 - Do not use "Ubuntu" in the product name or logo. That is Canonical's trademark. "for Ubuntu" as a description is fine.
 - The six quoted X users praised FileOS for Mac. Reusing their words or avatars for another product would be a fabricated endorsement. They are excluded outright.
 - Everything in [fileosmac/](fileosmac/) is **reference material for the team**, never shipped. [§5](#5-assets-mapping-the-scraped-material) maps each item to what replaces it.
@@ -170,11 +170,11 @@ The interface follows the reference captures in [fileosmac/](fileosmac/) closely
 
 ### 3.2 From macOS idiom to Ubuntu
 
-| Reference (macOS) | Cairn on Ubuntu |
+| Reference (macOS) | Steward on Ubuntu |
 |---|---|
 | Traffic lights, top left | Our own window buttons (minimise, maximise, close) at the right of the header, round and quiet. The window is frameless; we draw the whole chrome so it matches (GNOME expects client-side decorations) |
 | Sidebar as an inset rounded panel | Same |
-| App name row ("FileOS" + icon) | "Cairn" + our own app badge |
+| App name row ("FileOS" + icon) | "Steward" + our own app badge |
 | Sections Workspaces, Bookmarks, Favorites, Tools, Locations | Same order. Favorites holds Home and the XDG folders; Locations holds drives, phones and network shares. Sections appear as their features land (Workspaces Phase 4, Bookmarks Phase 7, Tools Phases 5 and 7) |
 | "MacBook Air · 147.8 GB free" with a bar | "Computer · 147.8 GB free" with a bar; opens About This Computer (Phase 5) |
 | ⌘ shortcuts | Ctrl shortcuts ([Appendix A](#appendix-a-keyboard-map)) |
@@ -191,7 +191,7 @@ Matches [smart-downloads.png](fileosmac/screenshots/smart-downloads.png):
 
 ```
 ╭──────────────╮  ╭─────────────────────────────────────────────────────────────────────────────╮
-│ ▣ Cairn    ⇤ │  │ (‹ ›)  Downloads        ( None│Kind│Date ) (☰│▦) (▤│▥│◫) ( Filter… ) ⋯  – ▢ ✕ │ header
+│ ▣ Steward    ⇤ │  │ (‹ ›)  Downloads        ( None│Kind│Date ) (☰│▦) (▤│▥│◫) ( Filter… ) ⋯  – ▢ ✕ │ header
 │              │  │ Computer › home › sam › Downloads                         Ctrl+L to type a path│ crumbs
 │ Workspaces   │  ├───────────────────────────────────────────────────────┬─────────────────────┤
 │  ▤ Launch    │  │ [All 29] [Folders 3] [Images 6] [Videos 2]   3 folders…│ Downloads           │
@@ -214,7 +214,7 @@ Matches [smart-downloads.png](fileosmac/screenshots/smart-downloads.png):
 | Element | Specification |
 |---|---|
 | Window | Lavender background (`bg`). Frameless; 8 px gutter around the sidebar panel; the content pane is white. Drag by any empty header area (system move); resize from the edges (system resize). Remembers size and maximised state |
-| Sidebar | Inset rounded panel, 210–240 px, radius 16, `sidebar` colour, 1 px `line` border. App row (badge + "Cairn", 19 px bold) with a collapse button. Section headings 12 px semibold, 50 % ink. Rows 34 px, radius 10, purple line icons, label, optional count on the right in `faint`. Selected row: accent at 16 % with bold label. Computer row pinned at the bottom with a thin purple usage bar and "N GB free" |
+| Sidebar | Inset rounded panel, 210–240 px, radius 16, `sidebar` colour, 1 px `line` border. App row (badge + "Steward", 19 px bold) with a collapse button. Section headings 12 px semibold, 50 % ink. Rows 34 px, radius 10, purple line icons, label, optional count on the right in `faint`. Selected row: accent at 16 % with bold label. Computer row pinned at the bottom with a thin purple usage bar and "N GB free" |
 | Collapsed sidebar | A 56 px icon rail (app badge, one icon per entry, computer icon). Hovering the rail slides the full sidebar over the content (spring, 250 ms); leaving it slides back. The collapse button and F9 toggle |
 | Header | 56 px. Left: back/forward in a white pill with a soft shadow; folder title 20 px bold. Right: grouping segmented control (None, Kind, Date); view switch (list, grid); pane toggles (preview pane; later the space chart and dual pane) where active buttons are filled with the accent; "Filter this folder" pill field; ⋯ menu; window buttons |
 | Breadcrumb row | Full path from the disk root ("Computer › home › sam › Downloads"), muted segments, current segment bold; "Ctrl+L to type a path" hint on the right. Ctrl+L turns the row into a text field with Tab completion |
@@ -339,7 +339,7 @@ Same six as the reference at launch. QML strings use `qsTr()` and Rust strings g
 | iCloud Drive, Dropbox, external drives in the sidebar | Adapt | Whatever GVfs mounts: external drives, SMB/SFTP/WebDAV shares, and GNOME Online Accounts drives (Google Drive, Nextcloud, OneDrive on newer releases **[verify]**). Dropbox appears as its normal synced folder | P1 |
 | Finder tags | Exclude | No system-wide equivalent that other apps honour | – |
 | AirDrop, Recents, Shared in sidebar | Exclude | AirDrop is Apple-only. "Recent" may come later from the XDG recently-used list | – |
-| Folder symbols (automatic by name, project type or "mostly PDFs"; or chosen) and per-folder colour, saved on the folder | Keep | Same rule order. Stored as user extended attributes (`user.cairn.symbol`, `user.cairn.color`) so they survive rename and move; database fallback on filesystems without xattrs (FAT, exFAT, some network shares) | P2 |
+| Folder symbols (automatic by name, project type or "mostly PDFs"; or chosen) and per-folder colour, saved on the folder | Keep | Same rule order. Stored as user extended attributes (`user.steward.symbol`, `user.steward.color`) so they survive rename and move; database fallback on filesystems without xattrs (FAT, exFAT, some network shares) | P2 |
 | Light, Dark or as system | Keep | `Theme.qml` light and dark palettes; "system" follows the desktop through Qt's style hints | P1 |
 | Open In (terminal, editor), add your own app | Adapt | Detect installed apps from desktop files. Terminals: the system default (via `xdg-terminal-exec` where present, else `x-terminal-emulator`), GNOME Terminal, Ptyxis, Ghostty, Kitty, Alacritty, WezTerm. Editors: VS Code, Cursor, Zed, Sublime Text, JetBrains IDEs, GNOME Text Editor, GNOME Builder. Xcode, Nova, BBEdit and iTerm are Mac-only and dropped | P2 |
 | Choose which folder is Downloads | Keep | Default from `xdg-user-dirs` | P1 |
@@ -363,7 +363,7 @@ Same six as the reference at launch. QML strings use `qsTr()` and Rust strings g
 | Search finds words in screenshots | Adapt | OCR with Tesseract, optional package, only for the Screenshots folder and imported phone screenshots | P3 |
 | **Peek** (Space; PDFs scroll, videos play, Info with where a file came from) | Adapt | Images via QML `Image`, PDF via Qt PDF, video and audio via Qt Multimedia, text and code in a QML text view with syntax colouring. "Where from" reads the `user.xdg.origin.url` attribute, which only some downloaders set, so the row is shown only when present | P1 |
 | **Markdown** (Preview, Edit, Split, outline) | Keep | QML `TextArea` for editing; preview with QML's own Markdown rendering (no web engine, so no scripts and no network) | P2 |
-| **Bookmarks** (links with pictures, collections, tags, four views) | Adapt | GNOME has no system Share menu. Ways in: paste with `Ctrl+V`, drag a link onto the page, `cairn add-link URL`, the dock-icon action "Add Link". A browser extension is a later option. Fetching a link's title and picture contacts that site; say so in Settings and allow turning it off | P2 |
+| **Bookmarks** (links with pictures, collections, tags, four views) | Adapt | GNOME has no system Share menu. Ways in: paste with `Ctrl+V`, drag a link onto the page, `steward add-link URL`, the dock-icon action "Add Link". A browser extension is a later option. Fetching a link's title and picture contacts that site; say so in Settings and allow turning it off | P2 |
 | **Git at a glance** (branch and uncommitted count, read-only) | Keep | Pure-Rust Git reader (`gix`), so no dependency on a `git` binary and no chance of writing | P2 |
 | Path bar commands (`code .`, `zed`, `terminal` …) | Keep | Maps to Open In targets | P2 |
 | **AI Agents** (projects set up for coding agents, their files, MCP servers, token usage from local logs, local dev servers with Stop) | Keep | These tools keep the same files on Linux **[verify paths per tool]**. Local servers come from listening sockets in `/proc` matched to the user's processes. Stop sends a normal terminate signal after asking | P2 |
@@ -373,7 +373,7 @@ Same six as the reference at launch. QML strings use `qsTr()` and Rust strings g
 | **Drop Shelf and Holding** | Adapt | **Shelf**: see [§4.4](#44-redesigned-the-shelf) | P3 |
 | Menu bar icon (latest downloads, quick access) | Adapt | Tray icon that toggles the Shelf; the Shelf gains a "Latest downloads" row and quick-access folders | P3 |
 | Spotlight integration | Replace | GNOME Shell search provider | P3 |
-| Shortcuts and Siri actions (eight actions) | Replace | `GApplication` actions, the `cairn` CLI and desktop-file actions | P2 |
+| Shortcuts and Siri actions (eight actions) | Replace | `GApplication` actions, the `steward` CLI and desktop-file actions | P2 |
 | Open at login | Keep | XDG autostart entry, off by default, only needed for the Shelf and tray | P3 |
 | Welcome tour, "What's New" after update, Report a Bug | Keep | "Report a Bug" opens the project's issue tracker instead of an email | P1 |
 | Licence key: buy, activate, deactivate, move to another computer | Exclude | The project is open source | – |
@@ -407,7 +407,7 @@ The reference's Drop Shelf drops out of the MacBook notch on ⌥Space, or when a
 | Reference behaviour | Why it does not port | Ubuntu design |
 |---|---|---|
 | Drops from the notch, top centre | A Wayland app cannot choose its position on screen | A small Shelf window the compositor places. With our optional GNOME Shell extension installed, the extension pins it top-centre, above other windows |
-| ⌥Space from any app | `Alt+Space` is the window menu on GNOME. Global keys need the GlobalShortcuts portal, which older GNOME lacks **[verify on 24.04]** | Default `Ctrl+Alt+Space`. Registered through the portal where available; otherwise as a GNOME custom keybinding that runs `cairn shelf` |
+| ⌥Space from any app | `Alt+Space` is the window menu on GNOME. Global keys need the GlobalShortcuts portal, which older GNOME lacks **[verify on 24.04]** | Default `Ctrl+Alt+Space`. Registered through the portal where available; otherwise as a GNOME custom keybinding that runs `steward shelf` |
 | Opens when a drag starts in any app | An app cannot observe other apps' drags | Not in the base product. The extension may be able to detect drags through the compositor **[verify, spike]** |
 
 What stays the same: **Holding** (a well that remembers files without moving them, persists across restarts, drag out to any app), numbered pinned folders (press 1 to 9), drop to move, `Ctrl` while dropping to copy (the Linux convention, where the reference uses ⌥), the result line with Undo. The Shelf also absorbs the reference's menu-bar panel: a "Latest downloads" row and quick-access folders.
@@ -432,7 +432,7 @@ The extension is strictly optional. Every Shelf function works without it.
 | Sound effects | Low value on Ubuntu; revisit later |
 | In-app updater | apt does this |
 | Checkout, licence keys, activation, the thank-you page, the launch waitlist | The project is open source; there is nothing to sell or activate |
-| "Compared with Finder" table as-is | Rewrite as "Files, or Cairn?" against Nautilus, with claims checked against the Nautilus version on each supported Ubuntu release |
+| "Compared with Finder" table as-is | Rewrite as "Files, or Steward?" against Nautilus, with claims checked against the Nautilus version on each supported Ubuntu release |
 
 ### 4.6 About This Computer
 
@@ -467,7 +467,7 @@ MTP is slow and single-threaded. The design must show thumbnails progressively, 
 
 Small features the reference cannot have, which make the product feel native:
 
-- **"Open as default file manager" option**, off by default, implementing `org.freedesktop.FileManager1` so "Show in folder" in browsers can open Cairn.
+- **"Open as default file manager" option**, off by default, implementing `org.freedesktop.FileManager1` so "Show in folder" in browsers can open Steward.
 - **Snap, Flatpak and apt awareness** throughout Installed, Smart Clean and About.
 - **Dock-icon actions**: New Window, New Workspace, Free Up Space, Add Link.
 - **Network places**: connect to server (SMB, SFTP, WebDAV) through GVfs.
@@ -502,7 +502,7 @@ Each recording doubles as an **interaction specification** for one screen and as
 | `gifs/search.gif` | Overlay layout, chips, matched-line rows, key hints | Search | P1 |
 | `screenshots/design.png` | Card anatomy, folder card, preview-pane tree | Design | P1 |
 | `gifs/developers.gif` | Git chip, Open In menu | For developers | P2 |
-| `gifs/peek.gif`, `bookmarks.gif`, `about-this-mac.gif`, `screenshots/ai-agents.png`, `installed.png` | The five secondary tools | "More in Cairn" tiles | P2 |
+| `gifs/peek.gif`, `bookmarks.gif`, `about-this-mac.gif`, `screenshots/ai-agents.png`, `installed.png` | The five secondary tools | "More in Steward" tiles | P2 |
 | `gifs/iphone.gif` | Phone view, picked bar, badge | Your phone | P3 |
 | `gifs/drop-shelf.gif` | Holding, pinned folders, drop feedback | Shelf | P3 |
 | `screenshots/keys.png` | Shortcut set (remapped in [Appendix A](#appendix-a-keyboard-map)) | Keyboard section | P1 |
@@ -571,11 +571,11 @@ calls presenter.activate(…)          + signals (toast, quit, …)             
 | Window chrome | Frameless window, our header, `startSystemMove`/`startSystemResize` | Matches the look on GNOME |
 | Translation | `qsTr()` in QML, gettext in Rust | Unified in Phase 6 |
 
-**Module structure** (crate `cairn`):
+**Module structure** (crate `steward`):
 
 ```
 crates/app/
-├─ build.rs              QML module dev.cairn.files, cxx-qt bridge, icons, settings schema
+├─ build.rs              QML module dev.steward.files, cxx-qt bridge, icons, settings schema
 ├─ qml/
 │  ├─ Main.qml           window, layout, shortcuts, dialogs
 │  ├─ Theme.qml          colour and size tokens (§3.6)
@@ -620,7 +620,7 @@ Plain GJS, no build framework, in `shell-extension/`. Scope is deliberately tiny
 
 ### 7.1 Local backend (inside the desktop app)
 
-All logic that is not widgets lives in `cairn-core`, a Rust library with **no UI-toolkit dependency** (neither Qt nor GTK), so it can be unit-tested headlessly and reused by the indexer and the CLI.
+All logic that is not widgets lives in `steward-core`, a Rust library with **no UI-toolkit dependency** (neither Qt nor GTK), so it can be unit-tested headlessly and reused by the indexer and the CLI.
 
 | Module | Responsibility | Key technology |
 |---|---|---|
@@ -640,14 +640,14 @@ All logic that is not widgets lives in `cairn-core`, a Rust library with **no UI
 
 **Why our own index rather than the desktop's (LocalSearch/Tracker).** The system indexer covers only configured folders, differs in name and schema between Ubuntu releases, and is tuned for desktop search rather than "every folder with this name, anywhere". We need folder sizes and kind breakdowns from the same crawl anyway. One crawl, one database, same behaviour on every release.
 
-**The indexer** (`cairn-indexer`) is a separate small binary run as a **systemd user service**, started by the app on first launch and D-Bus activatable. It crawls at idle priority, watches with inotify, falls back to periodic re-scans when the watch limit is reached, and pauses on battery. It is the only writer of the index database; the app opens it read-only.
+**The indexer** (`steward-indexer`) is a separate small binary run as a **systemd user service**, started by the app on first launch and D-Bus activatable. It crawls at idle priority, watches with inotify, falls back to periodic re-scans when the watch limit is reached, and pauses on battery. It is the only writer of the index database; the app opens it read-only.
 
 **Local data**
 
 | Store | Location | Contents | If deleted |
 |---|---|---|---|
-| `app.db` (SQLite, WAL) | `~/.local/share/cairn/` | Workspaces, bookmarks, sidebar, Shelf, undo journal, phone import records | User data lost: back this up |
-| `index.db` (SQLite, WAL) | `~/.cache/cairn/` | Names, content, sizes | Rebuilt automatically |
+| `app.db` (SQLite, WAL) | `~/.local/share/steward/` | Workspaces, bookmarks, sidebar, Shelf, undo journal, phone import records | User data lost: back this up |
+| `index.db` (SQLite, WAL) | `~/.cache/steward/` | Names, content, sizes | Rebuilt automatically |
 | GSettings | dconf | Preferences, shortcuts | Defaults return |
 | Thumbnails | `~/.cache/thumbnails/` (shared FreeDesktop cache) | | Rebuilt |
 
@@ -736,7 +736,7 @@ The project is open source. There is no checkout, no licence key, no account and
 
 **Content management.** Site copy, guide pages and release notes are Markdown files under `site/src/content/`, validated by Astro content collections (a typed schema catches a missing title or date at build time). A change is a pull request; merge deploys. Release notes are written once and feed three places: the site changelog, the in-app "What's New" and the Debian changelog.
 
-**What was dropped from the reference, and why.** Checkout, licence keys, activation and deactivation, the thank-you page and the launch waitlist all exist to sell the Mac app. None applies to an open-source project. If the model ever changes, licensing would be added as one new module in `cairn-core` plus a small service; nothing else in this design depends on its absence.
+**What was dropped from the reference, and why.** Checkout, licence keys, activation and deactivation, the thank-you page and the launch waitlist all exist to sell the Mac app. None applies to an open-source project. If the model ever changes, licensing would be added as one new module in `steward-core` plus a small service; nothing else in this design depends on its absence.
 
 ### 7.3 Integrations
 
@@ -760,11 +760,11 @@ The project is open source. There is no checkout, no licence key, no account and
 ```
 ┌─────────────────────────────── user session ───────────────────────────────┐
 │                                                                             │
-│  cairn (Qt/QML app + Rust)               cairn-indexer (systemd user unit)  │
+│  steward (Qt/QML app + Rust)               steward-indexer (systemd user unit)  │
 │  ┌───────────────────────────┐           ┌───────────────────────────┐      │
 │  │ QML UI ◄─► Presenter      │           │ crawler · inotify watcher │      │
 │  ├───────────────────────────┤  D-Bus    │ size roll-up              │      │
-│  │ cairn-core                │◀─control─▶│ text extraction ──┐       │      │
+│  │ steward-core                │◀─control─▶│ text extraction ──┐       │      │
 │  │  ops engine + undo journal│           └───────┬───────────│───────┘      │
 │  │  plan · clean · dupes     │                   │ writes    ▼              │
 │  │  packages · git · agents  │   reads   ┌───────▼──────┐  bwrap sandbox    │
@@ -859,7 +859,7 @@ How:
 
 ### 8.7 Maintainability
 
-- **One Cargo workspace**, strict crate boundaries: `cairn-core` has no UI; `cairn` has no business logic.
+- **One Cargo workspace**, strict crate boundaries: `steward-core` has no UI; `steward` has no business logic.
 - **Platform probes behind traits** (`PhoneSource`, `PackageSource`, `Suggester`, `SysProbe`) with fake implementations, so every feature is testable in a container with no hardware.
 - **Two-release build matrix** (24.04 and 26.04) on every pull request catches API drift early.
 - **Architecture Decision Records** in `docs/adr/`, one per decision in [§1.2](#12-key-decisions).
@@ -885,7 +885,7 @@ How:
 ### 9.1 Repository layout
 
 ```
-cairn/
+steward/
 ├─ Makefile                     every workflow is a make target wrapping docker compose
 ├─ compose.desktop.yaml         desktop app: dev GUI, tests, end-to-end tests, packaging
 ├─ compose.yaml                 website preview (Caddy) and apt repository publishing
@@ -982,9 +982,9 @@ FROM base AS build
 COPY . .
 RUN --mount=type=cache,target=/usr/local/cargo/registry \
     --mount=type=cache,target=/var/cache/cargo-target \
-    cargo build --release --locked -p cairn -p cairn-indexer -p cairn-cli && \
-    mkdir -p /out && cp ${CARGO_TARGET_DIR}/release/cairn \
-       ${CARGO_TARGET_DIR}/release/cairn-indexer ${CARGO_TARGET_DIR}/release/cairn-cli /out/
+    cargo build --release --locked -p steward -p steward-indexer -p steward-cli && \
+    mkdir -p /out && cp ${CARGO_TARGET_DIR}/release/steward \
+       ${CARGO_TARGET_DIR}/release/steward-indexer ${CARGO_TARGET_DIR}/release/steward-cli /out/
 
 # ---- package: .deb -----------------------------------------------------------
 FROM build AS package
@@ -995,7 +995,7 @@ RUN --mount=type=cache,target=/var/cache/apt,sharing=locked \
 RUN --mount=type=cache,target=/usr/local/cargo/registry \
     --mount=type=cache,target=/var/cache/cargo-target \
     cargo install --locked cargo-deb@${CARGO_DEB_VERSION} && \
-    cargo deb --locked -p cairn --no-build --output /out/ && lintian /out/*.deb
+    cargo deb --locked -p steward --no-build --output /out/ && lintian /out/*.deb
 
 # ---- artifact: `docker build --target artifact --output dist/` ---------------
 FROM scratch AS artifact
@@ -1005,7 +1005,7 @@ COPY --from=package /out/*.deb /
 FROM ubuntu:${UBUNTU_VERSION} AS install-test
 COPY --from=package /out/*.deb /tmp/
 RUN apt-get update && apt-get install -y --no-install-recommends /tmp/*.deb && \
-    cairn --version && cairn-cli --help >/dev/null
+    steward --version && steward-cli --help >/dev/null
 ```
 
 Package names are for 24.04 and should be confirmed on the first image build **[verify]**.
@@ -1013,7 +1013,7 @@ Package names are for 24.04 and should be confirmed on the first image build **[
 **`compose.desktop.yaml`**
 
 ```yaml
-name: cairn-desktop
+name: steward-desktop
 
 x-desktop-build: &desktop-build
   context: .
@@ -1038,7 +1038,7 @@ services:
       QML_DEBUG: ${QML_DEBUG:-}             # QML console and binding warnings
       G_MESSAGES_DEBUG: ${G_MESSAGES_DEBUG:-}
       RUST_BACKTRACE: "1"
-      CAIRN_DEV: "1"                        # live CSS reload; fixture-home guard on
+      STEWARD_DEV: "1"                        # live CSS reload; fixture-home guard on
     tmpfs:
       - /run/user/${HOST_UID:-1000}:uid=${HOST_UID:-1000},gid=${HOST_GID:-1000},mode=0700
     volumes:
@@ -1053,7 +1053,7 @@ services:
     init: true
     command: >
       dbus-run-session -- watchexec --restart --exts rs,blp,css,xml,toml
-      -- cargo run -p cairn
+      -- cargo run -p steward
 
   # Unit and integration tests.
   test:
@@ -1071,7 +1071,7 @@ services:
   e2e:
     extends: { service: test }
     environment:
-      CAIRN_E2E: "1"
+      STEWARD_E2E: "1"
       LANG: C.UTF-8
       G_DEBUG: fatal-criticals
     command: >
@@ -1089,7 +1089,7 @@ services:
 volumes:
   cargo-registry:
   cargo-target:
-    name: cairn-target-${UBUNTU_VERSION:-24.04}   # one build cache per Ubuntu release
+    name: steward-target-${UBUNTU_VERSION:-24.04}   # one build cache per Ubuntu release
   fixture-home:
 ```
 
@@ -1106,7 +1106,7 @@ volumes:
 | Window state | Debug builds reopen the last folder and view, so a relaunch lands where you were |
 | Inspecting the interface | `qmllint` in `make lint`; QML warnings in the log; GammaRay can attach for a live object tree **[verify packaging]** |
 
-Keeping `cairn-core` separate from the UI crate matters here: a UI edit recompiles only the thin UI crate.
+Keeping `steward-core` separate from the UI crate matters here: a UI edit recompiles only the thin UI crate.
 
 ### 9.4 The fixture home folder
 
@@ -1151,7 +1151,7 @@ The Caddyfile serves `/srv/site` at `/`, the repository volume at `/apt/`, and a
 **`compose.yaml`** (base)
 
 ```yaml
-name: cairn
+name: steward
 
 x-logging: &logging
   driver: json-file
@@ -1160,7 +1160,7 @@ x-logging: &logging
 services:
   # Production-like static server: the built site plus the apt repository.
   web:
-    image: ${REGISTRY}/cairn-web:${TAG}
+    image: ${REGISTRY}/steward-web:${TAG}
     build:
       context: .
       dockerfile: docker/web.Dockerfile
@@ -1190,7 +1190,7 @@ services:
     build: { context: ., dockerfile: docker/aptrepo.Dockerfile }
     environment:
       APT_SUITE: ${APT_SUITE:-dev}
-      APT_ORIGIN: ${APT_ORIGIN:-Cairn}
+      APT_ORIGIN: ${APT_ORIGIN:-Steward}
     volumes:
       - ./dist:/in:ro
       - aptrepo:/srv/apt
@@ -1273,7 +1273,7 @@ services:
 | `UBUNTU_VERSION` | `24.04` | Desktop build matrix, apt-install test |
 | `HOST_UID`, `HOST_GID` | set by the Makefile from `id -u`, `id -g` | Desktop dev containers (file ownership) |
 | `REGISTRY`, `TAG` | `ghcr.io/<org>`, `dev` | Image names |
-| `APT_SUITE`, `APT_ORIGIN` | `dev`, `Cairn` | Repository publishing |
+| `APT_SUITE`, `APT_ORIGIN` | `dev`, `Steward` | Repository publishing |
 | `SITE_DOMAIN` | `example.dev` | Self-hosting only |
 | `SECRETS_DIR` | `./secrets` | Compose secrets |
 | `E2E_MARK` | `not manual` | Which end-to-end tests run |
@@ -1283,7 +1283,7 @@ services:
 
 **Networking.** One default network. In development only the site (4321) and the preview server (8080) are published, both bound to `127.0.0.1`. The desktop containers publish nothing.
 
-**Volumes.** `aptrepo` (published repository), `aptly-db` (repository state), `caddy-data` and `caddy-config`, and the development caches (`cargo-registry`, `cairn-target-<release>`, `site-node-modules`, `fixture-home`). In production only `aptly-db` and `aptrepo` matter, and both can be rebuilt from the released `.deb` files.
+**Volumes.** `aptrepo` (published repository), `aptly-db` (repository state), `caddy-data` and `caddy-config`, and the development caches (`cargo-registry`, `steward-target-<release>`, `site-node-modules`, `fixture-home`). In production only `aptly-db` and `aptrepo` matter, and both can be rebuilt from the released `.deb` files.
 
 **Start-up order.** `apt-install-e2e` waits for `web` to be healthy. `docker compose up --wait` is the readiness check in CI.
 
@@ -1321,7 +1321,7 @@ Every command is a `make` target so nobody (human or agent) memorises Compose fl
 - *End-to-end failures:* each failed test leaves a screenshot, the accessibility tree as text, the app's JSON state and the app log in `artifacts/e2e/<test-id>/`. Read those before changing code.
 - *Containers:* `docker compose ps` for health; `docker compose exec web sh` for the preview server.
 
-**Logging.** The app logs to stderr through GLib's structured logging, with a per-module domain (`cairn-ops`, `cairn-index`, …), so `G_MESSAGES_DEBUG=cairn-ops` isolates one area. Never log file contents; log paths only at debug level. Containers log to stdout, rotated by the `json-file` driver (10 MB × 5).
+**Logging.** The app logs to stderr through GLib's structured logging, with a per-module domain (`steward-ops`, `steward-index`, …), so `G_MESSAGES_DEBUG=steward-ops` isolates one area. Never log file contents; log paths only at debug level. Containers log to stdout, rotated by the `json-file` driver (10 MB × 5).
 
 ### 9.8 CI and deployment
 
@@ -1378,13 +1378,13 @@ Copy these into `AGENTS.md` at the repository root in Phase 0.
 1. **One phase at a time, tasks in order.** Do not start a phase until the previous phase's gate has passed. One task per commit, with the task ID in the message (`P4-T03: Tidy plan dialog`).
 2. **Start and end every session with `docs/PROGRESS.md`.** Read it first, together with the current phase's section here and the ADRs. Before stopping, record what is done, what is next and what is blocked.
 3. **Everything runs through `make` in Docker.** Do not install toolchains on the host. Do not run the app outside the dev container.
-4. **Never touch a real home folder.** In development and test builds the app refuses to start unless its home contains the marker file `.cairn-fixture` (task P0-T05). Do not remove or bypass that guard.
+4. **Never touch a real home folder.** In development and test builds the app refuses to start unless its home contains the marker file `.steward-fixture` (task P0-T05). Do not remove or bypass that guard.
 5. **Write the test with the task.** Each end-to-end scenario below is implemented in the same commit series as the feature it covers. A task whose "done when" names a scenario is not done until that scenario passes.
 6. **The gate is `make check-all`.** It runs lint, unit and integration tests, and *every* end-to-end scenario written so far, on every supported release: Ubuntu 26.10 during development, with 24.04 and 26.04 added once the project is complete (ADR 0007). Earlier phases' scenarios are the regression suite; they stay green.
 7. **Never weaken a test to make it pass.** If a scenario is wrong, fix the scenario and say why in `docs/PROGRESS.md`. No `sleep` in tests; wait for a condition with a timeout.
 8. **When a [verify] item turns out false,** write an ADR in `docs/adr/` with what was found, apply the fallback this document names, and continue. If no fallback is named, stop and ask the human.
 9. **Stop at steps marked HUMAN.** These need real hardware, a real desktop session, a naming or legal decision, or a secret. List them in `docs/PROGRESS.md` and hand over.
-10. **All file changes go through `cairn-core::ops`.** No other module may move, copy, rename, trash or delete. A static check enforces this (scenario E2-13).
+10. **All file changes go through `steward-core::ops`.** No other module may move, copy, rename, trash or delete. A static check enforces this (scenario E2-13).
 11. **Keep the test hooks stable.** Every user command is a named `GAction`. Every interactive widget has an accessible name. All user-visible strings go through gettext. Tests run with `LANG=C.UTF-8`.
 12. **Do not copy from the reference.** No text, icons, images or demo data from [fileosmac/](fileosmac/). It is there to look at.
 
@@ -1393,7 +1393,7 @@ Copy these into `AGENTS.md` at the repository root in Phase 0.
 | Layer | What it proves | Where | Runs with |
 |---|---|---|---|
 | L1 Unit | Pure logic: planners, parsers, ranking, rules | `crates/*/src`, inline tests | `make test` |
-| L2 Integration | `cairn-core` against a real filesystem: operations, undo, index, suggesters | `crates/core/tests/`, on a fresh copy of the fixture home | `make test` |
+| L2 Integration | `steward-core` against a real filesystem: operations, undo, index, suggesters | `crates/core/tests/`, on a fresh copy of the fixture home | `make test` |
 | **L3 End-to-end** | **The real app binary, driven like a user, changes the real (fixture) filesystem correctly and shows the right thing** | `tests/e2e/` | `make e2e` |
 | L4 Packaged | The `.deb` installs on a clean system, the installed app passes the smoke scenarios, and `apt install` from the repository works | `install-test` stage, `compose.test.yaml` | `make deb-test`, `make apt-e2e` |
 | L5 Manual | What cannot be automated in a container: real phones, the real GNOME Shell, drag and drop between apps, screen reader | Checklist per phase, marked HUMAN | A person, on real Ubuntu 24.04 and 26.04 |
@@ -1403,9 +1403,9 @@ Copy these into `AGENTS.md` at the repository root in Phase 0.
 ```
 pytest (in the dev container)
   └─ fixture "app": for each test
-       1. copy the fixture home into a fresh tmpfs home (with .cairn-fixture)
+       1. copy the fixture home into a fresh tmpfs home (with .steward-fixture)
        2. start a private D-Bus session and a headless Wayland compositor
-       3. start cairn-indexer and cairn with CAIRN_E2E=1
+       3. start steward-indexer and steward with STEWARD_E2E=1
        4. yield a driver object; afterwards collect artifacts and stop everything
 ```
 
@@ -1415,11 +1415,11 @@ pytest (in the dev container)
 |---|---|---|
 | Trigger a command | Activate the app's or window's `GAction` over D-Bus (`org.gtk.Actions`, exported by the app through GIO, ADR 0009) | The same actions back the menus, shortcuts and the CLI, so this exercises the real code path |
 | Click a control, type text, read what is on screen | The accessibility tree (AT-SPI), by role and accessible name | This is also what a screen reader sees, so these tests double as accessibility checks |
-| Read precise state | `dev.cairn.Files.Test1.State()` returns JSON: current folder, visible items, selection, active pane, open dialog, toast text, queue | Compiled in only with the `e2e` cargo feature; never in release builds |
+| Read precise state | `io.github.m_umair_khan_dev.steward.Test1.State()` returns JSON: current folder, visible items, selection, active pane, open dialog, toast text, queue | Compiled in only with the `e2e` cargo feature; never in release builds |
 | Wait for background work | `Test1.WaitIdle(timeout_ms)` returns when the operations queue and the indexer are idle | Replaces sleeps |
 | Capture the window | `Test1.Screenshot(path)` renders the window to PNG from inside the app | Needs no screenshot permission from the compositor |
 | Check results on disk | Plain Python on the temporary home, plus `home.snapshot()` (paths, sizes, hashes) for before-and-after comparison | The primary assertion for anything that changes files |
-| Control time | `CAIRN_FAKE_NOW` shifts the app's clock | File birth time cannot be set, so "older than 90 days" rules are tested by moving "now" forward |
+| Control time | `STEWARD_FAKE_NOW` shifts the app's clock | File birth time cannot be set, so "older than 90 days" rules are tested by moving "now" forward |
 | Stand in for the system | Fake executables on `PATH` (`dpkg-query`, `snap`, `flatpak`, `sudo`, `pkexec`, editors, terminals) that return recorded output and log every call | Proves what the app asked for, and that it never ran a privileged or mutating command |
 | Real key presses | `app.press("ctrl+q")`: keys injected through mutter's remote-desktop interface (ADR 0003) | Needs the mutter compositor (the default). Pointer input and drags are not automated yet and stay on the HUMAN checklist |
 
@@ -1499,7 +1499,7 @@ Phases 7, 8 and 9 are independent of each other and can run in any order after 1
 | E0-01 | Launch headless | A window exists; the accessibility tree contains a header bar and a sidebar; no critical warnings in the log (`G_DEBUG=fatal-criticals`) |
 | E0-02 | Activate `app.about`, then close it | About dialog appears with the app name and version; closes |
 | E0-03 | `Test1.Screenshot` | A PNG of the window's size that is not a single flat colour |
-| E0-04 | Start with a home that lacks `.cairn-fixture` | The app exits with a clear error and touches nothing |
+| E0-04 | Start with a home that lacks `.steward-fixture` | The app exits with a clear error and touches nothing |
 | E0-05 | Activate `app.quit` | Process exits with code 0 within 2 s |
 
 **HUMAN.** Confirm or replace the codename and app ID. Confirm the licence ([§11.2](#112-open-decisions-for-the-product-owner)). Create the remote repository and enable CI. Run `make app` once on the host and confirm the window appears.
@@ -1557,7 +1557,7 @@ Phases 7, 8 and 9 are independent of each other and can run in any order after 1
 | E1-17 | Collapse the sidebar; open Documents from the rail; expand | The rail lists the same entries as icons; Documents opens; the full sidebar returns. (Hover expansion is on the HUMAN list) |
 | E1-18 | In Downloads, group by Kind with motion on; capture frames during the change | Cards move towards their kind folders over several frames (not a jump); the end state shows "By kind N" folders; with reduced motion the change is immediate |
 
-**HUMAN.** Compare the running app with the reference captures (§3) and sign off the look. On a real 26.10 desktop: window move and resize, hover effects and the sidebar hover expansion, text scaling at 200 %. Drag a file out of Cairn into Files. Plug in and eject a USB drive.
+**HUMAN.** Compare the running app with the reference captures (§3) and sign off the look. On a real 26.10 desktop: window move and resize, hover effects and the sidebar hover expansion, text scaling at 200 %. Drag a file out of Steward into Files. Plug in and eject a USB drive.
 
 **Gate.** `make check-all` green.
 
@@ -1614,7 +1614,7 @@ Phases 7, 8 and 9 are independent of each other and can run in any order after 1
 
 | ID | Task | Done when |
 |---|---|---|
-| P3-T01 | `cairn-indexer`: crawl configured roots at idle priority; batched writes; exclusion rules | L2: entry count equals the manifest |
+| P3-T01 | `steward-indexer`: crawl configured roots at idle priority; batched writes; exclusion rules | L2: entry count equals the manifest |
 | P3-T02 | `index.db` schema with the trigram name index ([§7.1](#71-local-backend-inside-the-desktop-app)); SQLite bundled so both releases behave the same | L2 |
 | P3-T03 | Folder size and count roll-up, updated incrementally | E3-02 |
 | P3-T04 | Watching with inotify; fall back to timed re-scans when the watch limit is hit; the app tells the indexer about its own operations | E3-05, E3-06 |
@@ -1656,7 +1656,7 @@ Phases 7, 8 and 9 are independent of each other and can run in any order after 1
 
 | ID | Task | Done when |
 |---|---|---|
-| P4-T01 | `core::plan`: a plan is a list of steps plus a list of skipped items with reasons; it can be shown, then handed to `ops` as one batch. Injectable clock (`CAIRN_FAKE_NOW`) | L1 |
+| P4-T01 | `core::plan`: a plan is a list of steps plus a list of skipped items with reasons; it can be shown, then handed to `ops` as one batch. Injectable clock (`STEWARD_FAKE_NOW`) | L1 |
 | P4-T02 | Tidy planner with the rules of [§4.2](#42-signature-features): loose files only, kind folders, skip partial downloads and files newer than 2 minutes, never move folders | L1 against the manifest |
 | P4-T03 | Tidy plan dialog and run; one toast, one Undo; `Ctrl+Shift+O` | E4-01 to E4-05 |
 | P4-T04 | `core::dupes`: size, partial hash, full hash; hash cache keyed by size and modification time | L2 with planted duplicates |
@@ -1791,7 +1791,7 @@ Phases 7, 8 and 9 are independent of each other and can run in any order after 1
 | P7-T07 | Markdown view: Preview, Edit, Split, outline, Save and Revert; preview with scripts and network disabled | E7-06 |
 | P7-T08 | Bookmarks: model, collections, tags, favourites; four views; paste and drop a link; metadata fetch with an off switch | E7-07 |
 | P7-T09 | Content search: sandboxed text extraction (text, code, Markdown, PDF, OpenDocument, Office); the Contents switch; matched line with the word in bold | E7-08, E7-09 |
-| P7-T10 | `cairn` command-line tool and matching app actions: open folder, open workspace, new workspace, add link, open Free Up Space | E7-10 |
+| P7-T10 | `steward` command-line tool and matching app actions: open folder, open workspace, new workspace, add link, open Free Up Space | E7-10 |
 | P7-T11 | Customisable shortcuts: change, clear, restore defaults, conflict warning | E7-11 |
 
 **End-to-end scenarios**
@@ -1807,7 +1807,7 @@ Phases 7, 8 and 9 are independent of each other and can run in any order after 1
 | E7-07 | Add a link pointing at the test's local server; then again with fetching off | First: a card with the page's title and picture. Second: no request is made and the card shows the address only. Both survive a restart |
 | E7-08 | Search with Contents on for a word planted inside a PDF, a document and a text file | Each is found with the matching line |
 | E7-09 | A planted file that makes extraction hang; a test helper that tries to open a network connection from inside the sandbox | Extraction times out and the app stays responsive; the connection is refused |
-| E7-10 | `cairn open-workspace`, `cairn add-link`, `cairn open` against the running app | Each has its effect in the running window |
+| E7-10 | `steward open-workspace`, `steward add-link`, `steward open` against the running app | Each has its effect in the running window |
 | E7-11 | Rebind Tidy; restore defaults; bind a key already in use | The new key is in the key-to-action table; defaults return; the conflict is reported |
 
 **HUMAN.** Try Open In with the terminals and editors actually installed. Check the AI Agents numbers against a real machine's usage.
@@ -1824,7 +1824,7 @@ Phases 7, 8 and 9 are independent of each other and can run in any order after 1
 |---|---|---|
 | P8-S1 | **Spike (with a human on real 24.04 and 26.04):** global shortcut through the portal versus a GNOME custom keybinding; tray icon behaviour; can a Shell extension place the Shelf window top-centre and keep it above; can it see a file drag begin | ADR per question. *Fallbacks:* custom keybinding; no tray on desktops without the extension; compositor-placed Shelf; no open-on-drag |
 | P8-S2 | **Spike (with a human and real phones):** Android over MTP and iPhone over PTP through GVfs: listing speed, thumbnails, dates, reliability | ADR. *Fallback:* ship Android only |
-| P8-T01 | Shelf window: Holding, numbered pinned folders with counts, latest downloads, quick access, result line with Undo; `app.shelf` action; `cairn shelf` | E8-01 to E8-04 |
+| P8-T01 | Shelf window: Holding, numbered pinned folders with counts, latest downloads, quick access, result line with Undo; `app.shelf` action; `steward shelf` | E8-01 to E8-04 |
 | P8-T02 | Shortcut registration by the route chosen in P8-S1; Preferences page "Shelf and tray" | E8-07 |
 | P8-T03 | Tray icon (StatusNotifierItem) that toggles the Shelf; open at login (autostart entry), off by default | E8-06 |
 | P8-T04 | GNOME Shell search provider for workspaces, collections and links, with a switch per kind | E8-05 |
@@ -1863,7 +1863,7 @@ Phases 7, 8 and 9 are independent of each other and can run in any order after 1
 | P9-T01 | Capability detection: when sandboxed, features that cannot work say why instead of showing nothing | E9-01 |
 | P9-T02 | Flatpak manifest and build | E9-02 |
 | P9-T03 | Hosted translation workflow; further languages | New languages pass E6-03 |
-| P9-T04 | Optional: browser extension that sends the current page to Bookmarks through `cairn add-link` | Manual check |
+| P9-T04 | Optional: browser extension that sends the current page to Bookmarks through `steward add-link` | Manual check |
 
 | ID | Scenario | Expected |
 |---|---|---|
@@ -1899,7 +1899,7 @@ Phases 7, 8 and 9 are independent of each other and can run in any order after 1
 | # | Question | Recommendation | Effect |
 |---|---|---|---|
 | O1 | **Source licence** | GPL-3.0-or-later. It suits the Linux desktop, is compatible with Qt (LGPL/GPL), and the PDF text tools are GPL | Licence file and headers in Phase 0 |
-| O2 | Final name, domain and app ID | Decide before Phase 6; the codename is fine until then | Replace `cairn` and `dev.cairn.Files` everywhere |
+| O2 | Final name, domain and app ID | Decide before Phase 6; the codename is fine until then | Replace `steward` and `io.github.m_umair_khan_dev.steward` everywhere |
 | O3 | Where the code and the site are hosted | Any Git host with CI and static hosting | CI syntax only |
 | O4 | Is the Shell extension in scope | Decide after spike P8-S1 | Phase 8 only |
 | O5 | Support GNOME on other distributions | Ubuntu first; Flatpak (Phase 9) is the route to others | Affects the Installed sources and packaging |

@@ -9,8 +9,8 @@ use gettextrs::gettext;
 use gio::prelude::*;
 use serde_json::json;
 
-use cairn_core::Kind;
-use cairn_core::ops::style::{self, Style};
+use steward_core::Kind;
+use steward_core::ops::style::{self, Style};
 
 use super::{Controller, dirty};
 use crate::app_data;
@@ -127,7 +127,9 @@ pub fn auto_symbol(path: &Path, name: &str) -> &'static str {
                 continue;
             }
             total += 1;
-            *counts.entry(cairn_core::plan::kind_of(&name)).or_default() += 1;
+            *counts
+                .entry(steward_core::plan::kind_of(&name))
+                .or_default() += 1;
         }
     }
     if let Some((kind, n)) = counts.into_iter().max_by_key(|(_, n)| *n)

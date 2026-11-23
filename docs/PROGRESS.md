@@ -122,7 +122,7 @@ Decisions:
   sparse file.
 - Undo of a copy sends the copy to the Trash rather than deleting it, so Undo
   itself never loses data.
-- Test hook `CAIRN_OPS_STEP_DELAY_MS` (e2e builds only) slows each step so a
+- Test hook `STEWARD_OPS_STEP_DELAY_MS` (e2e builds only) slows each step so a
   test can cancel or kill midway (E2-07, E2-11).
 
 Harness fix (rule 7, not a weaker test): the compositor could drop the very
@@ -143,7 +143,7 @@ E3-10: one million entries, p95 32 to 36 ms against a 50 ms limit
 
 | ID | Task | Status | Notes |
 |---|---|---|---|
-| P3-T01 | `cairn-indexer`: crawl at idle priority, batched writes, exclusions | done | L2 count equals the manifest |
+| P3-T01 | `steward-indexer`: crawl at idle priority, batched writes, exclusions | done | L2 count equals the manifest |
 | P3-T02 | `index.db` with a trigram name index | done | L2 |
 | P3-T03 | Size and count roll-up, incremental | done | L2, E3-02 |
 | P3-T04 | Watching (GIO monitors, inotify); timed re-crawls past the limit; Notify from the app | done | E3-05, E3-06 |
@@ -179,7 +179,7 @@ and 13 fixture tests pass; end-to-end E0-01 to E4-14 (64 scenarios) pass.
 
 | ID | Task | Status | Notes |
 |---|---|---|---|
-| P4-T01 | `core::plan`, fake clock `CAIRN_FAKE_NOW` | done | L1 |
+| P4-T01 | `core::plan`, fake clock `STEWARD_FAKE_NOW` | done | L1 |
 | P4-T02 | Tidy planner | done | L1 against the manifest |
 | P4-T03 | Tidy plan dialog and run; one Undo; Ctrl+Shift+O | done | E4-01 to E4-05 |
 | P4-T04 | `core::dupes` with a hash cache | done | L2 with planted duplicates |
@@ -306,16 +306,16 @@ Decisions and findings:
 - Version 1.0.0. Release notes live in site/src/content/changelog/<version>.md
   and feed What's New, the Debian changelog and (later) the site; a version
   without notes does not build.
-- Test builds skip the welcome unless CAIRN_NO_WELCOME is set empty (E6-01
+- Test builds skip the welcome unless STEWARD_NO_WELCOME is set empty (E6-01
   does); release builds always show it on a first run.
 - QML strings go through `p.t()` (gettext on the presenter); the five
   catalogs are AI drafts, marked so in their headers (HUMAN review).
   Some messages are sentence fragments joined in code; whole sentences with
   placeholders are a later improvement.
-- Cairn has one window, so the desktop file's "New Window" brings the window
+- Steward has one window, so the desktop file's "New Window" brings the window
   forward at the Home folder. A second launch hands its request to the
-  running Cairn over org.gtk.Actions.
-- FileManager1 is served only while Cairn runs and Files does not own the
+  running Steward over org.gtk.Actions.
+- FileManager1 is served only while Steward runs and Files does not own the
   name; no D-Bus activation file, because it would clash with Nautilus's.
 - Smoke scenarios (tests/e2e/test_smoke.py) use only public interfaces so
   they run against the installed release build, which has no Test1. E0-01
@@ -348,8 +348,8 @@ Decisions and findings:
 | P7-T06 | AI Agents view | done | E7-04, E7-05 |
 | P7-T07 | Markdown view | done | E7-06. Remote images (inline, reference and `<img>`) are removed before QML renders; local images only from the document's folder |
 | P7-T08 | Bookmarks | done | E7-07. `ureq` (rustls) fetches title and picture, bounded in time and size; the Preferences switch turns it off. Four views; paste, drop, Add Link (Ctrl+Shift+L) |
-| P7-T09 | Content search | done | E7-08, E7-09. The indexer reads text in `bwrap` (ADR 0005 profile) by running itself as `cairn-indexer extract FILE`; 20 s limit; Home only, plus the `content-folders` setting (no Preferences UI for it yet). `poppler-utils` added to the image and to Recommends; `bubblewrap` added to Depends |
-| P7-T10 | `cairn` command-line tool | done | E7-10. Commands live in `cairn_core::cli`; `cairn` forwards them to the running window (or runs them at start-up); `cairn-cli` does the same without Qt and starts `cairn` when none runs (not packaged). Desktop action "Add Link". Man page updated |
+| P7-T09 | Content search | done | E7-08, E7-09. The indexer reads text in `bwrap` (ADR 0005 profile) by running itself as `steward-indexer extract FILE`; 20 s limit; Home only, plus the `content-folders` setting (no Preferences UI for it yet). `poppler-utils` added to the image and to Recommends; `bubblewrap` added to Depends |
+| P7-T10 | `steward` command-line tool | done | E7-10. Commands live in `steward_core::cli`; `steward` forwards them to the running window (or runs them at start-up); `steward-cli` does the same without Qt and starts `steward` when none runs (not packaged). Desktop action "Add Link". Man page updated |
 | P7-T11 | Customisable shortcuts | done | E7-11. Changes are kept in the `shortcuts` setting (a{sas}) over the built-in table; Preferences › Shortcuts records a key (app shortcuts pause meanwhile), clears one, restores defaults, and refuses a key already in use with a message. A filter field finds a shortcut |
 
 Notes:
@@ -370,7 +370,7 @@ Notes:
 - Product owner's request (2026-11-22), outside DESIGN's task list: colour
   options. Style "System" takes Ubuntu's accent colour (GNOME 47+
   `accent-color`, or the Yaru variant on 24.04), live; Light and Dark offer
-  Cairn's own colours (purple, blue, teal, green, orange, rose, graphite),
+  Steward's own colours (purple, blue, teal, green, orange, rose, graphite),
   each with a light and a dark shade; folders follow the colour.
 - 2026-11-21: the product owner deleted all Docker images and volumes to free
   disk space; the dev image and fixture were rebuilt.
@@ -381,10 +381,10 @@ Notes:
 |---|---|---|---|
 | P8-S1 | Spike: shortcut, tray, extension | deferred to HUMAN | Built on the named fallbacks until checked on real 24.04/26.04 (ADR 0014) |
 | P8-S2 | Spike: phones | on hold | Product owner's decision |
-| P8-T01 | Shelf window | done | E8-01 to E8-04. Its own window; pins (defaults until chosen), Holding in app.db (migration 6), latest downloads, quick access, result line with Undo; `app.shelf`, `cairn shelf`; "Add to Holding" and "Pin to Shelf" in the item menu |
-| P8-T02 | Shelf shortcut; "Shelf and tray" page | done | E8-07. GNOME custom keybinding running `cairn shelf` (ADR 0014), off by default, removed when turned off; default Ctrl+Alt+Space, changeable on the new "Shelf and Tray" page |
-| P8-T03 | Tray icon; open at login | done | E8-06. StatusNotifierItem with its own bus name (off by default); click toggles the Shelf, middle click shows the window; re-registers when the panel appears. Open at login writes an autostart entry that runs `cairn --background` (no window). With the icon on, closing the window keeps Cairn running |
-| P8-T04 | Shell search provider | done | E8-05. org.gnome.Shell.SearchProvider2 on the app's bus name for workspaces, collections and links (a switch each, on the Search page); ini and a D-Bus service file (starts `cairn --background`) packaged |
+| P8-T01 | Shelf window | done | E8-01 to E8-04. Its own window; pins (defaults until chosen), Holding in app.db (migration 6), latest downloads, quick access, result line with Undo; `app.shelf`, `steward shelf`; "Add to Holding" and "Pin to Shelf" in the item menu |
+| P8-T02 | Shelf shortcut; "Shelf and tray" page | done | E8-07. GNOME custom keybinding running `steward shelf` (ADR 0014), off by default, removed when turned off; default Ctrl+Alt+Space, changeable on the new "Shelf and Tray" page |
+| P8-T03 | Tray icon; open at login | done | E8-06. StatusNotifierItem with its own bus name (off by default); click toggles the Shelf, middle click shows the window; re-registers when the panel appears. Open at login writes an autostart entry that runs `steward --background` (no window). With the icon on, closing the window keeps Steward running |
+| P8-T04 | Shell search provider | done | E8-05. org.gnome.Shell.SearchProvider2 on the app's bus name for workspaces, collections and links (a switch each, on the Search page); ini and a D-Bus service file (starts `steward --background`) packaged |
 | P8-T05 | Shell extension | waits for P8-S1 and decision O4 | HUMAN |
 | P8-T06 to P8-T08 | Phone | on hold | Product owner's decision |
 
@@ -392,22 +392,21 @@ Notes:
 
 | ID | Task | Status | Notes |
 |---|---|---|---|
-| P9-T01 | Capability detection | done | E9-01. `cairn_core::sandbox` detects Flatpak, Snap or the test switch; the Installed page, the installers and leftovers cards and the administrator rows explain why |
+| P9-T01 | Capability detection | done | E9-01. `steward_core::sandbox` detects Flatpak, Snap or the test switch; the Installed page, the installers and leftovers cards and the administrator rows explain why |
 | P9-T02 | Flatpak manifest and build | built; E9-02 open | ADR 0015. `make flatpak` builds the bundle in Docker (runtimes cached in a volume). Next: E9-02 (smoke scenarios inside the bundle); for Flathub, vendored crates, linter, tray bus name |
 | P9-T03 | Translation workflow; more languages | on hold | Product owner's decision (2026-11-23): both more languages and the hosted translation service |
-| P9-T04 | Browser extension (optional) | done (manual check pending) | `browser-extension/`: toolbar button and link menu; native host runs `cairn add-link` (web addresses only, no shell); tested by feeding the host a message. Firefox host manifest packaged; Chromium needs the store ID (HUMAN) |
+| P9-T04 | Browser extension (optional) | done (manual check pending) | `browser-extension/`: toolbar button and link menu; native host runs `steward add-link` (web addresses only, no shell); tested by feeding the host a message. Firefox host manifest packaged; Chromium needs the store ID (HUMAN) |
 
 ## Blocked / waiting for a human
 
 - Enable CI once the repository is on its Git host (P0-T07).
 - Now that this machine uses Docker Engine, run `make app` once and confirm
   the window opens on the desktop (ADR 0004).
-- Confirm or replace the codename "Cairn" and app ID `dev.cairn.Files`.
 - P1-T16: sign off the look against the reference captures.
 - E1-17: check that pointing at the rail slides the sidebar out (pointer input
   is not automated).
 - Decide whether to add tabs (the reference shows a second header row of tabs).
-- P2-T05: drag files between Cairn and Files (Nautilus) both ways; Ctrl-drag
+- P2-T05: drag files between Steward and Files (Nautilus) both ways; Ctrl-drag
   copies; copy in one and paste in the other.
 - Phase 3: index a real, large home; watch CPU, disk activity and battery
   behaviour (the indexer runs at nice 19; the systemd unit adds idle I/O).
@@ -423,23 +422,23 @@ Notes:
   - turn on "Open the Shelf with a key" and press Ctrl+Alt+Space from
     another app; check it appears in Settings › Keyboard › Custom Shortcuts
     and goes away when turned off;
-  - drag files from Files and from Cairn into Holding and onto a pinned
+  - drag files from Files and from Steward into Holding and onto a pinned
     folder (Ctrl copies); drag a held file out into another app;
   - where GNOME places the Shelf window, and whether it should stay on top;
   - the tray icon in the top bar (needs the Ubuntu AppIndicator extension):
     click opens and closes the Shelf, middle click shows the window;
-  - "Open at login": log out and in; Cairn should start with no window;
+  - "Open at login": log out and in; Steward should start with no window;
   - Activities search: type a workspace's name; a link; a collection;
   - decide whether the portal route for the key is worth adding on 26.04,
     and decision O4 (is the Shell extension, P8-T05, in scope).
 - Phase 9: load `browser-extension/extension` in Firefox (about:debugging)
-  with the packaged Cairn and save a page; sign it on addons.mozilla.org;
+  with the packaged Steward and save a page; sign it on addons.mozilla.org;
   publish in the Chrome Web Store and fill in its ID; decide whether to
   submit the Flatpak to Flathub (needs the public repository and app ID).
 - Phase 7: try Open In with the terminals and editors actually installed;
   check the AI Agents numbers against a real machine's usage.
 - Phase 6 (from DESIGN.md's HUMAN list):
-  - final name and icon (the icon is a placeholder);
+  - trademark search for the name Steward (ADR 0016);
   - review the five translations, or mark them beta;
   - create the project signing key and store it as APT_SIGNING_KEY in CI;
   - choose hosting and DNS; set the repository URL in Cargo.toml and the

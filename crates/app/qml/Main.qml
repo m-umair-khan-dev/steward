@@ -1,6 +1,6 @@
 import QtQuick
 import QtQuick.Window
-import dev.cairn.files
+import dev.steward.files
 
 // The main window (DESIGN.md §3.1, ADR 0008): inset sidebar (or icon rail
 // that slides the sidebar out on hover), header, path bar, kind chips, the
@@ -14,7 +14,7 @@ Window {
     minimumHeight: 480
     // Started at login in the background (P8-T03): no window until asked.
     visible: Qt.application.arguments.indexOf("--background") < 0
-    title: p.t("Cairn")
+    title: p.t("Steward")
     flags: Qt.Window | Qt.FramelessWindowHint
     color: Theme.bg
 
@@ -90,7 +90,7 @@ Window {
                                        : !!win.prefs.systemDark
 
     // Feature check (Ubuntu 24.04 has Qt 6.4): can QtQuick.Effects be used?
-    // Probed once at start-up; CAIRN_LEGACY_FX=1 (prefs.legacyFx) forces the
+    // Probed once at start-up; STEWARD_LEGACY_FX=1 (prefs.legacyFx) forces the
     // fallback so it can be tested on newer Qt.
     property bool effectsAvailable: false
     function probeEffects() {

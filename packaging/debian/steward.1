@@ -1,19 +1,19 @@
-.TH CAIRN 1 "2026-11-20" "Cairn 1.0.0" "User Commands"
+.TH STEWARD 1 "2026-11-20" "Steward 1.0.0" "User Commands"
 .SH NAME
-cairn \- a file manager for Ubuntu that keeps folders tidy
+steward \- a file manager for Ubuntu that keeps folders tidy
 .SH SYNOPSIS
-.B cairn
+.B steward
 [\fB\-\-new\-window\fR | \fB\-\-new\-workspace\fR | \fB\-\-free\-up\-space\fR]
 [\fIFOLDER\-OR\-FILE\fR...]
 .br
-.B cairn
+.B steward
 .I COMMAND
 [\fIARGUMENT\fR]
 .SH DESCRIPTION
-Cairn browses your files and keeps folders tidy. It shows a plan before
+Steward browses your files and keeps folders tidy. It shows a plan before
 anything moves, and one Undo puts everything back.
 .PP
-Cairn runs once per session. Starting it again hands the request to the
+Steward runs once per session. Starting it again hands the request to the
 window that is already open.
 .SH OPTIONS
 .TP
@@ -51,10 +51,10 @@ link's site unless that is turned off in Preferences.
 Open Free Up Space.
 .SH FILES
 .TP
-.I ~/.local/share/cairn/app.db
+.I ~/.local/share/steward/app.db
 Workspaces, bookmarks, sidebar order and the undo journal.
 .TP
-.I ~/.cache/cairn/
+.I ~/.cache/steward/
 The search index and other caches; safe to delete.
 .SH SEE ALSO
 .BR nautilus (1)

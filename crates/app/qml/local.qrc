@@ -3,7 +3,7 @@
        over the module, and without this qmldir Theme.qml is a plain type
        there, not the singleton. Qt 6.5+ resolves it through the module; this
        file changes nothing there. -->
-  <qresource prefix="/qt/qml/dev/cairn/files/qml">
+  <qresource prefix="/qt/qml/dev/steward/files/qml">
     <file alias="qmldir">qmldir.local</file>
   </qresource>
 </RCC>

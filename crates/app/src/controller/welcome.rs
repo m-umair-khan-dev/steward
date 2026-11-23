@@ -74,9 +74,9 @@ pub fn newer(current: &str, stored: &str) -> bool {
 }
 
 /// Test builds start without the welcome unless a test asks for it
-/// (`CAIRN_NO_WELCOME` empty), so other scenarios see the window at once.
+/// (`STEWARD_NO_WELCOME` empty), so other scenarios see the window at once.
 fn suppressed() -> bool {
-    cfg!(feature = "e2e") && std::env::var("CAIRN_NO_WELCOME").is_ok_and(|v| !v.is_empty())
+    cfg!(feature = "e2e") && std::env::var("STEWARD_NO_WELCOME").is_ok_and(|v| !v.is_empty())
 }
 
 impl Controller {

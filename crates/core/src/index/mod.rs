@@ -2,7 +2,7 @@
 //! folder under the indexed roots, with folder sizes and counts rolled up and
 //! a trigram index on names.
 //!
-//! `cairn-indexer` is the only writer ([`Index::open`]); the app opens it
+//! `steward-indexer` is the only writer ([`Index::open`]); the app opens it
 //! read-only ([`Index::open_read_only`]).
 
 mod content;
@@ -94,9 +94,9 @@ pub(crate) fn path_text(path: &Path) -> String {
 }
 
 impl Index {
-    /// `$XDG_CACHE_HOME/cairn/index.db`. Deleting it is safe: it is rebuilt.
+    /// `$XDG_CACHE_HOME/steward/index.db`. Deleting it is safe: it is rebuilt.
     pub fn default_path() -> PathBuf {
-        glib::user_cache_dir().join("cairn").join("index.db")
+        glib::user_cache_dir().join("steward").join("index.db")
     }
 
     /// Opens for writing (the indexer). A file from another schema version

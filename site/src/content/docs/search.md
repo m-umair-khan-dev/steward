@@ -11,4 +11,4 @@ Press <kbd>Ctrl+K</kbd> and type part of a name. Results are ranked as you type:
 - <kbd>Space</kbd> peeks at the result.
 - <kbd>Ctrl+Enter</kbd> shows it in its folder, selected.
 
-Search uses Cairn's index, kept up to date in the background at the lowest priority. In **Preferences › Search and Index** you can pause it, pause it on battery, leave folders out, or rebuild it.
+Search uses Steward's index, kept up to date in the background at the lowest priority. In **Preferences › Search and Index** you can pause it, pause it on battery, leave folders out, or rebuild it.

@@ -6,9 +6,9 @@
 set -euo pipefail
 cd "$(dirname "$0")/../.."
 release="${UBUNTU_VERSION:?}"
-export APT_SUITE=ci COMPOSE_PROJECT_NAME=cairn-apt-e2e
+export APT_SUITE=ci COMPOSE_PROJECT_NAME=steward-apt-e2e
 compose=(docker compose -f compose.yaml -f compose.test.yaml)
-deb="$(ls dist/"$release"/cairn_*.deb | head -1)"
+deb="$(ls dist/"$release"/steward_*.deb | head -1)"
 [ -n "$deb" ] || { echo "apt-e2e: no .deb in dist/$release (make deb)" >&2; exit 1; }
 v1="$(dpkg-deb -f "$deb" Version 2>/dev/null || docker run --rm -v "$PWD/dist:/d:ro" "${UBUNTU_IMAGE}" dpkg-deb -f "/d/$release/$(basename "$deb")" Version)"
 v2="${v1%%-*}.1-1~ubuntu${release}"
@@ -26,7 +26,7 @@ echo "== install with apt"
 echo "== publish $v2 and upgrade"
 mkdir -p "target/apt-e2e/$release"
 "${compose[@]}" --profile publish run --rm --entrypoint deb-bump -v "$PWD/target/apt-e2e:/out" \
-  aptrepo "/in/$release/$(basename "$deb")" "$v2" "/out/$release/cairn_${v2}_amd64.deb"
+  aptrepo "/in/$release/$(basename "$deb")" "$v2" "/out/$release/steward_${v2}_amd64.deb"
 APT_IN=./target/apt-e2e "${compose[@]}" --profile publish run --rm aptrepo
 "${compose[@]}" exec -T apt-client /scripts/apt-install-e2e upgrade "$v2"
 echo "apt-e2e: install and upgrade work on $release"

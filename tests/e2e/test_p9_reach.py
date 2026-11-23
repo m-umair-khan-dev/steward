@@ -11,14 +11,14 @@ def s(text: str) -> GLib.Variant:
 
 
 def test_E9_01_in_a_sandbox_features_say_why(session, home, app_factory):
-    app = app_factory(extra_env={"CAIRN_SIMULATE_SANDBOX": "1"})
+    app = app_factory(extra_env={"STEWARD_SIMULATE_SANDBOX": "1"})
     assert app.state()["sandbox"] == "a sandbox"
 
     # Installed: an explanation instead of an empty list; no tool was asked.
     app.action("win.tool-open", s("installed"))
     app.wait_for(lambda: app.state()["tools"]["page"] == "installed", "Installed")
     installed = app.state()["installed"]
-    assert installed["unavailable"] and "Cairn runs in a sandbox" in installed["unavailable"]
+    assert installed["unavailable"] and "Steward runs in a sandbox" in installed["unavailable"]
     assert not installed["loaded"] and not installed["looking"]
     assert installed["unavailable"] in app.a11y_names()
 
@@ -40,17 +40,17 @@ def test_E9_01_in_a_sandbox_features_say_why(session, home, app_factory):
 
 def test_the_browser_extension_host_saves_a_link(app, home, tmp_path):
     """The extension's host, fed a message as a browser sends it (a length,
-    then JSON), runs `cairn add-link` against the running app. The browser
+    then JSON), runs `steward add-link` against the running app. The browser
     side is a manual check (DESIGN.md P9-T04)."""
     import json
     import os
     import struct
     import subprocess
     from pathlib import Path
-    host = Path(__file__).resolve().parents[2] / "browser-extension" / "host" / "cairn-native-host"
+    host = Path(__file__).resolve().parents[2] / "browser-extension" / "host" / "steward-native-host"
     bin_dir = tmp_path / "bin"
     bin_dir.mkdir()
-    (bin_dir / "cairn").symlink_to(app.binary)
+    (bin_dir / "steward").symlink_to(app.binary)
     env = app.env() | {"PATH": f"{bin_dir}:{os.environ.get('PATH', '/usr/bin:/bin')}"}
 
     def ask(message: dict) -> dict:

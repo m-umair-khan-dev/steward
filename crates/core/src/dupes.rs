@@ -12,9 +12,9 @@ use rusqlite::{Connection, OptionalExtension, params};
 
 const PARTIAL: usize = 64 * 1024;
 
-/// `$XDG_CACHE_HOME/cairn/hashes.db`. Only a cache: safe to delete.
+/// `$XDG_CACHE_HOME/steward/hashes.db`. Only a cache: safe to delete.
 pub fn default_cache_path() -> PathBuf {
-    glib::user_cache_dir().join("cairn").join("hashes.db")
+    glib::user_cache_dir().join("steward").join("hashes.db")
 }
 
 pub struct HashCache {

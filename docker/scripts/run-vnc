@@ -8,6 +8,6 @@ cd /workspace
 mkdir -p "$XDG_RUNTIME_DIR"
 chmod 700 "$XDG_RUNTIME_DIR"
 
-echo "Cairn: connect a VNC viewer to 127.0.0.1:5900."
+echo "Steward: connect a VNC viewer to 127.0.0.1:5900."
 exec dbus-run-session -- watchexec --restart --exts rs,qml,svg,qrc,xml,toml \
-  --ignore 'target/**' -- sh -c "cargo build -p cairn-indexer && cargo run -p cairn"
+  --ignore 'target/**' -- sh -c "cargo build -p steward-indexer && cargo run -p steward"
