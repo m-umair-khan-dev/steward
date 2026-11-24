@@ -2,6 +2,7 @@
 //! up to date as files change on disk (DESIGN.md P1-T01, P1-T10).
 
 use std::cell::{Cell, RefCell};
+use std::collections::HashMap;
 use std::rc::Rc;
 
 use gio::prelude::*;
@@ -57,6 +58,11 @@ struct Inner {
     monitor: RefCell<Option<gio::FileMonitor>>,
     cancellable: RefCell<Option<gio::Cancellable>>,
     on_state: RefCell<Vec<StateCallback>>,
+    /// The latest change seen for each name, so a lookup that finishes
+    /// after a newer change to the same name (a rename, a removal, another
+    /// lookup) is dropped instead of bringing back what was there before.
+    child_changes: RefCell<HashMap<String, u64>>,
+    change_count: Cell<u64>,
 }
 
 /// A folder's contents. Cheap to clone; clones share the same listing.
@@ -82,6 +88,8 @@ impl FolderModel {
                 monitor: RefCell::new(None),
                 cancellable: RefCell::new(None),
                 on_state: RefCell::new(Vec::new()),
+                child_changes: RefCell::new(HashMap::new()),
+                change_count: Cell::new(0),
             }),
         }
     }
@@ -122,6 +130,7 @@ impl FolderModel {
         self.inner.generation.set(generation);
         *self.inner.folder.borrow_mut() = Some(folder.clone());
         self.inner.store.remove_all();
+        self.inner.child_changes.borrow_mut().clear();
         self.set_state(LoadState::Loading);
 
         let cancellable = gio::Cancellable::new();
@@ -195,10 +204,24 @@ impl FolderModel {
         })
     }
 
+    /// Records a change to `name` and returns its number.
+    fn note_change(&self, name: &str) -> u64 {
+        let change = self.inner.change_count.get() + 1;
+        self.inner.change_count.set(change);
+        self.inner
+            .child_changes
+            .borrow_mut()
+            .insert(name.to_owned(), change);
+        change
+    }
+
     fn remove_child(&self, file: &gio::File) {
-        if let Some(name) = file.basename()
-            && let Some(pos) = self.position_of(&name.to_string_lossy())
-        {
+        let Some(name) = file.basename() else {
+            return;
+        };
+        let name = name.to_string_lossy();
+        self.note_change(&name);
+        if let Some(pos) = self.position_of(&name) {
             self.inner.store.remove(pos);
         }
     }
@@ -210,6 +233,12 @@ impl FolderModel {
         if !parent_of_file.equal(parent) {
             return;
         }
+        let Some(name) = file.basename() else {
+            return;
+        };
+        let name = name.to_string_lossy().into_owned();
+        let change = self.note_change(&name);
+        let generation = self.inner.generation.get();
         let this = self.clone();
         let parent = parent.clone();
         let file = file.clone();
@@ -224,6 +253,11 @@ impl FolderModel {
             else {
                 return;
             };
+            // Something newer happened to this name while the lookup ran.
+            let latest = this.inner.child_changes.borrow().get(&name).copied();
+            if this.inner.generation.get() != generation || latest != Some(change) {
+                return;
+            }
             let entry = FileEntry::from_info(&parent, &info);
             match this.position_of(entry.name()) {
                 Some(pos) => this.inner.store.splice(pos, 1, &[entry]),
