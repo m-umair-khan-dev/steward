@@ -409,6 +409,7 @@ and dialog, and a long random run.
 | ID | Task | Status | Notes |
 |---|---|---|---|
 | P10-T01 | Real pointer clicks in the harness; Preferences tabs | done | E10-01. `App.click_at`/`mouse_click` click at a control's centre (AT-SPI SCREEN extents, which on Wayland are the main window's; Qt counts WINDOW extents from the nearest dialog). Mutter drops the first pointer motion of a remote-desktop session, so the harness spends it on a move first. Found and fixed: a tap on a Preferences tab also reached the Sheet backdrop's TapHandler and closed the dialog (every Sheet; only a tap outside the card closes it now); `dialogData` was `null` while no dialog was open, so WorkspaceDialog and FolderStyleDialog logged TypeErrors at start-up. E10-01 fails without the Sheet fix |
+| P10-T02 | Sweep: every control on every screen | done | E10-02, one test per screen (27: folders, two panes, search, Peek, the five tool pages, every Preferences tab, nine dialogs, four menus), harness/sweep.py. About 830 real clicks; after each: the app runs, goes idle within 10 s, logs no QML error, and a dialog stays open when a setting is changed. Clean after P10-T01's fixes. Open With needs an app for text files: the sweep writes two harmless .desktop files and a mimeinfo.cache (GIO matches types through it) into the fixture home. Runs about 35 minutes |
 
 ## Blocked / waiting for a human
 

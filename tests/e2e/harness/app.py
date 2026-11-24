@@ -253,6 +253,16 @@ class App:
                     and (role is None or aliases.get(n["role"], n["role"]) == role)
                     and bool(n.get("extents")) and n["extents"][2] > 0)
 
+    def find_node_role(self, roles: tuple[str, ...]) -> dict | None:
+        """The first showing node with one of these roles (e.g. an open menu)."""
+        stack = [self.a11y_tree()]
+        while stack:
+            node = stack.pop()
+            if node["showing"] and node["role"] in roles:
+                return node
+            stack.extend(node["children"])
+        return None
+
     def mouse_click(self, name: str, role: str | None = None, within: str | None = None,
                     button: str = "left", timeout: float = 10.0) -> None:
         """Clicks the centre of a control with the real pointer, as a person would."""
