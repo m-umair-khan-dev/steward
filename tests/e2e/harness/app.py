@@ -231,6 +231,14 @@ class App:
         device.button(button, True)
         device.button(button, False)
 
+    def scroll_at(self, x: float, y: float, steps: int) -> None:
+        """Turns the mouse wheel over a point; positive steps scroll down."""
+        device = self._input()
+        device.move_to(x, y)
+        self.wait_idle()
+        device.scroll(steps)
+        self.wait_idle()
+
     def find_node(self, name: str, role: str | None = None, within: str | None = None,
                   tree: dict | None = None) -> dict | None:
         """The first showing node with this name (and role), optionally inside
