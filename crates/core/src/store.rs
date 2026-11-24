@@ -134,6 +134,28 @@ pub struct Store {
     conn: Connection,
 }
 
+/// How long opening the store waits for another process's lock.
+const BUSY_WAIT: std::time::Duration = std::time::Duration::from_secs(10);
+
+/// Switches the file to WAL. When two processes open a new file at the same
+/// moment, the switch can fail at once with "database is locked": SQLite does
+/// not run the busy handler for the lock it needs, so busy_timeout does not
+/// help. Try again until the other one is done, for as long as BUSY_WAIT.
+fn set_wal(conn: &Connection) -> rusqlite::Result<()> {
+    let deadline = std::time::Instant::now() + BUSY_WAIT;
+    loop {
+        match conn.pragma_update(None, "journal_mode", "WAL") {
+            Err(rusqlite::Error::SqliteFailure(e, _))
+                if e.code == rusqlite::ErrorCode::DatabaseBusy
+                    && std::time::Instant::now() < deadline =>
+            {
+                std::thread::sleep(std::time::Duration::from_millis(5));
+            }
+            result => return result,
+        }
+    }
+}
+
 impl Store {
     /// The default location: `$XDG_DATA_HOME/steward/app.db`.
     pub fn default_path() -> PathBuf {
@@ -148,8 +170,8 @@ impl Store {
         // Two processes can open app.db at once (the app started by
         // Activities search, then by the user): wait for the other's lock
         // instead of failing.
-        conn.busy_timeout(std::time::Duration::from_secs(10))?;
-        conn.pragma_update(None, "journal_mode", "WAL")?;
+        conn.busy_timeout(BUSY_WAIT)?;
+        set_wal(&conn)?;
         conn.pragma_update(None, "foreign_keys", "ON")?;
         let mut store = Self { conn };
         store.migrate()?;
