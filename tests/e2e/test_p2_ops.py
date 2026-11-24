@@ -108,8 +108,12 @@ def test_E2_03_copy_paste_then_undo_removes_only_the_copies(app, home):
     documents = home.snapshot("Documents")
     app.select(*names)
     app.press("ctrl+c")
+    # Key presses travel through the compositor: wait for their effect, not
+    # just an idle queue (on a slow CI runner the copy may not have run yet).
+    app.wait_for(lambda: ops(app)["canPaste"], "the copy")
     app.open_folder(home / "Documents")
     app.press("ctrl+v")
+    app.wait_for(lambda: all((home / "Documents" / n).exists() for n in names), "the paste")
     app.wait_idle()
     for n in names:
         assert (home / "Documents" / n).read_bytes() == (home / "Downloads" / n).read_bytes()
@@ -130,8 +134,10 @@ def test_E2_04_cut_paste_then_undo_moves_back(app, home):
     before = (home.snapshot("Downloads"), home.snapshot("Documents"))
     app.select(*names)
     app.press("ctrl+x")
+    app.wait_for(lambda: ops(app)["canPaste"], "the cut")
     app.open_folder(home / "Documents")
     app.press("ctrl+v")
+    app.wait_for(lambda: all((home / "Documents" / n).exists() for n in names), "the paste")
     app.wait_idle()
     assert all((home / "Documents" / n).exists() for n in names)
     assert not any((home / "Downloads" / n).exists() for n in names)
