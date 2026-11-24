@@ -5,16 +5,39 @@ captures to artifacts/shots/<name>-<theme>.png. The normal gate skips them;
 they test nothing beyond the screens opening."""
 
 import os
+import subprocess
 from pathlib import Path
 
 import pytest
 from gi.repository import GLib
+from harness import Home
 
 pytestmark = pytest.mark.shots
 
 REPO = Path(__file__).resolve().parents[2]
 OUT = Path(os.environ.get("SHOTS_DIR", REPO / "artifacts" / "shots"))
 FIXTURE = REPO / "tests" / "data" / "sysinfo" / "fixture.json"
+
+
+# Where the screenshots' home lives: the path bar shows the whole path, so a
+# home under /tmp/pytest-of-dev/... would show in every capture. The e2e
+# service mounts an empty folder here (compose.desktop.yaml).
+SHOTS_HOME = Path(os.environ.get("SHOTS_HOME", "/home/alex"))
+
+
+@pytest.fixture
+def home(fixture_source) -> Home:
+    """The fixture home copied to SHOTS_HOME (planted times kept)."""
+    source, times = fixture_source
+    if not SHOTS_HOME.is_dir() or not os.access(SHOTS_HOME, os.W_OK):
+        pytest.fail(f"{SHOTS_HOME} is not a writable folder; run through `make shots`")
+    subprocess.run(["find", str(SHOTS_HOME), "-mindepth", "1", "-delete"], check=True)
+    subprocess.run(["cp", "-a", "--sparse=always", f"{source}/.", str(SHOTS_HOME)], check=True)
+    for rel, stamps in times.items():
+        os.utime(SHOTS_HOME / rel, ns=stamps, follow_symlinks=False)
+    copy = Home(SHOTS_HOME)
+    _ = copy.manifest
+    return copy
 
 
 def s(text: str) -> GLib.Variant:

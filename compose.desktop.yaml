@@ -115,6 +115,8 @@ services:
       STEWARD_COMPOSITOR: ${STEWARD_COMPOSITOR:-}
     tmpfs:
       - /home/dev:uid=${HOST_UID:-1000},gid=${HOST_GID:-1000}
+      # The screenshots' home (test_shots.py), so captures show /home/alex.
+      - /home/alex:uid=${HOST_UID:-1000},gid=${HOST_GID:-1000}
       # exec: tests put stand-in programs (dpkg-query, snap, editors) on PATH
       # in their temporary folders (DESIGN.md §10.2).
       - /tmp:uid=${HOST_UID:-1000},gid=${HOST_GID:-1000},mode=1777,exec
