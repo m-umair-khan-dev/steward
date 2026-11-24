@@ -61,6 +61,20 @@ def actions_of(node) -> list[str]:
         return []
 
 
+def extents_of(node) -> list[int] | None:
+    """[x, y, width, height] relative to the main window, or None. Qt counts
+    WINDOW coordinates from the nearest dialog; on Wayland its SCREEN
+    coordinates are the main window's (a client cannot know its position)."""
+    try:
+        component = node.get_component_iface()
+        if component is None:
+            return None
+        box = component.get_extents(Atspi.CoordType.SCREEN)
+        return [box.x, box.y, box.width, box.height]
+    except Exception:  # noqa: BLE001
+        return None
+
+
 def describe(node, depth: int = 0) -> dict:
     states = node.get_state_set()
     children = []
@@ -76,6 +90,7 @@ def describe(node, depth: int = 0) -> dict:
         "enabled": states.contains(Atspi.StateType.ENABLED),
         "active": states.contains(Atspi.StateType.ACTIVE),
         "actions": actions_of(node),
+        "extents": extents_of(node),
         "children": children,
     }
 

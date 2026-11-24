@@ -34,6 +34,7 @@ class App:
         self.process: subprocess.Popen | None = None
         self._bus: Gio.DBusConnection | None = None
         self._keyboard: Keyboard | None = None
+        self._pointer_ready = False
 
     # -- lifecycle --------------------------------------------------------
 
@@ -205,6 +206,60 @@ class App:
             self._keyboard.press("shift")
             self.wait_idle()
         self._keyboard.press(combo)
+
+    def _input(self) -> Keyboard:
+        if self._keyboard is None:
+            self.press("shift")  # opens the session and waits for focus
+        return self._keyboard
+
+    def click_at(self, x: float, y: float, button: str = "left") -> None:
+        """A real pointer click at window coordinates. The window fills the
+        compositor's 1280x800 screen (Main.qml), so they are screen coordinates.
+        The pointer moves first and the app is let idle (at least one frame),
+        so the compositor has given it pointer focus before the button goes
+        down; otherwise the first click of a session is lost."""
+        device = self._input()
+        if not self._pointer_ready:
+            # Mutter drops the first pointer motion of a remote-desktop
+            # session, which would leave the first click wherever the pointer
+            # started: spend it on a move that goes nowhere in particular.
+            device.move_to(0, 0)
+            self.wait_idle()
+            self._pointer_ready = True
+        device.move_to(x, y)
+        self.wait_idle()
+        device.button(button, True)
+        device.button(button, False)
+
+    def find_node(self, name: str, role: str | None = None, within: str | None = None,
+                  tree: dict | None = None) -> dict | None:
+        """The first showing node with this name (and role), optionally inside
+        the subtree of a showing node named `within`."""
+        def walk(node, pick):
+            if node["showing"] and pick(node):
+                return node
+            for child in node["children"]:
+                found = walk(child, pick)
+                if found is not None:
+                    return found
+            return None
+        root = tree or self.a11y_tree()
+        if within:
+            root = walk(root, lambda n: n["name"] == within)
+            if root is None:
+                return None
+        aliases = {"push button": "button", "grouping": "panel"}
+        return walk(root, lambda n: n["name"] == name
+                    and (role is None or aliases.get(n["role"], n["role"]) == role)
+                    and bool(n.get("extents")) and n["extents"][2] > 0)
+
+    def mouse_click(self, name: str, role: str | None = None, within: str | None = None,
+                    button: str = "left", timeout: float = 10.0) -> None:
+        """Clicks the centre of a control with the real pointer, as a person would."""
+        node = wait_for(lambda: self.find_node(name, role, within),
+                        f"a showing {name!r} to click", timeout)
+        x, y, w, h = node["extents"]
+        self.click_at(x + w / 2, y + h / 2, button)
 
     def type_text(self, text: str) -> None:
         """Types text with real key presses (US layout characters only)."""

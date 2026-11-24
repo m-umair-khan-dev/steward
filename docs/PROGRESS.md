@@ -398,6 +398,18 @@ Notes:
 | P9-T05 | Snap for the Snap Store and App Center (product owner's request, 2026-11-23) | built; revision 1 uploaded, awaiting store review | `snap/snapcraft.yaml`, docs/snap.md. Builds in LXD and installs; starts, owns its bus name and creates its window (this machine had no monitor connected, so the window was not seen). Revision 1 (1.0.0) uploaded with `--release=edge`; held for manual review because of the two dbus slots. HUMAN: post the review request on forum.snapcraft.io (store-requests), check the window on a real screen, then `snapcraft release steward 1 stable` |
 | P9-T04 | Browser extension (optional) | done (manual check pending) | `browser-extension/`: toolbar button and link menu; native host runs `steward add-link` (web addresses only, no shell); tested by feeding the host a message. Firefox host manifest packaged; Chromium needs the store ID (HUMAN) |
 
+## Phase 10: The UI with the real mouse (product owner's request, 2026-11-24)
+
+Accessibility actions call a control's handler directly, so the earlier
+scenarios could not see bugs in Qt's pointer delivery. Phase 10 clicks with
+the real pointer (mutter's remote desktop) in three passes: a targeted
+scenario per reported bug, a sweep that clicks every control on every screen
+and dialog, and a long random run.
+
+| ID | Task | Status | Notes |
+|---|---|---|---|
+| P10-T01 | Real pointer clicks in the harness; Preferences tabs | done | E10-01. `App.click_at`/`mouse_click` click at a control's centre (AT-SPI SCREEN extents, which on Wayland are the main window's; Qt counts WINDOW extents from the nearest dialog). Mutter drops the first pointer motion of a remote-desktop session, so the harness spends it on a move first. Found and fixed: a tap on a Preferences tab also reached the Sheet backdrop's TapHandler and closed the dialog (every Sheet; only a tap outside the card closes it now); `dialogData` was `null` while no dialog was open, so WorkspaceDialog and FolderStyleDialog logged TypeErrors at start-up. E10-01 fails without the Sheet fix |
+
 ## Blocked / waiting for a human
 
 - Save the snap store login as the GitHub secret SNAPCRAFT_STORE_CREDENTIALS

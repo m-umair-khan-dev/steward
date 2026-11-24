@@ -41,6 +41,7 @@ def combo_for(char: str) -> str:
         return char
     raise ValueError(f"cannot type {char!r} with the US key table")
 SHIFT = KEYCODES["shift"]
+BUTTONS = {"left": 0x110, "right": 0x111, "middle": 0x112}  # BTN_LEFT, BTN_RIGHT, BTN_MIDDLE
 
 
 class Keyboard:
@@ -85,3 +86,27 @@ class Keyboard:
             self._key(code, True)
         for code in reversed(codes):
             self._key(code, False)
+
+    # -- the pointer ----------------------------------------------------------
+    # Relative motion needs no screen-cast stream. Moving far up and left
+    # first pins the pointer to the screen's corner, so every move is exact.
+
+    def move_to(self, x: float, y: float) -> None:
+        self._call(self.session_path, SESSION_IFACE, "NotifyPointerMotionRelative",
+                   GLib.Variant("(dd)", (-10000.0, -10000.0)))
+        self._call(self.session_path, SESSION_IFACE, "NotifyPointerMotionRelative",
+                   GLib.Variant("(dd)", (float(x), float(y))))
+
+    def button(self, name: str, pressed: bool) -> None:
+        self._call(self.session_path, SESSION_IFACE, "NotifyPointerButton",
+                   GLib.Variant("(ib)", (BUTTONS[name], pressed)))
+
+    def click(self, x: float, y: float, button: str = "left") -> None:
+        self.move_to(x, y)
+        self.button(button, True)
+        self.button(button, False)
+
+    def scroll(self, steps: int) -> None:
+        """Mouse wheel: positive scrolls down."""
+        self._call(self.session_path, SESSION_IFACE, "NotifyPointerAxisDiscrete",
+                   GLib.Variant("(ui)", (0, steps)))
