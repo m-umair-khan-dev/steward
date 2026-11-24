@@ -26,7 +26,7 @@ the whole project is complete. Code stays within the 24.04 APIs (ADR 0001).
 | P0-T04 | Hello window | done | |
 | P0-T05 | Fixture home and guard | done | 13 generator tests |
 | P0-T06 | Headless runner and end-to-end harness | done | Real key presses work (ADR 0003) |
-| P0-T07 | CI workflow | done | HUMAN: enable on the Git host |
+| P0-T07 | CI workflow | done | Runs on GitHub on every pull request and push to main: the full gate on 26.10 and the .deb for 24.04, 26.04 and 26.10; `gate` is the required check on main (docs/releasing.md). GitHub's Ubuntu 24.04 runners block unprivileged user namespaces, which bwrap needs (thumbnails, search inside files: E1-09, E1-15, E7-08, E7-09 failed there); the workflow turns that AppArmor restriction off on the runner |
 | P0-S1 | Spike: library versions | done | ADR 0001 |
 | P0-S2 | Spike: headless compositor | done | ADR 0002: mutter default, weston fallback |
 | P0-S3 | Spike: accessibility tree and input | done | ADR 0003: both work |
@@ -295,7 +295,7 @@ Test harness fixes:
 | P6-T09 | apt repository tooling: aptrepo image, publish-apt, dev key, apt-install-e2e | done | E6-06 (`make apt-e2e`: install 1.0.0-1, upgrade to 1.0.0.1-1) |
 | P6-T10 | Website | ON HOLD | Paused by the product owner on 2026-11-20; draft in site/ (see site/README.md). E6-08 waits with it |
 | P6-T11 | Screenshot generator (`make shots`) | done | 8 screens, light and dark, in artifacts/shots/. The captures' home is /home/alex (a tmpfs in the e2e service), so the path bar shows a real-looking path; docs/screenshots/ retaken after the rename |
-| P6-T12 | Release workflow; compose.yaml, compose.test.yaml, compose.prod.yaml | done (dry run HUMAN) | `.github/workflows/release.yml`; a -dry tag publishes to ci. The local equivalent (`make deb deb-test apt-e2e`) passes |
+| P6-T12 | Release workflow; compose.yaml, compose.test.yaml, compose.prod.yaml | done | Product owner's request (2026-11-24): a merged pull request that raises the version in Cargo.toml releases it: .debs for 24.04, 26.04, 26.10, tag, GitHub Release with SHA256SUMS, snap to edge (docs/releasing.md). The apt-repository publish and -dry tags are out until the repository is hosted; `make deb deb-test apt-e2e` still covers it locally. HUMAN: the SNAPCRAFT_STORE_CREDENTIALS secret (docs/snap.md) |
 | P6-T13 | Report a Bug; SECURITY.md; code of conduct | done | Report-a-bug test |
 | P6-T14 | Performance pass, docs/perf.md | done | Search met; launch, big folder and memory missed, explained with issues to file (docs/perf.md) |
 
@@ -400,7 +400,8 @@ Notes:
 
 ## Blocked / waiting for a human
 
-- Enable CI once the repository is on its Git host (P0-T07).
+- Save the snap store login as the GitHub secret SNAPCRAFT_STORE_CREDENTIALS
+  (docs/snap.md, "From CI") so releases reach the edge channel.
 - Now that this machine uses Docker Engine, run `make app` once and confirm
   the window opens on the desktop (ADR 0004).
 - P1-T16: sign off the look against the reference captures.
@@ -445,8 +446,6 @@ Notes:
   - choose hosting and DNS; set the repository URL in Cargo.toml and the
     placeholder addresses (maintainer, security, conduct, metainfo, the
     download page);
-  - enable Actions and push a -dry tag to see the release workflow publish
-    to ci;
   - install from staging on real 24.04 and 26.04 machines and use it for a
     day;
   - one pass with the Orca screen reader;

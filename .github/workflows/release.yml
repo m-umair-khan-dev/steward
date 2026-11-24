@@ -1,42 +1,75 @@
-# Release (DESIGN.md §8.3, §9.8, P6-T12). Runs on a version tag:
-#   vX.Y.Z         → apt suite "stable", .deb files attached to the release
-#   vX.Y.Z-dryN    → apt suite "ci" (a dry run: nothing reaches users)
-# HUMAN: enable Actions on the code host, and store the project's signing key
-# as the secret APT_SIGNING_KEY (ASCII-armoured private key). The website
-# deploy step is added when the website work resumes (P6-T10 is on hold).
+# Release (DESIGN.md §8.3, §9.8, P6-T12). Runs on every push to main, which
+# only a merged pull request (or the owner) can make. It releases only when
+# the version in Cargo.toml has no tag yet, so a pull request that raises the
+# version publishes it and every other merge does nothing here:
+#   - the .deb for each Ubuntu release, built and installed in a clean Ubuntu
+#   - the tag vX.Y.Z and a GitHub Release with the .debs and SHA256SUMS
+#   - the snap, uploaded to the Snap Store's edge channel (stable stays manual)
+# The pull request already passed the full gate (ci.yml) against an
+# up-to-date main, so the end-to-end suite is not run again here.
+# The snap upload needs the secret SNAPCRAFT_STORE_CREDENTIALS (docs/snap.md);
+# without it the snap is built but not uploaded. The apt repository and the
+# website return when they are hosted (P6-T10 is on hold).
 name: Release
 
 on:
   push:
-    tags: ["v*"]
+    branches: [main]
+  workflow_dispatch:
 
 permissions:
-  contents: write
+  contents: read
+
+concurrency:
+  group: release
+  cancel-in-progress: false
 
 jobs:
-  build:
-    name: build and test (Ubuntu ${{ matrix.ubuntu }})
+  version:
+    name: new version?
     runs-on: ubuntu-24.04
-    timeout-minutes: 150
+    timeout-minutes: 5
+    outputs:
+      version: ${{ steps.v.outputs.version }}
+      release: ${{ steps.v.outputs.release }}
+    steps:
+      - uses: actions/checkout@v4
+      - id: v
+        name: Compare Cargo.toml with the tags
+        run: |
+          version="$(sed -n 's/^version = "\(.*\)"/\1/p' Cargo.toml | head -1)"
+          echo "version=$version" >> "$GITHUB_OUTPUT"
+          if git ls-remote --exit-code --tags origin "refs/tags/v$version" >/dev/null; then
+            echo "v$version is already released; nothing to do."
+            echo "release=false" >> "$GITHUB_OUTPUT"
+            exit 0
+          fi
+          metainfo=data/io.github.m_umair_khan_dev.steward.metainfo.xml
+          grep -q "<release version=\"$version\"" "$metainfo" || {
+            echo "::error::$metainfo has no <release version=\"$version\"> entry; add one with the date and what changed"
+            exit 1
+          }
+          echo "Releasing v$version."
+          echo "release=true" >> "$GITHUB_OUTPUT"
+
+  deb:
+    name: deb (Ubuntu ${{ matrix.ubuntu }})
+    needs: version
+    if: needs.version.outputs.release == 'true'
+    runs-on: ubuntu-24.04
+    timeout-minutes: 60
     strategy:
       fail-fast: true
       matrix:
-        # 26.10 for now; 24.04 and 26.04 join once the project is complete (ADR 0007).
-        ubuntu: ["26.10"]
+        ubuntu: ["24.04", "26.04", "26.10"]
     env:
       UBUNTU_VERSION: ${{ matrix.ubuntu }}
       CARGO_BUILD_JOBS: "4"
     steps:
       - uses: actions/checkout@v4
       - uses: docker/setup-buildx-action@v3
-      - name: The tag matches the version in Cargo.toml
-        run: |
-          version="$(sed -n 's/^version = "\(.*\)"/\1/p' Cargo.toml | head -1)"
-          tag="${GITHUB_REF_NAME#v}"; tag="${tag%%-dry*}"
-          test "$tag" = "$version" || { echo "tag $GITHUB_REF_NAME does not match version $version"; exit 1; }
-          test -f "site/src/content/changelog/$version.md" || { echo "no release notes for $version"; exit 1; }
-      - name: The gate
-        run: make check
+      - name: Allow unprivileged user namespaces (bwrap)
+        run: sudo sysctl -w kernel.apparmor_restrict_unprivileged_userns=0
       - name: Build the .deb (lintian runs inside)
         run: make deb
       - name: Install it in a clean Ubuntu; smoke tests
@@ -45,6 +78,7 @@ jobs:
         with:
           name: deb-${{ matrix.ubuntu }}
           path: dist/${{ matrix.ubuntu }}/*.deb
+          if-no-files-found: error
       - uses: actions/upload-artifact@v4
         if: always()
         with:
@@ -52,40 +86,78 @@ jobs:
           path: artifacts/
           if-no-files-found: ignore
 
-  publish:
-    name: publish
-    needs: build
+  release:
+    name: GitHub Release
+    needs: [version, deb]
     runs-on: ubuntu-24.04
-    timeout-minutes: 60
-    environment: ${{ contains(github.ref_name, '-dry') && 'ci' || 'stable' }}
+    timeout-minutes: 15
+    permissions:
+      contents: write
     env:
-      UBUNTU_VERSION: "26.10"
-      APT_SUITE: ${{ contains(github.ref_name, '-dry') && 'ci' || 'stable' }}
+      VERSION: ${{ needs.version.outputs.version }}
+      GH_TOKEN: ${{ github.token }}
     steps:
       - uses: actions/checkout@v4
       - uses: actions/download-artifact@v4
         with:
           pattern: deb-*
-          path: dist-ci
-      - name: Lay out dist/<release>/
+          path: dl
+          merge-multiple: true
+      - name: Name the files as GitHub will show them, and sum them
         run: |
-          for d in dist-ci/deb-*; do r="${d#dist-ci/deb-}"; mkdir -p "dist/$r"; cp "$d"/*.deb "dist/$r/"; done
-          ls -R dist
-      - name: Install with apt from a local copy of the repository, then upgrade
-        run: make keys apt-e2e
-      - name: Sign and publish to the suite
-        env:
-          APT_SIGNING_KEY: ${{ secrets.APT_SIGNING_KEY }}
+          # GitHub turns "~" in asset names into "."; name them that way first
+          # so SHA256SUMS and the notes match what people download.
+          mkdir -p out
+          for f in dl/*.deb; do b="$(basename "$f")"; cp "$f" "out/${b//\~/.}"; done
+          (cd out && sha256sum *.deb > SHA256SUMS)
+          ls -l out && cat out/SHA256SUMS
+      - name: Write the release notes
         run: |
-          test -n "$APT_SIGNING_KEY" || { echo "APT_SIGNING_KEY is not set (HUMAN)"; exit 1; }
-          mkdir -p release-secrets && printf '%s\n' "$APT_SIGNING_KEY" > release-secrets/apt_signing_key.asc
-          SECRETS_DIR=./release-secrets docker compose --profile publish run --rm aptrepo
-          rm -rf release-secrets
-          # HUMAN: upload the published tree (the aptrepo volume) to the chosen host here.
-      - name: Attach the .deb files to the release
-        if: ${{ !contains(github.ref_name, '-dry') }}
-        env:
-          GH_TOKEN: ${{ github.token }}
+          sed "s/@VERSION@/$VERSION/g" packaging/release-notes.md > notes.md
+          gh api "repos/$GITHUB_REPOSITORY/releases/generate-notes" \
+            -f tag_name="v$VERSION" -f target_commitish="$GITHUB_SHA" --jq .body > generated.md
+          { echo; cat generated.md; } >> notes.md
+      - name: Tag and publish
         run: |
-          gh release create "$GITHUB_REF_NAME" dist/*/*.deb --title "Steward ${GITHUB_REF_NAME#v}" \
-            --notes-file "site/src/content/changelog/${GITHUB_REF_NAME#v}.md"
+          gh release create "v$VERSION" out/*.deb out/SHA256SUMS \
+            --target "$GITHUB_SHA" --title "Steward $VERSION" --notes-file notes.md
+
+  snap:
+    name: snap
+    needs: version
+    if: needs.version.outputs.release == 'true'
+    runs-on: ubuntu-24.04
+    timeout-minutes: 90
+    outputs:
+      snap: ${{ steps.build.outputs.snap }}
+    steps:
+      - uses: actions/checkout@v4
+      - id: build
+        uses: snapcore/action-build@v1
+      - uses: actions/upload-artifact@v4
+        with:
+          name: snap
+          path: ${{ steps.build.outputs.snap }}
+          if-no-files-found: error
+
+  snap-edge:
+    name: snap to edge
+    # Only after the GitHub Release went out, so a failed .deb ships nothing.
+    needs: [snap, release]
+    runs-on: ubuntu-24.04
+    timeout-minutes: 30
+    env:
+      SNAPCRAFT_STORE_CREDENTIALS: ${{ secrets.SNAPCRAFT_STORE_CREDENTIALS }}
+    steps:
+      - uses: actions/download-artifact@v4
+        with:
+          name: snap
+          path: snap-out
+      - name: Upload to the edge channel
+        if: env.SNAPCRAFT_STORE_CREDENTIALS != ''
+        run: |
+          sudo snap install snapcraft --classic
+          snapcraft upload snap-out/*.snap --release=edge
+      - name: No store credentials
+        if: env.SNAPCRAFT_STORE_CREDENTIALS == ''
+        run: echo "::warning::SNAPCRAFT_STORE_CREDENTIALS is not set; the snap was built but not uploaded (docs/snap.md)"

@@ -68,3 +68,19 @@ Inside the snap the host's package tools are out of reach, so the
 Installed page and three Free Up Space features say so (P9-T01). Some
 interfaces (removable-media, system-observe) may need a store request on
 forum.snapcraft.io to connect automatically.
+
+## From CI
+
+When a merged pull request raises the version, the Release workflow
+(`.github/workflows/release.yml`) builds the snap and uploads it to edge
+after the GitHub Release is out. It needs a store login limited to this
+snap, saved as the repository secret `SNAPCRAFT_STORE_CREDENTIALS`:
+
+```sh
+snapcraft export-login --snaps=steward --channels=edge \
+  --acls package_access,package_push,package_update,package_release - \
+  | gh secret set SNAPCRAFT_STORE_CREDENTIALS --repo m-umair-khan-dev/steward
+```
+
+Without the secret the snap is still built, and the workflow warns that it
+was not uploaded. Moving a revision to stable stays a manual step.
