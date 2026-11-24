@@ -75,8 +75,34 @@ parts:
       export RUSTUP_HOME="$CRAFT_PART_BUILD/.rustup" CARGO_HOME="$CRAFT_PART_BUILD/.cargo"
       curl --proto '=https' --tlsv1.2 -sSf https://sh.rustup.rs | sh -s -- -y --profile minimal --default-toolchain none
       export PATH="$CARGO_HOME/bin:$PATH"
-      # Qt 6 comes from the kde-neon-6 extension's SDK.
-      export QMAKE="$(command -v qmake6 || command -v qmake)"
+      # Qt 6 comes from the kde-neon-6 extension's SDK. Its tools (qmake,
+      # moc, qmlcachegen) need the SDK's own Qt libraries, and cxx-qt runs
+      # them with an empty environment, so LD_LIBRARY_PATH cannot reach
+      # them: the build machine's linker is told about them instead. Only
+      # the libraries the system lacks are linked in, so the SDKs' copies of
+      # system libraries (libudev, libdrm) never shadow the real ones.
+      QT_SDK=/snap/kde-qt6-core24-sdk/current
+      sdk_path=""
+      for sdk in kde-qt6-core24-sdk kf6-core24-sdk; do
+        lib=/snap/$sdk/current/usr/lib/x86_64-linux-gnu
+        sdk_path="$sdk_path:$lib:$lib/libproxy"
+      done
+      links=/opt/qtsdk-libs
+      rm -rf "$links" /etc/ld.so.conf.d/kde-qt6-sdk.conf; mkdir -p "$links"
+      ldconfig
+      system_libs="$(ldconfig -p | awk '{print $1}')"
+      for tool in "$QT_SDK"/usr/lib/qt6/libexec/* "$QT_SDK"/usr/bin/qt6/*; do
+        [ -f "$tool" ] && LD_LIBRARY_PATH="${sdk_path#:}" ldd "$tool" 2>/dev/null || true
+      done | awk '/=> \/snap\// {print $1, $3}' | sort -u | while read -r so path; do
+        printf '%s\n' "$system_libs" | grep -qxF "$so" || ln -sf "$path" "$links/$so"
+      done
+      echo "$links" > /etc/ld.so.conf.d/kde-qt6-sdk.conf
+      ldconfig
+      export QMAKE="$QT_SDK/usr/bin/qmake6"
+      # The Qt SDK carries dangling libglib/libgio .so links. The gold
+      # linker (which cxx-qt asks for) stops at them and leaves GLib
+      # unresolved; the standard linker moves on to the system's copy.
+      export RUSTFLAGS="${RUSTFLAGS:-} -C link-arg=-fuse-ld=bfd"
       STEWARD_LOCALEDIR=/snap/steward/current/usr/share/locale \
         cargo build --release --locked -p steward -p steward-indexer
       install -Dm755 target/release/steward "$CRAFT_PART_INSTALL/usr/bin/steward"

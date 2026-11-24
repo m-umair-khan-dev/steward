@@ -25,12 +25,44 @@ sudo iptables -I DOCKER-USER -i lxdbr0 -j ACCEPT
 sudo iptables -I DOCKER-USER -o lxdbr0 -m conntrack --ctstate RELATED,ESTABLISHED -j ACCEPT
 ```
 
+### Qt from the kde-neon-6 SDK
+
+Three things in the build steps exist because of the SDK snaps, not Steward:
+
+- cxx-qt runs qmake, moc and qmlcachegen with an empty environment, so
+  `LD_LIBRARY_PATH` cannot point them at the SDK's own Qt. The build links
+  just the libraries the build machine lacks into `/opt/qtsdk-libs` and
+  tells the linker about that folder. Adding the SDK folders whole puts
+  their copies of system libraries (libudev) ahead of the real ones and
+  breaks `snap-confine`.
+- The Qt SDK carries dangling `libglib-2.0.so`/`libgio-2.0.so` links. The
+  gold linker stops at them and leaves GLib unresolved, so the snap links
+  with the standard linker (`-fuse-ld=bfd`).
+- snapcraft's output must be piped (`snapcraft pack ... | cat`) when it
+  runs without a terminal, or it exits with code 120.
+
+## Test locally
+
+```sh
+sudo snap install --dangerous ./steward_*_amd64.snap
+snap run steward
+```
+
+If the .deb is also installed, quit its background copy first
+(`killall steward steward-indexer`); otherwise the snap hands over to it.
+
 ## Publish
 
 ```sh
 snapcraft upload --release=edge steward_*_amd64.snap   # testers: snap install steward --edge
 snapcraft release steward <revision> stable           # App Center
 ```
+
+The two `dbus` slots (Steward's own bus names) always send an upload to
+manual review ("human review required due to 'deny-connection'
+constraint"). Ask for it on forum.snapcraft.io in the store-requests
+category; once approved, an upload made with `--release=edge` goes to
+edge on its own.
 
 Inside the snap the host's package tools are out of reach, so the
 Installed page and three Free Up Space features say so (P9-T01). Some
