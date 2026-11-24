@@ -1,6 +1,6 @@
 <?xml version="1.0" encoding="UTF-8"?>
-<!-- AppStream metadata (P6-T06). Screenshots come from `make shots` (P6-T11);
-     their URLs point at the project website (HUMAN: final domain). -->
+<!-- AppStream metadata (P6-T06). Screenshots come from `make shots` (P6-T11)
+     and are linked at the release tag, so each release shows its own. -->
 <component type="desktop-application">
   <id>io.github.m_umair_khan_dev.steward</id>
   <metadata_license>CC0-1.0</metadata_license>
@@ -56,20 +56,20 @@
   <screenshots>
     <screenshot type="default">
       <caption>A folder with its files as cards and its folders as glass folders</caption>
-      <image>https://github.com/m-umair-khan-dev/steward/raw/main/docs/screenshots/folder-light.png</image>
+      <image>https://github.com/m-umair-khan-dev/steward/raw/v1.0.0/docs/screenshots/folder-light.png</image>
     </screenshot>
     <screenshot>
       <caption>Free Up Space: what is safe to clear, and why</caption>
-      <image>https://github.com/m-umair-khan-dev/steward/raw/main/docs/screenshots/free-up-space-light.png</image>
+      <image>https://github.com/m-umair-khan-dev/steward/raw/v1.0.0/docs/screenshots/free-up-space-light.png</image>
     </screenshot>
   </screenshots>
   <content_rating type="oars-1.1"/>
   <branding>
-    <color type="primary" scheme_preference="light">#a497f2</color>
-    <color type="primary" scheme_preference="dark">#3a2f86</color>
+    <color type="primary" scheme_preference="light">#e3a6db</color>
+    <color type="primary" scheme_preference="dark">#661c5f</color>
   </branding>
   <releases>
-    <release version="1.0.0" date="2026-11-20">
+    <release version="1.0.0" date="2026-11-24">
       <description>
         <p>The first release: a file manager for Ubuntu that keeps folders tidy.</p>
       </description>

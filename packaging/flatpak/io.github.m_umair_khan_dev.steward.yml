@@ -5,11 +5,13 @@
 #
 # Build it with `make flatpak` (in Docker; the runtimes, about 4 GB, stay in
 # a Docker volume). The bundle lands in dist/flatpak/.
-# Cargo downloads crates during the build (build-args below). A Flathub
-# submission instead vendors them with flatpak-cargo-generator (HUMAN step).
+# The build is offline, as on Flathub: every crate is a source listed in
+# cargo-sources.json, written from Cargo.lock by cargo-sources.py (run it
+# again after Cargo.lock changes). The Flathub copy of this manifest differs
+# only in its source: the release tag on GitHub instead of this folder.
 app-id: io.github.m_umair_khan_dev.steward
 runtime: org.kde.Platform
-runtime-version: '6.10'
+runtime-version: '6.11'
 sdk: org.kde.Sdk
 sdk-extensions:
   - org.freedesktop.Sdk.Extension.rust-stable
@@ -35,21 +37,20 @@ finish-args:
   - --env=DCONF_USER_CONFIG_DIR=.config/dconf
   # The tray icon and "Show in folder" for other apps.
   - --talk-name=org.kde.StatusNotifierWatcher
-  # The tray item's name is org.kde.StatusNotifierItem-PID-N; Flatpak only
-  # takes whole-segment wildcards. (Flathub review may prefer the item on
-  # the unique bus name instead: follow-up.)
-  - --own-name=org.kde.*
+  # Qt names the tray item org.kde.StatusNotifierItem-<pid>-<n>; inside
+  # the sandbox the app is pid 2.
+  - --own-name=org.kde.StatusNotifierItem-2-1
   - --own-name=org.freedesktop.FileManager1
-  # The search index runs as a child of the app inside the sandbox. Its
-  # own bwrap sandbox for reading files cannot start inside Flatpak, so
-  # search inside files and thumbnails need another route there (ADR 0015).
-  - --own-name=io.github.m_umair_khan_dev.steward.Indexer
+  # The search index (a child of the app) owns
+  # io.github.m_umair_khan_dev.steward.Indexer, which Flatpak grants under
+  # the app ID. Its own bwrap sandbox for reading files cannot start inside
+  # Flatpak, so search inside files and thumbnails need another route there
+  # (ADR 0015).
 build-options:
   append-path: /usr/lib/sdk/rust-stable/bin
   env:
+    # cargo-sources.json puts the crates and a config.toml here.
     CARGO_HOME: /run/build/steward/cargo
-  build-args:
-    - --share=network
 modules:
   - name: poppler-utils
     # pdftotext, for search inside PDFs.
@@ -80,7 +81,7 @@ modules:
     build-commands:
       # The SDK's Rust can trail our pinned toolchain (rust-toolchain.toml)
       # by a release; the declared minimum is ours, not a language need.
-      - STEWARD_LOCALEDIR=/app/share/locale cargo build --release --locked --ignore-rust-version
+      - STEWARD_LOCALEDIR=/app/share/locale cargo build --release --offline --locked --ignore-rust-version
         -p steward -p steward-indexer
       - install -Dm755 target/release/steward /app/bin/steward
       # The app starts the indexer from beside itself.
@@ -108,3 +109,4 @@ modules:
           - site/node_modules
           - spikes
           - .env
+      - cargo-sources.json

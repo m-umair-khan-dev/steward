@@ -294,7 +294,7 @@ Test harness fixes:
 | P6-T08 | Packaging: cargo-deb, user unit for the indexer, lintian | done | E6-05 (`make deb-test`: apt install in a clean Ubuntu, 6 smoke scenarios); lintian no errors or warnings |
 | P6-T09 | apt repository tooling: aptrepo image, publish-apt, dev key, apt-install-e2e | done | E6-06 (`make apt-e2e`: install 1.0.0-1, upgrade to 1.0.0.1-1) |
 | P6-T10 | Website | ON HOLD | Paused by the product owner on 2026-11-20; draft in site/ (see site/README.md). E6-08 waits with it |
-| P6-T11 | Screenshot generator (`make shots`) | done | 8 screens, light and dark, in artifacts/shots/ |
+| P6-T11 | Screenshot generator (`make shots`) | done | 8 screens, light and dark, in artifacts/shots/. The captures' home is /home/alex (a tmpfs in the e2e service), so the path bar shows a real-looking path; docs/screenshots/ retaken after the rename |
 | P6-T12 | Release workflow; compose.yaml, compose.test.yaml, compose.prod.yaml | done (dry run HUMAN) | `.github/workflows/release.yml`; a -dry tag publishes to ci. The local equivalent (`make deb deb-test apt-e2e`) passes |
 | P6-T13 | Report a Bug; SECURITY.md; code of conduct | done | Report-a-bug test |
 | P6-T14 | Performance pass, docs/perf.md | done | Search met; launch, big folder and memory missed, explained with issues to file (docs/perf.md) |
@@ -393,7 +393,7 @@ Notes:
 | ID | Task | Status | Notes |
 |---|---|---|---|
 | P9-T01 | Capability detection | done | E9-01. `steward_core::sandbox` detects Flatpak, Snap or the test switch; the Installed page, the installers and leftovers cards and the administrator rows explain why |
-| P9-T02 | Flatpak manifest and build | built; E9-02 open | ADR 0015. `make flatpak` builds the bundle in Docker (runtimes cached in a volume). Next: E9-02 (smoke scenarios inside the bundle); for Flathub, vendored crates, linter, tray bus name |
+| P9-T02 | Flatpak manifest and build | built offline; Flathub lint clean but for the public repo; E9-02 open | ADR 0015. `make flatpak` builds offline from cargo-sources.json (packaging/flatpak/cargo-sources.py, from Cargo.lock) on KDE 6.11. flatpak-builder-lint: manifest clean; the repo check's remaining errors (screenshots, homepage) need the public GitHub repo. Next: E9-02 (smoke scenarios inside the bundle) |
 | P9-T03 | Translation workflow; more languages | on hold | Product owner's decision (2026-11-23): both more languages and the hosted translation service |
 | P9-T05 | Snap for the Snap Store and App Center (product owner's request, 2026-11-23) | built; revision 1 uploaded, awaiting store review | `snap/snapcraft.yaml`, docs/snap.md. Builds in LXD and installs; starts, owns its bus name and creates its window (this machine had no monitor connected, so the window was not seen). Revision 1 (1.0.0) uploaded with `--release=edge`; held for manual review because of the two dbus slots. HUMAN: post the review request on forum.snapcraft.io (store-requests), check the window on a real screen, then `snapcraft release steward 1 stable` |
 | P9-T04 | Browser extension (optional) | done (manual check pending) | `browser-extension/`: toolbar button and link menu; native host runs `steward add-link` (web addresses only, no shell); tested by feeding the host a message. Firefox host manifest packaged; Chromium needs the store ID (HUMAN) |
