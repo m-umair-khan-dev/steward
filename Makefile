@@ -67,7 +67,7 @@ test: images ## Unit and integration tests
 	$(RUN) test
 
 e2e: images ## End-to-end tests (make e2e k=E0_03 for one)
-	$(RUN) -e E2E_K="$(k)" e2e
+	$(RUN) -e E2E_K="$(k)" -e STEWARD_MONKEY_STEPS="$(steps)" -e STEWARD_MONKEY_SEED="$(seed)" e2e
 
 # Packaging (P6-T08). One .deb per Ubuntu release, built and tested in Docker.
 DEB_BUILD = docker build -f docker/desktop.Dockerfile \
