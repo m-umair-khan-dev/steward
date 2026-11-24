@@ -1,6 +1,10 @@
-# CI: the gate (DESIGN.md §9.8, §10). Runs `make check` on each supported
-# Ubuntu release, inside the same Docker images developers use.
-# HUMAN: enable Actions once the repository exists on its Git host.
+# CI: the gate (DESIGN.md §9.8, §10). Runs on every pull request, including
+# contributors' pull requests from forks, and on every push to main.
+#   check  lint, unit and integration tests, every end-to-end scenario (26.10)
+#   deb    the .deb for each Ubuntu release, installed in a clean Ubuntu
+#   gate   green only when all of the above passed; main requires it, so a
+#          pull request cannot be merged while anything is red
+# Fork pull requests run with a read-only token and no secrets.
 name: CI
 
 on:
@@ -23,7 +27,8 @@ jobs:
     strategy:
       fail-fast: false
       matrix:
-        # 26.10 for now; 24.04 and 26.04 join once the project is complete (ADR 0007).
+        # The full suite runs on 26.10 for now; 24.04 and 26.04 join once the
+        # project is complete (ADR 0007). Their .deb builds run below.
         ubuntu: ["26.10"]
     env:
       UBUNTU_VERSION: ${{ matrix.ubuntu }}
@@ -32,6 +37,12 @@ jobs:
       - uses: actions/checkout@v4
 
       - uses: docker/setup-buildx-action@v3
+
+      # Thumbnails and search inside files run their helpers in bwrap, which
+      # needs unprivileged user namespaces. GitHub's Ubuntu 24.04 runners
+      # turn them off through AppArmor; Ubuntu desktops leave them on.
+      - name: Allow unprivileged user namespaces (bwrap)
+        run: sudo sysctl -w kernel.apparmor_restrict_unprivileged_userns=0
 
       - name: Build the dev image
         run: make images
@@ -45,12 +56,6 @@ jobs:
       - name: End-to-end tests
         run: make e2e
 
-      - name: Build the .deb (lintian runs inside)
-        run: make deb
-
-      - name: Install it in a clean Ubuntu; smoke tests
-        run: make deb-test
-
       - name: Upload test artifacts
         if: always()
         uses: actions/upload-artifact@v4
@@ -59,3 +64,53 @@ jobs:
           path: artifacts/
           if-no-files-found: ignore
           retention-days: 14
+
+  deb:
+    name: deb (Ubuntu ${{ matrix.ubuntu }})
+    runs-on: ubuntu-24.04
+    timeout-minutes: 60
+    strategy:
+      fail-fast: false
+      matrix:
+        ubuntu: ["24.04", "26.04", "26.10"]
+    env:
+      UBUNTU_VERSION: ${{ matrix.ubuntu }}
+      CARGO_BUILD_JOBS: "4"
+    steps:
+      - uses: actions/checkout@v4
+
+      - uses: docker/setup-buildx-action@v3
+
+      - name: Allow unprivileged user namespaces (bwrap)
+        run: sudo sysctl -w kernel.apparmor_restrict_unprivileged_userns=0
+
+      - name: Build the .deb (lintian runs inside)
+        run: make deb
+
+      - name: Install it in a clean Ubuntu; smoke tests
+        run: make deb-test
+
+      - name: Upload the .deb and test artifacts
+        if: always()
+        uses: actions/upload-artifact@v4
+        with:
+          name: deb-test-${{ matrix.ubuntu }}
+          path: |
+            dist/${{ matrix.ubuntu }}/*.deb
+            artifacts/
+          if-no-files-found: ignore
+          retention-days: 14
+
+  gate:
+    name: gate
+    needs: [check, deb]
+    if: always()
+    runs-on: ubuntu-24.04
+    timeout-minutes: 5
+    steps:
+      - name: Every job passed
+        env:
+          RESULTS: ${{ join(needs.*.result, ' ') }}
+        run: |
+          echo "results: $RESULTS"
+          for r in $RESULTS; do [ "$r" = success ] || { echo "a required job did not pass"; exit 1; }; done
