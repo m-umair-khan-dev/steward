@@ -1,14 +1,5 @@
-# Flatpak build of Steward (P9-T02; DESIGN.md D6). The .deb stays the main
-# channel: inside the sandbox Steward cannot read the host's package lists or
-# run its package tools, so the Installed page and three Smart Clean
-# features explain that instead (P9-T01, capability detection).
-#
-# Build it with `make flatpak` (in Docker; the runtimes, about 4 GB, stay in
-# a Docker volume). The bundle lands in dist/flatpak/.
-# The build is offline, as on Flathub: every crate is a source listed in
-# cargo-sources.json, written from Cargo.lock by cargo-sources.py (run it
-# again after Cargo.lock changes). The Flathub copy of this manifest differs
-# only in its source: the release tag on GitHub instead of this folder.
+# Flatpak build of Steward
+
 app-id: io.github.m_umair_khan_dev.steward
 runtime: org.kde.Platform
 runtime-version: '6.11'
@@ -17,43 +8,38 @@ sdk-extensions:
   - org.freedesktop.Sdk.Extension.rust-stable
 command: steward
 finish-args:
-  # Display and GPU.
+  # Display and GPU
   - --share=ipc
   - --socket=wayland
   - --socket=fallback-x11
   - --device=dri
-  # A file manager needs the user's files; the host's other places stay out.
+  # User's files
   - --filesystem=home
   - --filesystem=/media
   - --filesystem=/run/media
-  # Bookmarks fetch a link's title and picture (can be turned off).
+  # Bookmarks
   - --share=network
-  # The Trash, mounts and drives (GVfs), the desktop's settings.
+  # The Trash
   - --talk-name=org.gtk.vfs.*
   - --filesystem=xdg-run/gvfsd
   - --talk-name=ca.desrt.dconf
   - --filesystem=xdg-run/dconf
   - --filesystem=~/.config/dconf:ro
   - --env=DCONF_USER_CONFIG_DIR=.config/dconf
-  # The tray icon and "Show in folder" for other apps.
+  # The tray icon and "Show in folder"
   - --talk-name=org.kde.StatusNotifierWatcher
-  # Qt names the tray item org.kde.StatusNotifierItem-<pid>-<n>; inside
-  # the sandbox the app is pid 2.
+  # Qt names the tray item org.kde.StatusNotifierItem-<pid>-<n>
   - --own-name=org.kde.StatusNotifierItem-2-1
   - --own-name=org.freedesktop.FileManager1
-  # The search index (a child of the app) owns
-  # io.github.m_umair_khan_dev.steward.Indexer, which Flatpak grants under
-  # the app ID. Its own bwrap sandbox for reading files cannot start inside
-  # Flatpak, so search inside files and thumbnails need another route there
-  # (ADR 0015).
+  # The search index
 build-options:
   append-path: /usr/lib/sdk/rust-stable/bin
   env:
-    # cargo-sources.json puts the crates and a config.toml here.
+    # cargo-sources
     CARGO_HOME: /run/build/steward/cargo
 modules:
   - name: poppler-utils
-    # pdftotext, for search inside PDFs.
+    # pdftotext
     buildsystem: cmake-ninja
     config-opts:
       - -DENABLE_UTILS=ON
@@ -79,12 +65,12 @@ modules:
   - name: steward
     buildsystem: simple
     build-commands:
-      # The SDK's Rust can trail our pinned toolchain (rust-toolchain.toml)
-      # by a release; the declared minimum is ours, not a language need.
+      # rust-toolchain.toml
+      # by a release
       - STEWARD_LOCALEDIR=/app/share/locale cargo build --release --offline --locked --ignore-rust-version
         -p steward -p steward-indexer
       - install -Dm755 target/release/steward /app/bin/steward
-      # The app starts the indexer from beside itself.
+      # The app starts the indexer from beside itself
       - install -Dm755 target/release/steward-indexer /app/bin/steward-indexer
       - for po in po/*.po; do lang=$(basename "$po" .po); [ "$lang" = "en@pseudo" ] && continue;
         install -d /app/share/locale/$lang/LC_MESSAGES;
