@@ -53,9 +53,20 @@ def in_folder(*parts: str, select: str | None = None):
         path = app.home.path.joinpath(*parts)
         if app.folder()["path"] != str(path):
             app.open_folder(path)
-        if select and app.folder()["selection"] != [select]:
+        # At start-up the app is already in the home folder, but its listing
+        # may still be loading (slow CI runners): a select before the item is
+        # listed does nothing. Wait for the listing, and select until it holds.
+        wait_for(lambda: (f := app.folder())["state"] != "loading"
+                 and (not select or select in f["items"]), f"{path.name or 'home'} to be listed", 15)
+
+        def selected():
+            if app.folder()["selection"] == [select]:
+                return True
             app.select(select)
-            wait_for(lambda: app.folder()["selection"] == [select], f"{select} selected")
+            return False
+
+        if select:
+            wait_for(selected, f"{select} selected", 10)
     return setup
 
 
