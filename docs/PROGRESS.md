@@ -419,7 +419,7 @@ and dialog, and a long random run.
 | ID | Task | Status | Notes |
 |---|---|---|---|
 | P11-T01 | Sidebar: hidden Favorites come back from Preferences; keep the sidebar open (issue #4) | done (CI) | Preferences › General has a Sidebar section: "Keep sidebar open" (the sidebar-visible setting), a switch per Favorites entry (hidden ones included, in the user's order) and Restore Sidebar. Hiding from the right-click menu shows "<name> hidden. Bring it back in Preferences › General." with Undo; that Undo runs win.sidebar-show, not the operations journal (new ToastWithUndo event). The slide-out sidebar's button, hidden before, now reads "Keep sidebar open" and locks it open; the rail's logo has an "Expand sidebar" tooltip. E11-01 to E11-05 (real pointer). Issue #4's "a left-click opens a menu" is waiting for the reporter's details |
-| P11-T02 | Extract Here for archives (issue #5) | next | |
+| P11-T02 | Extract Here for archives (issue #5) | done (CI) | `steward_core::ops::archive` + `Request::Extract` / journal action `extract`: bsdtar (libarchive-tools: ZIP, 7z, RAR 4/5, tar.gz/bz2/xz/zst, ISO, CAB) unpacks into a hidden staging folder beside the archive, then the result moves into place under a free name; one top folder is used as is. Undo trashes the folder, Redo extracts again; Cancel kills bsdtar and removes the staging. bsdtar refuses ".." and absolute names. Right-click › Extract Here (enabled when every selected item is an archive) and double-click (not .iso, which the system mounts). Password-protected, damaged and unknown archives say so in the toast. libarchive-tools: a deb dependency, staged in the snap, in the dev image. Not yet in the Flatpak (the toast says to install it). E11-06 to E11-10 |
 
 ## Blocked / waiting for a human
 

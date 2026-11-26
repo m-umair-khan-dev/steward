@@ -139,6 +139,46 @@ impl Run<'_> {
     }
 
     /// Copy or move each source into `dest` with the clash rules.
+    /// Extract Here: unpacks into staging, then moves the result into place
+    /// under a free name; the step is journaled so Undo can trash it.
+    fn extract(&mut self, archive: &Path) {
+        let Some(dir) = archive.parent() else { return };
+        self.total_items = super::archive::count_entries(archive);
+        let per_entry = self.total_bytes / self.total_items.max(1);
+        let cancel = self.ctx.cancellable().clone();
+        let unpacked = super::archive::unpack(archive, dir, &cancel, &mut |name| {
+            self.items += 1;
+            self.tick(per_entry, name);
+        });
+        let (from, staging, base) = match unpacked {
+            Ok(found) => found,
+            Err(error) => return self.fail(None, archive, &error),
+        };
+        let name = fsx::free_name(dir, &base);
+        let finish = |run: &mut Self| -> io::Result<PathBuf> {
+            let target = fsx::child(dir, &name)?;
+            let step = run.record(Action::Extract, Some(archive), Some(&target))?;
+            match fsx::rename_noreplace(&from, &target) {
+                Ok(()) => {
+                    run.done(step, Some(&target), None);
+                    Ok(target)
+                }
+                Err(error) => {
+                    run.fail(Some(step), archive, &error);
+                    Err(error)
+                }
+            }
+        };
+        match finish(self) {
+            Ok(target) => self.report.created.push(target),
+            Err(error) if self.report.failed.is_empty() => self.fail(None, archive, &error),
+            Err(_) => {}
+        }
+        if fsx::exists(&staging) {
+            let _ = fsx::remove_tree(&staging);
+        }
+    }
+
     fn transfer(&mut self, sources: &[PathBuf], dest: &Path, moving: bool) {
         for src in sources {
             if self.cancelled() {
@@ -401,6 +441,7 @@ impl Worker {
                     }
                 }
             }
+            Request::Extract { archive } => run.extract(archive),
             Request::EmptyTrash => {
                 let items: Vec<PathBuf> = self.trash.list().into_iter().map(|i| i.path).collect();
                 let mut erased = Vec::new();
@@ -480,8 +521,9 @@ impl Worker {
                 .ok_or_else(|| io::Error::from(io::ErrorKind::NotFound))
         };
         match step.action {
-            Action::Copy => {
-                // Copies go to the Trash, not away for good: Undo never loses data.
+            Action::Copy | Action::Extract => {
+                // Copies (and extracted folders) go to the Trash, not away for
+                // good: Undo never loses data.
                 let dst = need(&step.dst)?;
                 Ok(Some(self.trash.trash(&dst)?))
             }
@@ -592,6 +634,20 @@ impl Worker {
                 Ok(None)
             }
             Action::Erase => Err(io::Error::other("cannot be redone")),
+            Action::Extract => {
+                let (archive, dst) = (need(&step.src)?, need(&step.dst)?);
+                let dir = dst
+                    .parent()
+                    .ok_or_else(|| io::Error::from(io::ErrorKind::InvalidInput))?;
+                let (from, staging, _) =
+                    super::archive::unpack(&archive, dir, cancel, &mut |_| {})?;
+                let moved = fsx::rename_noreplace(&from, &dst);
+                if fsx::exists(&staging) {
+                    let _ = fsx::remove_tree(&staging);
+                }
+                moved?;
+                Ok(None)
+            }
         }
     }
 }

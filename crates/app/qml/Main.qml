@@ -508,6 +508,7 @@ Window {
         ] : [
             { text: p.t("Open"), action: "win.open-selected", param: "" },
             { text: p.t("Open With…"), action: "win.open-with", param: "", enabled: win.selectedCount === 1 },
+            { text: p.t("Extract Here"), action: "win.extract-here", param: "", enabled: !!win.folder.selectionArchives },
             { separator: true },
             { text: p.t("Rename…"), action: "win.rename", param: "", enabled: win.selectedCount === 1 },
             { text: p.t("Duplicate"), action: "win.duplicate", param: "" },

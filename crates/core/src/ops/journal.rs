@@ -20,6 +20,8 @@ pub enum Action {
     Trash,
     Restore,
     Erase,
+    /// An archive (src) unpacked into a new folder (dst).
+    Extract,
 }
 
 impl Action {
@@ -32,6 +34,7 @@ impl Action {
             Action::Trash => "trash",
             Action::Restore => "restore",
             Action::Erase => "erase",
+            Action::Extract => "extract",
         }
     }
 
@@ -44,6 +47,7 @@ impl Action {
             "trash" => Action::Trash,
             "restore" => Action::Restore,
             "erase" => Action::Erase,
+            "extract" => Action::Extract,
             _ => return None,
         })
     }

@@ -981,6 +981,13 @@ impl Controller {
         {
             return;
         }
+        if let Some(path) = entry.data().file.path().filter(|p| {
+            steward_core::ops::archive::is_archive(p)
+                && !p.to_string_lossy().to_lowercase().ends_with(".iso")
+        }) {
+            self.extract_paths(vec![path]);
+            return;
+        }
         let uri = entry.data().uri();
         let name = entry.display_name().to_string();
         glib::spawn_future_local(async move {
@@ -1544,6 +1551,17 @@ impl Controller {
             }
         }
         let (page, status_icon, status_title, status_text) = self.state_page();
+        let selection_archives = {
+            let selected = self.selected();
+            !selected.is_empty()
+                && selected.iter().all(|e| {
+                    !e.is_dir()
+                        && e.data()
+                            .file
+                            .path()
+                            .is_some_and(|p| steward_core::ops::archive::is_archive(&p))
+                })
+        };
         json!({
             "title": self.folder_title(),
             "path": self.current().and_then(|f| f.path()).map(|p| p.display().to_string()),
@@ -1570,6 +1588,8 @@ impl Controller {
                 [one] if one.is_dir() => one.data().file.path().map(|p| p.display().to_string()),
                 _ => None,
             },
+            // Extract Here is offered when every selected item is an archive.
+            "selectionArchives": selection_archives,
             "metrics": { "folder": self.row_size.folder_width(), "file": self.row_size.file_width(), "gap": GAP },
         })
     }
