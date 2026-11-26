@@ -153,6 +153,9 @@ pub mod dirty {
 pub enum Event {
     /// Text, and whether the toast offers Undo.
     Toast(String, bool),
+    /// Text, and the action (and its parameter) its Undo button runs, for
+    /// changes outside the operations journal (a hidden sidebar entry).
+    ToastWithUndo(String, String, String),
     Quit,
     #[cfg_attr(not(feature = "e2e"), allow(dead_code))] // Test1.Screenshot
     Screenshot(String),
@@ -441,7 +444,7 @@ impl Controller {
     }
 
     fn emit(&mut self, event: Event) {
-        if let Event::Toast(text, _) = &event {
+        if let Event::Toast(text, _) | Event::ToastWithUndo(text, _, _) = &event {
             self.last_toast = Some(text.clone());
         }
         self.events.push(event);
@@ -1372,11 +1375,31 @@ impl Controller {
         let (entries, hidden) = sidebar::load();
         self.sidebar = entries;
         self.hidden = hidden;
-        self.mark(dirty::SIDEBAR);
+        // Preferences lists the Favorites with a switch each.
+        self.mark(dirty::SIDEBAR | dirty::PREFS);
     }
 
+    /// Hides a Favorites entry and says where to bring it back.
     pub fn sidebar_hide(&mut self, key: &str) {
+        let label = self
+            .sidebar
+            .iter()
+            .find(|e| e.key == key)
+            .map(|e| e.label.clone());
         sidebar::hide(key);
+        self.reload_sidebar();
+        if let Some(label) = label {
+            self.emit(Event::ToastWithUndo(
+                gettext("{name} hidden. Bring it back in Preferences › General.")
+                    .replace("{name}", &label),
+                "win.sidebar-show".into(),
+                key.into(),
+            ));
+        }
+    }
+
+    pub fn sidebar_show(&mut self, key: &str) {
+        sidebar::show(key);
         self.reload_sidebar();
     }
 
@@ -1959,6 +1982,9 @@ impl Controller {
             "showHidden": s.boolean("show-hidden"),
             "preview": s.boolean("preview-visible"),
             "sidebar": s.boolean("sidebar-visible"),
+            "sidebarItems": sidebar::favorites().into_iter().map(|(key, label, icon, hidden)| json!({
+                "key": key, "label": label, "icon": icon, "shown": !hidden,
+            })).collect::<Vec<_>>(),
             "width": s.int("window-width"),
             "height": s.int("window-height"),
             "maximized": s.boolean("window-maximized"),

@@ -1,4 +1,5 @@
 import QtQuick
+import QtQuick.Controls.Basic
 
 // The icon rail shown while the sidebar is collapsed (DESIGN.md §3.3).
 // Pointing at it slides the full sidebar over the content (Main.qml).
@@ -31,6 +32,11 @@ Rectangle {
             Accessible.name: p.t("Expand sidebar")
             Accessible.onPressAction: root.expand()
             TapHandler { onTapped: root.expand() }
+            // The logo opens the sidebar again; say so (issue #4).
+            HoverHandler { id: logoHover; cursorShape: Qt.PointingHandCursor }
+            ToolTip.visible: logoHover.hovered
+            ToolTip.delay: 500
+            ToolTip.text: p.t("Expand sidebar")
         }
         Item { width: 1; height: 10 }
         Repeater {

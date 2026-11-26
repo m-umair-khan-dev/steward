@@ -271,6 +271,55 @@ Sheet {
             }
         }
 
+        // The sidebar (issue #4): keep it open or let it hide, and which
+        // Favorites it shows. Hidden ones come back here.
+        Text {
+            text: p.t("Sidebar"); color: Theme.ink; font.pixelSize: 15; font.weight: Font.DemiBold
+            topPadding: 18; bottomPadding: 4
+            Accessible.role: Accessible.Heading; Accessible.name: text
+        }
+        Item {
+            width: parent.width; height: 56
+            Column {
+                anchors.verticalCenter: parent.verticalCenter
+                width: parent.width - 70
+                Text { text: p.t("Keep sidebar open"); color: Theme.ink; font.pixelSize: 14 }
+                Text { width: parent.width; wrapMode: Text.WordWrap; color: Theme.muted; font.pixelSize: 12
+                       text: p.t("When off, the sidebar hides to a row of icons and slides out when you point at it.") }
+            }
+            Switch {
+                anchors.right: parent.right; anchors.verticalCenter: parent.verticalCenter
+                checked: root.prefs.sidebar !== false
+                Accessible.name: p.t("Keep sidebar open")
+                onCheckedChanged: if (checked !== (root.prefs.sidebar !== false)) p.setpref("sidebar-visible", checked ? "true" : "false")
+            }
+        }
+        Repeater {
+            model: root.prefs.sidebarItems || []
+            delegate: Item {
+                id: sidebarItem
+                required property var modelData
+                width: parent ? parent.width : 0; height: 40
+                Icon { x: 2; anchors.verticalCenter: parent.verticalCenter; name: sidebarItem.modelData.icon; size: 18; color: Theme.accentText }
+                Text { x: 32; anchors.verticalCenter: parent.verticalCenter; text: sidebarItem.modelData.label
+                       color: Theme.ink; font.pixelSize: 14 }
+                Switch {
+                    anchors.right: parent.right; anchors.verticalCenter: parent.verticalCenter
+                    checked: !!sidebarItem.modelData.shown
+                    Accessible.name: p.t("Show in sidebar: ") + sidebarItem.modelData.label
+                    onCheckedChanged: if (checked !== !!sidebarItem.modelData.shown)
+                        p.activate(checked ? "win.sidebar-show" : "win.sidebar-hide", sidebarItem.modelData.key)
+                }
+            }
+        }
+        Item {
+            width: parent.width; height: 48
+            Text { anchors.verticalCenter: parent.verticalCenter; width: parent.width - restoreSidebar.width - 12
+                   wrapMode: Text.WordWrap; color: Theme.muted; font.pixelSize: 12
+                   text: p.t("Shows every item again, in the usual order.") }
+            PillButton { id: restoreSidebar; anchors.right: parent.right; anchors.verticalCenter: parent.verticalCenter
+                         text: p.t("Restore Sidebar"); onClicked: p.activate("win.sidebar-reset", "") }
+        }
     }
 
     Column {

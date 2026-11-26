@@ -116,6 +116,30 @@ pub fn hide(key: &str) {
     let _ = app_data::store().borrow().set_sidebar_hidden(key, true);
 }
 
+/// Brings back an entry the user hid (Preferences, or Undo on the toast).
+pub fn show(key: &str) {
+    let _ = app_data::store().borrow().set_sidebar_hidden(key, false);
+}
+
+/// Every Favorites entry in the user's order, hidden ones included, as
+/// (key, label, icon, hidden): Preferences lists them with a switch each.
+pub fn favorites() -> Vec<(String, String, &'static str, bool)> {
+    let (shown, hidden) = load();
+    let mut out: Vec<_> = shown
+        .into_iter()
+        .filter(|e| e.section == "favorites")
+        .map(|e| (e.key, e.label, e.icon, false))
+        .collect();
+    // Hidden entries keep their default place among the others.
+    for (index, entry) in default_entries().into_iter().enumerate() {
+        if entry.section == "favorites" && hidden.contains(&entry.key) {
+            let at = index.min(out.len());
+            out.insert(at, (entry.key, entry.label, entry.icon, true));
+        }
+    }
+    out
+}
+
 pub fn move_by(entries: &[SidebarEntry], key: &str, delta: i32) {
     let mut keys: Vec<String> = entries.iter().map(|e| e.key.clone()).collect();
     let Some(index) = keys.iter().position(|k| k == key) else {

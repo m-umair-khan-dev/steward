@@ -414,6 +414,13 @@ and dialog, and a long random run.
 | P10-T04 | Long random run | done | E10-04 (tests/e2e/test_p10_monkey.py): random clicks on showing controls, right-clicks, the wheel, keys and typing from a seed; after every step the app runs, goes idle within 10 s and logs no QML error; steps in artifacts/e2e/monkey/steps.jsonl. The gate runs 200 steps (seed 20261124, about 5 minutes); `make e2e k=E10_04 steps=N seed=S` for longer runs. 2000 steps with seed 7 passed (42 minutes). The window's own Close button is left out while no dialog is open: it quits the app, as it should |
 | P10-T05 | Sweep setup waits for the listing (first GitHub run) | done | E10-02 "symbol and colour dialog" failed on GitHub: at start-up the app is already in the home folder, but its listing was still loading, so selecting Documents did nothing. The setup now waits for the listing and retries the selection until it holds; the selecting screens pass with every core busy |
 
+## Phase 11: Feedback from GitHub issues (product owner's request, 2026-11-26)
+
+| ID | Task | Status | Notes |
+|---|---|---|---|
+| P11-T01 | Sidebar: hidden Favorites come back from Preferences; keep the sidebar open (issue #4) | done (CI) | Preferences › General has a Sidebar section: "Keep sidebar open" (the sidebar-visible setting), a switch per Favorites entry (hidden ones included, in the user's order) and Restore Sidebar. Hiding from the right-click menu shows "<name> hidden. Bring it back in Preferences › General." with Undo; that Undo runs win.sidebar-show, not the operations journal (new ToastWithUndo event). The slide-out sidebar's button, hidden before, now reads "Keep sidebar open" and locks it open; the rail's logo has an "Expand sidebar" tooltip. E11-01 to E11-05 (real pointer). Issue #4's "a left-click opens a menu" is waiting for the reporter's details |
+| P11-T02 | Extract Here for archives (issue #5) | next | |
+
 ## Blocked / waiting for a human
 
 - Save the snap store login as the GitHub secret SNAPCRAFT_STORE_CREDENTIALS

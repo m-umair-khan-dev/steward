@@ -742,6 +742,9 @@ fn create() -> (gio::SimpleActionGroup, gio::SimpleActionGroup) {
     with_string(&win, "sidebar-hide", |key| {
         controller::with(|c| c.sidebar_hide(key))
     });
+    with_string(&win, "sidebar-show", |key| {
+        controller::with(|c| c.sidebar_show(key))
+    });
     with_string(&win, "sidebar-move-up", |key| {
         controller::with(|c| c.sidebar_move(key, -1))
     });

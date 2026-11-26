@@ -8,6 +8,8 @@ Rectangle {
     property var model: ({ entries: [], selected: "", free: "", usage: 0 })
     property bool overlay: false
     signal collapse()
+    // The slide-out sidebar's button: keep the sidebar open (issue #4).
+    signal keepOpen()
 
     radius: 16
     color: Theme.sidebar
@@ -45,11 +47,11 @@ Rectangle {
             anchors.verticalCenter: parent.verticalCenter
             width: 30; height: 30
             flat: true
-            icon: "sidebar"
+            icon: root.overlay ? "lock" : "sidebar"
             iconSize: 17
-            label: p.t("Collapse sidebar")
-            visible: !root.overlay
-            onClicked: root.collapse()
+            label: root.overlay ? p.t("Keep sidebar open") : p.t("Collapse sidebar")
+            tip: root.overlay ? p.t("Keep sidebar open") : p.t("Hide the sidebar until you point at the left edge")
+            onClicked: root.overlay ? root.keepOpen() : root.collapse()
         }
     }
 

@@ -29,6 +29,7 @@ Window {
             item.grabToImage(result => p.shot(path, result.saveToFile(file)))
         }
         onToast: (text, undo) => toast.show(text, undo)
+        onToastundo: (text, action, param) => toast.show(text, true, action, param)
         onFocus: target => {
             if (target === "hide") {
                 win.hide()
@@ -221,6 +222,7 @@ Window {
             anchors.fill: parent
             overlay: true
             model: win.sidebar
+            onKeepOpen: p.activate("win.toggle-sidebar", "")
             layer.enabled: true
         }
     }

@@ -5,9 +5,15 @@ Rectangle {
     id: root
     property string text: ""
     property bool undo: false
-    function show(message, withUndo) {
+    // What Undo runs: the operations journal's Undo, unless the toast is
+    // about something else (a hidden sidebar entry passes its own action).
+    property string undoAction: "win.undo"
+    property string undoParam: ""
+    function show(message, withUndo, action, param) {
         text = message
         undo = !!withUndo
+        undoAction = action || "win.undo"
+        undoParam = param || ""
         shown = true
         hide.restart()
     }
@@ -42,10 +48,10 @@ Rectangle {
             color: undoHover.hovered ? Qt.rgba(1, 1, 1, 0.22) : Qt.rgba(1, 1, 1, 0.12)
             Accessible.role: Accessible.Button
             Accessible.name: p.t("Undo")
-            Accessible.onPressAction: { root.shown = false; p.activate("win.undo", "") }
+            Accessible.onPressAction: { root.shown = false; p.activate(root.undoAction, root.undoParam) }
             Text { id: undoLabel; anchors.centerIn: parent; text: p.t("Undo"); color: "white"; font.pixelSize: 13; font.weight: Font.Bold }
             HoverHandler { id: undoHover }
-            TapHandler { onTapped: { root.shown = false; p.activate("win.undo", "") } }
+            TapHandler { onTapped: { root.shown = false; p.activate(root.undoAction, root.undoParam) } }
         }
     }
     Timer { id: hide; interval: root.undo ? 7000 : 4000; onTriggered: root.shown = false }
