@@ -57,7 +57,8 @@ Window {
 
     function parse(text, fallback) {
         if (!text) return fallback
-        try { return JSON.parse(text) } catch (e) { return fallback }
+        // "null" (no dialog open) counts as missing: dialogs read fields of it.
+        try { const value = JSON.parse(text); return value === null ? fallback : value } catch (e) { return fallback }
     }
     readonly property var folder: parse(p.folder, ({}))
     readonly property var rows: parse(p.rows, [])

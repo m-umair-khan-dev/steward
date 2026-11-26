@@ -24,7 +24,15 @@ FocusScope {
         color: Qt.rgba(0.05, 0.04, 0.1, Theme.dark ? 0.55 : 0.32)
         opacity: root.visible ? 1 : 0
         Behavior on opacity { NumberAnimation { duration: 150 } }
-        TapHandler { onTapped: root.close() }
+        // A TapHandler does not stop a tap from reaching handlers underneath,
+        // so this one also sees taps on the card (a Preferences tab used to
+        // close the dialog): only a tap outside the card closes it.
+        TapHandler {
+            onTapped: eventPoint => {
+                const at = card.mapFromItem(parent, eventPoint.position.x, eventPoint.position.y)
+                if (!card.contains(at)) root.close()
+            }
+        }
     }
 
     Rectangle {

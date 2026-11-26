@@ -398,6 +398,22 @@ Notes:
 | P9-T05 | Snap for the Snap Store and App Center (product owner's request, 2026-11-23) | built; revision 1 uploaded, awaiting store review | `snap/snapcraft.yaml`, docs/snap.md. Builds in LXD and installs; starts, owns its bus name and creates its window (this machine had no monitor connected, so the window was not seen). Revision 1 (1.0.0) uploaded with `--release=edge`; held for manual review because of the two dbus slots. HUMAN: post the review request on forum.snapcraft.io (store-requests), check the window on a real screen, then `snapcraft release steward 1 stable` |
 | P9-T04 | Browser extension (optional) | done (manual check pending) | `browser-extension/`: toolbar button and link menu; native host runs `steward add-link` (web addresses only, no shell); tested by feeding the host a message. Firefox host manifest packaged; Chromium needs the store ID (HUMAN) |
 
+## Phase 10: The UI with the real mouse (product owner's request, 2026-11-24)
+
+Accessibility actions call a control's handler directly, so the earlier
+scenarios could not see bugs in Qt's pointer delivery. Phase 10 clicks with
+the real pointer (mutter's remote desktop) in three passes: a targeted
+scenario per reported bug, a sweep that clicks every control on every screen
+and dialog, and a long random run.
+
+| ID | Task | Status | Notes |
+|---|---|---|---|
+| P10-T01 | Real pointer clicks in the harness; Preferences tabs | done | E10-01. `App.click_at`/`mouse_click` click at a control's centre (AT-SPI SCREEN extents, which on Wayland are the main window's; Qt counts WINDOW extents from the nearest dialog). Mutter drops the first pointer motion of a remote-desktop session, so the harness spends it on a move first. Found and fixed: a tap on a Preferences tab also reached the Sheet backdrop's TapHandler and closed the dialog (every Sheet; only a tap outside the card closes it now); `dialogData` was `null` while no dialog was open, so WorkspaceDialog and FolderStyleDialog logged TypeErrors at start-up. E10-01 fails without the Sheet fix |
+| P10-T02 | Sweep: every control on every screen | done | E10-02, one test per screen (27: folders, two panes, search, Peek, the five tool pages, every Preferences tab, nine dialogs, four menus), harness/sweep.py. About 830 real clicks; after each: the app runs, goes idle within 10 s, logs no QML error, and a dialog stays open when a setting is changed. Clean after P10-T01's fixes. Open With needs an app for text files: the sweep writes two harmless .desktop files and a mimeinfo.cache (GIO matches types through it) into the fixture home. Runs about 35 minutes |
+| P10-T03 | Each control does what its label says | done | E10-03 (13 scenarios, real pointer): four Preferences settings change and survive a restart; Pause indexing; header View, Sort, Descending, Larger; sidebar places, Back, Forward, the three tools, Collapse; the background menu (New Folder, Select All, Show Hidden Files); the item menu (Duplicate, Copy, Move to Trash, then Undo from the main menu); the main menu opens Preferences, Keyboard Shortcuts and About, and Close closes them; Light and Dark. Found: at 800 px the sidebar's Tools list scrolls under the Computer row, and accessibility still calls AI Agents "showing" (2 px of it are); the scenario scrolls the sidebar first. The sweep cannot tell such a clipped control from a visible one, so its click there lands on the Computer row (reported as "changed the screen", not as a problem) |
+| P10-T04 | Long random run | done | E10-04 (tests/e2e/test_p10_monkey.py): random clicks on showing controls, right-clicks, the wheel, keys and typing from a seed; after every step the app runs, goes idle within 10 s and logs no QML error; steps in artifacts/e2e/monkey/steps.jsonl. The gate runs 200 steps (seed 20261124, about 5 minutes); `make e2e k=E10_04 steps=N seed=S` for longer runs. 2000 steps with seed 7 passed (42 minutes). The window's own Close button is left out while no dialog is open: it quits the app, as it should |
+| P10-T05 | Sweep setup waits for the listing (first GitHub run) | done | E10-02 "symbol and colour dialog" failed on GitHub: at start-up the app is already in the home folder, but its listing was still loading, so selecting Documents did nothing. The setup now waits for the listing and retries the selection until it holds; the selecting screens pass with every core busy |
+
 ## Blocked / waiting for a human
 
 - Save the snap store login as the GitHub secret SNAPCRAFT_STORE_CREDENTIALS
