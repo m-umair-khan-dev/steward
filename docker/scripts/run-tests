@@ -4,4 +4,4 @@ set -euo pipefail
 cd /workspace
 
 docker/scripts/headless-run cargo nextest run --workspace --locked --no-fail-fast
-python3 -m pytest -q -p no:cacheprovider tests/fixtures
+python3 -m pytest -q -p no:cacheprovider tests/fixtures tests/theme

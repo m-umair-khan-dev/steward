@@ -201,7 +201,7 @@ Rectangle {
                 Rectangle {
                     width: 84; height: 5; radius: 2.5; color: Theme.track
                     anchors.verticalCenter: parent.verticalCenter
-                    Rectangle { width: parent.width * (root.model.usage || 0); height: 5; radius: 2.5; color: Theme.accent }
+                    Rectangle { width: parent.width * (root.model.usage || 0); height: 5; radius: 2.5; color: Theme.accentFill }
                 }
                 Text { text: root.model.free || ""; color: Theme.muted; font.pixelSize: 11 }
             }

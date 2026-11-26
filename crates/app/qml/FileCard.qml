@@ -57,7 +57,7 @@ Item {
         layer.enabled: Theme.effects
         layer.samplerName: "tex"
         layer.effect: FxShadow {
-            shadowColor: "#1a1240"
+            shadowColor: Theme.shadow
             shadowOpacity: root.lifted ? 0.22 : 0.06
             shadowBlur: root.lifted ? 0.8 : 0.3
             shadowVerticalOffset: root.lifted ? 8 : 1
@@ -84,7 +84,7 @@ Item {
                     GradientStop { position: 1.0; color: root.tint }
                 }
                 opacity: 0.85
-                Icon { anchors.centerIn: parent; name: root.symbol; size: Math.round(parent.height * 0.42); color: "white" }
+                Icon { anchors.centerIn: parent; name: root.symbol; size: Math.round(parent.height * 0.42); color: Theme.onAccent }
             }
             Image {
                 id: image
@@ -109,8 +109,8 @@ Item {
             }
             Rectangle {
                 y: 15; width: parent.width; height: 11; radius: 3
-                color: root.tint
-                Text { anchors.centerIn: parent; text: root.badge.slice(0, 4); color: "white"; font.pixelSize: 7; font.weight: Font.Black }
+                color: Theme.badge(root.kind)
+                Text { anchors.centerIn: parent; text: root.badge.slice(0, 4); color: Theme.onAccent; font.pixelSize: 7; font.weight: Font.Black }
             }
         }
         IconButton {

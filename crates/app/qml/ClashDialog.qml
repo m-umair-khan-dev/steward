@@ -35,10 +35,10 @@ Sheet {
                 x: all.leftPadding
                 anchors.verticalCenter: parent.verticalCenter
                 width: 20; height: 20; radius: 6
-                color: all.checked ? Theme.accent : Theme.pane
-                border.color: all.checked ? Theme.accent : Theme.faint
+                color: all.checked ? Theme.accentFill : Theme.pane
+                border.color: all.checked ? Theme.accentFill : Theme.faint
                 border.width: 1.5
-                Icon { anchors.centerIn: parent; visible: all.checked; name: "check"; size: 14; color: "white" }
+                Icon { anchors.centerIn: parent; visible: all.checked; name: "check"; size: 14; color: Theme.onAccent }
             }
             contentItem: Text {
                 leftPadding: all.indicator.width + 8

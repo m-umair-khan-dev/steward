@@ -41,7 +41,7 @@ FocusScope {
 
     Rectangle {
         anchors.fill: parent
-        color: Qt.rgba(0.05, 0.04, 0.1, Theme.dark ? 0.5 : 0.22)
+        color: Theme.scrim(Theme.dark ? 0.5 : 0.22)
         MouseArea { anchors.fill: parent; onClicked: p.activate("win.search-close", "") }
     }
 
@@ -243,9 +243,9 @@ FocusScope {
         Rectangle {
             x: 10; anchors.verticalCenter: parent.verticalCenter
             width: 40; height: 40; radius: 10
-            color: row.item.dir ? Theme.alpha(Theme.deep("folders"), 0.16) : Theme.deep(row.item.kind)
+            color: row.item.dir ? Theme.alpha(Theme.deep("folders"), 0.16) : Theme.badge(row.item.kind)
             Icon { visible: !!row.item.dir; anchors.centerIn: parent; name: "folder"; size: 20; color: Theme.deep("folders") }
-            Text { visible: !row.item.dir; anchors.centerIn: parent; text: row.item.badge; color: "white"
+            Text { visible: !row.item.dir; anchors.centerIn: parent; text: row.item.badge; color: Theme.onAccent
                    font.pixelSize: 10; font.weight: Font.Black }
         }
         Column {
@@ -285,7 +285,7 @@ FocusScope {
             color: Theme.deep(tile.item.kind)
             clip: true
             Icon { anchors.centerIn: parent; name: tile.item.kind === "videos" ? "videos" : "pictures"; size: 34
-                   color: Qt.rgba(1, 1, 1, 0.8) }
+                   color: Theme.onFill(0.8) }
             Image { anchors.fill: parent; source: tile.item.thumb ? "file://" + tile.item.thumb : ""
                     fillMode: Image.PreserveAspectCrop; asynchronous: true }
         }

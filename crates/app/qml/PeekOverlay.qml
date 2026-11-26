@@ -24,7 +24,7 @@ FocusScope {
 
     Rectangle {
         anchors.fill: parent
-        color: Qt.rgba(0.05, 0.04, 0.1, Theme.dark ? 0.6 : 0.35)
+        color: Theme.scrim(Theme.dark ? 0.6 : 0.35)
         MouseArea { anchors.fill: parent; onClicked: p.activate("win.peek-close", "") }
     }
 
@@ -52,8 +52,8 @@ FocusScope {
             Rectangle {
                 x: 18; anchors.verticalCenter: parent.verticalCenter
                 width: 30; height: 36; radius: 5
-                color: Theme.deep(root.model.kind || "other")
-                Text { anchors.centerIn: parent; text: (root.model.badge || "").slice(0, 4); color: "white"
+                color: Theme.badge(root.model.kind || "other")
+                Text { anchors.centerIn: parent; text: (root.model.badge || "").slice(0, 4); color: Theme.onAccent
                        font.pixelSize: 9; font.weight: Font.Black }
             }
             Column {
@@ -173,13 +173,13 @@ FocusScope {
                 anchors.horizontalCenter: parent.horizontalCenter
                 anchors.bottom: parent.bottom; anchors.bottomMargin: 12
                 width: pageLabel.implicitWidth + 24; height: 26; radius: 13
-                color: Qt.rgba(0.1, 0.1, 0.15, 0.7)
+                color: Theme.caption
                 visible: doc.pageCount > 0
                 Text {
                     id: pageLabel
                     anchors.centerIn: parent
                     text: p.t("Page ") + (pages.currentPage + 1) + p.t(" of ") + doc.pageCount
-                    color: "white"; font.pixelSize: 12
+                    color: Theme.onAccent; font.pixelSize: 12
                     Accessible.role: Accessible.StaticText
                     Accessible.name: text
                 }
@@ -238,8 +238,8 @@ FocusScope {
             Rectangle {
                 anchors.centerIn: parent
                 width: 120; height: 150; radius: 12
-                color: Theme.deep(root.model.kind || "other")
-                Text { anchors.centerIn: parent; text: root.model.badge || ""; color: "white"
+                color: Theme.badge(root.model.kind || "other")
+                Text { anchors.centerIn: parent; text: root.model.badge || ""; color: Theme.onAccent
                        font.pixelSize: 22; font.weight: Font.Black }
             }
         }

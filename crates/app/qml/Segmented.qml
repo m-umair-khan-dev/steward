@@ -26,7 +26,7 @@ Rectangle {
         y: 3
         height: parent.height - 6
         radius: height / 2
-        color: Theme.dark ? "#2c2a3d" : "#ececf2"
+        color: Theme.segment
         property Item target: repeater.count > root.index ? repeater.itemAt(root.index) : null
         x: target ? row.x + target.x : 3
         width: target ? target.width : 0

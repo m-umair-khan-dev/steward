@@ -124,15 +124,15 @@ Rectangle {
                     Rectangle {
                         height: 34; radius: 10
                         width: headline.implicitWidth + 40
-                        color: Theme.alpha("#2c8a57", Theme.dark ? 0.22 : 0.12)
-                        border.color: Theme.alpha("#2c8a57", 0.35)
+                        color: Theme.successFill
+                        border.color: Theme.successLine
                         Accessible.role: Accessible.StaticText
                         Accessible.name: root.model.headline || ""
                         Row {
                             anchors.centerIn: parent
                             spacing: 8
-                            Icon { name: "clean"; size: 15; color: "#2c8a57"; anchors.verticalCenter: parent.verticalCenter }
-                            Text { id: headline; text: root.model.headline || ""; color: Theme.dark ? "#8fd6ad" : "#1f6b42"
+                            Icon { name: "clean"; size: 15; color: Theme.success; anchors.verticalCenter: parent.verticalCenter }
+                            Text { id: headline; text: root.model.headline || ""; color: Theme.successText
                                    font.pixelSize: 14; font.weight: Font.DemiBold }
                         }
                     }
@@ -379,7 +379,7 @@ Rectangle {
     // --- parts ------------------------------------------------------------------
     component GroupBadge: Rectangle {
         property string group: "safe"
-        readonly property color tone: group === "safe" ? "#2c8a57" : (group === "admin" ? "#4c5361" : "#b8740a")
+        readonly property color tone: group === "safe" ? Theme.success : (group === "admin" ? Theme.deep("installers") : Theme.warning)
         width: badgeRow.implicitWidth + 16; height: 22; radius: 11
         color: Theme.alpha(tone, Theme.dark ? 0.25 : 0.12)
         border.color: Theme.alpha(tone, 0.35)

@@ -73,7 +73,7 @@ Rectangle {
                                     anchors.bottom: parent.bottom
                                     width: parent.width; radius: 4
                                     height: Math.max(parent.modelData.value > 0 ? 4 : 2, parent.height * parent.modelData.share)
-                                    color: parent.modelData.value > 0 ? "#d97757" : Theme.track
+                                    color: parent.modelData.value > 0 ? Theme.chart : Theme.track
                                 }
                             }
                         }
@@ -85,7 +85,7 @@ Rectangle {
                             delegate: Row {
                                 required property var modelData
                                 spacing: 6
-                                Rectangle { width: 10; height: 10; radius: 3; color: "#d97757"; anchors.verticalCenter: parent.verticalCenter }
+                                Rectangle { width: 10; height: 10; radius: 3; color: Theme.chart; anchors.verticalCenter: parent.verticalCenter }
                                 Text { text: parent.modelData.tool + " " + parent.modelData.text; color: Theme.muted; font.pixelSize: 13 }
                             }
                         }
@@ -100,7 +100,7 @@ Rectangle {
                     Accessible.name: p.t("On localhost")
                     Row {
                         x: 22; y: 20; spacing: 8
-                        Icon { name: "globe"; size: 18; color: "#2c8a57"; anchors.verticalCenter: parent.verticalCenter }
+                        Icon { name: "globe"; size: 18; color: Theme.success; anchors.verticalCenter: parent.verticalCenter }
                         Text { text: p.t("On localhost"); color: Theme.ink; font.pixelSize: 17; font.weight: Font.Bold
                                Accessible.role: Accessible.Heading; Accessible.name: text }
                         Text { text: (root.model.servers || []).length
@@ -131,9 +131,9 @@ Rectangle {
                             Rectangle {
                                 x: 10; anchors.verticalCenter: parent.verticalCenter
                                 width: portText.implicitWidth + 18; height: 30; radius: 8
-                                color: Theme.alpha("#2c8a57", Theme.dark ? 0.25 : 0.12)
+                                color: Theme.successFill
                                 Text { id: portText; anchors.centerIn: parent; text: ":" + server.modelData.port
-                                       color: Theme.dark ? "#8fd6ad" : "#1f6b42"; font.family: "monospace"; font.pixelSize: 14; font.weight: Font.Bold }
+                                       color: Theme.successText; font.family: "monospace"; font.pixelSize: 14; font.weight: Font.Bold }
                             }
                             Text {
                                 x: 100; anchors.verticalCenter: parent.verticalCenter

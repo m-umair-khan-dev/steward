@@ -21,7 +21,7 @@ FocusScope {
 
     Rectangle {
         anchors.fill: parent
-        color: Qt.rgba(0.05, 0.04, 0.1, Theme.dark ? 0.55 : 0.32)
+        color: Theme.scrim(Theme.dark ? 0.55 : 0.32)
         opacity: root.visible ? 1 : 0
         Behavior on opacity { NumberAnimation { duration: 150 } }
         // A TapHandler does not stop a tap from reaching handlers underneath,
