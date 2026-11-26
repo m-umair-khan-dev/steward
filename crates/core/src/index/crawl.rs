@@ -392,12 +392,21 @@ mod rules_tests {
     fn home_rules_skip_caches_and_editor_extensions() {
         let home = Path::new("/h");
         let rules = Rules::for_home(home);
-        for skipped in ["/h/.cache", "/h/.cache/pip/x", "/h/.cache/steward/index.db",
-                        "/h/.vscode/extensions/a/b.js", "/h/.local/share/Trash/files/x"] {
+        for skipped in [
+            "/h/.cache",
+            "/h/.cache/pip/x",
+            "/h/.cache/steward/index.db",
+            "/h/.vscode/extensions/a/b.js",
+            "/h/.local/share/Trash/files/x",
+        ] {
             assert!(rules.excluded(Path::new(skipped)), "{skipped} is skipped");
         }
-        for kept in ["/h/Documents/a.txt", "/h/.vscode/settings.json", "/h/.cachet/x",
-                     "/h/.config/app.conf"] {
+        for kept in [
+            "/h/Documents/a.txt",
+            "/h/.vscode/settings.json",
+            "/h/.cachet/x",
+            "/h/.config/app.conf",
+        ] {
             assert!(!rules.excluded(Path::new(kept)), "{kept} is indexed");
         }
     }
