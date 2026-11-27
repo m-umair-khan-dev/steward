@@ -275,7 +275,7 @@ Window {
                 width: 20; height: 20; radius: 5
                 anchors.verticalCenter: parent.verticalCenter
                 color: chip.item.dir ? Theme.alpha(Theme.deep("folders"), 0.16) : Theme.badge(chip.item.kind || "other")
-                Text { visible: !chip.item.dir; anchors.centerIn: parent; text: chip.item.badge || ""; color: Theme.onAccent
+                Text { visible: !chip.item.dir; anchors.centerIn: parent; text: chip.item.badge || ""; color: Theme.accentInk
                        font.pixelSize: 7; font.weight: Font.Black }
                 Icon { visible: !!chip.item.dir; anchors.centerIn: parent; name: "folder"; size: 12; color: Theme.deep("folders") }
             }

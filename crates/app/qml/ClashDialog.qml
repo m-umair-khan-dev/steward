@@ -38,7 +38,7 @@ Sheet {
                 color: all.checked ? Theme.accentFill : Theme.pane
                 border.color: all.checked ? Theme.accentFill : Theme.faint
                 border.width: 1.5
-                Icon { anchors.centerIn: parent; visible: all.checked; name: "check"; size: 14; color: Theme.onAccent }
+                Icon { anchors.centerIn: parent; visible: all.checked; name: "check"; size: 14; color: Theme.accentInk }
             }
             contentItem: Text {
                 leftPadding: all.indicator.width + 8

@@ -17,6 +17,6 @@ Rectangle {
     Accessible.checked: checked
     Accessible.onPressAction: root.toggled()
     Accessible.onToggleAction: root.toggled()
-    Icon { anchors.centerIn: parent; name: "check"; size: 14; color: Theme.onAccent; visible: root.checked }
+    Icon { anchors.centerIn: parent; name: "check"; size: 14; color: Theme.accentInk; visible: root.checked }
     TapHandler { enabled: root.enabled; onTapped: root.toggled() }
 }

@@ -31,7 +31,7 @@ Rectangle {
         anchors.centerIn: parent
         name: root.icon
         size: root.iconSize
-        color: root.checked ? Theme.onAccent : Theme.ink
+        color: root.checked ? Theme.accentInk : Theme.ink
     }
     HoverHandler { id: hover }
     TapHandler { onTapped: root.clicked() }

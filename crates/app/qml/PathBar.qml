@@ -97,7 +97,7 @@ Rectangle {
                 color: Theme.accentFill
                 anchors.verticalCenter: parent.verticalCenter
                 Text { id: changesText; anchors.centerIn: parent; text: root.model.git ? root.model.git.changes : ""
-                       color: Theme.onAccent; font.pixelSize: 11; font.weight: Font.Bold }
+                       color: Theme.accentInk; font.pixelSize: 11; font.weight: Font.Bold }
             }
         }
     }

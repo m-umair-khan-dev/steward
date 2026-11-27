@@ -166,6 +166,13 @@ def test_red_is_kept_for_danger():
         assert far, f"{kind} looks like the danger red"
 
 
+def test_no_role_name_looks_like_a_signal_handler():
+    """QML reads any name "on" + capital letter as a signal handler, so a
+    property called onAccent stops Theme.qml (and the whole app) loading."""
+    bad = re.findall(r'(?:property \w+|function) (on[A-Z]\w*)', THEME)
+    assert not bad, f"rename {bad}: on + capital letter is a signal handler in QML"
+
+
 def test_colours_are_only_written_in_theme():
     allowed = {"Theme.qml", "FxShadow.qml"}  # FxShadow: the effect's default, always overridden
     pattern = re.compile(r'"#[0-9a-fA-F]{6}"|Qt\.rgba\(|Qt\.hsla\(|"white"|"black"')

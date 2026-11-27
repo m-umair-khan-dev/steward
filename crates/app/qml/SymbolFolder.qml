@@ -14,6 +14,6 @@ Item {
         y: parent.height * 0.42
         name: root.symbol
         size: Math.round(root.size * 0.34)
-        color: Theme.onAccent
+        color: Theme.accentInk
     }
 }

@@ -53,7 +53,7 @@ FocusScope {
                 x: 18; anchors.verticalCenter: parent.verticalCenter
                 width: 30; height: 36; radius: 5
                 color: Theme.badge(root.model.kind || "other")
-                Text { anchors.centerIn: parent; text: (root.model.badge || "").slice(0, 4); color: Theme.onAccent
+                Text { anchors.centerIn: parent; text: (root.model.badge || "").slice(0, 4); color: Theme.accentInk
                        font.pixelSize: 9; font.weight: Font.Black }
             }
             Column {
@@ -179,7 +179,7 @@ FocusScope {
                     id: pageLabel
                     anchors.centerIn: parent
                     text: p.t("Page ") + (pages.currentPage + 1) + p.t(" of ") + doc.pageCount
-                    color: Theme.onAccent; font.pixelSize: 12
+                    color: Theme.accentInk; font.pixelSize: 12
                     Accessible.role: Accessible.StaticText
                     Accessible.name: text
                 }
@@ -239,7 +239,7 @@ FocusScope {
                 anchors.centerIn: parent
                 width: 120; height: 150; radius: 12
                 color: Theme.badge(root.model.kind || "other")
-                Text { anchors.centerIn: parent; text: root.model.badge || ""; color: Theme.onAccent
+                Text { anchors.centerIn: parent; text: root.model.badge || ""; color: Theme.accentInk
                        font.pixelSize: 22; font.weight: Font.Black }
             }
         }

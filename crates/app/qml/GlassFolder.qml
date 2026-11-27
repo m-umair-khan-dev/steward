@@ -79,7 +79,7 @@ Item {
             }
             Rectangle { y: parent.height * 0.11; width: parent.width; height: parent.height * 0.89; radius: 14; color: root.deep }
             Rectangle { x: parent.width * 0.14; y: parent.height * 0.17; width: parent.width * 0.72; height: parent.height * 0.5
-                        radius: 6; color: Theme.onFill(1); rotation: -4; antialiasing: true }
+                        radius: 6; color: Theme.fillInk(1); rotation: -4; antialiasing: true }
             Rectangle { x: parent.width * 0.15; y: parent.height * 0.21; width: parent.width * 0.72; height: parent.height * 0.5
                         radius: 6; color: Theme.paper; rotation: 3; antialiasing: true }
         }
@@ -113,13 +113,13 @@ Item {
                 GradientStop { position: 0.0; color: Theme.alpha(root.light, 0.70) }
                 GradientStop { position: 1.0; color: Theme.alpha(root.deep, 0.80) }
             }
-            border.color: Theme.onFill(0.45)
+            border.color: Theme.fillInk(0.45)
             border.width: 1
 
             Text {
                 x: 10; y: 6
                 text: root.count
-                color: Theme.onAccent; font.pixelSize: 11; font.weight: Font.Bold
+                color: Theme.accentInk; font.pixelSize: 11; font.weight: Font.Bold
                 width: parent.width - 20; elide: Text.ElideRight
             }
             // "i": select the folder and show it in the preview pane.
@@ -131,7 +131,7 @@ Item {
                 Accessible.role: Accessible.Button
                 Accessible.name: p.t("About ") + root.label
                 Accessible.onPressAction: root.infoRequested()
-                Icon { anchors.fill: parent; name: "info"; size: 16; color: Theme.onFill(0.92) }
+                Icon { anchors.fill: parent; name: "info"; size: 16; color: Theme.fillInk(0.92) }
                 MouseArea { anchors.fill: parent; anchors.margins: -4; onClicked: root.infoRequested() }
             }
             Icon {
@@ -139,12 +139,12 @@ Item {
                 anchors.verticalCenterOffset: 2
                 name: root.symbol
                 size: Math.round(front.height * 0.34)
-                color: Theme.onFill(0.92)
+                color: Theme.fillInk(0.92)
             }
             Text {
                 x: 10; anchors.bottom: parent.bottom; anchors.bottomMargin: 5
                 text: root.size
-                color: Theme.onFill(0.92); font.pixelSize: 10
+                color: Theme.fillInk(0.92); font.pixelSize: 10
             }
         }
     }
@@ -172,7 +172,7 @@ Item {
             anchors.centerIn: parent
             width: Math.min(implicitWidth, root.width - 14)
             text: root.label
-            color: root.selected ? Theme.onAccent : Theme.ink
+            color: root.selected ? Theme.accentInk : Theme.ink
             font.pixelSize: 13
             font.weight: Font.Medium
             elide: Text.ElideMiddle

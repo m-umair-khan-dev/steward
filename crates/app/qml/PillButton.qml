@@ -27,7 +27,7 @@ Rectangle {
         id: label
         anchors.centerIn: parent
         text: root.text
-        color: root.primary || root.destructive ? Theme.onAccent : Theme.ink
+        color: root.primary || root.destructive ? Theme.accentInk : Theme.ink
         font.pixelSize: 14
         font.weight: Font.DemiBold
     }

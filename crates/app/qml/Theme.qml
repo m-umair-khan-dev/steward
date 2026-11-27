@@ -3,7 +3,7 @@ import QtQuick
 
 // Colour, size and motion tokens (DESIGN.md §3.6, ADR 0008).
 //
-// Colours are roles, named for what they do (ink, muted, danger, onAccent),
+// Colours are roles, named for what they do (ink, muted, danger, accentInk),
 // never for how they look; QML elsewhere uses only these (P11-T04). Every
 // text role meets WCAG 2.2 AA on every surface, 4.5:1, and every icon and
 // control colour 3:1 (P11-T03). Colours that depend on the accent or the
@@ -63,15 +63,15 @@ QtObject {
 
     // --- accent -----------------------------------------------------------------
     // accent marks the selection and focus; accentText is the accent as text;
-    // accentFill is the accent behind white (onAccent) text and icons. The
+    // accentFill is the accent behind white (accentInk) text and icons. The
     // system's colour comes as one value, so its shades are worked out here
     // (libadwaita does the same): Ubuntu's orange as text would be 3.6:1.
     readonly property color accent: systemAccent ? systemAccentColor : accentSet[dark ? 1 : 0]
     readonly property color accentText: ensureContrast(systemAccent ? systemAccentColor : accentSet[dark ? 3 : 2],
                                                        sunken, 4.5)
-    readonly property color accentFill: ensureContrast(accent, onAccent, 4.6)
+    readonly property color accentFill: ensureContrast(accent, accentInk, 4.6)
     readonly property color accentFillHover: shiftLightness(accentFill, -0.05)
-    readonly property color onAccent: "#ffffff"
+    readonly property color accentInk: "#ffffff"
 
     // --- meaning ----------------------------------------------------------------
     // danger is only for destroying things (Empty Trash, Delete) and errors:
@@ -91,7 +91,7 @@ QtObject {
     // The dimmed backdrop behind dialogs, search and Peek, at a strength.
     function scrim(strength) { return Qt.rgba(0.05, 0.04, 0.1, strength) }
     // White on a coloured fill (folder glass, chips over a picture), at a strength.
-    function onFill(strength) { return Qt.rgba(1, 1, 1, strength) }
+    function fillInk(strength) { return Qt.rgba(1, 1, 1, strength) }
     readonly property color caption: Qt.rgba(0.1, 0.1, 0.15, 0.7)   // text box over a picture
     readonly property color shadow: "#1a1240"
     readonly property color toastBg: pick("#2e2128", "#3a2e36", "#26262b", "#323238")
@@ -129,7 +129,7 @@ QtObject {
             const deep = dark ? ensureContrast(base, card, 3.0) : base
             const lch = toOklch(base)
             // [deep, light, badge]: badge carries white text (4.5:1).
-            out[kind] = [deep, fromOklch(0.78, lch[1] * 0.75, lch[2]), ensureContrast(base, onAccent, 4.5)]
+            out[kind] = [deep, fromOklch(0.78, lch[1] * 0.75, lch[2]), ensureContrast(base, accentInk, 4.5)]
         }
         return out
     }

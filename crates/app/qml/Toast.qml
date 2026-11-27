@@ -40,16 +40,16 @@ Rectangle {
         id: row
         anchors.centerIn: parent
         spacing: 16
-        Text { id: label; anchors.verticalCenter: parent.verticalCenter; text: root.text; color: Theme.onFill(1); font.pixelSize: 14 }
+        Text { id: label; anchors.verticalCenter: parent.verticalCenter; text: root.text; color: Theme.fillInk(1); font.pixelSize: 14 }
         Rectangle {
             visible: root.undo
             anchors.verticalCenter: parent.verticalCenter
             width: undoLabel.implicitWidth + 22; height: 28; radius: 14
-            color: undoHover.hovered ? Theme.onFill(0.22) : Theme.onFill(0.12)
+            color: undoHover.hovered ? Theme.fillInk(0.22) : Theme.fillInk(0.12)
             Accessible.role: Accessible.Button
             Accessible.name: p.t("Undo")
             Accessible.onPressAction: { root.shown = false; p.activate(root.undoAction, root.undoParam) }
-            Text { id: undoLabel; anchors.centerIn: parent; text: p.t("Undo"); color: Theme.onFill(1); font.pixelSize: 13; font.weight: Font.Bold }
+            Text { id: undoLabel; anchors.centerIn: parent; text: p.t("Undo"); color: Theme.fillInk(1); font.pixelSize: 13; font.weight: Font.Bold }
             HoverHandler { id: undoHover }
             TapHandler { onTapped: { root.shown = false; p.activate(root.undoAction, root.undoParam) } }
         }

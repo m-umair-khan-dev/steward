@@ -86,7 +86,7 @@ Rectangle {
                 Accessible.checked: on
                 Accessible.onPressAction: p.activate("win.bookmarks-tag", modelData)
                 Text { id: tagText; anchors.centerIn: parent; text: "#" + parent.modelData
-                       color: parent.on ? Theme.onAccent : Theme.ink; font.pixelSize: 13 }
+                       color: parent.on ? Theme.accentInk : Theme.ink; font.pixelSize: 13 }
                 TapHandler { onTapped: p.activate("win.bookmarks-tag", parent.modelData) }
             }
         }
@@ -184,7 +184,7 @@ Rectangle {
                 GradientStop { position: 1; color: Theme.placeholder(pic.card.hue + 40, 1) }
             }
             Text { anchors.centerIn: parent; text: (pic.card.site || "?").charAt(0).toUpperCase()
-                   color: Theme.onAccent; font.pixelSize: Math.min(parent.height * 0.4, 56); font.weight: Font.Bold }
+                   color: Theme.accentInk; font.pixelSize: Math.min(parent.height * 0.4, 56); font.weight: Font.Bold }
         }
         Image {
             id: image
@@ -233,7 +233,7 @@ Rectangle {
             color: Theme.fromOklch(0.52, 0.12, parent.card.hue * Math.PI / 180)
             anchors.verticalCenter: parent.verticalCenter
             Text { anchors.centerIn: parent; text: (parent.parent.card.site || "?").charAt(0).toUpperCase()
-                   color: Theme.onAccent; font.pixelSize: 10; font.weight: Font.Bold }
+                   color: Theme.accentInk; font.pixelSize: 10; font.weight: Font.Bold }
         }
         Text { text: parent.card.site || ""; color: Theme.muted; font.pixelSize: 12
                anchors.verticalCenter: parent.verticalCenter }

@@ -84,7 +84,7 @@ Item {
                     GradientStop { position: 1.0; color: root.tint }
                 }
                 opacity: 0.85
-                Icon { anchors.centerIn: parent; name: root.symbol; size: Math.round(parent.height * 0.42); color: Theme.onAccent }
+                Icon { anchors.centerIn: parent; name: root.symbol; size: Math.round(parent.height * 0.42); color: Theme.accentInk }
             }
             Image {
                 id: image
@@ -110,7 +110,7 @@ Item {
             Rectangle {
                 y: 15; width: parent.width; height: 11; radius: 3
                 color: Theme.badge(root.kind)
-                Text { anchors.centerIn: parent; text: root.badge.slice(0, 4); color: Theme.onAccent; font.pixelSize: 7; font.weight: Font.Black }
+                Text { anchors.centerIn: parent; text: root.badge.slice(0, 4); color: Theme.accentInk; font.pixelSize: 7; font.weight: Font.Black }
             }
         }
         IconButton {
