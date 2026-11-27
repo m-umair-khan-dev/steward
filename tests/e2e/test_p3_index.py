@@ -12,7 +12,9 @@ from gi.repository import GLib
 pytestmark = pytest.mark.p3
 
 # What the indexer never covers (steward_core::index::Rules::for_home).
-SKIPPED = (".cache/steward", ".cache/thumbnails", ".local/share/steward", ".local/share/Trash")
+SKIPPED = (".cache", ".vscode/extensions", ".local/share/steward", ".local/share/Trash")
+# Skipped before 2026-11-26 too, so the manifest never counted what is in them.
+APP_OWNED = (".cache/steward", ".cache/thumbnails")
 
 
 def s(text: str) -> GLib.Variant:
@@ -36,7 +38,16 @@ def visible_names_containing(home, part: str) -> set[str]:
 def expected_files(home) -> int:
     """The manifest's files, plus the settings database (dconf's user file)
     that the session writes into the home as soon as a setting changes."""
-    return home.manifest["totals"]["files"] + int((home / ".config" / "dconf" / "user").exists())
+    skipped = 0
+    for part in (".cache", ".vscode/extensions"):
+        for root, dirs, files in os.walk(home / part):
+            rel = Path(root).relative_to(home.path).as_posix()
+            if rel.startswith(APP_OWNED):
+                dirs.clear()
+                continue
+            skipped += len(files)
+    return (home.manifest["totals"]["files"] - skipped
+            + int((home / ".config" / "dconf" / "user").exists()))
 
 
 def search(app, query: str) -> dict:

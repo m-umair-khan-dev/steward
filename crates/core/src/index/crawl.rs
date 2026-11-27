@@ -19,13 +19,16 @@ pub struct Rules {
 }
 
 impl Rules {
-    /// The app's own data, the Trash and the thumbnail cache are never
-    /// worth indexing.
+    /// Never worth indexing: the app's own data, the Trash, every cache
+    /// (`~/.cache` is throwaway by definition, and other apps rewrite it all
+    /// the time, which kept the indexer busy) and editor extensions, which
+    /// update themselves (product owner's decision, 2026-11-26). Free Up
+    /// Space measures caches itself and does not need them in the index.
     pub fn for_home(home: &Path) -> Self {
         Self {
             exclude: [
-                ".cache/steward",
-                ".cache/thumbnails",
+                ".cache",
+                ".vscode/extensions",
                 ".local/share/steward",
                 ".local/share/Trash",
             ]
@@ -378,5 +381,33 @@ impl Index {
             self.roll_up(parent)?;
         }
         self.conn.execute_batch("COMMIT")
+    }
+}
+
+#[cfg(test)]
+mod rules_tests {
+    use super::*;
+
+    #[test]
+    fn home_rules_skip_caches_and_editor_extensions() {
+        let home = Path::new("/h");
+        let rules = Rules::for_home(home);
+        for skipped in [
+            "/h/.cache",
+            "/h/.cache/pip/x",
+            "/h/.cache/steward/index.db",
+            "/h/.vscode/extensions/a/b.js",
+            "/h/.local/share/Trash/files/x",
+        ] {
+            assert!(rules.excluded(Path::new(skipped)), "{skipped} is skipped");
+        }
+        for kept in [
+            "/h/Documents/a.txt",
+            "/h/.vscode/settings.json",
+            "/h/.cachet/x",
+            "/h/.config/app.conf",
+        ] {
+            assert!(!rules.excluded(Path::new(kept)), "{kept} is indexed");
+        }
     }
 }

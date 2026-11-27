@@ -155,6 +155,7 @@ E3-10: one million entries, p95 32 to 36 ms against a 50 ms limit
 | P3-T10 | Folder names in the path bar | done | E3-09 |
 | P3-T11 | Peek: images, PDF, text and code, audio and video, Info | done | E3-08 |
 | P3-T12 | Preferences › Search and index | done | E3-11 |
+| P3-T13 | The index skips ~/.cache and ~/.vscode/extensions (product owner's decision, 2026-11-26) | done (CI) | After a fresh install the indexer kept working: other apps (VS Code's extension updates, GNOME Software's icon cache, browsers) rewrite those folders all the time. Rules::for_home now skips all of ~/.cache (it was only Steward's and the thumbnails) and ~/.vscode/extensions; Free Up Space measures caches itself, so it is unaffected. The home folder's rolled-up size no longer counts caches. Unit test for the rules; E3-01's expected count leaves out the fixture's cache files. From 2026-11-26 tests run only in GitHub's CI, not on the product owner's machine |
 
 Scenario adjustment (rule 7): E3-01 and E3-07 compare the index with the
 manifest plus `.config/dconf/user`, the settings database that the session
