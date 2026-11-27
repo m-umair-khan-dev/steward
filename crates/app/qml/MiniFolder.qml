@@ -17,5 +17,5 @@ Item {
         }
     }
     Rectangle { x: parent.width * 0.12; y: parent.height * 0.22; width: parent.width * 0.76; height: parent.height * 0.18
-                radius: 1.5; color: Qt.rgba(1, 1, 1, 0.85) }
+                radius: 1.5; color: Theme.fillInk(0.85) }
 }

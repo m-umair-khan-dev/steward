@@ -161,8 +161,8 @@ Rectangle {
                         visible: !root.model.dir && thumb.status !== Image.Ready
                         anchors.centerIn: parent
                         width: parent.width * 0.5; height: parent.height * 0.6; radius: 10
-                        color: Theme.deep(root.model.kind || "other")
-                        Text { anchors.centerIn: parent; text: root.model.badge || ""; color: "white"
+                        color: Theme.badge(root.model.kind || "other")
+                        Text { anchors.centerIn: parent; text: root.model.badge || ""; color: Theme.accentInk
                                font.pixelSize: 18; font.weight: Font.Black }
                     }
                 }

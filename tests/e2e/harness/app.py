@@ -231,6 +231,11 @@ class App:
         device.button(button, True)
         device.button(button, False)
 
+    def point_at(self, x: float, y: float) -> None:
+        """Moves the real pointer there (hover) without clicking."""
+        self._input().move_to(x, y)
+        self.wait_idle()
+
     def scroll_at(self, x: float, y: float, steps: int) -> None:
         """Turns the mouse wheel over a point; positive steps scroll down."""
         device = self._input()

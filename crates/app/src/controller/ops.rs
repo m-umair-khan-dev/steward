@@ -267,6 +267,32 @@ impl Controller {
         self.submit(Request::Duplicate { sources }, summary);
     }
 
+    /// Extract Here (issue #5): each selected archive into a folder beside it.
+    pub fn extract_here(&mut self) {
+        let archives: Vec<PathBuf> = self
+            .selected_paths()
+            .into_iter()
+            .filter(|p| steward_core::ops::archive::is_archive(p))
+            .collect();
+        if !archives.is_empty() && !self.in_trash() {
+            self.extract_paths(archives);
+        }
+    }
+
+    pub(crate) fn extract_paths(&mut self, archives: Vec<PathBuf>) {
+        if !steward_core::ops::archive::available() {
+            self.emit(Event::Toast(
+                gettext("To extract archives, install libarchive-tools"),
+                false,
+            ));
+            return;
+        }
+        for archive in archives {
+            let summary = format!("{} “{}”", gettext("Extract"), display_name(&archive));
+            self.submit(Request::Extract { archive }, summary);
+        }
+    }
+
     pub fn copy_selection(&mut self, cut: bool) {
         let paths = self.selected_paths();
         if paths.is_empty() || self.in_trash() {
@@ -600,7 +626,13 @@ impl Controller {
                 "{verb} {}: “{}” ({})",
                 format::items(report.failed.len() as u32),
                 display_name(&first.path),
-                reason(first.reason)
+                // Extract Here's own explanations ("protected by a password")
+                // say more than the generic "something went wrong".
+                if report.kind == "extract" && first.reason == FailReason::Other {
+                    gettext(first.message.as_str())
+                } else {
+                    reason(first.reason)
+                }
             ))
         };
         match report.outcome {
@@ -631,6 +663,15 @@ impl Controller {
                     "copy" => format!("{} {n}", gettext("Copied")),
                     "move" => format!("{} {n}", gettext("Moved")),
                     "duplicate" => format!("{} {n}", gettext("Duplicated")),
+                    "extract" => format!(
+                        "{} “{}”",
+                        gettext("Extracted to"),
+                        report
+                            .created
+                            .first()
+                            .map(|p| display_name(p))
+                            .unwrap_or_default()
+                    ),
                     "restore" => format!("{} {n}", gettext("Put back")),
                     "rename" => format!(
                         "{} “{}”",

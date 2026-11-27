@@ -94,10 +94,10 @@ Rectangle {
             Rectangle {
                 visible: !!root.model.git && root.model.git.changes > 0
                 width: Math.max(18, changesText.implicitWidth + 10); height: 18; radius: 9
-                color: Theme.accent
+                color: Theme.accentFill
                 anchors.verticalCenter: parent.verticalCenter
                 Text { id: changesText; anchors.centerIn: parent; text: root.model.git ? root.model.git.changes : ""
-                       color: "white"; font.pixelSize: 11; font.weight: Font.Bold }
+                       color: Theme.accentInk; font.pixelSize: 11; font.weight: Font.Bold }
             }
         }
     }

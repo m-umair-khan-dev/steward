@@ -726,6 +726,9 @@ fn create() -> (gio::SimpleActionGroup, gio::SimpleActionGroup) {
         controller::with(|c| c.open_selected())
     });
     simple(&win, "open-with", || controller::with(|c| c.open_with()));
+    simple(&win, "extract-here", || {
+        controller::with(|c| c.extract_here())
+    });
     simple(&win, "select-all", || controller::with(|c| c.select_all()));
     simple(&win, "show-help-overlay", || {
         controller::with(|c| c.show_dialog("shortcuts"))
@@ -741,6 +744,9 @@ fn create() -> (gio::SimpleActionGroup, gio::SimpleActionGroup) {
     });
     with_string(&win, "sidebar-hide", |key| {
         controller::with(|c| c.sidebar_hide(key))
+    });
+    with_string(&win, "sidebar-show", |key| {
+        controller::with(|c| c.sidebar_show(key))
     });
     with_string(&win, "sidebar-move-up", |key| {
         controller::with(|c| c.sidebar_move(key, -1))

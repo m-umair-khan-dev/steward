@@ -66,6 +66,7 @@ parts:
       - build-essential
     stage-packages:
       - poppler-utils       # pdftotext, for search inside PDFs
+      - libarchive-tools    # bsdtar, for Extract Here
       - shared-mime-info
     override-pull: |
       craftctl default

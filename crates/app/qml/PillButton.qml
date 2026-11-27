@@ -12,8 +12,8 @@ Rectangle {
     implicitWidth: label.implicitWidth + 32
     implicitHeight: 36
     radius: 10
-    color: destructive ? (hover.hovered ? "#b02a2a" : "#c53434")
-                       : primary ? (hover.hovered ? Qt.darker(Theme.accent, 1.1) : Theme.accent)
+    color: destructive ? (hover.hovered ? Theme.dangerHover : Theme.danger)
+                       : primary ? (hover.hovered ? Theme.accentFillHover : Theme.accentFill)
                                  : (hover.hovered ? Theme.sunken : Theme.pane)
     border.color: primary || destructive ? "transparent" : Theme.line
     border.width: 1
@@ -27,7 +27,7 @@ Rectangle {
         id: label
         anchors.centerIn: parent
         text: root.text
-        color: root.primary || root.destructive ? "white" : Theme.ink
+        color: root.primary || root.destructive ? Theme.accentInk : Theme.ink
         font.pixelSize: 14
         font.weight: Font.DemiBold
     }

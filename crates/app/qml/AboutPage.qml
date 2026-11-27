@@ -46,7 +46,7 @@ Rectangle {
                     id: screen
                     anchors.horizontalCenter: parent.horizontalCenter
                     width: root.model.laptop === false ? 150 : 150; height: 96; radius: 8
-                    color: "#2b2840"
+                    color: Theme.device[0]
                     Rectangle {
                         anchors.fill: parent; anchors.margins: 5; radius: 4
                         gradient: Gradient {
@@ -61,15 +61,15 @@ Rectangle {
                     anchors.horizontalCenter: parent.horizontalCenter
                     width: 190; height: 10; radius: 4
                     gradient: Gradient {
-                        GradientStop { position: 0; color: Theme.dark ? "#55536a" : "#d9d8e2" }
-                        GradientStop { position: 1; color: Theme.dark ? "#3a384c" : "#b9b7c6" }
+                        GradientStop { position: 0; color: Theme.device[1] }
+                        GradientStop { position: 1; color: Theme.device[2] }
                     }
                 }
                 Rectangle {
                     visible: root.model.laptop === false
                     anchors.top: screen.bottom
                     anchors.horizontalCenter: parent.horizontalCenter
-                    width: 18; height: 14; color: Theme.dark ? "#55536a" : "#c9c7d4"
+                    width: 18; height: 14; color: Theme.device[3]
                 }
             }
 
@@ -166,7 +166,7 @@ Rectangle {
                                     width: parent.width; height: 58
                                     Rectangle {
                                         x: 16; y: 14; width: parent.width - 32; height: 6; radius: 3; color: Theme.track
-                                        Rectangle { width: parent.width * Math.min(1, section.modelData.bar || 0); height: 6; radius: 3; color: Theme.accent }
+                                        Rectangle { width: parent.width * Math.min(1, section.modelData.bar || 0); height: 6; radius: 3; color: Theme.accentFill }
                                     }
                                     Text { x: 16; y: 30; text: section.modelData.caption || ""; color: Theme.muted; font.pixelSize: 12 }
                                     Text {

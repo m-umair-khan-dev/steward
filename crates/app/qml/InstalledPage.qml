@@ -84,10 +84,10 @@ Rectangle {
                                 id: chipRow
                                 anchors.centerIn: parent
                                 spacing: 8
-                                Rectangle { width: 22; height: 22; radius: 6; color: Theme.deep(chip.modelData.color)
+                                Rectangle { width: 22; height: 22; radius: 6; color: Theme.badge(chip.modelData.color)
                                             anchors.verticalCenter: parent.verticalCenter
                                             Text { anchors.centerIn: parent; text: chip.modelData.name.substring(0, 2)
-                                                   color: "white"; font.pixelSize: 10; font.weight: Font.Bold } }
+                                                   color: Theme.accentInk; font.pixelSize: 10; font.weight: Font.Bold } }
                                 Text { text: chip.modelData.name; color: Theme.ink; font.pixelSize: 15; font.weight: Font.DemiBold
                                        anchors.verticalCenter: parent.verticalCenter }
                                 Text { text: chip.modelData.count + " · " + chip.modelData.bytesText; color: Theme.muted
@@ -172,9 +172,9 @@ Rectangle {
                 Rectangle { anchors.bottom: parent.bottom; width: parent.width; height: 1; color: Theme.line }
                 Rectangle {
                     x: 18; anchors.verticalCenter: parent.verticalCenter
-                    width: 30; height: 30; radius: 8; color: Theme.deep(row.modelData.color)
+                    width: 30; height: 30; radius: 8; color: Theme.badge(row.modelData.color)
                     Text { anchors.centerIn: parent; text: row.modelData.name.substring(0, 1).toUpperCase()
-                           color: "white"; font.pixelSize: 14; font.weight: Font.Bold }
+                           color: Theme.accentInk; font.pixelSize: 14; font.weight: Font.Bold }
                 }
                 Column {
                     x: 62; anchors.verticalCenter: parent.verticalCenter
@@ -193,10 +193,10 @@ Rectangle {
                 Rectangle {
                     x: parent.width * 0.70; anchors.verticalCenter: parent.verticalCenter
                     height: 24; radius: 12; width: whyText.implicitWidth + 20
-                    color: row.modelData.why === "app" ? Theme.deep("documents")
-                         : row.modelData.why === "you" ? Theme.accent : Theme.sunken
+                    color: row.modelData.why === "app" ? Theme.badge("documents")
+                         : row.modelData.why === "you" ? Theme.accentFill : Theme.sunken
                     Text { id: whyText; anchors.centerIn: parent; text: row.modelData.whyLabel; font.pixelSize: 12
-                           font.weight: Font.DemiBold; color: row.modelData.why === "came-with" ? Theme.muted : "white" }
+                           font.weight: Font.DemiBold; color: row.modelData.why === "came-with" ? Theme.muted : Theme.accentInk }
                 }
                 Text { anchors.right: parent.right; anchors.rightMargin: 64; anchors.verticalCenter: parent.verticalCenter
                        text: row.modelData.sizeText; color: Theme.ink; font.pixelSize: 14 }

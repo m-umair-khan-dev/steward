@@ -42,7 +42,7 @@ Menu {
                     x: 24
                     anchors.verticalCenter: parent.verticalCenter
                     text: item.text
-                    color: item.enabled ? Theme.ink : Theme.faint
+                    color: item.enabled ? Theme.ink : Theme.disabled
                     font.pixelSize: 13
                 }
             }

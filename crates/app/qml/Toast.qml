@@ -5,9 +5,15 @@ Rectangle {
     id: root
     property string text: ""
     property bool undo: false
-    function show(message, withUndo) {
+    // What Undo runs: the operations journal's Undo, unless the toast is
+    // about something else (a hidden sidebar entry passes its own action).
+    property string undoAction: "win.undo"
+    property string undoParam: ""
+    function show(message, withUndo, action, param) {
         text = message
         undo = !!withUndo
+        undoAction = action || "win.undo"
+        undoParam = param || ""
         shown = true
         hide.restart()
     }
@@ -34,18 +40,18 @@ Rectangle {
         id: row
         anchors.centerIn: parent
         spacing: 16
-        Text { id: label; anchors.verticalCenter: parent.verticalCenter; text: root.text; color: "white"; font.pixelSize: 14 }
+        Text { id: label; anchors.verticalCenter: parent.verticalCenter; text: root.text; color: Theme.fillInk(1); font.pixelSize: 14 }
         Rectangle {
             visible: root.undo
             anchors.verticalCenter: parent.verticalCenter
             width: undoLabel.implicitWidth + 22; height: 28; radius: 14
-            color: undoHover.hovered ? Qt.rgba(1, 1, 1, 0.22) : Qt.rgba(1, 1, 1, 0.12)
+            color: undoHover.hovered ? Theme.fillInk(0.22) : Theme.fillInk(0.12)
             Accessible.role: Accessible.Button
             Accessible.name: p.t("Undo")
-            Accessible.onPressAction: { root.shown = false; p.activate("win.undo", "") }
-            Text { id: undoLabel; anchors.centerIn: parent; text: p.t("Undo"); color: "white"; font.pixelSize: 13; font.weight: Font.Bold }
+            Accessible.onPressAction: { root.shown = false; p.activate(root.undoAction, root.undoParam) }
+            Text { id: undoLabel; anchors.centerIn: parent; text: p.t("Undo"); color: Theme.fillInk(1); font.pixelSize: 13; font.weight: Font.Bold }
             HoverHandler { id: undoHover }
-            TapHandler { onTapped: { root.shown = false; p.activate("win.undo", "") } }
+            TapHandler { onTapped: { root.shown = false; p.activate(root.undoAction, root.undoParam) } }
         }
     }
     Timer { id: hide; interval: root.undo ? 7000 : 4000; onTriggered: root.shown = false }

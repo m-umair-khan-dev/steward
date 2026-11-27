@@ -80,13 +80,13 @@ Rectangle {
                 required property string modelData
                 readonly property bool on: root.model.tag === modelData
                 height: 28; radius: 14; width: tagText.implicitWidth + 22
-                color: on ? Theme.accent : Theme.sunken
+                color: on ? Theme.accentFill : Theme.sunken
                 Accessible.role: Accessible.Button
                 Accessible.name: "#" + modelData
                 Accessible.checked: on
                 Accessible.onPressAction: p.activate("win.bookmarks-tag", modelData)
                 Text { id: tagText; anchors.centerIn: parent; text: "#" + parent.modelData
-                       color: parent.on ? "white" : Theme.ink; font.pixelSize: 13 }
+                       color: parent.on ? Theme.accentInk : Theme.ink; font.pixelSize: 13 }
                 TapHandler { onTapped: p.activate("win.bookmarks-tag", parent.modelData) }
             }
         }
@@ -180,11 +180,11 @@ Rectangle {
             visible: image.status !== Image.Ready
             gradient: Gradient {
                 orientation: Gradient.Horizontal
-                GradientStop { position: 0; color: Qt.hsla(pic.card.hue / 360, 0.75, Theme.dark ? 0.35 : 0.80, 1) }
-                GradientStop { position: 1; color: Qt.hsla(((pic.card.hue + 40) % 360) / 360, 0.80, Theme.dark ? 0.28 : 0.68, 1) }
+                GradientStop { position: 0; color: Theme.placeholder(pic.card.hue, 0) }
+                GradientStop { position: 1; color: Theme.placeholder(pic.card.hue + 40, 1) }
             }
             Text { anchors.centerIn: parent; text: (pic.card.site || "?").charAt(0).toUpperCase()
-                   color: Qt.rgba(1, 1, 1, 0.85); font.pixelSize: Math.min(parent.height * 0.4, 56); font.weight: Font.Bold }
+                   color: Theme.accentInk; font.pixelSize: Math.min(parent.height * 0.4, 56); font.weight: Font.Bold }
         }
         Image {
             id: image
@@ -230,10 +230,10 @@ Rectangle {
         spacing: 6
         Rectangle {
             width: 16; height: 16; radius: 4
-            color: Qt.hsla(parent.card.hue / 360, 0.6, 0.5, 1)
+            color: Theme.fromOklch(0.52, 0.12, parent.card.hue * Math.PI / 180)
             anchors.verticalCenter: parent.verticalCenter
             Text { anchors.centerIn: parent; text: (parent.parent.card.site || "?").charAt(0).toUpperCase()
-                   color: "white"; font.pixelSize: 10; font.weight: Font.Bold }
+                   color: Theme.accentInk; font.pixelSize: 10; font.weight: Font.Bold }
         }
         Text { text: parent.card.site || ""; color: Theme.muted; font.pixelSize: 12
                anchors.verticalCenter: parent.verticalCenter }

@@ -8,6 +8,7 @@
 //! AGENTS.md rule 10: no other module may move, copy, rename, trash or
 //! delete files. Scenario E2-13 checks it.
 
+pub mod archive;
 mod fsx;
 pub mod journal;
 pub mod style;
@@ -66,6 +67,10 @@ pub enum Request {
         kind: String,
         moves: Vec<(PathBuf, PathBuf)>,
     },
+    /// Unpacks an archive into a new folder beside it (Extract Here).
+    Extract {
+        archive: PathBuf,
+    },
     Undo,
     Redo,
 }
@@ -83,6 +88,7 @@ impl Request {
             Request::Restore { .. } => "restore",
             Request::EmptyTrash => "empty-trash",
             Request::Apply { .. } => "apply",
+            Request::Extract { .. } => "extract",
             Request::Undo => "undo",
             Request::Redo => "redo",
         }
@@ -99,6 +105,7 @@ impl Request {
             | Request::Move { sources, .. }
             | Request::Duplicate { sources }
             | Request::Trash { sources } => sources.clone(),
+            Request::Extract { archive } => vec![archive.clone()],
             Request::Apply { moves, .. } => moves.iter().map(|(from, _)| from.clone()).collect(),
             _ => Vec::new(),
         }

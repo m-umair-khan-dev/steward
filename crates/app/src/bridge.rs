@@ -59,6 +59,9 @@ pub mod qobject {
         fn shoot(self: Pin<&mut Presenter>, path: QString);
         #[qsignal]
         fn toast(self: Pin<&mut Presenter>, text: QString, undo: bool);
+        /// A toast whose Undo runs `action` with `param` (not the journal's Undo).
+        #[qsignal]
+        fn toastundo(self: Pin<&mut Presenter>, text: QString, action: QString, param: QString);
         #[qsignal]
         fn focus(self: Pin<&mut Presenter>, target: QString);
 
@@ -245,6 +248,9 @@ impl qobject::Presenter {
         for event in events {
             match event {
                 Event::Toast(text, undo) => self.as_mut().toast(q(&text), undo),
+                Event::ToastWithUndo(text, action, param) => {
+                    self.as_mut().toastundo(q(&text), q(&action), q(&param))
+                }
                 Event::Quit => self.as_mut().quitting(),
                 Event::Screenshot(path) => self.as_mut().shoot(q(&path)),
                 Event::Focus(target) => self.as_mut().focus(q(target)),
